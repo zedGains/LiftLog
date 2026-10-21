@@ -138,6 +138,7 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .wcd{font-size:14px;color:var(--muted)}
 .wcdays{display:grid;gap:6px;margin-top:4px;font-size:12.5px;color:var(--muted)}
 .wcdays b{display:block;color:var(--fg);font-size:13px}
+.unitrow{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .ronote{margin:0;font-size:12.5px;color:var(--muted)}
 .rolist{display:grid;gap:6px}
 .rorow{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 4px;box-sizing:border-box}
@@ -450,12 +451,23 @@ const rxText=(it)=>{
   const r=it.reps[0]===it.reps[1]?`${it.reps[0]}`:`${it.reps[0]}–${it.reps[1]}`;
   return `${it.sets}×${r}${it.each?" each side":""}`;
 };
+/* ---------- units ----------
+   Weights are always stored in pounds; they're shown and typed in the person's chosen unit. */
+const LB_PER_KG=2.20462262;
+function defaultUnits(){const l=((navigator.languages&&navigator.languages[0])||navigator.language||"en-US");return /^en(-US)?$|-(US|LR|MM)$/i.test(l)?"imperial":"metric"}
+function units(){return (typeof plan!=="undefined"&&plan&&plan.units)||defaultUnits()}
+const isKg=()=>units()==="metric";
+const wU=()=>isKg()?"kg":"lb";
+function toDisp(lb){if(lb===""||lb==null)return "";const n=Number(lb);if(isNaN(n))return "";const v=isKg()?n/LB_PER_KG:n;return Math.round(v*10)/10}
+function fromDisp(v){if(v===""||v==null)return "";const n=Number(v);if(isNaN(n))return "";return isKg()?Math.round(n*LB_PER_KG*10000)/10000:n}
+function rPlate(lb){return isKg()?Math.round(lb/LB_PER_KG/2.5)*2.5*LB_PER_KG:r5(lb)}
+const minPlate=()=>isKg()?2.5*LB_PER_KG:5;
 function setsText(sets,type){
   if(!sets||!sets.length) return "";
   if(type==="cardio") return sets[0].w?`${sets[0].w} min`:"done";
   const top=sets.filter(s=>s.r||s.w);
   if(!top.length) return "";
-  return top.map(s=>(s.w?`${s.w}×`:"BW×")+(s.r||"?")).join(", ");
+  return top.map(s=>(s.w?`${toDisp(s.w)}×`:"BW×")+(s.r||"?")).join(", ");
 }
 
 /* ---------- state & storage ---------- */
@@ -492,7 +504,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,sections:[]}});
@@ -546,7 +558,7 @@ const ORIG={};
    (data/users/<uid>/_template), e.g. one written for them by their trainer. */
 const STARTER_SPEC={name:"Starter 3-day · Push / Pull / Legs",schedule:{"1":"d1","3":"d2","5":"d3"},
  notes:{eyebrow:"Starter 3-day · Push / Pull / Legs",restBanner:"Rest and recover. A walk or some light stretching helps.",
-  panels:[{h:"How to progress",t:"When you hit the top of the rep range on every set, add 5 lb next time. Most sets should end 1–3 reps short of failure."},
+  panels:[{h:"How to progress",t:"When you hit the top of the rep range on every set, add a little weight next time (5 lb or 2.5 kg). Most sets should end 1–3 reps short of failure."},
    {h:"Warm-up",t:"Work up to your first working weight in 2–3 lighter sets. Warm-up sets don't need to be logged."},
    {h:"Rest between sets",t:"About 1½–2 minutes on big lifts, 60–90 seconds on smaller ones. The Rest tab has a timer."}]},
  days:{
@@ -740,8 +752,8 @@ function hintFor(it){
   const last=lastEntry(it.id); if(!last||it.type==="cardio") return "";
   const s=(last.sets||[])[0]; if(!s||!s.r) return "";
   if(s.r>=it.reps[1]){
-    const step=/curl|raise|fly|flies|sway|extension|pushdown|pull downs|skull/i.test(it.name)?5:10;
-    return s.w?`Hit ${s.r} reps at ${s.w} lb last time. Try ${s.w+step} lb.`:`Hit ${s.r} reps last time. Add weight or reps.`;
+    const small=/curl|raise|fly|flies|sway|extension|pushdown|pull downs|skull/i.test(it.name);const step=isKg()?(small?2.5:5):(small?5:10);
+    return s.w?`Hit ${s.r} reps at ${toDisp(s.w)} ${wU()} last time. Try ${Math.round((toDisp(s.w)+step)*10)/10} ${wU()}.`:`Hit ${s.r} reps last time. Add weight or reps.`;
   }
   return "";
 }
@@ -821,7 +833,7 @@ function render(){
      return `<div class="resetrow"><span>${c.total?c.text:"Matches your original training split."}</span><button class="btn small" id="resetday" ${c.total?"":"disabled"}>Reset to original</button></div>`})()}
   <div class="savebar">
     <div class="savehead"><b>Finish ${d.label}</b><span>${ldPast?`${done} marked to save`:pending?`${pending} change${pending===1?"":"s"} to save`:savedN?`All saved${savedAt?" at "+new Date(savedAt).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):""}`:"Nothing marked yet"}</span></div>
-    <div class="kcal">${plan.bw?`<div class="kbig"><span>Estimated burn</span><b>~${Math.round(dayKcal)}</b><small>kcal</small></div><p>${done?`From the ${done} workout${done===1?"":"s"} you marked, using your weights, reps, sets and ${plan.bw} lb body weight.`:"Mark workouts to see your estimate."} <button class="linkbtn" id="kcalhow">How it's figured</button></p>`
+    <div class="kcal">${plan.bw?`<div class="kbig"><span>Estimated burn</span><b>~${Math.round(dayKcal)}</b><small>kcal</small></div><p>${done?`From the ${done} workout${done===1?"":"s"} you marked, using your weights, reps, sets and ${toDisp(plan.bw)} ${wU()} body weight.`:"Mark workouts to see your estimate."} <button class="linkbtn" id="kcalhow">How it's figured</button></p>`
       :`<p><b>See calories burned:</b> add your body weight under <b>About you</b> in the Log tab. <button class="linkbtn" id="gotoabout">Go to About you</button></p>`}</div>
     <div class="logdate"><span class="lbl" style="margin:0">Date finished</span>
       <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===ymd(new Date(Date.now()-864e5))?"on":""}" data-ld="yday">Yesterday</button>
@@ -859,7 +871,7 @@ function card(it){
   const dr=state.drafts[it.id];
   const cur=dr?cleanSets(dSets(it,dr)):(t?t.sets:[]);
   const alt=dr?dr.alt:(t&&t.alt);
-  const lb=(sets)=>sets.some(x=>x.w)&&it.type!=="cardio"?" lb":"";
+  const lb=(sets)=>sets.some(x=>x.w)&&it.type!=="cardio"?" "+wU():"";
   const lastTxt=last?`Last (${fmtDate(last.date)}): <b>${esc(setsText(last.sets,it.type))||"done"}</b>${lb(last.sets||[])}${last.alt?` · did ${esc(last.alt)}`:""}`:"No log yet";
   const kc=m?exKcal(it,cur):null;
   const status=(kc?`<span class="st kc">~${Math.round(kc)} kcal</span>`:"")+(m?(pend?'<span class="st pend">Not saved</span>':'<span class="st ok">Saved</span>'):(pend?'<span class="st pend">Unmarked, not saved</span>':""));
@@ -880,10 +892,10 @@ function card(it){
 /* ---------- drop sets ---------- */
 let dropPct=ls.get("ll.dropPct",20);
 const DROP_CHOICES=[10,15,20,25,30];
-function dropW(w,n){return r5(w*(1-dropPct/100*n))}
-function dropsTxt(w){return w?`drops: ${w} → ${dropW(w,1)} → ${dropW(w,2)} lb (${dropPct}% each)`:""}
+function dropW(w,n){return rPlate(w*(1-dropPct/100*n))}
+function dropsTxt(w){return w?`drops: ${toDisp(w)} → ${toDisp(dropW(w,1))} → ${toDisp(dropW(w,2))} ${wU()} (${dropPct}% each)`:""}
 let dropAuto=ls.get("ll.dropAuto",true);
-function autoW(w,n){if(n<=2)return Math.max(5,dropW(w,n));return Math.max(5,r5(autoW(w,n-1)*(1-dropPct/100)))}
+function autoW(w,n){if(n<=2)return Math.max(minPlate(),dropW(w,n));return Math.max(minPlate(),rPlate(autoW(w,n-1)*(1-dropPct/100)))}
 function refillDrops(it,d){
   if(!it.drop||!dropAuto) return;
   d.autoIdx=d.autoIdx||[];
@@ -891,7 +903,7 @@ function refillDrops(it,d){
   for(let j=1;j<nSets(it,d)&&j<d.sets.length;j++){
     const isAuto=d.autoIdx.includes(j);
     if(!w){if(isAuto){d.sets[j].w="";d.autoIdx=d.autoIdx.filter(x=>x!==j)}continue}
-    if(d.sets[j].w===""||isAuto){const prev=Number(d.sets[j-1].w)||autoW(w,j-1);d.sets[j].w=String(j<=2?autoW(w,j):Math.max(5,r5(prev*(1-dropPct/100))));if(!isAuto)d.autoIdx.push(j)}
+    if(d.sets[j].w===""||isAuto){const prev=Number(d.sets[j-1].w)||autoW(w,j-1);d.sets[j].w=String(j<=2?autoW(w,j):Math.max(minPlate(),rPlate(prev*(1-dropPct/100))));if(!isAuto)d.autoIdx.push(j)}
   }
 }
 function setDropPct(v){v=Math.round(Number(v));if(!(v>=5&&v<=45))return false;dropPct=v;ls.set("ll.dropPct",v);return true}
@@ -909,7 +921,7 @@ function openSheet(id,keepScroll){
     const ph=last&&last.sets&&last.sets[i]?last.sets[i]:null;
     const w=Number(s.w)||(ph&&ph.w)||0;
     return `<div class="setrow"><span class="n">${isCardio?"TIME":"SET "+(i+1)}</span>
-      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""}"><input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(s.w)}" placeholder="${ph&&ph.w!=null?ph.w:isCardio?"10":"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?"lb opt.":"lb"}</span></label>
+      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""}"><input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" placeholder="${ph&&ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):isCardio?"10":"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
       ${isCardio?"<span></span>":`<label class="field"><input id="r-${id}-${i}" inputmode="numeric" data-i="${i}" data-f="r" value="${esc(s.r)}" placeholder="${ph&&ph.r!=null?ph.r:it.reps[1]}" aria-label="Set ${i+1} reps"><span>reps</span></label>`}
       ${it.drop&&!dropAuto?`<span class="drops" data-drops="${i}" data-w="${w||""}">${dropsTxt(w)}</span>`:""}
       ${it.drop&&dropAuto&&i===0&&N>1?`<span class="drops">Sets 2–${N} fill in at ${dropPct}% drops from this weight</span>`:""}
@@ -953,13 +965,13 @@ function openSheet(id,keepScroll){
   <div class="btns"><button class="btn" id="closesheet" style="flex:1">Close</button></div>`;
   sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=st;
   sh.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
-    const i=+inp.dataset.i; d.sets[i][inp.dataset.f]=inp.value.replace(/[^0-9.]/g,""); saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
+    const i=+inp.dataset.i; const raw=inp.value.replace(/[^0-9.]/g,""); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw; saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
     if(it.drop&&inp.dataset.f==="w"){
       if(dropAuto){
         if(i>0){d.autoIdx=(d.autoIdx||[]).filter(x=>x!==i);inp.closest(".field").classList.remove("autofill")}
-        else{refillDrops(it,d);for(let j=1;j<nSets(it,d);j++){const el=sh.querySelector(`#w-${id}-${j}`);if(el){el.value=d.sets[j].w;el.closest(".field").classList.toggle("autofill",(d.autoIdx||[]).includes(j))}}}
+        else{refillDrops(it,d);for(let j=1;j<nSets(it,d);j++){const el=sh.querySelector(`#w-${id}-${j}`);if(el){el.value=toDisp(d.sets[j].w);el.closest(".field").classList.toggle("autofill",(d.autoIdx||[]).includes(j))}}}
         saveDrafts();
-      } else {const ph=Number(inp.placeholder)||0;const w=Number(d.sets[i].w)||ph;const el=sh.querySelector(`[data-drops="${i}"]`);if(el){el.dataset.w=w||"";el.textContent=dropsTxt(w)}}
+      } else {const ph=Number(fromDisp(inp.placeholder))||0;const w=Number(d.sets[i].w)||ph;const el=sh.querySelector(`[data-drops="${i}"]`);if(el){el.dataset.w=w||"";el.textContent=dropsTxt(w)}}
     }
   });
   sh.querySelectorAll("[data-alt]").forEach(b=>b.onclick=()=>{d.alt=b.dataset.alt||null;saveDrafts();openSheet(id,true);render()});
@@ -1165,7 +1177,7 @@ function showKcalHow(){
     <p><b>Blank boxes:</b> a set with no reps uses the middle of the rep range.</p>
     <p class="savenote">This is an estimate. Real burn depends on tempo, how hard you push, and your body, so it can be off by 20–30% either way. A heart-rate watch gets closer. It's most useful for comparing your own workouts week to week.</p>
    </div>
-   <p class="coach">Using <b>${plan.bw||"—"} lb</b>. Change it under About you in the Log tab.</p>
+   <p class="coach">Using <b>${plan.bw?toDisp(plan.bw)+" "+wU():"—"}</b>. Change it under About you in the Log tab.</p>
    <div class="btns"><button class="btn primary" id="bwupd" style="flex:1">Go to About you</button></div>`;
   state.open="__kcal"; sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=0;
   $("#dfclose",sh).onclick=closeSheet;
@@ -1252,9 +1264,11 @@ function planView(){
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    <div class="panel" id="about"><h2>About you</h2>
     <div class="about">
-     <label>Weight<span class="field"><input id="pf-w" inputmode="decimal" value="${plan.bw||""}" placeholder="220" aria-label="Weight in pounds"><span>lb</span></span></label>
+     <div class="unitrow"><span class="lbl" style="margin:0">Units</span><div class="dchips" role="group" aria-label="Units"><button class="dchip wide ${isKg()?"":"on"}" data-units="imperial" aria-pressed="${!isKg()}">lb · ft/in</button><button class="dchip wide ${isKg()?"on":""}" data-units="metric" aria-pressed="${isKg()}">kg · cm</button></div></div>
+     <label>Weight<span class="field"><input id="pf-w" inputmode="decimal" value="${plan.bw?toDisp(plan.bw):""}" placeholder="${isKg()?"100":"220"}" aria-label="Weight in ${isKg()?"kilograms":"pounds"}"><span>${wU()}</span></span></label>
      <label>Age<span class="field"><input id="pf-age" inputmode="numeric" value="${plan.profile.age||""}" placeholder="30" aria-label="Age"><span>yrs</span></span></label>
-     <label>Height<span class="hgt"><span class="field"><input id="pf-ft" inputmode="numeric" value="${plan.profile.ft||""}" placeholder="5" aria-label="Height feet"><span>ft</span></span><span class="field"><input id="pf-in" inputmode="numeric" value="${plan.profile.inch??""}" placeholder="10" aria-label="Height inches"><span>in</span></span></span></label>
+     ${isKg()?`<label>Height<span class="field"><input id="pf-cm" inputmode="numeric" value="${plan.profile.ft!=null?Math.round(((plan.profile.ft||0)*12+(plan.profile.inch||0))*2.54):""}" placeholder="178" aria-label="Height in centimeters"><span>cm</span></span></label>`
+     :`<label>Height<span class="hgt"><span class="field"><input id="pf-ft" inputmode="numeric" value="${plan.profile.ft||""}" placeholder="5" aria-label="Height feet"><span>ft</span></span><span class="field"><input id="pf-in" inputmode="numeric" value="${plan.profile.inch??""}" placeholder="10" aria-label="Height inches"><span>in</span></span></span></label>`}
     </div>
     <p class="savenote" id="pf-err" role="alert"></p>
     <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
@@ -1284,9 +1298,9 @@ function planView(){
    <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
     <div class="drow">${dropChips("pdp")}<label class="field dcustom"><input id="dpc" inputmode="numeric" value="${DROP_CHOICES.includes(dropPct)?"":dropPct}" placeholder="Other" aria-label="Custom drop percent"><span>%</span></label></div>
-    <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="225" aria-label="Main weight"><span>lb</span></label>
+    <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="${isKg()?"100":"225"}" aria-label="Main weight"><span>${wU()}</span></label>
      <output id="c1">—</output><output id="c2">—</output><output id="c3">—</output></div>
-    <p class="savenote">Rounded to the nearest 5 lb.</p></div>
+    <p class="savenote">Rounded to the nearest ${isKg()?"2.5 kg":"5 lb"}.</p></div>
    ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).map(x=>`<div class="panel"><h2>${esc(x.h)}</h2><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}
   </div>`}
 function fmtStamp(ms){if(!ms)return "—";const d=new Date(ms);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}
@@ -1311,11 +1325,11 @@ function sessions(){
 }
 function buildCSV(){
   const q=(v)=>{v=v==null?"":String(v);return /[",\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
-  const rows=[["workout_date","day","day_name","section","exercise","done_as","set","weight_lb","reps","minutes","est_kcal_exercise","logged_at","last_edited"]];
+  const rows=[["workout_date","day","day_name","section","exercise","done_as","set",`weight_${wU()}`,"reps","minutes","est_kcal_exercise","logged_at","last_edited"]];
   sessions().slice().reverse().forEach(s=>s.items.forEach(({it,e})=>{
     const sets=e.sets&&e.sets.length?e.sets:[{w:null,r:null}];
     sets.forEach((st,i)=>rows.push([s.date,DAYS[s.day]?DAYS[s.day].label:(e.dl||""),DAYS[s.day]?DAYS[s.day].title:(e.dt||""),it.sec,it.name,e.alt||"",i+1,
-      it.type==="cardio"?"":st.w,it.type==="cardio"?"":st.r,it.type==="cardio"?st.w:"",i===0&&e.kcal!=null?e.kcal:"",isoLocal(e.loggedAt||e.ts),isoLocal(e.ts)]));
+      it.type==="cardio"?"":toDisp(st.w),it.type==="cardio"?"":st.r,it.type==="cardio"?st.w:"",i===0&&e.kcal!=null?e.kcal:"",isoLocal(e.loggedAt||e.ts),isoLocal(e.ts)]));
   }));
   return rows.map(r=>r.map(q).join(",")).join("\n");
 }
@@ -1332,15 +1346,19 @@ function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFT
     da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
   document.querySelectorAll("[data-wd]").forEach(b=>b.onclick=()=>{const i=+b.dataset.wd;state.weekEdit=state.weekEdit===i?null:i;render()});
   document.querySelectorAll("[data-sched]").forEach(b=>b.onclick=()=>{const k=b.dataset.sched;const w=String(state.weekEdit);if(k)plan.schedule[w]=k;else delete plan.schedule[w];savePlan();syncDays();state.weekEdit=null;render();toast(`${WD_LONG[+w]}: ${k?DAYS[k].label:"rest day"}`)});
+  document.querySelectorAll("[data-units]").forEach(b=>b.onclick=()=>{plan.units=b.dataset.units;savePlan();render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});toast(isKg()?"Showing kilograms and centimeters":"Showing pounds and feet/inches")});
   const pf=$("#pf-save");if(pf)pf.onclick=()=>{
     const num=(id)=>{const v=$(id).value.replace(/[^0-9.]/g,"");return v===""?null:Number(v)};
-    const w=num("#pf-w"),age=num("#pf-age"),ft=num("#pf-ft"),inch=num("#pf-in"); const err=$("#pf-err");
-    if(w!=null&&!(w>=60&&w<=700)){err.textContent="Enter your weight in pounds, like 220.";return}
+    const num2=(id)=>$(id)?num(id):null;
+    const wd=num("#pf-w"),age=num("#pf-age"); let ft=num2("#pf-ft"),inch=num2("#pf-in"); const cm=num2("#pf-cm"); const err=$("#pf-err");
+    const w=wd==null?null:Number(fromDisp(wd));
+    if(w!=null&&!(w>=60&&w<=700)){err.textContent=isKg()?"Enter your weight in kilograms, like 100.":"Enter your weight in pounds, like 220.";return}
     if(age!=null&&!(age>=10&&age<=100)){err.textContent="Age should be between 10 and 100.";return}
+    if(cm!=null){if(!(cm>=90&&cm<=250)){err.textContent="Height should be between 90 and 250 cm.";return}const ti=Math.round(cm/2.54);ft=Math.floor(ti/12);inch=ti%12}
     if(ft!=null&&!(ft>=3&&ft<=8)){err.textContent="Feet should be between 3 and 8.";return}
     if(inch!=null&&!(inch>=0&&inch<12)){err.textContent="Inches should be 0 to 11.";return}
     plan.bw=w; plan.profile={age,ft,inch,updated:Date.now()}; savePlan(); render(); toast("Saved")};const i=$("#calcw");
-  const calc=()=>{const w=Number(i.value.replace(/[^0-9.]/g,""));$("#c1").textContent=w?w:"—";$("#c2").textContent=w?dropW(w,1):"—";$("#c3").textContent=w?dropW(w,2):"—";
+  const calc=()=>{const wd=Number(i.value.replace(/[^0-9.]/g,""));const w=wd?Number(fromDisp(wd)):0;$("#c1").textContent=w?wd:"—";$("#c2").textContent=w?toDisp(dropW(w,1)):"—";$("#c3").textContent=w?toDisp(dropW(w,2)):"—";
     $("#dpt").textContent=dropPct+"%";$("#dpt2").textContent=dropPct+"%";
     document.querySelectorAll("[data-pdp]").forEach(b=>{const on=+b.dataset.pdp===dropPct;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})};
   i.oninput=calc;
@@ -1651,16 +1669,16 @@ function pBest(pid,id,before){const p=plan.partners.find(x=>x.id===pid);let w=Nu
 function cleanP(o){const out={};Object.keys(o||{}).forEach(pid=>{const x=o[pid];const w=Number(x&&x.w);if(w>0)out[pid]={w,r:x.r===""||x.r==null?null:Number(x.r)}});return out}
 function trackedLifts(){const seen=new Set(),out=[];trainKeys().forEach(k=>daySections(k).forEach(s=>s.items.forEach(it=>{if(tracksPartner(it)&&!seen.has(it.id)){seen.add(it.id);out.push(it)}})));return out}
 function vsLine(it){if(!plan.partners.length||!tracksPartner(it))return "";const me=myBest(it.id).w;
-  return `<span class="vs">Best · You <b>${me||"—"}</b>${plan.partners.map(p=>` · ${esc(p.name)} <b>${pBest(p.id,it.id).w||"—"}</b>`).join("")}</span>`}
+  return `<span class="vs">Best · You <b>${me?toDisp(me):"—"}</b>${plan.partners.map(p=>{const w=pBest(p.id,it.id).w;return ` · ${esc(p.name)} <b>${w?toDisp(w):"—"}</b>`}).join("")}</span>`}
 function partnerBox(it,d){
   if(it.type==="cardio") return "";
   if(!tracksPartner(it)) return `<button class="linkbtn ptrack" id="ptrackon">+ Track a partner's max on this lift</button>`;
   d.partners=d.partners||{};
   const rows=plan.partners.map(p=>{const b=pBest(p.id,it.id);const x=d.partners[p.id]||{w:"",r:""};const nw=Number(x.w)||0;
-    return `<div class="ptrow"><span class="pname"><span class="pnh"><b>${esc(p.name)}</b><button class="linkbtn prmx" data-prmx="${p.id}" aria-label="Remove ${esc(p.name)}">Remove</button></span><small>${b.w?`Best ${b.w}${b.r?` × ${b.r}`:""}${b.date?` · ${fmtDate(b.date)}`:" · starting max"}`:"No max yet"}</small></span>
-      <label class="field"><input inputmode="decimal" data-pw="${p.id}" value="${esc(x.w)}" placeholder="${b.w||"lb"}" aria-label="${esc(p.name)} top weight today"><span>lb</span></label>
+    return `<div class="ptrow"><span class="pname"><span class="pnh"><b>${esc(p.name)}</b><button class="linkbtn prmx" data-prmx="${p.id}" aria-label="Remove ${esc(p.name)}">Remove</button></span><small>${b.w?`Best ${toDisp(b.w)}${b.r?` × ${b.r}`:""}${b.date?` · ${fmtDate(b.date)}`:" · starting max"}`:"No max yet"}</small></span>
+      <label class="field"><input inputmode="decimal" data-pw="${p.id}" value="${esc(toDisp(x.w))}" placeholder="${b.w?toDisp(b.w):wU()}" aria-label="${esc(p.name)} top weight today"><span>${wU()}</span></label>
       <label class="field"><input inputmode="numeric" data-pr="${p.id}" value="${esc(x.r)}" placeholder="—" aria-label="${esc(p.name)} reps"><span>reps</span></label>
-      ${nw>b.w&&b.w?`<span class="pr">▲ New best for ${esc(p.name)}: ${nw} lb (+${nw-b.w})</span>`:nw&&!b.w?`<span class="pr">First max logged for ${esc(p.name)}</span>`:""}</div>`}).join("");
+      ${nw>b.w&&b.w?`<span class="pr">▲ New best for ${esc(p.name)}: ${toDisp(nw)} ${wU()} (+${toDisp(nw-b.w)})</span>`:nw&&!b.w?`<span class="pr">First max logged for ${esc(p.name)}</span>`:""}</div>`}).join("");
   return `<div class="pbox"><div class="pbh"><b>Partner</b><button class="linkbtn" id="paddp">+ Add partner</button></div>
    ${plan.partners.length?rows:`<p class="savenote" style="margin:0">Add your gym partner to log just their top set here.</p>`}
    ${plan.partners.length?`<p class="savenote" style="margin:0">Their top set saves with your day log once you mark this exercise done.</p>`:""}
@@ -1668,7 +1686,7 @@ function partnerBox(it,d){
 }
 function bindPartnerBox(sh,it,d){
   sh.querySelectorAll("[data-pw],[data-pr]").forEach(inp=>{const pid=inp.dataset.pw||inp.dataset.pr,f=inp.dataset.pw?"w":"r";
-    inp.oninput=()=>{d.partners=d.partners||{};const x=d.partners[pid]=d.partners[pid]||{w:"",r:""};x[f]=inp.value.replace(/[^0-9.]/g,"");saveDrafts();clearTimeout(window.__rr);window.__rr=setTimeout(render,400)};
+    inp.oninput=()=>{d.partners=d.partners||{};const x=d.partners[pid]=d.partners[pid]||{w:"",r:""};const raw=inp.value.replace(/[^0-9.]/g,"");x[f]=f==="w"&&raw!==""?String(fromDisp(raw)):raw;saveDrafts();clearTimeout(window.__rr);window.__rr=setTimeout(render,400)};
     inp.onchange=()=>openSheet(it.id,true)});
   const on=$("#ptrackon",sh); if(on) on.onclick=()=>{plan.ptrack[it.id]=true;savePlan();openSheet(it.id,true);render()};
   const off=$("#ptrackoff",sh); if(off) off.onclick=()=>{plan.ptrack[it.id]=false;savePlan();openSheet(it.id,true);render()};
@@ -1688,7 +1706,7 @@ function openPartnerEdit(pid,back){
    <div class="cform"><label>Name<span class="field"><input id="pe-name" value="${p?esc(p.name):""}" placeholder="e.g. Jay" autocomplete="off"></span></label>
    <div class="lbl" style="margin-bottom:0">Starting maxes <small>(optional)</small></div>
    <p class="savenote" style="margin:0">If you know their current heaviest weight, put it in so progress starts from there.</p>
-   ${lifts.map(it=>`<label class="pestart"><span>${esc(it.name)}</span><span class="field"><input inputmode="decimal" data-ps="${it.id}" value="${p&&p.start&&p.start[it.id]?p.start[it.id]:""}" placeholder="lb" aria-label="${esc(it.name)} starting max"><span>lb</span></span></label>`).join("")}
+   ${lifts.map(it=>`<label class="pestart"><span>${esc(it.name)}</span><span class="field"><input inputmode="decimal" data-ps="${it.id}" value="${p&&p.start&&p.start[it.id]?toDisp(p.start[it.id]):""}" placeholder="${wU()}" aria-label="${esc(it.name)} starting max"><span>${wU()}</span></span></label>`).join("")}
    <p class="err" id="pe-err" style="color:var(--red);margin:0;font-size:13px"></p></div>
    <div class="btns"><button class="btn primary" id="pesave" style="flex:1">${p?"Save":"Add partner"}</button></div>
    ${p?`<div class="btns"><button class="btn danger" id="pedel" style="flex:1">Remove ${esc(p.name)} completely</button></div><p class="savenote">Deletes ${esc(p.name)} and every number you logged for them. Your own logs aren't touched.</p>`:""}`;
@@ -1696,7 +1714,7 @@ function openPartnerEdit(pid,back){
   const done=()=>{if(back)back();else closeSheet();render()};
   $("#pecancel",sh).onclick=()=>back?back():closeSheet();
   $("#pesave",sh).onclick=()=>{const n=$("#pe-name",sh).value.trim();if(!n){$("#pe-err",sh).textContent="Give them a name.";return}
-    const start={};sh.querySelectorAll("[data-ps]").forEach(i=>{const v=Number(i.value);if(v>0)start[i.dataset.ps]=v});
+    const start={};sh.querySelectorAll("[data-ps]").forEach(i=>{const v=Number(fromDisp(i.value.replace(/[^0-9.]/g,"")));if(v>0)start[i.dataset.ps]=v});
     if(p){p.name=n;p.start=start}else plan.partners.push({id:"p"+Date.now().toString(36),name:n,start});
     if(!pid&&!state.pSel) state.pSel=plan.partners[plan.partners.length-1].id;
     savePlan();done();toast(p?"Partner saved":`${n} added. Log their top set on the big lifts.`)};
@@ -1707,13 +1725,13 @@ function openPartnerEdit(pid,back){
 function partnerPanel(){
   const ps=plan.partners; const sel=ps.find(x=>x.id===state.pSel)||ps[0]; const lifts=trackedLifts();
   const cut=ymd(new Date(Date.now()-28*864e5));
-  const chg=(now,prev)=>now&&prev&&now>prev?`<span class="up">+${now-prev} in 4 wk</span>`:"";
+  const chg=(now,prev)=>now&&prev&&now>prev?`<span class="up">+${toDisp(now-prev)} in 4 wk</span>`:"";
   return `<div class="panel" id="partners"><h2>Partner maxes</h2>
    ${ps.length?`<div class="dchips" style="margin-bottom:10px">${ps.map(p=>`<button class="dchip wide ${sel&&sel.id===p.id?"on":""}" data-psel="${p.id}">You vs ${esc(p.name)}</button>`).join("")}<button class="dchip wide" id="paddp2">+ Add partner</button></div>
    ${lifts.length?`<div class="mx">${`<div class="mxh"><span>Lift</span><span>You</span><span>${esc(sel.name)}</span></div>`}${lifts.map(it=>{const me=myBest(it.id),mp=myBest(it.id,cut),pb=pBest(sel.id,it.id),pp=pBest(sel.id,it.id,cut);
      const hist=entriesOf(it.id).filter(e=>e.done||(e.partners&&e.partners[sel.id])).slice(-12).reverse();
-     return `<details class="mxr"><summary><span>${esc(it.name)}</span><span>${me.w||"—"}${chg(me.w,mp.w)}</span><span>${pb.w||"—"}${chg(pb.w,pp.w)}</span></summary>
-      ${hist.length?`<div class="history">${hist.map(e=>{const x=e.partners&&e.partners[sel.id];return `<div><span class="d">${fmtDate(e.date)}</span><span class="v">You ${topW(e.sets)||"—"} · ${esc(sel.name)} ${x?x.w+(x.r?"×"+x.r:""):"—"}</span></div>`}).join("")}</div>`:`<p class="savenote">No logs yet for this lift.</p>`}</details>`}).join("")}</div>`
+     return `<details class="mxr"><summary><span>${esc(it.name)}</span><span>${me.w?toDisp(me.w):"—"}${chg(me.w,mp.w)}</span><span>${pb.w?toDisp(pb.w):"—"}${chg(pb.w,pp.w)}</span></summary>
+      ${hist.length?`<div class="history">${hist.map(e=>{const x=e.partners&&e.partners[sel.id];return `<div><span class="d">${fmtDate(e.date)}</span><span class="v">You ${topW(e.sets)?toDisp(topW(e.sets)):"—"} · ${esc(sel.name)} ${x?toDisp(x.w)+(x.r?"×"+x.r:""):"—"}</span></div>`}).join("")}</div>`:`<p class="savenote">No logs yet for this lift.</p>`}</details>`}).join("")}</div>`
      :`<p>None of your days have a big lift right now. Open any lift and tap <b>Track a partner's max</b>.</p>`}
    <div class="btns"><button class="btn small" id="pedit">Edit ${esc(sel.name)}</button><button class="btn small danger" id="prm">Remove ${esc(sel.name)}</button></div>
    <p class="savenote">Heaviest top set on each lift, from your logs and the partner line. Tap a lift to see every week.</p>`
