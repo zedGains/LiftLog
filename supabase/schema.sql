@@ -82,3 +82,16 @@ create policy admins_self on public.admins for select to authenticated using (us
 do $$ begin
   alter publication supabase_realtime add table public.docs;
 exception when duplicate_object then null; end $$;
+
+-- "Delete my account": removes the person's documents, shared programs and sign-in.
+create or replace function public.delete_my_account() returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'not signed in'; end if;
+  delete from public.docs
+   where owner = auth.uid()
+      or path in ('programs/' || auth.uid()::text, 'social/' || auth.uid()::text);
+  delete from auth.users where id = auth.uid();   -- profiles/admins rows cascade
+end $$;
+revoke all on function public.delete_my_account() from public, anon;
+grant execute on function public.delete_my_account() to authenticated;

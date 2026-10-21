@@ -123,6 +123,21 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .mxr summary span:first-child{font-family:var(--body);font-weight:700;font-size:14px}
 .mxr .history{padding:0 2px 10px}
 .up{display:block;color:var(--ok);font-size:11.5px}
+.danger-zone{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.danger-zone summary{cursor:pointer;color:var(--red);font-weight:700;font-size:14px}
+.danger-zone p{font-size:13.5px}
+.tabs:has(nav:empty){display:none}
+.panel a,.savenote a{color:var(--fg)}
+.boot{padding:40px 0;text-align:center;color:var(--muted)}
+.welcome{display:grid;gap:12px;padding-bottom:24px}
+.welcome h1{font-size:30px}
+.wchoice{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.wchoice:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wchoice:first-of-type{border:2px solid var(--accent)}
+.wct{font-family:var(--display);font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.02em}
+.wcd{font-size:14px;color:var(--muted)}
+.wcdays{display:grid;gap:6px;margin-top:4px;font-size:12.5px;color:var(--muted)}
+.wcdays b{display:block;color:var(--fg);font-size:13px}
 .ronote{margin:0;font-size:12.5px;color:var(--muted)}
 .rolist{display:grid;gap:6px}
 .rorow{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px 8px 4px;box-sizing:border-box}
@@ -382,95 +397,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 
 <script>
 /* ---------- program data (from "3 Day Training Split") ---------- */
-const CORE = (day)=>[
- {sec:"Abs", items:[
-  {id:"crunches",name:"Crunches",sets:3,reps:[15,25],type:"bw",target:"Abs",p:["abs"],s:[],
-   note:"25 reps is preferable if you can do it. Use an inclined ab bench if your gym has one.",
-   alts:["Cable Crunch","Ab Crunch Machine","Decline Sit-Ups"]},
-  {id:"legraise",name:"Leg Raises (dumbbell between feet)",sets:3,setsGuess:true,reps:[15,25],type:"bw",target:"Lower abs",p:["abs"],s:["obliques"],
-   note:"Use the weight that lets you do 15 to 25 reps. Incline bench or the floor both work. The program doesn't list a set count, so 3 rows are here to log.",
-   alts:["Hanging Leg Raises","Captain's Chair Leg Raises","Reverse Crunches"]}]},
- {sec:"Obliques", items:[
-  {id:"sways",name:"Dumbbell Oblique Sways",sets:2,reps:[25,25],each:true,type:"lift",target:"Obliques",p:["obliques"],s:["abs"],
-   note:"2 sets of 25 on each side. Use the weight that lets you do a proper 25.",
-   alts:["Cable Side Bends","Plate Side Bends","Roman Chair Side Bends"]}]},
- {sec:"Cardio", items:[
-  {id:"cardio_"+day,name:"Mild Cardio, 10 min",sets:1,reps:[10,10],type:"cardio",target:"Heart rate 135–140",p:[],s:[],
-   note:"10 minutes on any machine you choose. Keep your heart rate between 135 and 140 bpm.",
-   alts:["Incline Treadmill Walk","Stationary Bike","Elliptical","StairMaster (slow)"]}]}
-];
-const DAYS = {
- d1:{key:"d1",label:"Day 1",weekday:1,dayname:"Monday",title:"Chest & Arms",short:"Chest·Arms",color:"--red",
-  sections:[
-  {sec:"Chest",items:[
-   {id:"dbflies",name:"Dumbbell Flies",sets:3,drop:true,reps:[6,8],type:"lift",target:"Chest",p:["chest"],s:["shoulders"],
-    alts:["Pec Deck Fly","Cable Crossover (mid height)","Machine Chest Fly"]},
-   {id:"inclinebench",name:"Incline Bench Press",sets:4,drop:true,reps:[8,10],type:"lift",target:"Upper chest",p:["chest"],s:["shoulders","triceps"],
-    alts:["Incline Dumbbell Press","Incline Smith Machine Press","Incline Chest Press Machine"]},
-   {id:"declineflies",name:"Decline Flies",sets:3,drop:true,reps:[6,8],type:"lift",target:"Lower chest",p:["chest"],s:[],
-    alts:["High-to-Low Cable Crossover","Decline Dumbbell Press","Chest Dips (lean forward)"]}]},
-  {sec:"Triceps",items:[
-   {id:"ropepd",name:"Rope Pull Downs",sets:3,reps:[12,15],type:"lift",target:"Triceps",p:["triceps"],s:[],
-    alts:["Straight-Bar Pushdown","V-Bar Pushdown","Single-Arm Cable Pushdown"]},
-   {id:"skull",name:"Skull Crushers",sets:4,drop:true,reps:[12,15],type:"lift",target:"Triceps",p:["triceps"],s:[],
-    alts:["Dumbbell Skull Crushers","Overhead Dumbbell Extension","Cable Overhead Rope Extension"]},
-   {id:"dips",name:"Bench Dips or Triceps Dip Machine",sets:3,reps:[12,15],type:"lift",target:"Triceps",p:["triceps"],s:["chest","shoulders"],
-    note:"Either one counts. Log the added weight (or machine weight). Leave weight blank for bodyweight bench dips.",
-    alts:["Assisted Dip Machine","Close-Grip Bench Press","Close-Grip Push-Ups"]}]},
-  {sec:"Biceps",items:[
-   {id:"seatedcurl",name:"Seated Dumbbell Curls",sets:4,drop:true,reps:[8,10],type:"lift",target:"Biceps",p:["biceps"],s:["forearms"],
-    note:"Keep your back flat on the bench, with the bench set at 90 degrees.",
-    alts:["Standing Dumbbell Curls","Cable Curls","Incline Dumbbell Curls"]},
-   {id:"preacher",name:"Barbell Preacher Curls",sets:4,reps:[12,15],type:"lift",target:"Biceps",p:["biceps"],s:["forearms"],
-    alts:["Preacher Curl Machine","Dumbbell Preacher Curl","Cable Preacher Curl"]},
-   {id:"reversecurl",name:"Standing Reverse Grip Curls (EZ Bar)",sets:4,reps:[12,15],type:"lift",target:"Forearms & biceps",p:["forearms","biceps"],s:[],
-    alts:["Reverse-Grip Cable Curl","Hammer Curls","Dumbbell Reverse Curls"]}]},
-  ...CORE("d1")]},
- d2:{key:"d2",label:"Day 2",weekday:3,dayname:"Wednesday",title:"Legs",short:"Legs",color:"--blue",
-  sections:[
-  {sec:"Legs",items:[
-   {id:"hamcurl",name:"Hamstring Curls",sets:4,reps:[8,10],type:"lift",target:"Hamstrings",p:["hamstrings"],s:["calves"],
-    alts:["Seated Leg Curl","Lying Leg Curl","Single-Leg Cable Curl"]},
-   {id:"sldl",name:"Straight Leg Deadlifts",sets:4,reps:[10,12],type:"lift",target:"Hamstrings",p:["hamstrings"],s:["glutes","lowerback"],
-    alts:["Dumbbell Stiff-Leg Deadlift","Smith Machine Stiff-Leg Deadlift","Cable Pull-Through"]},
-   {id:"legpress",name:"Leg Press",sets:5,drop:true,reps:[8,12],type:"lift",target:"Quads",p:["quads"],s:["glutes","hamstrings"],
-    alts:["Hack Squat","Smith Machine Squat","Single-Leg Press"]},
-   {id:"hacksquat",name:"Hack Squat",sets:4,reps:[8,10],type:"lift",target:"Quads",p:["quads"],s:["glutes"],
-    alts:["Smith Machine Squat","Leg Press (feet low)","Goblet Squat"]},
-   {id:"sumo",name:"Sumo Squats",sets:4,reps:[8,12],type:"lift",target:"Inner thighs & glutes",p:["quads","glutes"],s:["hamstrings"],
-    note:"Free weights or a Smith machine both work.",
-    alts:["Dumbbell Sumo Squat","Smith Machine Sumo Squat","Wide-Stance Leg Press"]},
-   {id:"lunges",name:"Front Lunges",sets:4,reps:[8,12],type:"lift",target:"Quads & glutes",p:["quads","glutes"],s:["hamstrings"],
-    note:"Free weights or a Smith machine both work.",
-    alts:["Smith Machine Lunges","Walking Dumbbell Lunges","Bulgarian Split Squat"]},
-   {id:"calfraise",name:"Calf Raises",sets:4,reps:[15,20],type:"lift",target:"Calves",p:["calves"],s:[],
-    alts:["Smith Machine Calf Raise","Calf Raise on Leg Press","Single-Leg Dumbbell Calf Raise"]},
-   {id:"seatedcalf",name:"Seated Calf Raises",sets:4,reps:[15,20],type:"lift",target:"Calves (soleus)",p:["calves"],s:[],
-    alts:["Dumbbell-on-Knee Seated Calf Raise","Smith Machine Seated Calf Raise","Leg Press Calf Raise"]}]},
-  ...CORE("d2")]},
- d3:{key:"d3",label:"Day 3",weekday:5,dayname:"Friday",title:"Back & Shoulders",short:"Back·Delts",color:"--yellow",
-  sections:[
-  {sec:"Back",items:[
-   {id:"bbrow",name:"Underhand Grip Barbell Rows",sets:4,drop:true,reps:[6,8],type:"lift",target:"Lats & mid back",p:["lats","midback"],s:["biceps","reardelts"],
-    alts:["Underhand Smith Machine Row","Supinated Dumbbell Row","T-Bar Row"]},
-   {id:"cablerow",name:"Seated Cable Rows (underhand grip)",sets:4,drop:true,reps:[8,10],type:"lift",target:"Mid back & lats",p:["midback","lats"],s:["biceps"],
-    alts:["Chest-Supported Machine Row","One-Arm Dumbbell Row","Seated Row Machine"]},
-   {id:"latpd",name:"Front Lat Pull Down",sets:3,drop:true,reps:[10,12],type:"lift",target:"Lats",p:["lats"],s:["biceps","midback"],
-    alts:["Assisted Pull-Up Machine","Single-Arm Cable Pulldown","Pulldown Machine"]}]},
-  {sec:"Shoulders",items:[
-   {id:"lateral",name:"Seated Dumbbell Lateral Raises",sets:3,drop:true,reps:[8,10],type:"lift",target:"Side delts",p:["shoulders"],s:["traps"],
-    alts:["Cable Lateral Raise","Lateral Raise Machine","Standing Dumbbell Lateral Raise"]},
-   {id:"ohp",name:"Seated Barbell Front Shoulder Press",sets:3,drop:true,reps:[8,10],type:"lift",target:"Front delts",p:["shoulders"],s:["triceps","traps"],
-    alts:["Seated Dumbbell Shoulder Press","Smith Machine Shoulder Press","Shoulder Press Machine"]},
-   {id:"rearfly",name:"Rear Pec Deck Fly",sets:3,drop:true,reps:[10,15],type:"lift",target:"Rear delts",p:["reardelts"],s:["midback"],
-    note:"No pec deck machine? Do dumbbell rear shoulder flies.",
-    alts:["Bent-Over Dumbbell Rear Flies","Cable Rear Delt Fly","Face Pulls"]}]},
-  {sec:"Traps",items:[
-   {id:"shrugs",name:"Shrugs",sets:5,drop:true,reps:[8,12],type:"lift",target:"Traps",p:["traps"],s:["forearms"],
-    note:"Shrug machine, dumbbells or barbell all count.",
-    alts:["Dumbbell Shrugs","Barbell Shrugs","Smith Machine Shrugs"]}]},
-  ...CORE("d3")]}
-};
+const DAYS={}; let TPL=null; let BUILTIN=[];
 
 
 /* ---------- body map ---------- */
@@ -518,7 +445,8 @@ const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}
 const thaw=(v)=>v==null?v:JSON.parse(JSON.stringify(v));
 const yt=(q)=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q+" proper form");
 const rxText=(it)=>{
-  if(it.type==="cardio") return String(it.id).startsWith("cardio_")?"10 min · 135–140 bpm":`${it.reps[0]} min`;
+  if(it.rx) return it.rx;
+  if(it.type==="cardio") return `${it.reps[0]} min`;
   const r=it.reps[0]===it.reps[1]?`${it.reps[0]}`:`${it.reps[0]}–${it.reps[1]}`;
   return `${it.sets}×${r}${it.each?" each side":""}`;
 };
@@ -531,7 +459,7 @@ function setsText(sets,type){
 }
 
 /* ---------- state & storage ---------- */
-const state={tab:ls.get("ll.tab",null),logs:{},drafts:ls.get("ll.drafts."+TODAY,{}),mode:"local",open:null};
+const state={tab:ls.get("ll.tab",null),logs:{},drafts:ls.get("ll.drafts."+TODAY,{}),mode:"local",open:null,loading:!ls.get("ll.plan",null),needsStart:false};
 let db=null,uid=null,col=null;
 const LOCAL_KEY="ll.logs";
 function loadLocal(){state.logs=ls.get(LOCAL_KEY,{})}
@@ -564,10 +492,8 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-const DEF_SCHED={"1":"d1","3":"d2","5":"d3"};
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{...DEF_SCHED},bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
-const BUILTIN=["d1","d2","d3"];
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,sections:[]}});
   trainKeys().forEach((k,i)=>{DAYS[k].label="Day "+(i+1)})}
@@ -601,7 +527,6 @@ function refreshTitles(){
     d.title=title; d.short=title.replace("Shoulders","Delts").replace(/ & /g,"·"); d.autoTitle=auto;
   });
 }
-syncDays();
 let planPending=0;
 function savePlan(){
   plan.rev=Date.now(); ls.set("ll.plan",plan);
@@ -614,7 +539,50 @@ function savePlan(){
   }
 }
 function libById(id){return LIB.find(x=>x.id===id)||plan.customs.find(x=>x.id===id)}
-const ORIG={}; Object.keys(DAYS).forEach(k=>DAYS[k].sections.forEach(sc=>sc.items.forEach(it=>{ORIG[it.id]=ORIG[it.id]||{...it,sec:sc.sec}})));
+const ORIG={};
+/* ---------- plan templates ----------
+   What a person starts from. "starter" is a generic Push/Pull/Legs built from the library.
+   "blank" has no days. "private" is a program kept in the person's own account
+   (data/users/<uid>/_template), e.g. one written for them by their trainer. */
+const STARTER_SPEC={name:"Starter 3-day · Push / Pull / Legs",schedule:{"1":"d1","3":"d2","5":"d3"},
+ notes:{eyebrow:"Starter 3-day · Push / Pull / Legs",restBanner:"Rest and recover. A walk or some light stretching helps.",
+  panels:[{h:"How to progress",t:"When you hit the top of the rep range on every set, add 5 lb next time. Most sets should end 1–3 reps short of failure."},
+   {h:"Warm-up",t:"Work up to your first working weight in 2–3 lighter sets. Warm-up sets don't need to be logged."},
+   {h:"Rest between sets",t:"About 1½–2 minutes on big lifts, 60–90 seconds on smaller ones. The Rest tab has a timer."}]},
+ days:{
+  d1:{label:"Day 1",title:"Push",color:"--red",items:[["Barbell Bench Press",3,[6,8]],["Seated Dumbbell Shoulder Press",3,[8,10]],["Incline Dumbbell Press",3,[8,10]],["Dumbbell Lateral Raise",3,[12,15]],["Rope Pushdown",3,[10,12]],["Overhead Cable Rope Extension",3,[10,12]]]},
+  d2:{label:"Day 2",title:"Pull",color:"--blue",items:[["Lat Pulldown",3,[8,10]],["Seated Cable Row",3,[8,10]],["One-Arm Dumbbell Row",3,[10,12]],["Face Pulls",3,[12,15]],["EZ-Bar Curl",3,[8,10]],["Hammer Curl",3,[10,12]]]},
+  d3:{label:"Day 3",title:"Legs & Core",color:"--yellow",items:[["Barbell Back Squat",3,[6,8]],["Romanian Deadlift",3,[8,10]],["Leg Press",3,[10,12]],["Lying Leg Curl",3,[10,12]],["Standing Calf Raise Machine",3,[12,15]],["Hanging Leg Raises",3,[10,15]]]}}};
+function buildStarter(){
+  const t={name:STARTER_SPEC.name,schedule:STARTER_SPEC.schedule,notes:STARTER_SPEC.notes,days:{}};
+  Object.keys(STARTER_SPEC.days).forEach(k=>{const d=STARTER_SPEC.days[k];const secs={};const order=[];
+    d.items.forEach(([name,sets,reps])=>{const L=LIB.find(x=>x.name===name);if(!L)return;const sec=["Quads","Hamstrings","Glutes","Calves"].includes(L.g)?"Legs":L.g;
+      if(!secs[sec]){secs[sec]=[];order.push(sec)}
+      secs[sec].push({id:"s_"+L.id,name:L.name,sets,reps,type:L.type,target:L.g,g:L.g,p:L.p,s:L.s,alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name)})});
+    t.days[k]={label:d.label,title:d.title,short:d.title,color:d.color,sections:order.map(sec=>({sec,items:secs[sec]}))}});
+  return t}
+const BLANK_TPL={name:"Your own plan",schedule:{},notes:{eyebrow:"Your plan"},days:{}};
+function templateFor(p){
+  const kind=p.template||"private";
+  if(kind==="starter") return buildStarter();
+  if(kind==="blank") return BLANK_TPL;
+  const t=ls.get("ll.tpl",null); return t&&t.days?t:null;
+}
+function installTemplate(t){
+  BUILTIN.forEach(k=>delete DAYS[k]); Object.keys(ORIG).forEach(k=>delete ORIG[k]);
+  TPL=t||BLANK_TPL; BUILTIN=Object.keys(TPL.days||{});
+  BUILTIN.forEach(k=>{const d=TPL.days[k];DAYS[k]={key:k,label:d.label,weekday:d.weekday,dayname:d.dayname,title:d.title,short:d.short||d.title,color:d.color||"--slate",
+    sections:(d.sections||[]).map(s=>({sec:s.sec,items:(s.items||[]).map(it=>({p:[],s:[],alts:[],reps:[8,10],sets:3,type:"lift",target:s.sec,...it}))}))}});
+  Object.keys(DAYS).forEach(k=>(DAYS[k].sections||[]).forEach(sc=>sc.items.forEach(it=>{ORIG[it.id]=ORIG[it.id]||{...it,sec:sc.sec}})));
+  syncDays();
+}
+let TPL_SIG="";
+function refreshTemplate(){const t=templateFor(plan);const sig=JSON.stringify([plan.template,t&&t.name,t&&Object.keys(t.days||{}),ls.get("ll.tpl",null)&&plan.template!=="starter"&&plan.template!=="blank"?JSON.stringify(ls.get("ll.tpl",null)).length:0]);
+  if(sig!==TPL_SIG){TPL_SIG=sig;installTemplate(t)}}
+function tplNote(k){return TPL&&TPL.notes&&TPL.notes[k]}
+
+const HAD_LOCAL_PLAN=!!ls.get("ll.plan",null);
+refreshTemplate();
 const M2G={chest:"Chest",lats:"Back",midback:"Back",lowerback:"Back",shoulders:"Shoulders",reardelts:"Shoulders",traps:"Traps",biceps:"Biceps",triceps:"Triceps",forearms:"Forearms",quads:"Quads",hamstrings:"Hamstrings",glutes:"Glutes",calves:"Calves",abs:"Abs",obliques:"Obliques"};
 function groupOf(it){return it.g||(it.type==="cardio"?"Cardio":M2G[(it.p||[])[0]]||it.sec)}
 function sectionFor(g,dayKey){
@@ -784,7 +752,7 @@ function schedOf(wd){const k=plan.schedule[String(wd)];return k&&DAYS[k]?k:null}
 function weekdayTab(){return schedOf(new Date().getDay())}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
-function pickTab(){return validTab(state.tab)?state.tab:(weekdayTab()||"d1")}
+function pickTab(){return validTab(state.tab)?state.tab:(weekdayTab()||trainKeys()[0]||"plan")}
 function tabList(){refreshTitles();return [...[...trainKeys(),...dayKeys().filter(k=>DAYS[k].prog)].map(k=>({k,top:DAYS[k].label,v:DAYS[k].short,c:DAYS[k].color})),
   {k:"add",plus:true,v:"Add day",c:"--green"},{k:"programs",top:"Plans",v:"Programs",c:"--green"},{k:"timer",top:"Rest",v:"Timer",c:"--green"},{k:"plan",top:"Log",v:"History·Plan",c:"--green"}]}
 function renderTabs(){
@@ -793,7 +761,27 @@ function renderTabs(){
    `<button class="tab" role="tab" id="tab-${t.k}" aria-selected="${t.k===cur}" style="--tc:var(${t.c})" data-tab="${t.k}"><span class="k">${esc(t.top)}</span><span class="v">${esc(t.v)}</span></button>`).join("");
   const sel=$("#tabs [aria-selected=true]"); if(sel&&sel.scrollIntoView) sel.scrollIntoView({block:"nearest",inline:"nearest"});
 }
+function bootLocal(){if(!state.loading)return;state.loading=false;if(!HAD_LOCAL_PLAN&&!plan.template)state.needsStart=true;render()}
+function startWith(kind){
+  plan.template=kind==="community"?"blank":kind; plan.schedule={...((kind==="starter"?STARTER_SPEC.schedule:{}))};
+  state.needsStart=false; refreshTemplate(); savePlan(); syncDays();
+  state.tab=kind==="starter"?"d1":kind==="community"?"programs":"plan"; ls.set("ll.tab",state.tab); render(); window.scrollTo(0,0);
+}
+function welcomeView(){
+  const st=buildStarter();
+  return `<div class="welcome">
+   <header class="dayhead"><div class="row"><div><div class="eyebrow">Welcome${window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name?", "+esc(window.LIFTLOG_ACCOUNT.name):""}</div><h1>How do you want to start?</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
+   <button class="wchoice" data-start="starter"><span class="wct">Starter 3-day plan</span><span class="wcd">Push, Pull, Legs on Mon, Wed, Fri. 3 sets of each, built from common gym exercises.</span>
+     <span class="wcdays">${Object.keys(st.days).map(k=>`<span><b>${esc(st.days[k].label)} · ${esc(st.days[k].title)}</b>${esc(st.days[k].sections.flatMap(s=>s.items).map(i=>i.name).join(", "))}</span>`).join("")}</span></button>
+   <button class="wchoice" data-start="blank"><span class="wct">Build my own</span><span class="wcd">Start empty. Add your days with <b>+ Add day</b>, then pick exercises from the library or make your own.</span></button>
+   <button class="wchoice" data-start="community"><span class="wct">Follow a shared program</span><span class="wcd">Browse programs other lifters and trainers have published and start one.</span></button>
+   <p class="savenote">You can change anything later: swap exercises, add or remove days and sets, or switch programs.</p>
+  </div>`;
+}
 function render(){
+  if(state.loading){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=`<p class="boot">Loading your plan…</p>`;return}
+  if(state.needsStart){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=welcomeView();
+    document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>startWith(b.dataset.start));return}
   const tab=pickTab(); document.body.dataset.day=tab; renderTabs();
   if(DAYS[tab]&&DAYS[tab].custom){document.body.style.setProperty("--accent",`var(${DAYS[tab].color})`);document.body.style.setProperty("--accent-ink",DAYS[tab].color==="--yellow"?"var(--on-yellow)":"#fff")}
   else{document.body.style.removeProperty("--accent");document.body.style.removeProperty("--accent-ink")}
@@ -818,7 +806,7 @@ function render(){
     <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
-  ${restDay?`<div class="banner"><b>${new Date().toLocaleDateString(undefined,{weekday:"long"})} is a rest day on the plan.</b> Do 30 min of mild cardio in the morning on an empty stomach (heart rate 135–140). Water's fine.</div>`:""}
+  ${restDay?`<div class="banner"><b>${new Date().toLocaleDateString(undefined,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
   <div class="mapwrap">${bodyMap([...prim],[...sec].filter(x=>!prim.has(x)))}
     <div class="legend"><p>Muscles hit today</p>
       <div><span class="sw" style="background:var(--accent)"></span>Main target</div>
@@ -1173,7 +1161,7 @@ function showKcalHow(){
    <div class="howto">
     <p><b>Lifting, for each set:</b> the work you did (weight × reps × about half a meter of movement, for every drop in a drop set), converted to calories at the body's roughly 20% efficiency. Plus your body's burn during the set and the rest after it (your rest timer, now ${fmtT(timer.preset)}), based on your body weight.</p>
     <p><b>Bodyweight moves</b> (dips, crunches, leg raises) count about half your body weight as the load, plus any weight you add.</p>
-    <p><b>Cardio:</b> minutes × your body weight at a moderate pace (heart rate 135–140).</p>
+    <p><b>Cardio:</b> minutes × your body weight at a moderate pace.</p>
     <p><b>Blank boxes:</b> a set with no reps uses the middle of the rep range.</p>
     <p class="savenote">This is an estimate. Real burn depends on tempo, how hard you push, and your body, so it can be off by 20–30% either way. A heart-rate watch gets closer. It's most useful for comparing your own workouts week to week.</p>
    </div>
@@ -1259,8 +1247,9 @@ function planView(){
   const thisMonth=ss.filter(x=>x.date.startsWith(monthKey)).length;
   const wkStart=(()=>{const d=new Date();const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)})();
   const thisWeek=ss.filter(x=>x.date>=wkStart).length;
-  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">3-day split · weight loss</div><h1>Workout Log</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
+  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
   <div class="plan">
+   ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    <div class="panel" id="about"><h2>About you</h2>
     <div class="about">
      <label>Weight<span class="field"><input id="pf-w" inputmode="decimal" value="${plan.bw||""}" placeholder="220" aria-label="Weight in pounds"><span>lb</span></span></label>
@@ -1270,7 +1259,11 @@ function planView(){
     <p class="savenote" id="pf-err" role="alert"></p>
     <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
     <p class="savenote">Your weight drives the calorie estimate. Update it as it changes. ${plan.profile.updated?`Last updated ${fmtStamp(plan.profile.updated)}.`:""}</p></div>
-   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button></div></div>`:""}
+   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button></div>
+    <p class="savenote"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a></p>
+    <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
+     <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
+     <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
    ${partnerPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
@@ -1288,15 +1281,13 @@ function planView(){
    <div class="panel" id="dayorder"><h2>Day order</h2><p>Move a workout up or down to swap it with the day next to it. It takes over that day's number and weekday.</p>
     <div class="rolist">${(()=>{const L=trainKeys();return L.map((k,i)=>`<div class="rorow"><span class="ronum" style="color:var(${DAYS[k].color})">●</span><span class="ron">${esc(DAYS[k].label)} · ${esc(DAYS[k].title)}<small>${esc(schedNames(k))}</small></span><span class="roctl"><button class="iconbtn robtn" data-mvday="${k}" data-dir="-1" ${i?"":"disabled"} aria-label="Move ${esc(DAYS[k].title)} up">↑</button><button class="iconbtn robtn" data-mvday="${k}" data-dir="1" ${i<L.length-1?"":"disabled"} aria-label="Move ${esc(DAYS[k].title)} down">↓</button></span></div>`).join("")})()}</div></div>
 
-   <div class="panel"><h2>Rest days</h2><p><b>30 min of mild cardio every rest-day morning, on an empty stomach.</b> Water is fine, and coffee or a fat burner if you want. Any machine, heart rate 135–140. No machine at home? Fast walking works.</p></div>
-   <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set. Your program uses 20%.</p>
+   <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
     <div class="drow">${dropChips("pdp")}<label class="field dcustom"><input id="dpc" inputmode="numeric" value="${DROP_CHOICES.includes(dropPct)?"":dropPct}" placeholder="Other" aria-label="Custom drop percent"><span>%</span></label></div>
     <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="225" aria-label="Main weight"><span>lb</span></label>
      <output id="c1">—</output><output id="c2">—</output><output id="c3">—</output></div>
     <p class="savenote">Rounded to the nearest 5 lb.</p></div>
-   <div class="panel"><h2>Warm-up</h2><p>Work up in steps until you reach your main weight. Example for a 225 lb incline press: 95 → 115 → 145 → 205 → 225. Warm-up sets don't count, so do as many reps as you like.</p></div>
-   <div class="panel"><h2>After every workout</h2><p>10 minutes of mild cardio on any machine, heart rate 135–140. It's the last item on each day's list.</p></div>
+   ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).map(x=>`<div class="panel"><h2>${esc(x.h)}</h2><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}
   </div>`}
 function fmtStamp(ms){if(!ms)return "—";const d=new Date(ms);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}
 function isoLocal(ms){if(!ms)return "";const d=new Date(ms);return `${ymd(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
@@ -1335,7 +1326,10 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.signOut();bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
+function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.signOut();
+  const ex=$("#exportme");if(ex)ex.onclick=()=>window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data was downloaded")).catch(()=>toast("Couldn't download your data. Try again."));
+  const dc=$("#delconfirm"),da=$("#delacct");if(dc&&da){dc.oninput=()=>{da.disabled=dc.value.trim().toUpperCase()!=="DELETE"};
+    da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
   document.querySelectorAll("[data-wd]").forEach(b=>b.onclick=()=>{const i=+b.dataset.wd;state.weekEdit=state.weekEdit===i?null:i;render()});
   document.querySelectorAll("[data-sched]").forEach(b=>b.onclick=()=>{const k=b.dataset.sched;const w=String(state.weekEdit);if(k)plan.schedule[w]=k;else delete plan.schedule[w];savePlan();syncDays();state.weekEdit=null;render();toast(`${WD_LONG[+w]}: ${k?DAYS[k].label:"rest day"}`)});
   const pf=$("#pf-save");if(pf)pf.onclick=()=>{
@@ -1641,7 +1635,7 @@ function applyProgram(p,wi){
 }
 function stopProgram(){
   const k=plan.activeProgram&&plan.activeProgram.key;
-  clearProgramDays(); plan.schedule={...DEF_SCHED}; plan.activeProgram=null; savePlan(); syncDays();
+  clearProgramDays(); plan.schedule={...((TPL&&TPL.schedule)||{})}; plan.activeProgram=null; savePlan(); syncDays();
   if(k&&pg.myUses.has(k)){pg.myUses.delete(k);recount();writeSocial()}
   render(); toast("Stopped. Your week is back to Days 1–3.");
 }
@@ -1747,32 +1741,37 @@ render();
 /* ---------- account storage (db) ---------- */
 (async()=>{
   try{
-    if(!window.claude||!window.claude.use) return;
+    if(!window.claude||!window.claude.use) return bootLocal();
     const [d,u]=await Promise.all([window.claude.use("db"),window.claude.use("user")]);
-    if(!d||!u) return;
-    const id=await u.id(); if(!id) return;
+    if(!d||!u) return bootLocal();
+    const id=await u.id(); if(!id) return bootLocal();
     db=d;uid=id;col=db.collection("data/users/"+uid); uCap=u;
     try{startCommunity()}catch(e){console.warn(e)}
     try{u.isOwner().then(v=>{pg.isOwner=!!v})}catch(e){}
     const localLogs=ls.get(LOCAL_KEY,{});
     let first=true;
     col.onSnapshot(snap=>{
+      let tplDoc=null;
       const next={};snap.docs.forEach(doc=>{const v=thaw(doc.data());
+        if(doc.id==="_template"){tplDoc=v;return}
         if(doc.id==="_plan"&&v){ if(planPending>0) return; if(plan.rev&&(v.rev||0)<plan.rev) return;
           plan=normPlan(v); plan.rev=v.rev||0; ls.set("ll.plan",plan); syncDays(); return}
         if(v&&Array.isArray(v.entries))next[doc.id]={entries:v.entries}});
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
+      if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
+      if(first){state.loading=false; if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account
-        if(!snap.docs.some(x=>x.id==="_plan")&&(Object.keys(plan.slots).length||plan.customs.length)) savePlan();
+        if(!snap.docs.some(x=>x.id==="_plan")&&(plan.template||Object.keys(plan.slots).length||plan.customs.length)) savePlan();
         Object.keys(localLogs).forEach(k=>{const have=new Set((next[k]?.entries||[]).map(e=>e.date));
           const add=(localLogs[k].entries||[]).filter(e=>!have.has(e.date));
           if(add.length){state.logs[k]={entries:[...(next[k]?.entries||[]),...add].sort((a,b)=>a.date<b.date?-1:1)};persist(k)}});
       }
       if(!state.open) render(); else {render();}
-    },err=>{state.mode="local";loadLocal();render()});
-  }catch(e){}
+    },err=>{state.mode="local";loadLocal();bootLocal()});
+  }catch(e){bootLocal()}
 })();
 </script>
 

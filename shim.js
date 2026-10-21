@@ -89,7 +89,18 @@
     window.LIFTLOG_ACCOUNT = {
       email: user.email,
       name: (user.user_metadata && user.user_metadata.name) || "",
-      signOut: async () => { await sb.auth.signOut(); clearAppStorage(); location.reload(); }
+      signOut: async () => { await sb.auth.signOut(); clearAppStorage(); location.reload(); },
+      exportData: async () => {
+        const { data, error } = await sb.from("docs").select("path,data,updated_at").eq("owner", user.id);
+        if (error) throw mapErr(error);
+        const body = { exported: new Date().toISOString(), email: user.email, documents: data };
+        await downloadsApi.save({ filename: `liftlog-my-data-${new Date().toISOString().slice(0, 10)}.json`, data: new Blob([JSON.stringify(body, null, 2)], { type: "application/json" }) });
+      },
+      deleteAccount: async () => {
+        const { error } = await sb.rpc("delete_my_account");
+        if (error) throw mapErr(error);
+        await sb.auth.signOut().catch(() => {}); clearAppStorage(); location.reload();
+      }
     };
     ensureProfile(user);
     hideAuth();
@@ -242,6 +253,7 @@
       </form>
       ${up || np ? "" : `<button class="linkbtn" id="a-forgot" type="button">${fp ? "Back to sign in" : "Forgot password?"}</button>`}
       <p class="savenote">Your workouts are saved to your account, so they're on any phone you sign in on.</p>
+      ${up ? `<p class="savenote">By creating an account you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>. LiftLog isn't medical advice; check with a doctor before starting a new program.</p>` : `<p class="savenote"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>`}
     </div>`;
     el.querySelectorAll("[data-am]").forEach((b) => (b.onclick = () => showAuth(b.dataset.am)));
     const f = el.querySelector("#a-forgot"); if (f) f.onclick = () => showAuth(fp ? "signin" : "forgot");

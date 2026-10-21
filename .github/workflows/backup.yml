@@ -1,0 +1,47 @@
+# Nightly backup of the LiftLog database (all documents + profiles) as a private
+# GitHub Actions artifact, kept 30 days. Download from: Actions → Nightly backup → a run → Artifacts.
+# Needs two repo secrets (Settings → Secrets and variables → Actions):
+#   SUPABASE_URL          https://<project>.supabase.co
+#   SUPABASE_SECRET_KEY   the project's secret / service_role key (never put this in the app)
+name: Nightly backup
+on:
+  schedule:
+    - cron: "17 7 * * *"   # 3:17 AM Eastern
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Export tables
+        env:
+          URL: ${{ secrets.SUPABASE_URL }}
+          KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${URL}" ] || [ -z "${KEY}" ]; then echo "Add SUPABASE_URL and SUPABASE_SECRET_KEY secrets first"; exit 1; fi
+          mkdir -p backup
+          dump() {
+            table="$1"; offset=0; page=1000; echo "[" > "backup/$table.json"; first=1
+            while :; do
+              chunk=$(curl -sS --fail "$URL/rest/v1/$table?select=*&order=$2&limit=$page&offset=$offset" -H "apikey: $KEY")
+              n=$(echo "$chunk" | jq 'length')
+              if [ "$n" -gt 0 ]; then
+                body=$(echo "$chunk" | jq -c '.[]' | paste -sd, -)
+                if [ $first -eq 1 ]; then first=0; else echo "," >> "backup/$table.json"; fi
+                echo "$body" >> "backup/$table.json"
+              fi
+              [ "$n" -lt "$page" ] && break
+              offset=$((offset+page))
+            done
+            echo "]" >> "backup/$table.json"
+            echo "$table: $(jq length backup/$table.json) rows"
+          }
+          dump docs path
+          dump profiles id
+      - uses: actions/upload-artifact@v4
+        with:
+          name: liftlog-backup-${{ github.run_id }}
+          path: backup/
+          retention-days: 30
