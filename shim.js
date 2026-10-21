@@ -238,6 +238,9 @@
     }
   });
 
+  // Server-side stats functions (counts only; see supabase/stats.sql).
+  window.LIFTLOG_RPC = async (fn, args) => { await ready; const { data, error } = await sb.rpc(fn, args || {}); if (error) throw mapErr(error); return data; };
+
   window.claude = Object.freeze({
     use: async (name) => {
       if (name === "downloads") return downloadsApi;

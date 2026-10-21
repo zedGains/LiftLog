@@ -128,6 +128,27 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .danger-zone p{font-size:13.5px}
 .tabs:has(nav:empty){display:none}
 .panel a,.savenote a{color:var(--fg)}
+.stats.s4{grid-template-columns:repeat(2,1fr)}
+@media (min-width:480px){.stats.s4{grid-template-columns:repeat(4,1fr)}}
+.wbars{width:100%;height:auto;display:block;margin-top:4px;overflow:visible}
+.wbars .bfill{fill:var(--accent)}
+.wbars .bar:hover .bfill,.wbars .bar:focus .bfill{opacity:.8}
+.wbars .bar:focus{outline:none}
+.wbars .bbase{stroke:var(--line);stroke-width:1}
+.wbars .bval{font:700 11px var(--mono);fill:var(--fg)}
+.wbars .bax{font:600 10px var(--body);fill:var(--muted)}
+.stable{margin-top:6px;font-size:13px}.stable summary{cursor:pointer;color:var(--muted)}
+.stable table{width:100%;border-collapse:collapse;margin-top:6px}.stable td,.stable th{text-align:left;padding:4px 2px;border-bottom:1px dashed var(--line);font-variant-numeric:tabular-nums}
+.hbars{display:grid;gap:8px}
+.hb{display:grid;grid-template-columns:minmax(0,1.3fr) 1fr auto;gap:10px;align-items:center;font-size:14px}
+.hbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbt{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+.hbt i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.hb b{font-family:var(--mono);font-size:13px;min-width:2ch;text-align:right}
+.mxrow{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:6px;padding:8px 2px;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:14px}
+.mxrow span:first-child{font-family:var(--body);font-weight:700;display:grid}.mxrow small{font-weight:500;color:var(--muted);font-size:12px}
+.salesp{border-style:dashed}
+.dayhead .btn.small{white-space:nowrap;flex:none}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -798,6 +819,7 @@ function render(){
   if(DAYS[tab]&&DAYS[tab].custom){document.body.style.setProperty("--accent",`var(${DAYS[tab].color})`);document.body.style.setProperty("--accent-ink",DAYS[tab].color==="--yellow"?"var(--on-yellow)":"#fff")}
   else{document.body.style.removeProperty("--accent");document.body.style.removeProperty("--accent-ink")}
   const app=$("#app");
+  if(state.stats){app.innerHTML=statsView(); bindStats(); return}
   if(tab==="timer"){app.innerHTML=timerView(); bindTimerView(); updateTimer(); return}
   if(tab==="plan"){app.innerHTML=planView(); bindPlan(); return}
   if(tab==="programs"){app.innerHTML=programsView(); bindPrograms(); return}
@@ -1261,6 +1283,7 @@ function planView(){
   const thisWeek=ss.filter(x=>x.date>=wkStart).length;
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
   <div class="plan">
+   ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    <div class="panel" id="about"><h2>About you</h2>
     <div class="about">
@@ -1340,7 +1363,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
+function bindPlan(){const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
   const ex=$("#exportme");if(ex)ex.onclick=()=>{ex.disabled=true;window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data is ready")).catch(e=>{if(!(e&&e.code==="declined"))toast("Couldn't download your data. Try again.")}).finally(()=>{ex.disabled=false})};
   const dc=$("#delconfirm"),da=$("#delacct");if(dc&&da){dc.oninput=()=>{da.disabled=dc.value.trim().toUpperCase()!=="DELETE"};
     da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
@@ -1371,7 +1394,7 @@ const WD_SHORT=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const WEEK_ORDER=[1,2,3,4,5,6,0];
 const GOALS=["Fat loss","Muscle","Strength","General fitness"];
 const LEVELS=["Beginner","Intermediate","Advanced"];
-const pg={seg:"community",goal:"",q:"",sort:"popular",community:[],socialDocs:{},social:{likes:{},uses:{}},myLikes:new Set(),myUses:new Set(),names:{},ready:false,isOwner:false,socialPending:0};
+const pg={seg:"community",goal:"",q:"",sort:"popular",community:[],socialDocs:{},social:{likes:{},uses:{}},myLikes:new Set(),myUses:new Set(),myStarted:{},names:{},ready:false,isOwner:false,socialPending:0};
 let uCap=null;
 function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function progById(id){return plan.myPrograms.find(p=>p.id===id)}
@@ -1426,7 +1449,7 @@ function progCard(p){const st=progStats(p);return `<button class="pcard" data-pv
   ${miniCal(p.weeks[0])}</button>`}
 function mineView(){
   const ps=plan.myPrograms;
-  return `<div class="plan"><button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
+  return `<div class="plan">${ps.some(p=>p.published)&&window.LIFTLOG_RPC?`<button class="browse" id="creatorstats" style="margin-top:4px"><span><b>📊 Creator stats</b><br><small>Starts, followers, likes and sales for your published programs</small></span><span aria-hidden="true">›</span></button>`:""}<button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
    ${ps.length?ps.map(p=>{const st=progStats(p);return `<button class="pcard" data-pedit="${esc(p.id)}"><span class="pct">${esc(p.title||"Untitled program")}</span>
      <span class="pcm">${p.published?'<b class="pub">Published</b>':"Draft"} · ${st.weeks} wk · ${st.dpw} days/wk · ${st.ex} exercises</span>${miniCal(p.weeks[0])}</button>`}).join("")
      :`<div class="panel"><p>No programs yet. Tap <b>+ New program</b> to build one, or open a community program and tap <b>Copy to my programs</b> to remix it.</p></div>`}</div>`;
@@ -1464,6 +1487,7 @@ function builderView(){
 function bindPrograms(){
   if(state.builder){bindBuilder();return}
   document.querySelectorAll("[data-seg]").forEach(b=>b.onclick=()=>{pg.seg=b.dataset.seg;render()});
+  const cs=$("#creatorstats"); if(cs) cs.onclick=()=>openStats("creator");
   const q=$("#pgq"); if(q) q.oninput=()=>{pg.q=q.value;clearTimeout(window.__pgq);window.__pgq=setTimeout(()=>{render();const n=$("#pgq");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length)}},200)};
   document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{pg.goal=b.dataset.goal;render()});
   const so=$("#pgsort"); if(so) so.onclick=()=>{pg.sort=pg.sort==="new"?"popular":"new";render()};
@@ -1553,12 +1577,12 @@ function publishProg(p){
   p.published=true;p.pubAt=Date.now();p.updatedAt=Date.now();savePlan();writePublic();render();toast("Published to the community");
 }
 let socQ=Promise.resolve();
-function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses]}; pg.socialPending++;
+function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted}}; pg.socialPending++;
   const run=()=>db.doc("social/"+uid).set(payload); socQ=socQ.then(run,run).catch(()=>{}).finally(()=>{pg.socialPending--}); }
 function recount(){const likes={},uses={};const docs={...pg.socialDocs};if(uid)docs[uid]={likes:[...pg.myLikes],uses:[...pg.myUses]};
   Object.values(docs).forEach(v=>{(v.likes||[]).forEach(k=>likes[k]=(likes[k]||0)+1);(v.uses||[]).forEach(k=>uses[k]=(uses[k]||0)+1)});pg.social={likes,uses}}
 function toggleLike(key){pg.myLikes.has(key)?pg.myLikes.delete(key):pg.myLikes.add(key);recount();writeSocial()}
-function rerenderPrograms(){if(pickTab()!=="programs"||state.builder)return;const ae=document.activeElement;if(ae&&ae.id==="pgq")return;const y=window.scrollY;render();window.scrollTo(0,y)}
+function rerenderPrograms(){if(pickTab()!=="programs"||state.builder||state.stats)return;const ae=document.activeElement;if(ae&&ae.id==="pgq")return;const y=window.scrollY;render();window.scrollTo(0,y)}
 function resolveNames(){if(!uCap)return;const ids=[...new Set(pg.community.map(p=>p.author).filter(Boolean))];if(!ids.length)return;
   uCap.profiles(ids).then(ps=>{let ch=false;ids.forEach(i=>{const n=(ps[i]&&ps[i].name)||"";if(pg.names[i]!==n){pg.names[i]=n;ch=true}});if(ch)rerenderPrograms()}).catch(()=>{})}
 function startCommunity(){
@@ -1569,7 +1593,7 @@ function startCommunity(){
   },()=>{pg.ready=true;rerenderPrograms()});
   db.collection("social").onSnapshot(snap=>{
     pg.socialDocs={}; snap.docs.forEach(doc=>{const v=thaw(doc.data());if(v)pg.socialDocs[doc.id]=v});
-    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[])}
+    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[]);pg.myStarted={...(pg.socialDocs[uid].started||{})}}
     delete pg.socialDocs[uid]; recount(); rerenderPrograms();
   },()=>{});
 }
@@ -1619,7 +1643,7 @@ function openUse(p){
     $("#ugo",sh).onclick=()=>{
       const prevKey=plan.activeProgram&&plan.activeProgram.key;
       applyProgram(p,wi);
-      if(state.mode==="db"&&!String(p.key).startsWith("mine:")){if(prevKey)pg.myUses.delete(prevKey);pg.myUses.add(p.key);recount();writeSocial()}
+      if(state.mode==="db"&&!String(p.key).startsWith("mine:")){if(prevKey)pg.myUses.delete(prevKey);pg.myUses.add(p.key);if(!pg.myStarted[p.key])pg.myStarted[p.key]=Date.now();recount();writeSocial()}
       else if(prevKey&&pg.myUses.has(prevKey)){pg.myUses.delete(prevKey);recount();writeSocial()}
       closeSheet(); const first=WEEK_ORDER.find(i=>(p.weeks[wi].days||{})[String(i)]);
       state.tab=first!=null?"pw"+first:"plan"; ls.set("ll.tab",state.tab); render(); window.scrollTo(0,0);
@@ -1746,12 +1770,81 @@ function bindPartnerPanel(){
   const e=$("#pedit"); if(e) e.onclick=()=>{const sel=plan.partners.find(x=>x.id===state.pSel)||plan.partners[0];if(sel)openPartnerEdit(sel.id)};
 }
 
+/* ---------- stats dashboards (owner + program creators). Counts only. ---------- */
+function weeks8(series){
+  const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7));
+  const out=[]; for(let i=7;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-7*i);out.push({week:ymd(x),n:0})}
+  (series||[]).forEach(s=>{const o=out.find(w=>w.week===s.week);if(o)o.n=Number(s.n)||0});
+  return out;
+}
+function weekBars(series,label){
+  const data=weeks8(series); const max=Math.max(1,...data.map(x=>x.n));
+  const W=320,H=150,top=18,bottom=24,gap=8,bw=(W-gap*7)/8; const total=data.reduce((a,x)=>a+x.n,0);
+  const bars=data.map((x,i)=>{const h=x.n?Math.max(3,(H-top-bottom)*x.n/max):0;const xx=i*(bw+gap);const y=H-bottom-h;
+    const wk=new Date(x.week+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"});
+    return `<g class="bar" tabindex="0" aria-label="Week of ${wk}: ${x.n} ${label}"><title>Week of ${wk}: ${x.n} ${label}</title>
+      <rect x="${xx}" y="${top}" width="${bw}" height="${H-top-bottom}" fill="transparent"/>
+      ${h?`<path d="M${xx} ${H-bottom}V${y+4}a4 4 0 0 1 4 -4h${bw-8}a4 4 0 0 1 4 4V${H-bottom}Z" class="bfill"/>`:""}
+      ${(x.n&&(x.n===max||i===7))?`<text x="${xx+bw/2}" y="${y-5}" text-anchor="middle" class="bval">${x.n}</text>`:""}
+      ${i%2===1||i===7?`<text x="${xx+bw/2}" y="${H-7}" text-anchor="middle" class="bax">${i===7?"This wk":wk}</text>`:""}</g>`}).join("");
+  return `<svg class="wbars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${label} per week, last 8 weeks, ${total} total">
+    <line x1="0" x2="${W}" y1="${H-bottom}" y2="${H-bottom}" class="bbase"/>${bars}</svg>
+    <details class="stable"><summary>Show as table</summary><table><thead><tr><th>Week of</th><th>${esc(label)}</th></tr></thead><tbody>${data.map(x=>`<tr><td>${fmtDate(x.week)}</td><td>${x.n}</td></tr>`).join("")}</tbody></table></details>`;
+}
+function hBars(rows,unit){
+  if(!rows.length) return `<p class="savenote">Nothing yet.</p>`;
+  const max=Math.max(1,...rows.map(r=>r.n));
+  return `<div class="hbars">${rows.map(r=>`<div class="hb" title="${esc(r.label)}: ${r.n} ${unit}"><span class="hbl">${esc(r.label)}</span><span class="hbt"><i style="width:${Math.max(2,r.n/max*100)}%"></i></span><b>${r.n}</b></div>`).join("")}</div>`;
+}
+const tile=(n,l,sub)=>`<div><b>${n}</b><small>${l}</small>${sub?`<span>${sub}</span>`:""}</div>`;
+const pct=(a,b)=>b?Math.round(a/b*100)+"%":"—";
+function openStats(kind){state.stats={kind,data:null,err:null};render();window.scrollTo(0,0);
+  if(!window.LIFTLOG_RPC){state.stats.err="Stats need an account connection.";render();return}
+  window.LIFTLOG_RPC(kind==="owner"?"admin_stats":"my_program_stats").then(d=>{if(state.stats&&state.stats.kind===kind){state.stats.data=d;render()}})
+    .catch(e=>{if(state.stats){state.stats.err=/not allowed/i.test(String(e&&e.message))?"Only the app owner can see this.":/function|does not exist|schema cache/i.test(String(e&&e.message))?"Stats aren't set up in the database yet (run stats.sql in Supabase).":"Couldn't load stats. Check your connection and try again.";render()}});
+}
+function statsView(){
+  const S=state.stats, owner=S.kind==="owner";
+  const head=`<header class="dayhead"><div class="row"><div><div class="eyebrow">${owner?"Owner only · counts, no personal data":"Your published programs"}</div><h1>${owner?"App stats":"Creator stats"}</h1></div><button class="btn small" id="statsback">‹ Back</button></div></header>`;
+  if(S.err) return head+`<div class="plan"><div class="panel"><p>${esc(S.err)}</p><div class="btns"><button class="btn small" id="statsretry">Try again</button></div></div></div>`;
+  if(!S.data) return head+`<p class="boot">Loading stats…</p>`;
+  const d=S.data;
+  if(owner){
+    const startsL={starter:"Starter plan",blank:"Built their own",private:"Private program"};
+    return head+`<div class="plan">
+     <div class="panel"><h2>People</h2><div class="stats s4">${tile(d.users,"accounts",`+${d.new7} this week`)}${tile(d.active7,"active this week","logged a workout")}${tile(d.active30,"active in 30 days")}${tile(pct(d.returned,d.loggedAny),"came back","after week 1")}</div>
+      <div class="dlabel">New sign-ups per week</div>${weekBars(d.signupsWeekly,"sign-ups")}</div>
+     <div class="panel"><h2>Workouts</h2><div class="stats">${tile(d.workouts30,"logged","last 30 days")}${tile(d.workoutsAll,"logged","all time")}${tile(d.active30?(d.workouts30/d.active30).toFixed(1):"—","per active person","30 days")}</div>
+      <div class="dlabel">Workouts logged per week</div>${weekBars(d.weekly,"workouts")}</div>
+     <div class="panel"><h2>How people start</h2>${hBars(Object.keys(d.starts||{}).map(k=>({label:startsL[k]||k,n:d.starts[k]})).sort((a,b)=>b.n-a.n),"people")}</div>
+     <div class="panel"><h2>Top exercises</h2><p class="savenote" style="margin-top:0">Times logged, last 30 days</p>${hBars((d.topExercises||[]).map(x=>({label:x.name,n:x.n})),"times")}</div>
+     <div class="panel"><h2>Community</h2><div class="stats">${tile(d.programs,"programs published")}${tile(d.following,"people following one")}${tile(d.partnerUsers,"track a partner")}</div>
+      ${(d.topPrograms||[]).length?`<div class="mx"><div class="mxh"><span>Program</span><span>Using</span><span>Likes</span></div>${d.topPrograms.map(p=>`<div class="mxrow"><span>${esc(p.title||"Untitled")}<small>${p.author?"by "+esc(p.author):""}</small></span><span>${p.using}</span><span>${p.likes}</span></div>`).join("")}</div>`:""}</div>
+     <div class="panel"><h2>Units</h2>${hBars(Object.keys(d.units||{}).map(k=>({label:k==="metric"?"kg · cm":k==="imperial"?"lb · ft/in":"Phone default",n:d.units[k]})),"people")}</div>
+     <p class="savenote">Counts only. Nobody's individual workouts, weights or partners are shown here.</p></div>`;
+  }
+  const ps=d||[]; const sum=(k)=>ps.reduce((a,p)=>a+(Number(p[k])||0),0);
+  if(!ps.length) return head+`<div class="plan"><div class="panel"><p>Publish a program from <b>My programs</b> and its numbers show up here: how many people start it, follow it, like it and train with it.</p></div></div>`;
+  return head+`<div class="plan">
+   <div class="panel"><h2>All programs</h2><div class="stats s4">${tile(sum("using"),"following now")}${tile(sum("started"),"total starts")}${tile(sum("likes"),"likes")}${tile(sum("workouts30"),"workouts","by followers, 30 days")}</div></div>
+   <div class="panel salesp"><h2>Sales</h2><div class="stats">${tile("$0","earned")}${tile(sum("sales"),"sold")}</div>
+    <p class="savenote">Paid programs are coming. When they launch, your sales, earnings after LiftLog's 10% and payouts will show here.</p></div>
+   ${ps.map(p=>`<div class="panel"><h2>${esc(p.title||"Untitled program")}</h2>
+     <div class="stats s4">${tile(p.using,"following now")}${tile(p.started,"started")}${tile(p.likes,"likes")}${tile(p.workouts30,"workouts","30 days")}</div>
+     <div class="dlabel">New starts per week</div>${weekBars(p.startsWeekly,"starts")}</div>`).join("")}
+   <p class="savenote">Counts only. You won't see who follows or what they lift.</p></div>`;
+}
+function bindStats(){
+  const b=$("#statsback"); if(b) b.onclick=()=>{state.stats=null;render();window.scrollTo(0,0)};
+  const r=$("#statsretry"); if(r) r.onclick=()=>openStats(state.stats.kind);
+}
+
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
  t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,2200)}
 
 /* ---------- tabs ---------- */
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab==="add"){openAddDay();return}if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.tab=b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab==="add"){openAddDay();return}if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.tab=b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
 
 render();
