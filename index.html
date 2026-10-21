@@ -1326,8 +1326,8 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.signOut();
-  const ex=$("#exportme");if(ex)ex.onclick=()=>window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data was downloaded")).catch(()=>toast("Couldn't download your data. Try again."));
+function bindPlan(){const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
+  const ex=$("#exportme");if(ex)ex.onclick=()=>{ex.disabled=true;window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data is ready")).catch(e=>{if(!(e&&e.code==="declined"))toast("Couldn't download your data. Try again.")}).finally(()=>{ex.disabled=false})};
   const dc=$("#delconfirm"),da=$("#delacct");if(dc&&da){dc.oninput=()=>{da.disabled=dc.value.trim().toUpperCase()!=="DELETE"};
     da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
   document.querySelectorAll("[data-wd]").forEach(b=>b.onclick=()=>{const i=+b.dataset.wd;state.weekEdit=state.weekEdit===i?null:i;render()});

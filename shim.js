@@ -51,9 +51,17 @@
 
   /* ---------- downloads (works without an account) ---------- */
   const downloadsApi = Object.freeze({
-    save({ filename, data }) {
+    async save({ filename, data }) {
+      const blob = data instanceof Blob ? data : new Blob([data], { type: /\.csv$/i.test(filename) ? "text/csv" : "text/plain" });
+      // Phones (and home-screen apps on iPhone) handle files best through the share sheet: Save to Files, AirDrop, email…
+      try {
+        const file = new File([blob], filename || "download", { type: blob.type });
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
+          await navigator.share({ files: [file], title: filename });
+          return;
+        }
+      } catch (e) { if (e && e.name === "AbortError") { const x = new Error("declined"); x.code = "declined"; throw x; } }
       return new Promise((resolve) => {
-        const blob = data instanceof Blob ? data : new Blob([data], { type: /\.csv$/i.test(filename) ? "text/csv" : "text/plain" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url; a.download = filename || "download"; document.body.appendChild(a); a.click(); a.remove();
@@ -83,13 +91,22 @@
     const name = (user.user_metadata && user.user_metadata.name) || (user.email || "").split("@")[0];
     try { await sb.from("profiles").upsert({ id: user.id, name }, { onConflict: "id", ignoreDuplicates: true }); } catch (e) {}
   }
+  // Sign-out must always work, even offline or if the auth library stalls:
+  // try the library for a moment, then remove the stored session ourselves and reload.
+  function withTimeout(promise, ms) {
+    return Promise.race([Promise.resolve(promise).catch(() => {}), new Promise((r) => setTimeout(r, ms))]);
+  }
+  function hardSignOut() {
+    try { Object.keys(localStorage).filter((k) => k.startsWith("sb-")).forEach((k) => localStorage.removeItem(k)); } catch (e) {}
+    clearAppStorage(); currentUser = null; location.replace(location.pathname);
+  }
   function signedIn(user) {
     if (lsGet(LL_UID) !== user.id) { clearAppStorage(); lsSet(LL_UID, user.id); location.reload(); return; }
     currentUser = user;
     window.LIFTLOG_ACCOUNT = {
       email: user.email,
       name: (user.user_metadata && user.user_metadata.name) || "",
-      signOut: async () => { await sb.auth.signOut(); clearAppStorage(); location.reload(); },
+      signOut: async () => { await withTimeout(sb.auth.signOut({ scope: "local" }), 2500); hardSignOut(); },
       exportData: async () => {
         const { data, error } = await sb.from("docs").select("path,data,updated_at").eq("owner", user.id);
         if (error) throw mapErr(error);
@@ -99,7 +116,7 @@
       deleteAccount: async () => {
         const { error } = await sb.rpc("delete_my_account");
         if (error) throw mapErr(error);
-        await sb.auth.signOut().catch(() => {}); clearAppStorage(); location.reload();
+        await withTimeout(sb.auth.signOut({ scope: "local" }), 2500); hardSignOut();
       }
     };
     ensureProfile(user);
@@ -110,7 +127,8 @@
     if (data && data.session) signedIn(data.session.user); else showAuth("signin");
   });
   sb.auth.onAuthStateChange((event, session) => {
-    if (event === "SIGNED_IN" && session && !currentUser) signedIn(session.user);
+    // Defer: calling Supabase from inside this callback can stall its auth lock.
+    if (event === "SIGNED_IN" && session && !currentUser) setTimeout(() => { if (!currentUser) signedIn(session.user); }, 0);
     if (event === "PASSWORD_RECOVERY") showAuth("newpass");
     if (event === "SIGNED_OUT") { currentUser = null; }
   });
