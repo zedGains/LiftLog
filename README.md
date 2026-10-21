@@ -4,6 +4,8 @@ Workout log for lifters and their gym partners, with shareable trainer programs.
 A plain static web app (no build step) backed by Supabase for sign-in, storage and live updates.
 Installable on a phone's home screen.
 
+**Live:** https://liftlog-snowy-pi.vercel.app
+
 ## Files
 | File | What it is |
 |---|---|
