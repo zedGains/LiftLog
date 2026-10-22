@@ -2491,6 +2491,12 @@ function gEx(){if(state.settings||!DAYS[pickTab()]||(state.open&&!ALL[state.open
   const c=document.querySelector("#app [data-open]");if(!c)return;const id=c.dataset.open;if(state.open!==id||$("#sheet").hidden)openSheet(id)}
 function gTab(t,seg){closeSheet();state.settings=false;state.builder=null;state.stats=null;state.dayMenu=false;if(seg)pg.seg=seg;if(state.tab!==t){state.tab=t;window.scrollTo(0,0)}render()}
 function gSet(){if(state.open)closeSheet();if(!state.settings||pickTab()!=="plan"){state.tab="plan";state.settings=true;state.stats=null;window.scrollTo(0,0)}render()}
+function gAlts(){gEx();const it=ALL[state.open];if(it)openMyAlts(it)}
+let demoItem=null;
+function gDemoDay(){gTab("programs","mine");const w=weekFromPlan();const k=Object.keys(w.days).find(x=>(w.days[x].items||[]).length);if(!k)return;
+  const d=w.days[k];demoItem=d.items[0];demoItem.alts=defaultAlts(demoItem).slice(0,2);openDayEdit({title:"Example",weeks:[w]},0,k)}
+function gDemoAlts(){gDemoDay();if(demoItem)openProgAlts(demoItem,()=>{},()=>{})}
+function gLifts(){gTab("plan");openLiftPick()}
 const GUIDE=[
  {id:"day",t:"Your workout day",d:"Switching days, reordering, adding, resetting, saving",p:gDay,steps:[
   {sel:"#daypick",t:"Switch days",x:"Tap the day's name to jump to another day, add a new day, or set which workout lands on which weekday. Today's workout opens on its own."},
@@ -2512,7 +2518,8 @@ const GUIDE=[
   {sel:"#markbtn",t:"Mark done",x:"Same as the box on the card. Your numbers save with the day."},
   {sel:"#nedit",t:"My notes",x:"Private notes for this exercise, like seat height or grip. They show every time you open it, on any day."},
   {sel:"#sheet .alts",t:"Machine taken?",x:"Pick a backup exercise for today only. Your plan stays the same and your log shows which one you did. Tap Edit choices to set your own backups."},
-  {sel:"#sheet .pbox, #ptrackon",t:"Gym partner",x:"Lift with a friend? Log their top set next to yours and compare maxes in the Log."},
+  {p:gAlts,sel:"#sheet .delist",t:"Your own backup choices",x:"This is Edit choices. Remove one with ✕, move your favorite to the top with ↑, or search any exercise below to add it. Go back to the suggested choices anytime. Your list shows on this exercise every day it's on."},
+  {p:gEx,sel:"#sheet .pbox, #ptrackon",t:"Gym partner",x:"Lift with a friend? Log their top set next to yours and compare maxes in the Log."},
   {sel:"#mkss, #splitss",t:"Supersets",x:"Do this back to back with another exercise, no rest in between. Pick one already on this day, or one from the library."},
   {sel:"#removeex",t:"Remove from this day",x:"Takes it off this day. An Undo bar shows for a few seconds, and Reset to original brings it back later."},
   {sel:"#browse",t:"Swap it for good",x:"Replace this exercise with anything in the library. It stays swapped every week. Only need a change today? Use the backups above instead."}]},
@@ -2520,7 +2527,10 @@ const GUIDE=[
   {sel:"#app .seg",t:"Community and My programs",x:"Community has programs other lifters and trainers shared, plus LiftLog classics like 5×5 and Smolov Jr. My programs is where you build your own."},
   {sel:"#pgq",opt:true,t:"Search",x:"Search by name, or filter by goal and body part."},
   {sel:"#app [data-pview]",t:"Open a program",x:"Read the write-up, who it's for and every week's workouts. Use this program loads it into your days. Tap the trainer's name to see their profile and follow them."},
-  {p:()=>gTab("programs","mine"),sel:"#newprog",t:"Build your own",x:"Lay out workouts on a weekly calendar, add weeks, set backup exercises, write it up and publish it."}]},
+  {p:()=>gTab("programs","mine"),sel:"#newprog",t:"Build your own",x:"Lay out workouts on a weekly calendar, add weeks, write it up and publish it. Next: what a day looks like inside the builder."},
+  {p:gDemoDay,sel:"#sheet .delist",t:"A day in the builder",x:"Here's an example day. Each exercise shows its sets × reps and its backups. ↑ moves it up in the order, ✕ removes it, and + Add exercise is at the bottom."},
+  {sel:"#sheet [data-alts]",t:"⇄ Backup choices",x:"Tap ⇄ to choose what your clients switch to if a machine or spot is taken. \"Suggested backups\" means the app's picks. \"2 backups\" means you chose them yourself."},
+  {p:gDemoAlts,sel:"#sheet .delist",t:"Pick the backups",x:"Remove ✕, reorder ↑, or search any exercise to add it. People following your program see these under Machine taken? and can still change them for themselves."}]},
  {id:"timer",t:"Rest timer",d:"Presets and controls",p:()=>gTab("timer"),steps:[
   {sel:"#app .ring",t:"Rest timer",x:"Counts down your rest. It runs in the background while you log, and alerts you when it's done."},
   {sel:"#app .presets",t:"Presets",x:"One tap for common rest times. Use − and + to fine-tune by 15 seconds."}]},
@@ -2528,8 +2538,9 @@ const GUIDE=[
   {sel:"#bwpanel",t:"Body weight",x:"Log your weight now and then to see your trend and weekly average."},
   {sel:"#exportcsv",t:"History",x:"Every workout you saved, by date. Download them all as a spreadsheet anytime."},
   {sel:"#yourweek",t:"Your week",x:"Tap a weekday to choose its workout, build a new day from body parts, or make it a rest day."},
-  {sel:"#partners",t:"Partner maxes",x:"You vs your gym partner on each lift. Tap Choose lifts to pick which ones you compare."},
-  {sel:"#opensettings",t:"Settings",x:"Units, notifications, calculators, your trainer profile and your account."}]},
+  {sel:"#partners",t:"Partner maxes",x:"You vs your gym partner on each lift: your best next to theirs, and how much each of you went up in the last 4 weeks. Tap a lift to see every week."},
+  {p:gLifts,sel:"#sheet .pltlist",t:"Choose lifts",x:"Check the lifts you want to compare. Each checked lift gets a row in Partner maxes, and a box for your partner's top set when you open it during a workout. Bench press and squat start checked."},
+  {p:()=>gTab("plan"),sel:"#opensettings",t:"Settings",x:"Units, notifications, calculators, your trainer profile and your account."}]},
  {id:"settings",t:"Settings & tools",d:"Units, alerts, calculators, trainer profile, account",p:gSet,steps:[
   {sel:"#about",t:"Profile & units",x:"Your weight, age and height (for calorie estimates) and whether you use lb or kg."},
   {sel:"#notifs",t:"Notifications",x:"Choose sound, vibration and banners for when rest is over."},
