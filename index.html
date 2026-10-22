@@ -149,6 +149,51 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .mxrow span:first-child{font-family:var(--body);font-weight:700;display:grid}.mxrow small{font-weight:500;color:var(--muted);font-size:12px}
 .salesp{border-style:dashed}
 .dayhead .btn.small{white-space:nowrap;flex:none}
+.ntab{flex:1 1 0!important;gap:3px!important;color:var(--muted)}
+.ntab svg{width:24px;height:24px}
+.ntab .v{font-size:11.5px!important;font-weight:600}
+.ntab[aria-selected="true"]{color:var(--fg)}
+.ntab[aria-selected="true"]::after{background:var(--accent)!important;left:30%!important;right:30%!important}
+.tabs nav{overflow:visible!important}
+.daypick{all:unset;cursor:pointer;display:grid;gap:2px;border-radius:8px}
+.daypick:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.dph1{display:flex;align-items:center;gap:6px}.dph1 h1{margin:2px 0 0}.dph1 svg{flex:none;margin-top:2px}
+.mscrim{position:fixed;inset:0;background:rgba(10,12,15,.35);z-index:25}
+.dmenu{position:fixed;left:12px;right:12px;z-index:30;background:var(--surface);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.28);padding:6px;display:grid;max-width:536px;margin:0 auto;max-height:calc(100vh - 170px);overflow-y:auto}
+.dmi{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:12px 1fr auto;gap:12px;align-items:center;padding:11px 12px;border-radius:10px}
+.dmi:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.dmi .dot{width:12px;height:12px;border-radius:50%;background:var(--dc)}
+.dmi b{font-size:16px}.dmi b.sm{font-size:14px;font-weight:600}.dmi small{display:block;color:var(--muted);font-size:12.5px}
+.dmi.on{background:var(--surface-2)}
+.dmi .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#fff;background:var(--red);border-radius:6px;padding:2px 7px}
+.dmsep{height:1px;background:var(--line);margin:4px 8px}
+.dmi.add b{color:var(--green)}.dmi.add .dot{background:none;border:2px solid var(--green);width:8px;height:8px}
+.wkprev{margin-top:12px;padding:12px 14px;display:grid;gap:6px}
+.wkt{font-family:var(--display);font-size:24px;text-transform:uppercase;line-height:1.05}
+.wkn{font-size:13.5px;color:var(--muted)}
+.opt{font-weight:500;color:var(--muted)}
+.psum{font-size:14px;color:var(--fg);line-height:1.35}
+.pvsum{font-size:16px;font-weight:600;margin:6px 0 10px}
+.pvtags{margin-bottom:6px}.pvtags .gchip{cursor:default}
+.pvtext{margin:0;font-size:15px;white-space:pre-wrap}
+.pvnote{margin:0 0 6px;font-size:13.5px;color:var(--muted);white-space:pre-wrap}
+.tgtrow{margin-top:8px;align-items:center}.tgl{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-right:2px}
+.gchip.small{padding:5px 10px;font-size:12.5px}
+.daynote{margin-top:10px;white-space:pre-wrap}
+#tourov{position:fixed;inset:0;z-index:60}
+.tspot{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(10,12,15,.62);outline:2px solid #fff;pointer-events:none;transition:all .2s}
+.tcard{position:fixed;left:16px;right:16px;max-width:420px;margin:0 auto;background:var(--surface);color:var(--fg);border-radius:16px;padding:16px 16px 12px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.tcard h4{font-family:var(--display);font-size:24px;line-height:1.05;text-transform:uppercase;margin:2px 40px 6px 0}
+.tcard p{margin:0 0 12px;font-size:15px}
+.tstep{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tx{position:absolute;top:8px;right:8px;width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);font-size:24px;line-height:1;cursor:pointer;color:var(--fg)}
+.tbtns{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tbtns span{display:flex;gap:8px}
+.tbtns button{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:10px 14px;font-weight:700;font-size:14px;color:var(--fg);cursor:pointer}
+.tbtns .tnext{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.tbtns .tskip{background:none;border:0;color:var(--muted);padding-left:0;font-weight:600}
+.tdots{display:flex;gap:5px;justify-content:center;margin-top:10px}.tdots i{width:6px;height:6px;border-radius:3px;background:var(--line)}.tdots i.on{background:var(--accent);width:16px}
+@media (prefers-reduced-motion:reduce){.tspot{transition:none}}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -475,7 +520,9 @@ const rxText=(it)=>{
 /* ---------- units ----------
    Weights are always stored in pounds; they're shown and typed in the person's chosen unit. */
 const LB_PER_KG=2.20462262;
-function defaultUnits(){const l=((navigator.languages&&navigator.languages[0])||navigator.language||"en-US");return /^en(-US)?$|-(US|LR|MM)$/i.test(l)?"imperial":"metric"}
+function defaultUnits(){const l=String((navigator.languages&&navigator.languages[0])||navigator.language||"en-US");
+  const m=l.match(/^[a-z]{2,3}(?:[-_][A-Za-z]{4})?[-_]([A-Za-z]{2})(?![A-Za-z])/); const region=m?m[1].toUpperCase():(/^en\b/i.test(l)?"US":"");
+  return ["US","LR","MM"].includes(region)?"imperial":"metric"}
 function units(){return (typeof plan!=="undefined"&&plan&&plan.units)||defaultUnits()}
 const isKg=()=>units()==="metric";
 const wU=()=>isKg()?"kg":"lb";
@@ -525,10 +572,10 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
-function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,sections:[]}});
+function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
   trainKeys().forEach((k,i)=>{DAYS[k].label="Day "+(i+1)})}
 function dayKeys(){const all=Object.keys(DAYS);const o=(plan.dayOrder||[]).filter(k=>DAYS[k]);return [...o,...all.filter(k=>!o.includes(k))]}
 const WEEK_RANK=[1,2,3,4,5,6,0];
@@ -785,20 +832,43 @@ function schedOf(wd){const k=plan.schedule[String(wd)];return k&&DAYS[k]?k:null}
 function weekdayTab(){return schedOf(new Date().getDay())}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
-function pickTab(){return validTab(state.tab)?state.tab:(weekdayTab()||trainKeys()[0]||"plan")}
-function tabList(){refreshTitles();return [...[...trainKeys(),...dayKeys().filter(k=>DAYS[k].prog)].map(k=>({k,top:DAYS[k].label,v:DAYS[k].short,c:DAYS[k].color})),
-  {k:"add",plus:true,v:"Add day",c:"--green"},{k:"programs",top:"Plans",v:"Programs",c:"--green"},{k:"timer",top:"Rest",v:"Timer",c:"--green"},{k:"plan",top:"Log",v:"History·Plan",c:"--green"}]}
+function defaultDay(){const k=state.lastDay;return DAYS[k]?k:(weekdayTab()||trainKeys()[0]||null)}
+function pickTab(){if(validTab(state.tab))return state.tab;if(state.tab==="workout")return defaultDay()||"workout";return defaultDay()||"workout"}
+const NAV_ICONS={workout:'<path d="M6 8v8M18 8v8M3 10.5v3M21 10.5v3M6 12h12" stroke-width="2.2" stroke-linecap="round"/>',
+ programs:'<rect x="4" y="5" width="16" height="15" rx="2" stroke-width="2"/><path d="M4 9.5h16M9 3v4M15 3v4" stroke-width="2" stroke-linecap="round"/>',
+ timer:'<circle cx="12" cy="13" r="7.5" stroke-width="2"/><path d="M12 13V9.5M10 3h4" stroke-width="2" stroke-linecap="round"/>',
+ plan:'<path d="M5 19V10M10 19V5M15 19v-7M20 19v-4" stroke-width="2.2" stroke-linecap="round"/>'};
+function tabList(){refreshTitles();return [{k:"workout",v:"Workout"},{k:"programs",v:"Plans"},{k:"timer",v:"Rest timer"},{k:"plan",v:"Log"}]}
 function renderTabs(){
-  const cur=pickTab();
-  $("#tabs").innerHTML=tabList().map(t=>t.plus?`<button class="tab addtab" data-tab="add" aria-label="Add a workout day"><span class="plus" aria-hidden="true">+</span><span class="v">${t.v}</span></button>`:
-   `<button class="tab" role="tab" id="tab-${t.k}" aria-selected="${t.k===cur}" style="--tc:var(${t.c})" data-tab="${t.k}"><span class="k">${esc(t.top)}</span><span class="v">${esc(t.v)}</span></button>`).join("");
-  const sel=$("#tabs [aria-selected=true]"); if(sel&&sel.scrollIntoView) sel.scrollIntoView({block:"nearest",inline:"nearest"});
+  const cur=pickTab(); const sel=(DAYS[cur]||cur==="workout")?"workout":cur;
+  $("#tabs").innerHTML=tabList().map(t=>`<button class="tab ntab" role="tab" id="tab-${t.k}" aria-selected="${t.k===sel}" data-tab="${t.k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">${NAV_ICONS[t.k]}</svg><span class="v">${t.v}</span></button>`).join("");
 }
+function goWeek(){state.dayMenu=false;state.tab="plan";ls.set("ll.tab","plan");closeSheet();render();const w=$("#yourweek");if(w){w.scrollIntoView({block:"start"});window.scrollBy(0,-80)}}
+function renderDayMenu(tab){
+  document.querySelectorAll(".dmenu,.mscrim").forEach(x=>x.remove());
+  const dp=$("#daypick"); if(dp) dp.setAttribute("aria-expanded",String(!!state.dayMenu));
+  if(!state.dayMenu) return;
+  const keys=[...trainKeys(),...dayKeys().filter(k=>DAYS[k].prog)]; const today=weekdayTab();
+  const head=$(".dayhead"); const r=head?head.getBoundingClientRect():{bottom:120};
+  document.body.insertAdjacentHTML("beforeend",`<div class="mscrim"></div><div class="dmenu" role="listbox" aria-label="Workout days" style="top:${Math.max(70,Math.min(r.bottom-8,innerHeight-200))}px">
+   ${keys.map(k=>{const d=DAYS[k];return `<button class="dmi ${k===tab?"on":""}" role="option" aria-selected="${k===tab}" data-dm="${k}" style="--dc:var(${d.color||"--slate"})"><span class="dot"></span><span><b>${esc(d.title)}</b><small>${esc(d.label)} · ${esc(schedNames(k))}</small></span>${k===today?'<span class="badge">Today</span>':""}</button>`}).join("")}
+   <div class="dmsep"></div>
+   <button class="dmi add" id="dmadd"><span class="dot"></span><span><b>+ Add a day</b><small>Build a new workout day</small></span></button>
+   <button class="dmi" id="dmweek"><span></span><span><b class="sm">Edit my week</b><small>Which workout goes on which weekday</small></span></button></div>`);
+  const close=()=>{state.dayMenu=false;renderDayMenu(tab)};
+  $(".mscrim").onclick=close;
+  document.querySelectorAll("[data-dm]").forEach(b=>b.onclick=()=>{state.dayMenu=false;state.tab=b.dataset.dm;ls.set("ll.tab",state.tab);render();window.scrollTo(0,0)});
+  $("#dmadd").onclick=()=>{close();openAddDay()};
+  $("#dmweek").onclick=goWeek;
+  const cur=document.querySelector(".dmi.on")||document.querySelector(".dmi"); if(cur) cur.focus({preventScroll:true});
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.dayMenu){state.dayMenu=false;renderDayMenu(pickTab());const d=$("#daypick");if(d)d.focus()}});
 function bootLocal(){if(!state.loading)return;state.loading=false;if(!HAD_LOCAL_PLAN&&!plan.template)state.needsStart=true;render()}
 function startWith(kind){
   plan.template=kind==="community"?"blank":kind; plan.schedule={...((kind==="starter"?STARTER_SPEC.schedule:{}))};
   state.needsStart=false; refreshTemplate(); savePlan(); syncDays();
   state.tab=kind==="starter"?"d1":kind==="community"?"programs":"plan"; ls.set("ll.tab",state.tab); render(); window.scrollTo(0,0);
+  if(!plan.tourDone) setTimeout(startTour,350);
 }
 function welcomeView(){
   const st=buildStarter();
@@ -823,6 +893,11 @@ function render(){
   if(tab==="timer"){app.innerHTML=timerView(); bindTimerView(); updateTimer(); return}
   if(tab==="plan"){app.innerHTML=planView(); bindPlan(); return}
   if(tab==="programs"){app.innerHTML=programsView(); bindPrograms(); return}
+  if(!DAYS[tab]){app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow">Workout</div><h1>No workout days yet</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
+    <div class="plan"><div class="panel">${plan.template==null?`<p><b>Your private program isn't loaded yet.</b> It's stored in your account; if it doesn't appear in a moment, ask the app owner to load it.</p>`:""}<p>Add your first day, then pick exercises for it. Or follow a program someone shared in <b>Plans</b>.</p>
+    <div class="btns"><button class="btn primary" id="emptyadd" style="flex:1">+ Add a day</button><button class="btn" id="emptyweek">Build my week by body part</button></div></div></div>`;
+    $("#emptyadd").onclick=openAddDay; $("#emptyweek").onclick=()=>goWeek(); return}
+  state.lastDay=tab;
   refreshTitles(); const d=DAYS[tab]; rebuildAll(); const secs=daySections(tab); const items=secs.flatMap(s=>s.items);
   const done=items.filter(it=>isMarked(it.id)).length;
   const pending=items.filter(it=>isPending(it.id)).length;
@@ -834,12 +909,12 @@ function render(){
   const dayKcal=items.filter(it=>isMarked(it.id)).reduce((a,it)=>a+(exKcal(it,curSets(it))||0),0);
   app.innerHTML=`
   <header class="dayhead">
-    <div class="row"><div><div class="eyebrow">${esc(d.label)} · ${schedNames(tab)}</div><h1>${esc(d.title)}</h1>${d.autoTitle?`<div class="autonote">Renamed from ${esc(d.baseTitle)} to match your exercises</div>`:""}</div>${d.custom?`<button class="btn small" id="editday">Edit day</button>`:`<div class="plate" aria-hidden="true"><span></span></div>`}</div>
+    <div class="row"><div><button class="daypick" id="daypick" aria-haspopup="listbox" aria-expanded="${!!state.dayMenu}"><span class="eyebrow">${esc(d.label)} · ${schedNames(tab)}${weekdayTab()===tab?" · Today":""}</span><span class="dph1"><h1>${esc(d.title)}</h1><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>${d.autoTitle?`<div class="autonote">Renamed from ${esc(d.baseTitle)} to match your exercises</div>`:""}</div>${d.custom?`<button class="btn small" id="editday">Edit day</button>`:`<div class="plate" aria-hidden="true"><span></span></div>`}</div>
     <div class="chips">${secs.map(s=>`<span class="chip">${s.sec}</span>`).join("")}</div>
-    ${(()=>{if(d.prog)return "";const L=trainKeys(),i=L.indexOf(tab);if(L.length<2)return "";return `<div class="moveday"><span>${esc(d.label)} of ${L.length}</span><button class="btn small" data-mvday="${tab}" data-dir="-1" ${i>0?"":"disabled"}>↑ Make it ${i>0?esc(DAYS[L[i-1]].label):"earlier"}</button><button class="btn small" data-mvday="${tab}" data-dir="1" ${i<L.length-1?"":"disabled"}>↓ Make it ${i<L.length-1?esc(DAYS[L[i+1]].label):"later"}</button></div>`})()}
     <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
+  ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${restDay?`<div class="banner"><b>${new Date().toLocaleDateString(undefined,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
   <div class="mapwrap">${bodyMap([...prim],[...sec].filter(x=>!prim.has(x)))}
     <div class="legend"><p>Muscles hit today</p>
@@ -876,6 +951,8 @@ function render(){
   const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
   $("#addex").onclick=()=>openAdd(tab);
   const ed=$("#editday"); if(ed) ed.onclick=()=>openDayEditor(tab);
+  const dp=$("#daypick"); if(dp) dp.onclick=()=>{state.dayMenu=!state.dayMenu;renderDayMenu(tab)};
+  renderDayMenu(tab);
   const ga=$("#gotoabout"); if(ga) ga.onclick=goAbout;
   const rd=$("#resetday"); if(rd) rd.onclick=()=>openResetDay(tab);
   const kh=$("#kcalhow"); if(kh) kh.onclick=showKcalHow;
@@ -1296,7 +1373,7 @@ function planView(){
     <p class="savenote" id="pf-err" role="alert"></p>
     <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
     <p class="savenote">Your weight drives the calorie estimate. Update it as it changes. ${plan.profile.updated?`Last updated ${fmtStamp(plan.profile.updated)}.`:""}</p></div>
-   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button></div>
+   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button><button class="btn small" id="replaytour">▶ Replay the guide</button></div>
     <p class="savenote"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a></p>
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
@@ -1311,12 +1388,9 @@ function planView(){
     </details>`).join("")}</div>`:`<p>No saved workouts yet. Finish a day and tap <b>Save</b> at the bottom, and it shows up here with the date and time you logged it.</p>`}
     <div class="btns"><button class="btn primary" id="exportcsv" ${ss.length?"":"disabled"}>Download all logs (CSV)</button></div>
     <p class="savenote">Opens in Excel or Google Sheets: one row per set, with the workout date, day, exercise, weight, reps and the time you logged it.</p></div>
-   <div class="panel"><h2>Your week</h2>
+   <div class="panel" id="yourweek"><h2>Your week</h2>
     <div class="week">${order.map(i=>{const k=schedOf(i);const c=k?DAYS[k].color:null;return `<button class="wk ${i===wd?"today":""} ${state.weekEdit===i?"sel":""}" data-wd="${i}" aria-label="${WD_LONG[i]}: ${k?esc(DAYS[k].label):"Rest"}" style="${c?`background:var(${c});color:${c==="--yellow"?"var(--on-yellow)":"#fff"}`:""}"><b>${names[i]}</b>${k?esc(DAYS[k].label):"Rest"}</button>`}).join("")}</div>
-    ${state.weekEdit!=null?`<div class="weekpick"><div class="dlabel">${WD_LONG[state.weekEdit]} is</div><div class="dchips">${[["","Rest day"],...trainKeys().map(k=>[k,DAYS[k].label+" · "+DAYS[k].title])].map(([k,l])=>`<button class="dchip wide ${(schedOf(state.weekEdit)||"")===k?"on":""}" data-sched="${k}">${esc(l)}</button>`).join("")}</div></div>`
-      :`<p>Tap any day to choose what you train on it. A day can go on more than one weekday.</p>`}</div>
-   <div class="panel" id="dayorder"><h2>Day order</h2><p>Move a workout up or down to swap it with the day next to it. It takes over that day's number and weekday.</p>
-    <div class="rolist">${(()=>{const L=trainKeys();return L.map((k,i)=>`<div class="rorow"><span class="ronum" style="color:var(${DAYS[k].color})">●</span><span class="ron">${esc(DAYS[k].label)} · ${esc(DAYS[k].title)}<small>${esc(schedNames(k))}</small></span><span class="roctl"><button class="iconbtn robtn" data-mvday="${k}" data-dir="-1" ${i?"":"disabled"} aria-label="Move ${esc(DAYS[k].title)} up">↑</button><button class="iconbtn robtn" data-mvday="${k}" data-dir="1" ${i<L.length-1?"":"disabled"} aria-label="Move ${esc(DAYS[k].title)} down">↓</button></span></div>`).join("")})()}</div></div>
+    <p>Tap a weekday to choose its workout. Pick body parts to build a new day, use a day you already have, or make it a rest day.</p></div>
 
    <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
@@ -1363,11 +1437,11 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
+function bindPlan(){const rt=$("#replaytour");if(rt)rt.onclick=()=>{state.tab=defaultDay()||"workout";render();startTour()};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
   const ex=$("#exportme");if(ex)ex.onclick=()=>{ex.disabled=true;window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data is ready")).catch(e=>{if(!(e&&e.code==="declined"))toast("Couldn't download your data. Try again.")}).finally(()=>{ex.disabled=false})};
   const dc=$("#delconfirm"),da=$("#delacct");if(dc&&da){dc.oninput=()=>{da.disabled=dc.value.trim().toUpperCase()!=="DELETE"};
     da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
-  document.querySelectorAll("[data-wd]").forEach(b=>b.onclick=()=>{const i=+b.dataset.wd;state.weekEdit=state.weekEdit===i?null:i;render()});
+  document.querySelectorAll("[data-wd]").forEach(b=>b.onclick=()=>openWeekDay(+b.dataset.wd));
   document.querySelectorAll("[data-sched]").forEach(b=>b.onclick=()=>{const k=b.dataset.sched;const w=String(state.weekEdit);if(k)plan.schedule[w]=k;else delete plan.schedule[w];savePlan();syncDays();state.weekEdit=null;render();toast(`${WD_LONG[+w]}: ${k?DAYS[k].label:"rest day"}`)});
   document.querySelectorAll("[data-units]").forEach(b=>b.onclick=()=>{plan.units=b.dataset.units;savePlan();render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});toast(isKg()?"Showing kilograms and centimeters":"Showing pounds and feet/inches")});
   const pf=$("#pf-save");if(pf)pf.onclick=()=>{
@@ -1393,8 +1467,9 @@ function bindPlan(){const os=$("#ownerstats");if(os)os.onclick=()=>openStats("ow
 const WD_SHORT=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const WEEK_ORDER=[1,2,3,4,5,6,0];
 const GOALS=["Fat loss","Muscle","Strength","General fitness"];
+const TARGETS=["Fat loss","Muscle","Strength","Chest","Back","Shoulders","Arms","Legs","Glutes","Core","Conditioning"];
 const LEVELS=["Beginner","Intermediate","Advanced"];
-const pg={seg:"community",goal:"",q:"",sort:"popular",community:[],socialDocs:{},social:{likes:{},uses:{}},myLikes:new Set(),myUses:new Set(),myStarted:{},names:{},ready:false,isOwner:false,socialPending:0};
+const pg={seg:"community",goal:"",target:"",q:"",sort:"popular",community:[],socialDocs:{},social:{likes:{},uses:{}},myLikes:new Set(),myUses:new Set(),myStarted:{},names:{},ready:false,isOwner:false,socialPending:0};
 let uCap=null;
 function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function progById(id){return plan.myPrograms.find(p=>p.id===id)}
@@ -1428,7 +1503,7 @@ function programsView(){
 }
 function communityList(){
   const q=pg.q.trim().toLowerCase();
-  return pg.community.filter(p=>(!pg.goal||p.goal===pg.goal)&&(!q||((p.title||"")+" "+(p.desc||"")).toLowerCase().includes(q)))
+  return pg.community.filter(p=>(!pg.goal||p.goal===pg.goal)&&(!pg.target||(p.targets||[]).includes(pg.target))&&(!q||[p.title,p.summary,p.desc,p.who,(p.targets||[]).join(" ")].join(" ").toLowerCase().includes(q)))
    .map(p=>({...p,likes:pg.social.likes[p.key]||0,uses:pg.social.uses[p.key]||0}))
    .sort((a,b)=>pg.sort==="new"?(b.updatedAt||0)-(a.updatedAt||0):((b.likes*2+b.uses)-(a.likes*2+a.uses))||((b.updatedAt||0)-(a.updatedAt||0)));
 }
@@ -1439,11 +1514,13 @@ function communityView(){
    <label class="field search"><input id="pgq" placeholder="Search programs" value="${esc(pg.q)}" aria-label="Search programs" autocomplete="off"></label>
    <div class="gchips">${["",...GOALS].map(g=>`<button class="gchip ${pg.goal===g?"on":""}" data-goal="${g}" aria-pressed="${pg.goal===g}">${g||"All"}</button>`).join("")}
      <button class="gchip ghost" id="pgsort">${pg.sort==="new"?"Newest first":"Most popular"} ⇅</button></div>
-   ${!pg.ready?`<p class="savenote">Loading programs…</p>`:list.length?list.map(progCard).join(""):`<div class="panel"><p><b>No programs ${pg.goal||pg.q?"match":"yet"}.</b> ${pg.goal||pg.q?"Try another filter.":"Be the first: build one under My programs and publish it."}</p></div>`}
+   ${(()=>{const used=TARGETS.filter(t=>pg.community.some(p=>(p.targets||[]).includes(t)));return used.length?`<div class="gchips tgtrow"><span class="tgl">Targets</span>${used.map(t=>`<button class="gchip small ${pg.target===t?"on":""}" data-ptgt="${t}" aria-pressed="${pg.target===t}">${t}</button>`).join("")}</div>`:""})()}
+   ${!pg.ready?`<p class="savenote">Loading programs…</p>`:list.length?list.map(progCard).join(""):`<div class="panel"><p><b>No programs ${pg.goal||pg.q||pg.target?"match":"yet"}.</b> ${pg.goal||pg.q||pg.target?"Try another filter.":"Be the first: build one under My programs and publish it."}</p></div>`}
   </div>`;
 }
 function progCard(p){const st=progStats(p);return `<button class="pcard" data-pview="${esc(p.key)}">
   <span class="pct">${esc(p.title)}</span>
+  ${p.summary?`<span class="psum">${esc(p.summary)}</span>`:""}
   <span class="pcm">by ${esc(nameOf(p.author))} · ${esc(p.goal||"General fitness")} · ${esc(p.level||"All levels")}</span>
   <span class="pcs"><span>${st.weeks} wk</span><span>${st.dpw} days/wk</span><span>♥ ${p.likes||0}</span><span>${p.uses||0} using</span></span>
   ${miniCal(p.weeks[0])}</button>`}
@@ -1463,7 +1540,12 @@ function builderView(){
      <label>Program name<span class="field"><input id="bp-title" value="${esc(p.title)}" placeholder="e.g. 4-Week Fat Loss Split" maxlength="60" autocomplete="off"></span></label>
      <div class="two"><label>Goal<span class="field"><select id="bp-goal">${GOALS.map(g=>`<option ${p.goal===g?"selected":""}>${g}</option>`).join("")}</select></span></label>
       <label>Level<span class="field"><select id="bp-level">${LEVELS.map(g=>`<option ${p.level===g?"selected":""}>${g}</option>`).join("")}</select></span></label></div>
-     <label>Description<span class="field"><textarea id="bp-desc" rows="3" maxlength="400" placeholder="Who it's for, how to progress, rest-day cardio…">${esc(p.desc||"")}</textarea></span></label>
+     <label>Short summary <small class="opt">shows on the program card</small><span class="field"><input id="bp-sum" value="${esc(p.summary||"")}" maxlength="120" placeholder="e.g. Burn fat and keep muscle in 8 weeks" autocomplete="off"></span></label>
+     <label>About this program<span class="field"><textarea id="bp-desc" rows="5" maxlength="2000" placeholder="In your own words: what this program is, why it works, what results to expect…">${esc(p.desc||"")}</textarea></span></label>
+     <label>Who it's for<span class="field"><textarea id="bp-who" rows="2" maxlength="300" placeholder="e.g. Beginners who can train 3 days a week">${esc(p.who||"")}</textarea></span></label>
+     <div><div class="dlabel" style="margin-top:0">What it targets</div><div class="gchips" role="group" aria-label="What it targets">${TARGETS.map(t=>`<button class="gchip ${(p.targets||[]).includes(t)?"on":""}" data-tgt="${t}" aria-pressed="${(p.targets||[]).includes(t)}">${t}</button>`).join("")}</div></div>
+     <label>How to progress<span class="field"><textarea id="bp-prog" rows="3" maxlength="600" placeholder="e.g. Add 5 lb when you hit the top of the rep range. Rest 60–90 seconds.">${esc(p.progress||"")}</textarea></span></label>
+     <label>Equipment<span class="field"><input id="bp-eq" value="${esc(p.equip||"")}" maxlength="120" placeholder="e.g. Full gym, or dumbbells only" autocomplete="off"></span></label>
    </div></div>
    <div class="panel"><h2>Calendar</h2>
     <div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-week="${i}" aria-pressed="${i===wi}">Week ${i+1}</button>`).join("")}<button class="gchip ghost" id="addweek">+ Week</button></div>
@@ -1490,6 +1572,7 @@ function bindPrograms(){
   const cs=$("#creatorstats"); if(cs) cs.onclick=()=>openStats("creator");
   const q=$("#pgq"); if(q) q.oninput=()=>{pg.q=q.value;clearTimeout(window.__pgq);window.__pgq=setTimeout(()=>{render();const n=$("#pgq");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length)}},200)};
   document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{pg.goal=b.dataset.goal;render()});
+  document.querySelectorAll("[data-ptgt]").forEach(b=>b.onclick=()=>{pg.target=pg.target===b.dataset.ptgt?"":b.dataset.ptgt;render()});
   const so=$("#pgsort"); if(so) so.onclick=()=>{pg.sort=pg.sort==="new"?"popular":"new";render()};
   document.querySelectorAll("[data-pview]").forEach(b=>b.onclick=()=>openProgView(b.dataset.pview));
   document.querySelectorAll("[data-pedit]").forEach(b=>b.onclick=()=>{state.builder={id:b.dataset.pedit,week:0};render();window.scrollTo(0,0)});
@@ -1509,6 +1592,11 @@ function bindBuilder(){
   $("#bp-goal").onchange=e=>{p.goal=e.target.value;save()};
   $("#bp-level").onchange=e=>{p.level=e.target.value;save()};
   $("#bp-desc").oninput=e=>{p.desc=e.target.value;deb()};
+  $("#bp-sum").oninput=e=>{p.summary=e.target.value;deb()};
+  $("#bp-who").oninput=e=>{p.who=e.target.value;deb()};
+  $("#bp-prog").oninput=e=>{p.progress=e.target.value;deb()};
+  $("#bp-eq").oninput=e=>{p.equip=e.target.value;deb()};
+  document.querySelectorAll("[data-tgt]").forEach(b=>b.onclick=()=>{const t=b.dataset.tgt;const a=p.targets||[];p.targets=a.includes(t)?a.filter(x=>x!==t):[...a,t];b.classList.toggle("on");b.setAttribute("aria-pressed",String(p.targets.includes(t)));save()});
   document.querySelectorAll("[data-week]").forEach(b=>b.onclick=()=>{state.builder.week=+b.dataset.week;render()});
   $("#addweek").onclick=()=>{p.weeks.push(emptyWeek());state.builder.week=p.weeks.length-1;save();render();toast(`Week ${p.weeks.length} added. Tap Copy to fill it from the week before.`)};
   document.querySelectorAll("[data-cday]").forEach(b=>b.onclick=()=>openDayEdit(p,state.builder.week,b.dataset.cday));
@@ -1545,7 +1633,8 @@ function openDayEdit(p,wi,wd){
   }
   const st=sh.scrollTop;
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="declose">Done</button><span class="eyebrow">${lbl}</span></div>
-   <div class="cform"><label>Workout name<span class="field"><input id="de-title" value="${esc(d.title)}" maxlength="40" autocomplete="off"></span></label></div>
+   <div class="cform"><label>Workout name<span class="field"><input id="de-title" value="${esc(d.title)}" maxlength="40" autocomplete="off"></span></label>
+    <label>Notes for this day <small class="opt">optional, shown to people following</small><span class="field"><textarea id="de-note" rows="2" maxlength="300" placeholder="e.g. Heavy day. Rest 2 minutes between sets.">${esc(d.note||"")}</textarea></span></label></div>
    <div class="lbl">Exercises <small>${d.items.length}</small></div>
    <div class="delist">${d.items.length?d.items.map((x,i)=>`<div class="derow"><span class="den"><b>${esc(x.name)}</b><small>${esc(x.g)} · ${exText(x)}${x.drop?" · drop sets":""}</small></span>
       <span class="dect"><button class="iconbtn" data-up="${i}" aria-label="Move ${esc(x.name)} up" ${i?"":"disabled"}>↑</button><button class="iconbtn" data-rm="${i}" aria-label="Remove ${esc(x.name)}">✕</button></span></div>`).join(""):`<p class="savenote">No exercises yet.</p>`}</div>
@@ -1554,6 +1643,7 @@ function openDayEdit(p,wi,wd){
    <p class="savenote">Clear day removes its exercises but keeps it a training day. Delete day turns it into a rest day.</p>`;
   sh.scrollTop=st;
   $("#declose",sh).onclick=()=>{closeSheet();render()};
+  $("#de-note",sh).oninput=e=>{d.note=e.target.value;clearTimeout(window.__dn);window.__dn=setTimeout(save,400)};
   $("#de-title",sh).oninput=e=>{d.title=e.target.value;clearTimeout(window.__dt);window.__dt=setTimeout(()=>{save();render()},400)};
   sh.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{d.items.splice(+b.dataset.rm,1);save();render();openDayEdit(p,wi,wd)});
   sh.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>{const i=+b.dataset.up;[d.items[i-1],d.items[i]]=[d.items[i],d.items[i-1]];save();openDayEdit(p,wi,wd)});
@@ -1566,7 +1656,7 @@ function openDayEdit(p,wi,wd){
 }
 
 /* ----- community data ----- */
-function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
+function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
 let pubQ=Promise.resolve();
 function writePublic(){ if(state.mode!=="db"||!db||!uid) return; const payload=JSON.parse(JSON.stringify(pubPayload()));
   const run=()=>db.doc("programs/"+uid).set(payload);
@@ -1607,11 +1697,13 @@ function openProgView(key){
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pvclose">Close</button><span class="eyebrow">${esc(p.goal||"")} · ${esc(p.level||"")}</span></div>
      <h3 id="sheet-title">${esc(p.title)}</h3>
      <p class="savenote">by ${esc(nameOf(p.author))} · ${p.weeks.length} week${p.weeks.length===1?"":"s"} · updated ${fmtStamp(p.updatedAt)}</p>
-     ${p.desc?`<p class="coach">${esc(p.desc)}</p>`:""}
+     ${p.summary?`<p class="pvsum">${esc(p.summary)}</p>`:""}
+     ${(p.targets||[]).length?`<div class="gchips pvtags">${p.targets.map(t=>`<span class="gchip on">${esc(t)}</span>`).join("")}</div>`:""}
+     ${[["About this program",p.desc],["Who it's for",p.who],["How to progress",p.progress],["Equipment",p.equip]].filter(x=>(x[1]||"").trim()).map(([h,t])=>`<div class="lbl">${h}</div><p class="pvtext">${esc(t)}</p>`).join("")}
      <div class="btns" style="align-items:center"><button class="btn small ${liked?"okd":""}" id="pvlike" aria-pressed="${liked}">♥ ${liked?"Liked":"Like"} · ${pg.social.likes[key]||0}</button><span class="savenote">${pg.social.uses[key]||0} following it</span></div>
      ${p.weeks.length>1?`<div class="wtabs" style="margin-top:12px">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-pvw="${i}">Week ${i+1}</button>`).join("")}</div>`:""}
      <div class="cal small">${calCells(w,false)}</div>
-     ${WEEK_ORDER.filter(i=>w.days[String(i)]).map(i=>{const d=w.days[String(i)];return `<div class="lbl">${WD_LONG[i]} · ${esc(d.title||"Workout")}</div><div class="history">${d.items.map(x=>`<div><span class="d">${esc(x.name)}</span><span class="v">${exText(x)}${x.drop?" · drop":""}</span></div>`).join("")||`<div><span class="d">No exercises</span></div>`}</div>`}).join("")}
+     ${WEEK_ORDER.filter(i=>w.days[String(i)]).map(i=>{const d=w.days[String(i)];return `<div class="lbl">${WD_LONG[i]} · ${esc(d.title||"Workout")}</div>${d.note?`<p class="pvnote">${esc(d.note)}</p>`:""}<div class="history">${d.items.map(x=>`<div><span class="d">${esc(x.name)}</span><span class="v">${exText(x)}${x.drop?" · drop":""}</span></div>`).join("")||`<div><span class="d">No exercises</span></div>`}</div>`}).join("")}
      <div class="btns"><button class="btn primary" id="pvuse" style="flex:1">Use this program</button></div>
      <div class="btns"><button class="btn" id="pvcopy" style="flex:1">${mine?"Make a copy to edit":"Copy to my programs"}</button></div>
      ${pg.isOwner&&!mine?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
@@ -1619,7 +1711,7 @@ function openProgView(key){
     $("#pvlike",sh).onclick=()=>{toggleLike(key);draw()};
     sh.querySelectorAll("[data-pvw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.pvw;draw()});
     $("#pvuse",sh).onclick=()=>openUse(p);
-    $("#pvcopy",sh).onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
+    $("#pvcopy",sh).onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
       plan.myPrograms.unshift(c);savePlan();closeSheet();pg.seg="mine";state.builder={id:c.id,week:0};render();window.scrollTo(0,0);toast("Copied to My programs. Edit away.")};
     armBtn($("#pvmod",sh),"Tap again to remove",()=>{const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
       db.doc("programs/"+p.author).set({programs:rest,updatedAt:Date.now()}).then(()=>toast("Removed from the community")).catch(()=>toast("Couldn't remove it."));closeSheet()});
@@ -1669,7 +1761,7 @@ function applyProgram(p,wi){
   clearProgramDays(); plan.schedule={};
   const w=p.weeks[wi]; const colors=["--green","--purple","--orange","--slate","--blue","--red","--yellow"]; let ci=0;
   WEEK_ORDER.forEach(i=>{const d=w.days[String(i)];if(!d)return;const key="pw"+i;
-    plan.days.push({key,label:WD_SHORT[i],title:d.title||"Workout",color:colors[ci++%colors.length],prog:true});
+    plan.days.push({key,label:WD_SHORT[i],title:d.title||"Workout",color:colors[ci++%colors.length],prog:true,note:(d.note||"").trim()||undefined});
     plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop}));
     plan.schedule[String(i)]=key});
   plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks))};
@@ -1839,12 +1931,104 @@ function bindStats(){
   const r=$("#statsretry"); if(r) r.onclick=()=>openStats(state.stats.kind);
 }
 
+/* ---------- Your Week: build a weekday by body part ---------- */
+const BODY_PARTS=[["Chest",["Chest"]],["Back",["Back"]],["Shoulders",["Shoulders"]],["Arms",["Biceps","Triceps"]],["Legs",["Quads","Hamstrings","Calves"]],["Glutes",["Glutes"]],["Abs",["Abs","Obliques"]],["Cardio",["Cardio"]],["Full body",["Quads","Chest","Back","Shoulders","Hamstrings","Abs"]]];
+const PICKS={Chest:["Barbell Bench Press","Incline Dumbbell Press","Cable Crossover","Chest Press Machine"],
+ Back:["Lat Pulldown","Seated Cable Row","One-Arm Dumbbell Row","Pull-Ups"],
+ Shoulders:["Seated Dumbbell Shoulder Press","Dumbbell Lateral Raise","Face Pulls","Military Press"],
+ Biceps:["EZ-Bar Curl","Hammer Curl","Cable Curl"],Triceps:["Rope Pushdown","Overhead Cable Rope Extension","EZ-Bar Skull Crushers"],
+ Quads:["Barbell Back Squat","Leg Press","Leg Extension"],Hamstrings:["Romanian Deadlift","Lying Leg Curl"],Calves:["Standing Calf Raise Machine"],
+ Glutes:["Barbell Hip Thrust","Hip Abduction Machine","Cable Glute Kickback"],Abs:["Cable Crunch","Hanging Leg Raises"],Obliques:["Russian Twists"],Cardio:["Incline Treadmill Walk"]};
+const WSIZE={fewer:4,normal:6,more:8};
+function buildDayFrom(parts,size){
+  const n=WSIZE[size]||6; const wantCardio=parts.includes("Cardio"); const lifts=parts.filter(p=>p!=="Cardio");
+  const queues=lifts.map(p=>{const groups=(BODY_PARTS.find(b=>b[0]===p)||[0,[]])[1];const q=[];let i=0;
+    while(q.length<12&&groups.some(g=>(PICKS[g]||[])[Math.floor(i/groups.length)])){const g=groups[i%groups.length];const name=(PICKS[g]||[])[Math.floor(i/groups.length)];if(name&&!q.includes(name))q.push(name);i++}
+    return q});
+  const out=[]; const cap=n-(wantCardio&&lifts.length?1:0);
+  for(let r=0;out.length<cap&&queues.some(q=>q.length);r++) queues.forEach(q=>{if(out.length<cap&&q.length){const x=q.shift();if(!out.includes(x))out.push(x)}});
+  if(wantCardio) out.push(PICKS.Cardio[0]);
+  return out.map(name=>LIB.find(x=>x.name===name)).filter(Boolean);
+}
+function dayTitleFrom(parts){const p=parts.slice(); if(p.length<=1) return p[0]||"Workout"; return p.slice(0,-1).join(", ")+" & "+p[p.length-1]}
+function openWeekDay(wd){
+  const ws={sel:[],size:"normal"}; const sh=$("#sheet");
+  const draw=()=>{
+    const ex=ws.sel.length?buildDayFrom(ws.sel,ws.size):[]; const title=dayTitleFrom(ws.sel); const cur=schedOf(wd);
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="wkcancel">Cancel</button><span class="eyebrow">Your week · ${WD_LONG[wd]}</span></div>
+     <h3 id="sheet-title">What's on ${WD_LONG[wd]}?</h3>
+     <p class="savenote" style="margin-top:6px">Right now: <b>${cur?esc(DAYS[cur].label+" · "+DAYS[cur].title):"Rest day"}</b></p>
+     <div class="lbl">Build it by body part <small>(pick one or more)</small></div>
+     <div class="gchips" role="group" aria-label="Body parts">${BODY_PARTS.map(([p])=>`<button class="gchip ${ws.sel.includes(p)?"on":""}" data-bp="${p}" aria-pressed="${ws.sel.includes(p)}">${p}</button>`).join("")}</div>
+     ${ws.sel.length?`<div class="panel wkprev"><div class="eyebrow">${WD_LONG[wd]} becomes</div><b class="wkt">${esc(title)}</b>
+       <div class="wkn">${ex.length} exercises, 3×8–10 each. Swap or remove any of them after.</div>
+       <div class="history">${ex.map(x=>`<div><span>${esc(x.name)}</span><span class="d">${esc(x.g)}</span></div>`).join("")}</div>
+       <div class="dchips" role="group" aria-label="How many exercises">${[["fewer","Fewer"],["normal","Normal"],["more","More"]].map(([k,l])=>`<button class="dchip wide ${ws.size===k?"on":""}" data-wsz="${k}" aria-pressed="${ws.size===k}">${l}${ws.size===k?` (${ex.length})`:""}</button>`).join("")}</div></div>
+       <div class="btns"><button class="btn primary" id="wkcreate" style="flex:1">Put ${esc(title)} on ${WD_LONG[wd]}</button></div>`:""}
+     ${trainKeys().length?`<div class="lbl">Or use a day you already have</div><div class="dchips">${trainKeys().map(k=>`<button class="dchip wide ${cur===k?"on":""}" data-wsk="${k}">${esc(DAYS[k].label+" · "+DAYS[k].title)}</button>`).join("")}</div>`:""}
+     <div class="lbl">Or</div><div class="dchips"><button class="dchip wide ${!cur?"on":""}" data-wsk="">Rest day</button></div>
+     <p class="savenote">Picking body parts creates a new day you can edit like any other. Your other days aren't changed.</p>`;
+    $("#wkcancel",sh).onclick=closeSheet;
+    sh.querySelectorAll("[data-bp]").forEach(b=>b.onclick=()=>{const p=b.dataset.bp;ws.sel=ws.sel.includes(p)?ws.sel.filter(x=>x!==p):[...ws.sel,p];const st=sh.scrollTop;draw();sh.scrollTop=st});
+    sh.querySelectorAll("[data-wsz]").forEach(b=>b.onclick=()=>{ws.size=b.dataset.wsz;const st=sh.scrollTop;draw();sh.scrollTop=st});
+    sh.querySelectorAll("[data-wsk]").forEach(b=>b.onclick=()=>{const k=b.dataset.wsk;if(k)plan.schedule[String(wd)]=k;else delete plan.schedule[String(wd)];savePlan();syncDays();closeSheet();render();toast(`${WD_LONG[wd]}: ${k?DAYS[k].label+" · "+DAYS[k].title:"rest day"}`)});
+    const cr=$("#wkcreate",sh); if(cr) cr.onclick=()=>{
+      const used=new Set(Object.values(DAYS).map(d=>d.color)); const col=(DAY_COLORS.find(([c])=>!used.has(c))||DAY_COLORS[plan.days.length%DAY_COLORS.length])[0];
+      const key="u"+Date.now().toString(36);
+      plan.days.push({key,label:"Day",title,color:col});
+      plan.extra[key]=ex.map((L,i)=>({sid:key+"_"+i,ex:L.id,sets:L.type==="cardio"?1:3,reps:L.type==="cardio"?[15,15]:[8,10],drop:false}));
+      plan.schedule[String(wd)]=key; savePlan(); syncDays(); closeSheet();
+      state.tab=key; ls.set("ll.tab",key); render(); window.scrollTo(0,0); toast(`${title} is on ${WD_LONG[wd]}`)};
+  };
+  state.open="__week"; sh.hidden=false; $("#scrim").hidden=false; draw(); sh.scrollTop=0;
+}
+
+/* ---------- guided tour ---------- */
+const TOUR=[
+ {sel:"#daypick",day:true,title:"Your workout days",text:"Today's workout opens automatically. Tap the day's name to switch days, add a day, or change which day goes on which weekday."},
+ {sel:"#app [data-open]",day:true,title:"Tap a workout to log it",text:"Enter weight and reps, see what you did last time, add or remove sets, swap the exercise, or watch a form video."},
+ {sel:"#app .check",day:true,title:"Mark it done",text:"Tap the box when you finish an exercise. Nothing is logged until you save the day."},
+ {sel:"#saveday",day:true,scroll:true,title:"Save the day",text:"When you're done, save here. You can pick an earlier date if you're logging a past workout."},
+ {sel:"#tab-programs",title:"Plans",text:"Follow a program someone shared, or build your own on a weekly calendar and share it with others."},
+ {sel:"#tab-plan",title:"Your Log",text:"History, partner maxes, units (lb or kg), your week and account settings. The rest timer is right next to it."}
+];
+let tourI=-1;
+function tourSteps(){return TOUR.filter(s=>!s.day||trainKeys().length||dayKeys().length)}
+function startTour(){state.dayMenu=false;closeSheet();tourI=0;showTour()}
+function endTour(){tourI=-1;const o=$("#tourov");if(o)o.remove();if(!plan.tourDone){plan.tourDone=true;savePlan()}}
+function showTour(){
+  const steps=tourSteps(); if(tourI<0||tourI>=steps.length){endTour();return}
+  const s=steps[tourI];
+  if(s.day&&!DAYS[pickTab()]){state.tab=defaultDay();render()}
+  let el=document.querySelector(s.sel); if(!el){tourI++;return showTour()}
+  if(s.scroll) el.scrollIntoView({block:"center"}); else if(s.day) window.scrollTo(0,0);
+  requestAnimationFrame(()=>drawTour(steps,s));
+}
+function drawTour(steps,s){
+  const el=document.querySelector(s.sel); if(!el) return;
+  let ov=$("#tourov"); if(!ov){ov=document.createElement("div");ov.id="tourov";document.body.appendChild(ov)}
+  const r=el.getBoundingClientRect(), pad=6, below=r.bottom+230<innerHeight, last=tourI===steps.length-1;
+  ov.innerHTML=`<div class="tspot" style="left:${r.left-pad}px;top:${r.top-pad}px;width:${r.width+pad*2}px;height:${r.height+pad*2}px"></div>
+   <div class="tcard" role="dialog" aria-modal="true" aria-labelledby="tour-t" style="${below?`top:${Math.max(12,r.bottom+14)}px`:`bottom:${Math.max(12,innerHeight-r.top+14)}px`}">
+    <button class="tx" id="tourx" aria-label="Close the guide">×</button>
+    <div class="tstep">${tourI+1} of ${steps.length}</div>
+    <h4 id="tour-t">${esc(s.title)}</h4><p>${esc(s.text)}</p>
+    <div class="tbtns"><button class="tskip" id="tourskip">Skip tour</button><span>${tourI?'<button id="tourback">Back</button>':""}<button class="tnext" id="tournext">${last?"Done":"Next"}</button></span></div>
+    <div class="tdots" aria-hidden="true">${steps.map((_,j)=>`<i class="${j===tourI?"on":""}"></i>`).join("")}</div></div>`;
+  $("#tourx").onclick=endTour; $("#tourskip").onclick=endTour;
+  $("#tournext").onclick=()=>{if(last){endTour();toast("You're all set. Replay the guide anytime from Log → Account.")}else{tourI++;showTour()}};
+  const bk=$("#tourback"); if(bk) bk.onclick=()=>{tourI--;showTour()};
+  $("#tournext").focus({preventScroll:true});
+}
+window.addEventListener("resize",()=>{if(tourI>=0)showTour()});
+document.addEventListener("keydown",e=>{if(tourI>=0&&e.key==="Escape")endTour()});
+
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
  t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,2200)}
 
 /* ---------- tabs ---------- */
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab==="add"){openAddDay();return}if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.tab=b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.dayMenu=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
 
 render();
