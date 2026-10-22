@@ -1,0 +1,290 @@
+567	Đây là Sửa lựa chọn. Bỏ một bài bằng ✕, đưa bài yêu thích lên đầu bằng ↑, tìm bất kỳ bài nào bên dưới để thêm, hoặc nhập bài tự nghĩ ra. Quay lại lựa chọn gợi ý bất cứ lúc nào. Danh sách của bạn hiện ở bài này mọi ngày có bài đó.
+568	Đây là chu kỳ cơ bản trong chương trình squat của Sergey Smolov, phần mà mọi người nói tới khi bảo "tôi đã tập Smolov". Bạn squat bốn lần mỗi tuần với khối lượng cao ở {0}–{1}% mức tối đa, và mức tạ tăng mỗi tuần. Chương trình gốc đầy đủ còn có phần mở đầu {2} tuần, giai đoạn chuyển tiếp {3} tuần và giai đoạn cường độ cao {4} tuần; khối này là phần hầu hết mọi người tập riêng. Hãy chuẩn bị cho chân đau mỏi, ăn rất nhiều và một mức squat mạnh hơn rõ rệt.
+569	Thao tác này xóa vĩnh viễn tài khoản, kế hoạch, mọi buổi tập đã ghi, số liệu của bạn tập và các chương trình bạn đã đăng. Không thể hoàn tác. Hãy tải dữ liệu trước nếu muốn giữ một bản.
+570	Ba buổi tập toàn thân ngắn mỗi tuần với tạ đơn và máy, phù hợp nếu bạn ngại thanh đòn. Bạn luân phiên hai buổi và nghỉ giữa các ngày tập.
+571	T5
+572	Múi giờ
+573	Số lần ghi, {0} ngày qua
+574	Hôm nay
+575	Hôm nay ·
+576	Cân nặng hôm nay
+577	Cân nặng hôm nay (lb)
+578	Buổi tập hôm nay tự mở. Chạm tên ngày để đổi ngày, thêm ngày hoặc đổi ngày nào vào thứ nào.
+579	Hôm nay:
+580	Hôm nay: <b>{0}×?</b> lb
+581	Bài tập phổ biến
+582	Tổng trọng lượng
+583	Tổng trọng lượng (kg)
+584	Tổng trọng lượng (lb)
+585	Tổng: {0} lb = thanh {1} lb + {2} lb mỗi bên.
+586	Tập mỗi nhóm cơ hai lần mỗi tuần với lịch tập thể hình phổ biến nhất.
+587	Huấn luyện viên
+588	Hồ sơ huấn luyện viên
+589	Thanh lục giác
+590	Thanh lục giác, thanh squat an toàn hay thanh đòn nặng hơn? Nhập trọng lượng ở mục Khác.
+591	Cơ thang
+592	Cơ thang <small>{0}</small>
+593	Tay sau
+594	Tay sau <small>{0}</small>
+595	T3
+596	Hướng dẫn
+597	Hai buổi tập ngắn, A và B, xoay quanh các bài lớn với thanh đòn. Bạn luân phiên ba ngày mỗi tuần (A-B-A tuần này, B-A-B tuần sau) và tăng chút tạ mỗi buổi. Đơn giản, dạy các bài chính, và người mới thường khỏe lên nhiều trong vài tháng đầu. Đây là phiên bản chung của phương pháp {0}×{1} nổi tiếng.
+598	Hai ngày thân trên và hai ngày thân dưới. Cặp đầu nặng hơn, cặp sau thêm đa dạng, nên mỗi nhóm cơ được tập hai lần mỗi tuần mà không phải tập quá lâu.
+599	Nhập DELETE để xác nhận
+600	Nhập tổng trọng lượng để xem mỗi bên lắp bánh tạ nào. Chọn thanh đòn hoặc nhập trọng lượng thanh.
+601	Nhập mức tạ và rep cho mỗi hiệp. Số lần trước hiện màu xám để bạn biết cần vượt qua.
+602	Nhập mức tạ bạn muốn trên thanh. Ứng dụng cho biết lắp bánh tạ nào ở
+603	Nhập mức tạ bạn muốn trên thanh. Ứng dụng cho biết lắp bánh tạ nào ở <b>mỗi bên</b>.
+604	Nhập mức tạ chính để xem từng lần giảm. Chọn mỗi lần giảm bao nhiêu.
+605	Hoàn tác
+606	Hoàn tác mọi thay đổi của ngày này (đổi bài, thêm hoặc bỏ bài, số hiệp, thứ tự) và quay về kế hoạch gốc. Nhật ký đã lưu không bao giờ bị ảnh hưởng. Lỡ chạm? Bấm Hoàn tác.
+607	Đơn vị
+608	Đơn vị, thông báo, máy tính, hồ sơ HLV, tài khoản
+609	Đơn vị, thông báo, máy tính, hồ sơ huấn luyện viên và tài khoản của bạn.
+610	Bỏ đánh dấu
+611	Hủy đăng
+612	Đã hủy đăng
+613	Không an toàn hoặc có hại
+614	Tối đa {0} bài thay thế
+615	Cập nhật bản đã đăng
+616	Thân trên / Thân dưới · {0} ngày
+617	Thân trên A
+618	Thân trên B
+619	Thân trên
+620	Dùng mức tối đa thận trọng (khoảng {0}% kỷ lục thật). Tuần {1} dùng phần trăm đã ghi. Tuần {2}: cộng {3}–{4} lb ({5}–{6} kg) vào mức tạ mỗi ngày. Tuần {7}: cộng thêm {8}–{9} lb. Tuần {10}: nghỉ đầu tuần rồi thử mức tối đa mới vào thứ Bảy. Giữ các bài chân khác nhẹ trong suốt khối này.
+621	Mật khẩu cần ít nhất {0} ký tự.
+622	Cần ít nhất {0} ký tự.
+623	Dùng trên thiết bị này
+624	Dùng chương trình
+625	Dùng chương trình này
+626	Tự dùng chương trình này
+627	Dùng tên bài tập của riêng bạn, kể cả bài tự nghĩ ra
+628	Đã xác minh
+629	Rung khi hết giờ nghỉ (Android)
+630	Khởi động
+631	Trang web
+632	T4
+633	Đã xóa tuần
+634	Tuần bắt đầu
+635	Tuần {0}
+636	Đã thêm tuần {0}. Chạm Sao chép để điền từ tuần trước.
+637	Đã chép tuần {0} sang tuần {1}
+638	Tóm tắt tuần
+639	Mức tạ
+640	Mức tạ và rep
+641	Cân nặng (kilôgam)
+642	Cân nặng (pound)
+643	Nhắm vào
+644	Bạn sẽ tập gì
+645	Chương trình này có vấn đề gì?
+646	Khi hết giờ bạn sẽ nghe {0} tiếng bíp, màn hình nhấp nháy và điện thoại rung nếu hỗ trợ. Hãy bật chuông.
+647	Khi đạt mức rep cao nhất ở mọi hiệp, lần sau tăng chút tạ ({0} lb hoặc {1} kg). Hầu hết các hiệp nên dừng trước giới hạn {2}–{3} rep.
+648	Khi tập xong, lưu ở đây. Bạn có thể chọn ngày trước đó nếu ghi buổi tập cũ.
+649	Hai bạn so sánh bài nào?
+650	Buổi tập nào vào thứ nào
+651	Dành cho ai
+652	Thanh nữ
+653	Tập trong khoảng rep đã ghi. Khi đạt mức cao nhất ở mọi hiệp, lần sau tăng chút tạ. Nghỉ {0} phút với bài lớn và {1}–{2} giây với các bài còn lại.
+654	Tăng dần đến mức tạ làm việc đầu tiên trong {0}–{1} hiệp nhẹ hơn. Không cần ghi các hiệp khởi động.
+655	Buổi tập
+656	Buổi tập A
+657	Buổi tập B
+658	Nhật ký của tôi
+659	Nhắc ngày tập
+660	Ngày tập
+661	Tên buổi tập
+662	Buổi tập
+663	Số buổi tập ghi mỗi tuần
+664	Vàng
+665	Hôm qua
+666	Bạn có thể đổi mọi thứ sau: đổi bài, thêm hoặc bỏ ngày và hiệp, hoặc đổi chương trình.
+667	Bạn so với bạn tập ở từng bài: kỷ lục của bạn cạnh kỷ lục của họ, và mỗi người tăng bao nhiêu trong {0} tuần qua. Chạm một bài để xem từng tuần.
+668	Bạn sẽ thêm bài tập ở bước tiếp theo. Đưa vào tuần của bạn từ tab Nhật ký.
+669	YouTube
+670	Nhật ký của bạn
+671	Nhật ký của bạn · {0}/{1}
+672	Giới thiệu, địa điểm và liên kết của bạn, hiện khi người khác chạm tên bạn trên chương trình bạn đã đăng.
+673	Lựa chọn của bạn
+674	Lựa chọn của bạn <small>{0}</small>
+675	Dữ liệu của bạn đã sẵn sàng
+676	Tên của bạn
+677	Số liệu được lưu khi bạn chạm
+678	Số liệu được lưu khi bạn chạm <b>Lưu nhật ký Ngày {0}</b> ở cuối ngày.
+679	Bài thay thế của riêng bạn
+680	Bài tập của bạn
+681	Kế hoạch của bạn
+682	Giờ của bạn:
+683	Tuần của bạn
+684	Tuần của bạn sẽ thành chương trình này: {0} ngày tập, mỗi ngày một tab mang tên thứ. Ngày {1}–{2} vẫn ở trong tab nhưng rời khỏi tuần, và mọi nhật ký đều được giữ. Chuyển sang tuần tiếp theo từ tab Chương trình khi bạn sẵn sàng.
+685	Cân nặng dùng để ước tính calo. Cập nhật khi thay đổi.
+686	Cân nặng, tuổi và chiều cao (để ước tính calo) và bạn dùng lb hay kg.
+687	Ngày tập của bạn
+688	Ngày tập của bạn · {0}/{1}
+689	Các ngày tập của bạn
+690	Buổi tập được lưu vào tài khoản, nên có trên mọi điện thoại bạn đăng nhập.
+691	tài khoản
+692	hoạt động trong {0} ngày
+693	hoạt động tuần này
+694	thêm cân nặng ở mục
+695	sau tuần {0}
+696	từ trước tới nay
+697	và
+698	ở cuối ngày.
+699	ở dưới cùng, buổi tập sẽ hiện ở đây kèm ngày giờ bạn ghi.
+700	sẽ đưa lại. Nhật ký đã lưu vẫn còn.
+701	bởi
+702	đã quay lại
+703	cm
+704	VD: Tay và bụng
+705	VD: Đốt mỡ và giữ cơ trong {0} tuần
+706	VD: Phòng gym đầy đủ, hoặc chỉ tạ đơn
+707	VD: Lịch giảm mỡ {0} tuần
+708	mỗi bên
+709	người theo dõi
+710	ft
+711	in
+712	trong tab Nhật ký.
+713	kg
+714	thanh kg
+715	kg · cm
+716	{0} ngày qua
+717	lb
+718	thanh lb
+719	lb · ft/in
+720	lượt thích
+721	đã ghi
+722	đã ghi một buổi tập
+723	ghi chú
+724	không bắt buộc, hiện cho người theo dõi
+725	người đang theo một chương trình
+726	mỗi người hoạt động
+727	chương trình
+728	chương trình đã đăng
+729	đã đăng · Pro
+730	rep
+731	đang hiện tất cả
+732	hiện trên thẻ chương trình
+733	lượt đăng ký
+734	tháng này
+735	tuần này
+736	đến
+737	để hoàn thành hiệp.
+738	theo dõi bạn tập
+739	hlv@vidu.com
+740	ngày tập
+741	buổi tập
+742	trangcuaban.com
+743	tuổi
+744	{0} thay đổi cần lưu
+745	{0} thay đổi cần lưu
+746	{0} ngày
+747	{0} ngày/tuần
+748	{0} bài
+749	{0} người theo
+750	{0} kg
+751	{0} lb
+752	{0} chưa lưu
+753	{0}/{1}
+754	Đã đánh dấu {0}/{1}
+755	Đã chọn {0} · chạm để thêm hoặc bỏ
+756	{0} hiệp
+757	{0} hiệp {1} rep ở {2}% mức tối đa.
+758	{0} người dùng
+759	{0} đang chờ
+760	{0} tuần
+761	{0} giây
+762	Sức mạnh cho người mới {0}×{1}
+763	‹ Quay lại
+764	⇄ Bài thay thế
+765	⇄ Tạo siêu hiệp
+766	− Bớt hiệp
+767	−{0} giây
+768	⏱ Hết giờ nghỉ. Hiệp tiếp theo!
+769	▶ Bắt đầu hướng dẫn đầy đủ
+770	▶ Xem kỹ thuật trên YouTube
+771	★ Chương trình kinh điển LiftLog
+772	♥ Thích · {0}
+773	♥ Đã thích · {0}
+774	⚙️ Cài đặt
+775	✓ Đã đồng bộ hết
+776	✓ Đang theo dõi
+777	✓ Đã xong
+778	✓ HLV đã xác minh
+779	📊 Thống kê ứng dụng
+780	📝 Thêm ghi chú (độ cao ghế, cách cầm, lưu ý…)
+781	📝 Ghi chú của tôi · chỉ bạn thấy
+782	Đã lưu hết lúc {x}
+783	{x} bài tập · đã ghi {x2}
+784	Đã đăng lên cộng đồng · cập nhật {x}. Thay đổi sẽ được đăng khi bạn chạm Cập nhật.
+785	Cân nặng dùng để ước tính calo. Cập nhật khi thay đổi. Cập nhật lần cuối: {x}.
+786	Giờ của bạn: <b>{x}</b>. Múi giờ quyết định khi nào "hôm nay" bắt đầu, buổi tập nào là của hôm nay và giờ trong nhật ký của bạn.
+787	{x}: Nghỉ
+788	{x}: Ngày {x2}
+789	Ngày {x} · {x2}
+790	Tuần {x} · {x2}
+791	{x} · {x2} · Hôm nay
+792	Nếu {x} có người dùng…
+793	Tập {x} liền với…
+794	Hiện ở {x} mọi ngày có bài đó. Chọn một bài chỉ đổi cho hôm nay. Kế hoạch không thay đổi.
+795	Bài thay thế cho {x}
+796	Đã bỏ {x}
+797	Bỏ {x}
+798	Đưa {x} lên
+799	Bỏ khỏi {x}
+800	Hoàn thành {x}
+801	Lưu nhật ký {x}
+802	Số liệu được lưu khi bạn chạm <b>Lưu nhật ký {x}</b> ở cuối ngày.
+803	Thêm vào <b>{x}</b>. Bài sẽ vào mục nhóm cơ tương ứng.
+804	Thêm vào {x} ở mục <b>{x2}</b>.
+805	Bỏ khỏi ngày này. <b>Khôi phục bản gốc</b> sẽ đưa lại. Nhật ký đã lưu vẫn còn.
+806	Đã thêm {x} vào {x2}
+807	{x} giờ ở {x2}
+808	Tập {x} hôm nay
+809	Đã đổi lại {x}
+810	Đã thêm {x}
+811	{x}: {x2} hiệp mỗi tuần
+812	{x}: trở lại {x2} hiệp
+813	Đã lưu {x}: ghi {x2} buổi tập
+814	Đã lưu {x}: ghi 1 buổi tập
+815	Đã lưu {x} cho {x2}: ghi {x3} buổi tập
+816	Đã xóa {x}
+817	Đã tạo {x}. Hãy thêm bài tập.
+818	{x} giờ là ngày nghỉ
+819	{x} vào {x2}
+820	Đã xóa {x} cùng mọi số liệu
+821	Chạm lần nữa để xóa {x}
+822	Chạm lần nữa: xóa {x} và số liệu của họ
+823	Đã bắt đầu {x}, tuần {x2}
+824	Bắt đầu nghỉ: {x}
+825	Đang theo dõi {x}
+826	Đã bỏ theo dõi {x}
+827	Theo dõi {x}
+828	Sửa {x}
+829	Xóa hẳn {x}
+830	Xóa {x} và mọi số liệu bạn đã ghi cho họ. Nhật ký của bạn không bị ảnh hưởng.
+831	Bạn so với {x}
+832	Đã thêm {x}. Ghi hiệp nặng nhất của họ khi bạn tập các bài này.
+833	Ngày bạn hoàn thành {x}
+834	Cân nặng hôm nay ({x})
+835	Mức tối đa ban đầu {x}
+836	Không lưu được một thay đổi làm khi ngoại tuyến: {x}
+837	Trước khi đăng: {x}
+838	Trong kế hoạch, bài này thay cho <b>{x}</b>.
+839	Bạn đã thêm bài này vào {x}.
+840	Thay cho {x}
+841	bởi {x}
+842	{x} là ngày nghỉ trong kế hoạch.
+843	Kế hoạch ghi {x}. Thay đổi này chỉ cho hôm nay.
+844	Giữ {x} hiệp mỗi tuần
+845	Tổng: {x} = thanh {x2} + {x3} mỗi bên.
+846	Không thể ra đúng {x} với bánh tạ tiêu chuẩn. Gần nhất mà không vượt quá: <b>{x2}</b>.
+847	Nhẹ hơn cả thanh đòn ({x}).
+848	Tự động · {x}
+849	LiftLog · {x}
+850	Chủ Nhật
+851	Thứ Hai
+852	Thứ Ba
+853	Thứ Tư
+854	Thứ Năm
+855	Thứ Sáu
+856	Thứ Bảy

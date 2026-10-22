@@ -1,0 +1,283 @@
+0	+ Ajouter
+1	+ Ajouter un jour
+2	+ Ajouter un partenaire
+3	+ Ajouter un jour
+4	+ Ajouter un exercice
+5	+ Ajouter un partenaire
+6	+ Ajouter une série
+7	+ Ajouter ton propre exercice
+8	+ Nouveau programme
+9	+ Choisir dans la bibliothèque
+10	+ Semaine
+11	+ ajouter
+12	+{0} s
+13	, puis baisse encore de
+14	, puis choisis des exercices dans la bibliothèque ou crée les tiens.
+15	. Il va dans la section de son groupe musculaire.
+16	. LiftLog ne remplace pas un avis médical ; consulte un médecin avant de commencer un nouveau programme.
+17	. Choisis n'importe quel groupe musculaire. Si tu en choisis un autre, il passe dans cette section du Jour {0}.
+18	. Le fuseau horaire décide quand « aujourd'hui » commence, quelle séance est celle du jour et l'heure de tes enregistrements.
+19	<b>+ Ajouter un jour</b><small>Crée un nouveau jour d'entraînement</small>
+20	<b>+ Ajouter un exercice</b><br><small>De la bibliothèque ou le tien</small>
+21	<b>+ Ajouter un exercice</b><br><small>N'importe quel groupe musculaire, ou le tien</small>
+22	<b>+ Ajouter ton propre exercice</b><br><small>Pour tout ce qui n'est pas dans la liste</small>
+23	<b>+ Nouveau programme</b><br><small>Crée-le sur un calendrier hebdomadaire</small>
+24	<b>+ Choisir dans la bibliothèque</b><br><small>L'ajoute à ce jour et crée le superset</small>
+25	<b>Voir tous les exercices</b><br><small>Remplace par n'importe quoi, n'importe quel groupe, ou ajoute le tien</small>
+26	<b>Dans un exercice</b><small>Séries, repos, notes, alternatives, partenaires, supersets, remplacements</small>
+27	<b>Hors ligne.</b> Enregistré sur ce téléphone. La synchro se fera au retour du réseau.
+28	<b>Plans et programmes</b><small>Suivre les programmes de coachs et créer les tiens</small>
+29	<b>Minuteur de repos</b><small>Raccourcis et commandes</small>
+30	<b>Réglages et outils</b><small>Unités, alertes, calculateurs, profil de coach, compte</small>
+31	<b>Ton journal</b><small>Poids, historique, ta semaine, records avec partenaire</small>
+32	<b>Ton jour d'entraînement</b><small>Changer de jour, réordonner, ajouter, réinitialiser, enregistrer</small>
+33	<b>{0}</b><small>abonnés</small>
+34	<b>{0}</b><small>j'aime</small>
+35	<b>{0}</b><small>programme</small>
+36	<b>📊 Stats de l'app</b><br><small>Propriétaire uniquement : inscriptions, personnes actives, séances, exercices populaires</small>
+37	@chaîne ou lien
+38	@pseudo
+39	Une modification faite hors ligne n'a pas pu être enregistrée :
+40	Un jour dans le créateur
+41	Un bloc squat court et intense de {0} semaines qui peut ajouter beaucoup de poids à ton max.
+42	Une visite de toutes les fonctions sur tes vrais écrans. Choisis un sujet ou fais tout (environ {0} minutes).
+43	À propos de LiftLog
+44	À propos de ce programme
+45	À propos de toi
+46	Environ {0}½–{1} minutes sur les gros exercices, {2}–{3} secondes sur les petits. L'onglet Repos a un minuteur.
+47	Abdos
+48	Abdos <small>{0}</small>
+49	Compte
+50	Ajouter un choix
+51	Ajouter un jour · Jour {0}
+52	Ajouter un exercice
+53	Ajoute n'importe lequel des {0}+ exercices, de n'importe quel groupe, ou crée le tien. Il reste sur ce jour chaque semaine.
+54	Ajouter un exercice
+55	Ajouter ou retirer des séries
+56	Ajouter au Jour {0}
+57	Augmente le poids quand tu atteins le haut de la fourchette de reps sur toutes les séries. Garde {0}–{1} reps en réserve sur la plupart des séries.
+58	Ajoute ton premier jour, puis choisis ses exercices. Ou suis un programme partagé dans
+59	Ajoute ton premier jour, puis choisis ses exercices. Ou suis un programme partagé dans <b>Plans</b>.
+60	Ajoute ton partenaire de salle pour noter seulement sa meilleure série ici.
+61	Ajoute ton nom.
+62	Ajout à
+63	Ajout à <b>Jour {0} · Poussée</b>. Il va dans la section de son groupe musculaire.
+64	Ajout à <b>Semaine {0} · Mardi · Séance</b>. Il va dans la section de son groupe musculaire.
+65	L'ajoute à ce jour et crée le superset
+66	S'ajoute au Jour {0} dans
+67	S'ajoute au Jour {0} dans <b>Pectoraux</b>.
+68	Avancé
+69	Âge
+70	L'âge doit être entre {0} et {1}.
+71	Tout
+72	Presque fini : clique sur le lien reçu par e-mail, puis connecte-toi.
+73	Alternative
+74	Une routine full body facile à suivre pour tes premiers mois en salle.
+75	Stats de l'app
+76	Jour bras
+77	Bras
+78	Dos
+79	Dos et épaules
+80	Dos <small>{0}</small>
+81	Retour à la connexion
+82	Revenir aux choix suggérés
+83	Alternatives
+84	Barre
+85	Poids de la barre en kg
+86	Poids de la barre en lb
+87	Base tes pourcentages sur un max récent et honnête. La semaine {0} utilise les pourcentages indiqués. Semaine {1} : ajoute {2} lb ({3} kg) au poids de chaque jour de la semaine {4}. Semaine {5} : poids de la semaine {6} plus {7} lb ({8} kg). Semaine {9} : repos lundi et mercredi, puis monte jusqu'à une répétition lourde vendredi et samedi. Si une séance se passe mal, refais cette semaine au lieu d'ajouter du poids.
+88	Avant de publier :
+89	Débutant
+90	Débutants à intermédiaires qui peuvent s'entraîner {0} jours par semaine.
+91	Développé couché, incliné, militaire, squat et soulevé de terre sont cochés au départ. Coche n'importe quel autre exercice de tes jours pour le comparer aussi. Tu choisis aussi les exercices en ajoutant un partenaire.
+92	Entre les séries
+93	Biceps
+94	Biceps <small>{0}</small>
+95	Gros exercices absents de tes jours
+96	Bio
+97	Bleu
+98	Groupe musculaire
+99	Groupes musculaires
+100	Groupes musculaires <small>tous affichés</small>
+101	Groupes musculaires <small>{0} sélectionnés · touche pour ajouter ou retirer</small>
+102	Poids corporel
+103	Poids, historique, ta semaine, records avec partenaire
+104	Poids du corps
+105	Reps au poids du corps (poids facultatif)
+106	Voir tous les exercices
+107	Parcours les programmes publiés par d'autres pratiquants et coachs, et lance-en un.
+108	Crée un nouveau jour d'entraînement
+109	Crée-le sur un calendrier hebdomadaire
+110	Créer le mien
+111	Construire ma semaine par groupe musculaire
+112	Crée le tien
+113	En créant un compte, tu acceptes les
+114	En créant un compte, tu acceptes les <a href="terms.html">Conditions</a> et la <a href="privacy.html">Politique de confidentialité</a>. LiftLog ne remplace pas un avis médical ; consulte un médecin avant de commencer un nouveau programme.
+115	CSV enregistré
+116	Poulie
+117	Calendrier
+118	Mollets
+119	Mollets <small>{0}</small>
+120	Impossible de faire exactement {0} lb avec des disques standard. Le plus proche sans dépasser :
+121	Impossible de faire exactement {0} lb avec des disques standard. Le plus proche sans dépasser : <b>{1} lb</b>.
+122	Annuler
+123	Cardio
+124	Cardio et gainage
+125	Cardio <small>{0}</small>
+126	Regarde tes e-mails pour le lien de réinitialisation.
+127	Les exercices cochés apparaissent dans Records avec partenaire et ont une ligne partenaire quand tu les ouvres pendant la séance. Il en manque un ? Ajoute-le d'abord à un de tes jours.
+128	Pectoraux
+129	Pectoraux et bras
+130	Pectoraux <small>{0}</small>
+131	Choisir les exercices
+132	Choisis le son, la vibration et les bannières pour la fin du repos.
+133	Effacer
+134	Vider le jour
+135	Vider le jour retire ses exercices mais en garde un jour d'entraînement. Supprimer le jour en fait un jour de repos.
+136	Vider la semaine {0}
+137	Fermer
+138	Fermer le guide
+139	Couleur
+140	Bientôt disponible
+141	Communauté
+142	Communauté et Mes programmes
+143	Communauté contient des programmes partagés par d'autres pratiquants et coachs, plus des classiques LiftLog comme le {0}×{1} et Smolov Jr. Mes programmes, c'est là que tu crées les tiens.
+144	Grands débutants, ou toute personne pressée.
+145	Conditionnement
+146	Confirme d'abord ton e-mail : clique sur le lien qu'on t'a envoyé.
+147	Copié sur quelqu'un d'autre
+148	Copié dans Mes programmes. Modifie-le à ta guise.
+149	Ta semaine actuelle a été copiée
+150	Copier la dernière fois
+151	Copier dans mes programmes
+152	Copier la semaine {0} dans la semaine {1}
+153	Gainage
+154	Impossible de le modifier. moderation.sql est-il installé ?
+155	Impossible de supprimer ton compte. Vérifie ta connexion et réessaie.
+156	Impossible de télécharger ou copier le CSV sur cet appareil.
+157	Impossible de télécharger tes données. Réessaie.
+158	Impossible de le retirer.
+159	Impossible d'enregistrer dans ton journal. C'est gardé sur ce téléphone pour l'instant.
+160	Impossible d'enregistrer la modification de ton plan dans ton compte.
+161	Impossible d'envoyer le signalement. Réessaie.
+162	Décompte ton repos. Il tourne en arrière-plan pendant que tu notes et te prévient à la fin.
+163	Uniquement des totaux. Aucune séance, aucun poids ni aucun partenaire individuel n'est affiché ici.
+164	Créer le Jour {0}
+165	Créer un compte
+166	Créateur
+167	Niveaux de créateur
+168	Pourcentage de baisse personnalisé
+169	Date de fin
+170	Date à laquelle tu as fini le Jour {0}
+171	Jour mis à jour
+172	Jour {0}
+173	Le Jour {0} a des modifications : {1} nombre de séries modifié.
+174	Jour {0} enregistré : {1} séances notées
+175	Supprimer le jour
+176	Supprimer mon compte
+177	Supprimer mon compte définitivement
+178	Supprimer le programme
+179	Supprimer la semaine {0}
+180	Suppression…
+181	Tu as fait une série en plus ou en moins ? Utilise − Retirer une série et + Ajouter une série. Ça reste ainsi sur ce jour jusqu'à ce que tu le réinitialises.
+182	Fais une série de chaque sans repos entre les deux, puis repose-toi. Ça reste sur ce jour chaque semaine jusqu'à ce que tu le sépares.
+183	Enchaîne cet exercice avec un autre, sans repos entre les deux. Choisis-en un déjà sur ce jour ou dans la bibliothèque.
+184	Terminé
+185	Télécharger tous les enregistrements (CSV)
+186	Le téléchargement n'est pas disponible ici, le CSV a donc été copié. Colle-le dans un tableur.
+187	Télécharger mes données
+188	Brouillon · {0} sem · {1} jours/sem · {2} exercices
+189	Calculateur de séries dégressives
+190	Séries dégressives
+191	Taille de la baisse
+192	Barre EZ
+193	Chaque exercice
+194	Par côté :
+195	Par côté : <b>{0} × {1}</b>
+196	Modifier
+197	Modifier les choix
+198	Modifier ma semaine
+199	Huit semaines de travail de force ciblé pour pratiquants intermédiaires.
+200	E-mail
+201	M'envoyer un lien de réinitialisation
+202	Saisis d'abord son e-mail
+203	Note le poids et les reps, vois ce que tu as fait la dernière fois, ajoute ou retire des séries, change d'exercice ou regarde une vidéo de technique.
+204	Saisis ton e-mail.
+205	Équipement
+206	Chaque séance enregistrée, par date. Télécharge-les toutes en tableur quand tu veux.
+207	Ex. : Poussée, Tirage, Jambes, Jour épaules
+208	Exemple : {0} kg sur une barre de {1} kg = {2} + {3} par côté.
+209	Exemple : {0} lb sur une barre de {1} lb = deux disques de {2} par côté.
+210	Exercices
+211	Exercices <small>{0}</small>
+212	Les exercices marqués A{0} / A{1} s'enchaînent sans repos. Touche Séparer pour annuler.
+213	Pratiquants expérimentés avec un bon squat et une bonne récupération. Garde le reste de ton entraînement au minimum pendant ces {0} semaines.
+214	Perte de gras
+215	Les pieds doivent être entre {0} et {1}.
+216	Remplit exactement ce que tu as fait à la dernière séance.
+217	Terminer le Jour {0}
+218	Suis un programme partagé ou crée le tien sur un calendrier hebdomadaire et partage-le.
+219	Suivre un programme partagé
+220	Suivre les programmes de coachs et créer les tiens
+221	Pour tout ce qui n'est pas dans la liste
+222	Avant-bras
+223	Avant-bras <small>{0}</small>
+224	Mot de passe oublié ?
+225	Technique ↗
+226	Quatre séances équilibrées par semaine pour gagner force et volume ensemble.
+227	Gratuit
+228	Les comptes gratuits peuvent publier {0} programmes. Les coachs vérifiés et Pro peuvent en publier {1}.
+229	Ven
+230	De la bibliothèque ou le tien
+231	De ton programme · sélectionné
+232	Full body
+233	Full body <small>{0}</small>
+234	Full body A
+235	Full body B
+236	Full body · Débutant {0} jours
+237	Salle complète
+238	Forme générale
+239	Forme générale · Débutant
+240	Donne un nom à l'exercice.
+241	Donne-lui un nom.
+242	Fessiers
+243	Fessiers <small>{0}</small>
+244	Revenir aux choix suggérés
+245	Revenir à {0}
+246	Aller à À propos de toi
+247	Objectif
+248	Vert
+249	Partenaire de salle
+250	Ischio-jambiers
+251	Ischio-jambiers <small>{0}</small>
+252	Taille
+253	Taille en pieds
+254	Taille en centimètres
+255	Taille en pouces
+256	La taille doit être entre {0} et {1} cm.
+257	Voici un jour d'exemple. Chaque exercice affiche ses séries × reps et ses alternatives. ↑ le fait monter, ✕ le retire, et + Ajouter un exercice est en bas.
+258	Historique
+259	Historique, records avec partenaire, unités (lb ou kg), ta semaine et les réglages du compte. Le minuteur de repos est juste à côté.
+260	Comment veux-tu commencer ?
+261	Comment les gens commencent
+262	Comment progresser
+263	Comment tu le notes
+264	Dans le plan du jour
+265	Les pouces doivent être entre {0} et {1}.
+266	Dans un exercice
+267	Dans un exercice · {0} sur {1}
+268	Instagram
+269	Intermédiaire
+270	Juste pour aujourd'hui
+271	Garder l'écran allumé pendant le minuteur
+272	Kettlebell
+273	Langue
+274	Langue et fuseau horaire
+275	Organise des séances sur un calendrier hebdomadaire, ajoute des semaines, décris-le et publie-le. Ensuite : à quoi ressemble un jour dans le créateur.
+276	Jambes
+277	Jambes et gainage
+278	Autoriser les autres à copier et remixer ce programme
+279	Niveau
+280	Tu t'entraînes avec un ami ? Ajoute-le et note seulement sa meilleure série à côté de la tienne. Développé couché, incliné, militaire, squat et soulevé de terre pour commencer, et tu peux ajouter n'importe quel autre exercice. Il n'a pas besoin de l'app.
+281	Tu t'entraînes avec un ami ? Sur les exercices que vous comparez (couché, incliné, militaire, squat et soulevé de terre pour commencer), note sa meilleure série ici à côté de la tienne. Choisis les exercices dans Journal → Records avec partenaire.
+282	LiftLog

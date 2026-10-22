@@ -21,7 +21,7 @@
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   function clearAppStorage() {
     try {
-      Object.keys(localStorage).filter((k) => k.startsWith("ll.")).forEach((k) => localStorage.removeItem(k));
+      Object.keys(localStorage).filter((k) => k.startsWith("ll.") && !["ll.lang", "ll.tz"].includes(k)).forEach((k) => localStorage.removeItem(k));
     } catch (e) {}
   }
   function err(code, message) { const e = new Error(message || code); e.code = code; return e; }
@@ -333,9 +333,11 @@
       </form>
       ${up || np ? "" : `<button class="linkbtn" id="a-forgot" type="button">${fp ? "Back to sign in" : "Forgot password?"}</button>`}
       <p class="savenote">Your workouts are saved to your account, so they're on any phone you sign in on.</p>
+      ${window.LIFTLOG_I18N ? `<label class="authlang"><span aria-hidden="true">🌐</span><select id="a-lang" data-noi18n aria-label="Language">${window.LIFTLOG_I18N.langs.map(([c, n]) => `<option value="${c}" ${c === window.LIFTLOG_I18N.lang ? "selected" : ""}>${n}</option>`).join("")}</select></label>` : ""}
       ${up ? `<p class="savenote">By creating an account you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>. LiftLog isn't medical advice; check with a doctor before starting a new program.</p>` : `<p class="savenote"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p>`}
     </div>`;
     el.querySelectorAll("[data-am]").forEach((b) => (b.onclick = () => showAuth(b.dataset.am)));
+    const al = el.querySelector("#a-lang"); if (al) al.onchange = () => window.LIFTLOG_I18N.set(al.value);
     const f = el.querySelector("#a-forgot"); if (f) f.onclick = () => showAuth(fp ? "signin" : "forgot");
     const msg = (t, ok) => { const e = el.querySelector("#a-err"); e.textContent = t; e.classList.toggle("ok", !!ok); };
     el.querySelector("#authform").onsubmit = async (ev) => {

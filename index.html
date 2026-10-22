@@ -15,6 +15,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="LiftLog">
 <style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="i18n.js"></script>
 <script src="config.js"></script>
 <script src="vendor/supabase.js"></script>
 <script src="shim.js"></script>
@@ -25,6 +26,7 @@
 .authbrand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .authbrand .plate{background:var(--red)}
 #auth .cform{gap:12px}
+.authlang{display:inline-flex;gap:6px;align-items:center;margin-top:10px;font-size:14px}.authlang select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
 .autherr{margin:0;min-height:1.2em;font-size:13.5px;color:var(--red)}
 .autherr.ok{color:var(--ok)}
 #auth .linkbtn{justify-self:start;font-size:14px}
@@ -441,7 +443,8 @@ svg.map{width:100%;height:auto;display:block}
 .alt .am{font-size:12px;color:var(--muted)}
 a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:5px 8px;white-space:nowrap;background:var(--surface-2)}
 .sets{display:grid;gap:6px}
-.setrow{display:grid;grid-template-columns:44px 1fr 1fr;gap:8px;align-items:center}
+.setrow{display:grid;grid-template-columns:minmax(44px,max-content) 1fr 1fr;gap:8px;align-items:center}
+.setrow .n{white-space:nowrap}
 .setrow .n{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .field{display:flex;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:0 10px;min-width:0}
 .field input{all:unset;width:100%;min-width:0;padding:11px 0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -559,9 +562,13 @@ function bodyMap(primary,secondary,showLabels=true){
 const $=(s,r=document)=>r.querySelector(s);
 const esc=(s)=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const pad=(n)=>String(n).padStart(2,"0");
-const ymd=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const TZ=(()=>{try{const v=JSON.parse(localStorage.getItem("ll.tz"));if(v){new Intl.DateTimeFormat("en-US",{timeZone:v});return v}}catch(e){}return null})();
+const LOC=(window.LIFTLOG_I18N&&window.LIFTLOG_I18N.locale)||undefined;
+function tzD(ms){const n=new Date(ms);if(!TZ)return n;try{return new Date(n.toLocaleString("en-US",{timeZone:TZ}))}catch(e){return n}}
+function nowD(){return tzD(Date.now())}
+const ymd=(d=nowD())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const TODAY=ymd();
-const fmtDate=(s)=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})};
+const fmtDate=(s)=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(LOC,{weekday:"short",month:"short",day:"numeric"})};
 const r5=(x)=>Math.round(x/5)*5;
 const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const thaw=(v)=>v==null?v:JSON.parse(JSON.stringify(v));
@@ -886,7 +893,7 @@ function hintFor(it){
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function schedOf(wd){const k=plan.schedule[String(wd)];return k&&DAYS[k]?k:null}
-function weekdayTab(){return schedOf(new Date().getDay())}
+function weekdayTab(){return schedOf(nowD().getDay())}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
 function defaultDay(){const k=state.lastDay;return DAYS[k]?k:(weekdayTab()||trainKeys()[0]||null)}
@@ -973,7 +980,7 @@ function render(){
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
-  ${restDay?`<div class="banner"><b>${new Date().toLocaleDateString(undefined,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
+  ${restDay?`<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
   <div class="mapwrap">${bodyMap([...prim],[...sec].filter(x=>!prim.has(x)))}
     <div class="legend"><p>Muscles hit today</p>
       <div><span class="sw" style="background:var(--accent)"></span>Main target</div>
@@ -987,11 +994,11 @@ function render(){
   ${(()=>{const c=dayChanges(tab);if(d.custom)return items.length?`<div class="resetrow"><span>${items.length} exercise${items.length===1?"":"s"} on ${esc(d.label)}.</span><button class="btn small" id="resetday">Clear all exercises</button></div>`:"";
      return `<div class="resetrow"><span>${c.total?c.text:"Matches your original training split."}</span><button class="btn small" id="resetday" ${c.total?"":"disabled"}>Reset to original</button></div>`})()}
   <div class="savebar">
-    <div class="savehead"><b>Finish ${d.label}</b><span>${ldPast?`${done} marked to save`:pending?`${pending} change${pending===1?"":"s"} to save`:savedN?`All saved${savedAt?" at "+new Date(savedAt).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):""}`:"Nothing marked yet"}</span></div>
+    <div class="savehead"><b>Finish ${d.label}</b><span>${ldPast?`${done} marked to save`:pending?`${pending} change${pending===1?"":"s"} to save`:savedN?`All saved${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}`:"Nothing marked yet"}</span></div>
     <div class="kcal">${plan.bw?`<div class="kbig"><span>Estimated burn</span><b>~${Math.round(dayKcal)}</b><small>kcal</small></div><p>${done?`From the ${done} workout${done===1?"":"s"} you marked, using your weights, reps, sets and ${toDisp(plan.bw)} ${wU()} body weight.`:"Mark workouts to see your estimate."} <button class="linkbtn" id="kcalhow">How it's figured</button></p>`
       :`<p><b>See calories burned:</b> add your body weight under <b>About you</b> in the Log tab. <button class="linkbtn" id="gotoabout">Go to About you</button></p>`}</div>
     <div class="logdate"><span class="lbl" style="margin:0">Date finished</span>
-      <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===ymd(new Date(Date.now()-864e5))?"on":""}" data-ld="yday">Yesterday</button>
+      <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===ymd(tzD(Date.now()-864e5))?"on":""}" data-ld="yday">Yesterday</button>
       <label class="field ldpick"><input type="date" id="logdate" value="${logDate()}" max="${TODAY}" aria-label="Date you finished ${esc(d.label)}"></label></div>
       ${ldPast?`<p class="ldnote">Saving to <b>${fmtDate(logDate())}</b>. If you already logged any of these workouts that day, this replaces them. Today's log isn't touched.</p>`:""}</div>
     <p>Saves every workout you marked, with its weights and reps. Workouts you didn't mark aren't logged.</p>
@@ -1005,7 +1012,7 @@ function render(){
   app.querySelectorAll("[data-check]").forEach(b=>b.onclick=()=>toggleMark(ALL[b.dataset.check]));
   $("#saveday").onclick=()=>saveDay(tab);
   app.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));
-  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{state.logDate=b.dataset.ld==="yday"?ymd(new Date(Date.now()-864e5)):null;render()});
+  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{state.logDate=b.dataset.ld==="yday"?ymd(tzD(Date.now()-864e5)):null;render()});
   const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
   $("#addex").onclick=()=>openAdd(tab);
   const ed=$("#editday"); if(ed) ed.onclick=()=>openDayEditor(tab);
@@ -1419,13 +1426,13 @@ function bindTimerView(){
 
 /* ---------- plan ---------- */
 function planView(){
-  const wd=new Date().getDay(); const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const wd=nowD().getDay(); const names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   const order=[1,2,3,4,5,6,0];
   const trainDays=[0,1,2,3,4,5,6].filter(i=>schedOf(i)).length;
   const ss=sessions();
-  const now=new Date(), monthKey=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
+  const now=nowD(), monthKey=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
   const thisMonth=ss.filter(x=>x.date.startsWith(monthKey)).length;
-  const wkStart=(()=>{const d=new Date();const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)})();
+  const wkStart=(()=>{const d=nowD();const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)})();
   const thisWeek=ss.filter(x=>x.date>=wkStart).length;
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="btn small gearbtn" id="opensettings" aria-label="Settings">⚙️ Settings</button></div></header>
   <div class="plan">
@@ -1465,6 +1472,7 @@ function settingsView(){
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
+   ${langPanel()}
    ${trainerPanel()}
    <div class="panel" id="notifs"><h2>Notifications</h2>
     <div class="lbl" style="margin-top:4px">Rest timer</div>
@@ -1483,8 +1491,8 @@ function settingsView(){
    ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
    <div class="panel"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
   </div>`}
-function fmtStamp(ms){if(!ms)return "—";const d=new Date(ms);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}
-function isoLocal(ms){if(!ms)return "";const d=new Date(ms);return `${ymd(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function fmtStamp(ms){if(!ms)return "—";const d=tzD(ms);return d.toLocaleDateString(LOC,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"})}
+function isoLocal(ms){if(!ms)return "";const d=tzD(ms);return `${ymd(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
 function guessDay(id,date){
   // older entries have no day saved: pick the day whose own exercises were logged that date
   const ks=Object.keys(DAYS).filter(k=>dayHas(k,id));
@@ -1520,7 +1528,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1986,7 +1994,7 @@ function openPartnerEdit(pid,back){
 
 function partnerPanel(){
   const ps=plan.partners; const sel=ps.find(x=>x.id===state.pSel)||ps[0]; const lifts=trackedLifts();
-  const cut=ymd(new Date(Date.now()-28*864e5));
+  const cut=ymd(tzD(Date.now()-28*864e5));
   const chg=(now,prev)=>now&&prev&&now>prev?`<span class="up">+${toDisp(now-prev)} in 4 wk</span>`:"";
   return `<div class="panel" id="partners"><h2>Partner maxes</h2>
    ${ps.length?`<div class="dchips" style="margin-bottom:10px">${ps.map(p=>`<button class="dchip wide ${sel&&sel.id===p.id?"on":""}" data-psel="${p.id}">You vs ${esc(p.name)}</button>`).join("")}<button class="dchip wide" id="paddp2">+ Add partner</button></div>
@@ -2011,7 +2019,7 @@ function bindPartnerPanel(){
 
 /* ---------- stats dashboards (owner + program creators). Counts only. ---------- */
 function weeks8(series){
-  const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7));
+  const d=nowD(); d.setHours(0,0,0,0); d.setDate(d.getDate()-((d.getDay()+6)%7));
   const out=[]; for(let i=7;i>=0;i--){const x=new Date(d);x.setDate(d.getDate()-7*i);out.push({week:ymd(x),n:0})}
   (series||[]).forEach(s=>{const o=out.find(w=>w.week===s.week);if(o)o.n=Number(s.n)||0});
   return out;
@@ -2020,7 +2028,7 @@ function weekBars(series,label){
   const data=weeks8(series); const max=Math.max(1,...data.map(x=>x.n));
   const W=320,H=150,top=18,bottom=24,gap=8,bw=(W-gap*7)/8; const total=data.reduce((a,x)=>a+x.n,0);
   const bars=data.map((x,i)=>{const h=x.n?Math.max(3,(H-top-bottom)*x.n/max):0;const xx=i*(bw+gap);const y=H-bottom-h;
-    const wk=new Date(x.week+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"});
+    const wk=new Date(x.week+"T00:00:00").toLocaleDateString(LOC,{month:"short",day:"numeric"});
     return `<g class="bar" tabindex="0" aria-label="Week of ${wk}: ${x.n} ${label}"><title>Week of ${wk}: ${x.n} ${label}</title>
       <rect x="${xx}" y="${top}" width="${bw}" height="${H-top-bottom}" fill="transparent"/>
       ${h?`<path d="M${xx} ${H-bottom}V${y+4}a4 4 0 0 1 4 -4h${bw-8}a4 4 0 0 1 4 4V${H-bottom}Z" class="bfill"/>`:""}
@@ -2179,7 +2187,7 @@ function drawTour(steps,s){
     <button class="tx" id="tourx" aria-label="Close the guide">×</button>
     <div class="tstep">${s.ch?esc(s.ch)+" · ":""}${tourI+1} of ${steps.length}</div>
     <h4 id="tour-t">${esc(s.title)}</h4><p>${esc(s.text)}</p>
-    <div class="tbtns"><button class="tskip" id="tourskip">Skip tour</button><span>${tourI?'<button id="tourback">Back</button>':""}<button class="tnext" id="tournext">${last?"Done":"Next"}</button></span></div>
+    <div class="tbtns"><button class="tskip" id="tourskip">Skip tour</button><span>${tourI?'<button id="tourback">‹ Back</button>':""}<button class="tnext" id="tournext">${last?"Done":"Next"}</button></span></div>
     <div class="tdots" aria-hidden="true" ${steps.length>10?"hidden":""}>${steps.map((_,j)=>`<i class="${j===tourI?"on":""}"></i>`).join("")}</div></div>`;
   $("#tourx").onclick=endTour; $("#tourskip").onclick=endTour;
   $("#tournext").onclick=()=>{if(last){const g=!!tourList;endTour();toast(g?"Nice. Pick another topic anytime.":"You're all set. The full tutorial is in Log → Settings.")}else{tourDir=1;tourI++;showTour()}};
@@ -2361,7 +2369,7 @@ function weightChart(list){
   const grid=ticks.map(v=>`<line class="gl" x1="${l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text x="0" y="${y(v)+3}">${v}</text>`).join("");
   const path=vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
   const step=Math.max(1,Math.ceil(data.length/5));
-  const labs=data.map((d,i)=>(i%step===0||i===data.length-1)&&!(i!==data.length-1&&data.length-1-i<step)?`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${new Date(d.d+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})}</text>`:"").join("");
+  const labs=data.map((d,i)=>(i%step===0||i===data.length-1)&&!(i!==data.length-1&&data.length-1-i<step)?`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${new Date(d.d+"T00:00:00").toLocaleDateString(LOC,{month:"short",day:"numeric"})}</text>`:"").join("");
   const pts=data.map((d,i)=>`<circle class="pt" cx="${x(i)}" cy="${y(vals[i])}" r="${data.length>14?3:4}" tabindex="0"><title>${fmtDate(d.d)}: ${vals[i]} ${wU()}</title></circle>`).join("");
   return `<svg class="bwchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Body weight, ${data.length} weigh-ins, from ${vals[0]} to ${vals[vals.length-1]} ${wU()}">${grid}<path class="ln" d="${path}"/>${pts}${labs}</svg>
    <details class="stable"><summary>Show as table</summary><table><thead><tr><th>Date</th><th>${wU()}</th></tr></thead><tbody>${data.slice().reverse().map((d,i)=>`<tr><td>${fmtDate(d.d)}</td><td>${toDisp(d.w)}</td></tr>`).join("")}</tbody></table></details>`;
@@ -2580,6 +2588,22 @@ function guidePanel(){return `<div class="panel" id="tutorial"><h2>Tutorial</h2>
   <div class="tlist">${GUIDE.map(c=>`<button class="tlrow" data-guide="${c.id}"><span><b>${esc(c.t)}</b><small>${esc(c.d)}</small></span><span class="tln">${c.steps.length} ›</span></button>`).join("")}</div>
   <div class="btns"><button class="btn primary" id="guideall" style="flex:1">▶ Start the full tutorial</button><button class="btn" id="replaytour2">Quick tour</button></div></div>`}
 function bindGuide(){document.querySelectorAll("[data-guide]").forEach(b=>b.onclick=()=>startGuide([b.dataset.guide]));const a=$("#guideall");if(a)a.onclick=()=>startGuide(null)}
+
+/* ---------- language & time zone ---------- */
+function devTZ(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"}catch(e){return "UTC"}}
+function tzList(){let l=[];try{l=Intl.supportedValuesOf("timeZone")}catch(e){}
+  if(!l.length)l=["America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Anchorage","Pacific/Honolulu","America/Sao_Paulo","America/Mexico_City","Europe/London","Europe/Paris","Europe/Madrid","Africa/Cairo","Asia/Dubai","Asia/Riyadh","Asia/Kolkata","Asia/Ho_Chi_Minh","Asia/Shanghai","Asia/Seoul","Asia/Tokyo","Australia/Sydney","UTC"];
+  const d=devTZ(); if(!l.includes(d)) l=[d,...l]; return l}
+function tzLabel(z){try{const s=new Intl.DateTimeFormat("en-US",{timeZone:z,timeZoneName:"shortOffset"}).formatToParts(new Date()).find(x=>x.type==="timeZoneName");return z.replace(/_/g," ")+(s?" ("+s.value+")":"")}catch(e){return z}}
+function langPanel(){const I=window.LIFTLOG_I18N; if(!I) return "";
+  const cur=TZ||""; const now=nowD().toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"})+" · "+nowD().toLocaleDateString(LOC,{weekday:"long",month:"short",day:"numeric"});
+  return `<div class="panel" id="langtz"><h2>Language &amp; time zone</h2>
+   <div class="cform"><label>Language<span class="field"><select id="langsel" data-noi18n>${I.langs.map(([c,n])=>`<option value="${c}" ${c===I.lang?"selected":""}>${n}</option>`).join("")}</select></span></label>
+   <label>Time zone<span class="field"><select id="tzsel" data-noi18n><option value="" ${cur?"":"selected"}>Automatic · ${esc(tzLabel(devTZ()))}</option>${tzList().map(z=>`<option value="${esc(z)}" ${z===cur?"selected":""}>${esc(tzLabel(z))}</option>`).join("")}</select></span></label></div>
+   <p class="savenote">Your time now: <b>${esc(now)}</b>. The time zone decides when "today" starts, which workout is today's, and the times on your logs.</p>
+   ${I.lang!=="en"?`<p class="savenote">Translations are new. Exercise names stay in English. Spot a bad translation? Email us.</p>`:""}</div>`}
+function bindLang(){const l=$("#langsel");if(l)l.onchange=()=>{window.LIFTLOG_I18N.set(l.value)};
+  const z=$("#tzsel");if(z)z.onchange=()=>{ls.set("ll.tz",z.value||null);location.reload()}}
 
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}

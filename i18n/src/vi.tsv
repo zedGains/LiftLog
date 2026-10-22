@@ -1,0 +1,283 @@
+0	+ Thêm
+1	+ Thêm một ngày
+2	+ Thêm bạn tập
+3	+ Thêm ngày
+4	+ Thêm bài tập
+5	+ Thêm bạn tập
+6	+ Thêm hiệp
+7	+ Thêm bài tập của bạn
+8	+ Chương trình mới
+9	+ Chọn từ thư viện
+10	+ Tuần
+11	+ thêm
+12	+{0} giây
+13	, rồi giảm thêm
+14	, rồi chọn bài tập từ thư viện hoặc tự tạo.
+15	. Bài sẽ vào mục nhóm cơ tương ứng.
+16	. LiftLog không phải lời khuyên y tế; hãy hỏi bác sĩ trước khi bắt đầu chương trình mới.
+17	. Chọn bất kỳ nhóm cơ nào. Nếu chọn nhóm khác, bài sẽ chuyển sang mục đó của Ngày {0}.
+18	. Múi giờ quyết định khi nào "hôm nay" bắt đầu, buổi tập nào là của hôm nay và giờ trong nhật ký của bạn.
+19	<b>+ Thêm một ngày</b><small>Tạo một ngày tập mới</small>
+20	<b>+ Thêm bài tập</b><br><small>Từ thư viện hoặc của bạn</small>
+21	<b>+ Thêm bài tập</b><br><small>Chọn từ nhóm cơ bất kỳ hoặc thêm bài của bạn</small>
+22	<b>+ Thêm bài tập của bạn</b><br><small>Cho những bài không có trong danh sách</small>
+23	<b>+ Chương trình mới</b><br><small>Xây dựng trên lịch theo tuần</small>
+24	<b>+ Chọn từ thư viện</b><br><small>Thêm vào ngày này và tạo siêu hiệp</small>
+25	<b>Xem tất cả bài tập</b><br><small>Đổi sang bất kỳ bài nào, nhóm cơ nào, hoặc thêm bài của bạn</small>
+26	<b>Bên trong một bài tập</b><small>Hiệp, nghỉ, ghi chú, bài thay thế, bạn tập, siêu hiệp, đổi bài</small>
+27	<b>Ngoại tuyến.</b> Đang lưu trên điện thoại này. Sẽ đồng bộ khi có mạng lại.
+28	<b>Kế hoạch và chương trình</b><small>Theo chương trình của huấn luyện viên và tự tạo chương trình</small>
+29	<b>Hẹn giờ nghỉ</b><small>Nút nhanh và điều khiển</small>
+30	<b>Cài đặt và công cụ</b><small>Đơn vị, thông báo, máy tính, hồ sơ HLV, tài khoản</small>
+31	<b>Nhật ký của bạn</b><small>Cân nặng, lịch sử, tuần của bạn, kỷ lục với bạn tập</small>
+32	<b>Ngày tập của bạn</b><small>Đổi ngày, sắp xếp, thêm, khôi phục, lưu</small>
+33	<b>{0}</b><small>người theo dõi</small>
+34	<b>{0}</b><small>lượt thích</small>
+35	<b>{0}</b><small>chương trình</small>
+36	<b>📊 Thống kê ứng dụng</b><br><small>Chỉ chủ sở hữu: đăng ký, người hoạt động, buổi tập, bài tập phổ biến</small>
+37	@kênh hoặc liên kết
+38	@tên người dùng
+39	Không lưu được một thay đổi làm khi ngoại tuyến:
+40	Một ngày trong trình tạo
+41	Một khối squat ngắn và cường độ cao trong {0} tuần, có thể tăng đáng kể mức tạ tối đa của bạn.
+42	Hướng dẫn mọi tính năng ngay trên màn hình thật. Chọn một chủ đề hoặc xem hết (khoảng {0} phút).
+43	Về LiftLog
+44	Về chương trình này
+45	Về bạn
+46	Khoảng {0}½–{1} phút với bài lớn, {2}–{3} giây với bài nhỏ. Tab Nghỉ có hẹn giờ.
+47	Cơ bụng
+48	Cơ bụng <small>{0}</small>
+49	Tài khoản
+50	Thêm một lựa chọn
+51	Thêm một ngày · Ngày {0}
+52	Thêm một bài tập
+53	Thêm bất kỳ bài nào trong hơn {0} bài tập, nhóm cơ nào cũng được, hoặc tự tạo. Bài sẽ ở ngày này mỗi tuần.
+54	Thêm bài tập
+55	Thêm hoặc bớt hiệp
+56	Thêm vào Ngày {0}
+57	Tăng tạ khi bạn đạt mức rep cao nhất ở mọi hiệp. Giữ lại {0}–{1} rep dự trữ ở hầu hết các hiệp.
+58	Thêm ngày đầu tiên rồi chọn bài tập cho ngày đó. Hoặc theo một chương trình được chia sẻ trong
+59	Thêm ngày đầu tiên rồi chọn bài tập cho ngày đó. Hoặc theo một chương trình được chia sẻ trong <b>Kế hoạch</b>.
+60	Thêm bạn tập để ghi lại hiệp nặng nhất của họ ở đây.
+61	Hãy nhập tên của bạn.
+62	Thêm vào
+63	Thêm vào <b>Ngày {0} · Đẩy</b>. Bài sẽ vào mục nhóm cơ tương ứng.
+64	Thêm vào <b>Tuần {0} · Thứ Ba · Buổi tập</b>. Bài sẽ vào mục nhóm cơ tương ứng.
+65	Thêm vào ngày này và tạo siêu hiệp
+66	Thêm vào Ngày {0} ở mục
+67	Thêm vào Ngày {0} ở mục <b>Ngực</b>.
+68	Nâng cao
+69	Tuổi
+70	Tuổi phải từ {0} đến {1}.
+71	Tất cả
+72	Sắp xong: bấm vào liên kết chúng tôi gửi qua email, rồi đăng nhập.
+73	Bài thay thế
+74	Bài tập toàn thân dễ theo cho những tháng đầu ở phòng gym.
+75	Thống kê ứng dụng
+76	Ngày tập tay
+77	Tay
+78	Lưng
+79	Lưng và vai
+80	Lưng <small>{0}</small>
+81	Quay lại đăng nhập
+82	Quay lại lựa chọn gợi ý
+83	Bài thay thế
+84	Thanh đòn
+85	Trọng lượng thanh đòn (kg)
+86	Trọng lượng thanh đòn (lb)
+87	Tính phần trăm dựa trên mức tối đa gần đây và trung thực. Tuần {0} dùng phần trăm đã ghi. Tuần {1}: cộng {2} lb ({3} kg) vào mức tạ mỗi ngày của tuần {4}. Tuần {5}: mức tạ tuần {6} cộng {7} lb ({8} kg). Tuần {9}: nghỉ thứ Hai và thứ Tư, rồi tăng dần đến một rep nặng vào thứ Sáu và thứ Bảy. Nếu một buổi tập không tốt, hãy lặp lại tuần đó thay vì tăng tạ.
+88	Trước khi đăng:
+89	Người mới
+90	Người mới đến trung cấp, có thể tập {0} ngày mỗi tuần.
+91	Đẩy ngực, đẩy ngực dốc lên, đẩy vai quân đội, squat và deadlift được chọn sẵn. Chọn thêm bất kỳ bài nào trong các ngày của bạn để so sánh. Bạn cũng chọn bài khi thêm bạn tập.
+92	Giữa các hiệp
+93	Tay trước
+94	Tay trước <small>{0}</small>
+95	Bài lớn không có trong các ngày của bạn
+96	Giới thiệu
+97	Xanh dương
+98	Nhóm cơ
+99	Các nhóm cơ
+100	Các nhóm cơ <small>đang hiện tất cả</small>
+101	Các nhóm cơ <small>đã chọn {0} · chạm để thêm hoặc bỏ</small>
+102	Cân nặng
+103	Cân nặng, lịch sử, tuần của bạn, kỷ lục với bạn tập
+104	Trọng lượng cơ thể
+105	Rep với trọng lượng cơ thể (tạ không bắt buộc)
+106	Xem tất cả bài tập
+107	Xem các chương trình người tập và HLV khác đã đăng và bắt đầu một chương trình.
+108	Tạo một ngày tập mới
+109	Xây dựng trên lịch theo tuần
+110	Tự tạo
+111	Xây tuần của tôi theo nhóm cơ
+112	Tự tạo của bạn
+113	Khi tạo tài khoản, bạn đồng ý với
+114	Khi tạo tài khoản, bạn đồng ý với <a href="terms.html">Điều khoản</a> và <a href="privacy.html">Chính sách quyền riêng tư</a>. LiftLog không phải lời khuyên y tế; hãy hỏi bác sĩ trước khi bắt đầu chương trình mới.
+115	Đã lưu CSV
+116	Cáp
+117	Lịch
+118	Bắp chân
+119	Bắp chân <small>{0}</small>
+120	Không thể ra đúng {0} lb với bánh tạ tiêu chuẩn. Gần nhất mà không vượt quá:
+121	Không thể ra đúng {0} lb với bánh tạ tiêu chuẩn. Gần nhất mà không vượt quá: <b>{1} lb</b>.
+122	Hủy
+123	Cardio
+124	Cardio và cơ lõi
+125	Cardio <small>{0}</small>
+126	Kiểm tra email để lấy liên kết đặt lại.
+127	Bài được chọn sẽ hiện trong Kỷ lục với bạn tập và có dòng cho bạn tập khi mở bài lúc tập. Thiếu bài nào? Hãy thêm vào một ngày tập trước.
+128	Ngực
+129	Ngực và tay
+130	Ngực <small>{0}</small>
+131	Chọn bài
+132	Chọn âm thanh, rung và thông báo khi hết giờ nghỉ.
+133	Xóa
+134	Xóa ngày
+135	Xóa ngày sẽ bỏ các bài tập nhưng vẫn giữ là ngày tập. Xóa hẳn ngày sẽ biến nó thành ngày nghỉ.
+136	Xóa tuần {0}
+137	Đóng
+138	Đóng hướng dẫn
+139	Màu
+140	Sắp có
+141	Cộng đồng
+142	Cộng đồng và Chương trình của tôi
+143	Cộng đồng có các chương trình người tập và HLV khác chia sẻ, cùng các chương trình kinh điển của LiftLog như {0}×{1} và Smolov Jr. Chương trình của tôi là nơi bạn tự tạo.
+144	Người hoàn toàn mới, hoặc người ít thời gian.
+145	Thể lực
+146	Hãy xác nhận email trước: bấm vào liên kết chúng tôi đã gửi.
+147	Sao chép của người khác
+148	Đã sao chép vào Chương trình của tôi. Tha hồ chỉnh sửa.
+149	Đã sao chép tuần hiện tại
+150	Chép lần trước
+151	Chép vào chương trình của tôi
+152	Chép tuần {0} sang tuần {1}
+153	Cơ lõi
+154	Không đổi được. Đã cài moderation.sql chưa?
+155	Không xóa được tài khoản. Kiểm tra kết nối và thử lại.
+156	Không tải xuống hoặc sao chép được CSV trên thiết bị này.
+157	Không tải được dữ liệu của bạn. Thử lại.
+158	Không gỡ được.
+159	Không lưu được vào nhật ký. Tạm thời được giữ trên điện thoại này.
+160	Không lưu được thay đổi kế hoạch vào tài khoản.
+161	Không gửi được báo cáo. Thử lại.
+162	Đếm ngược thời gian nghỉ. Vẫn chạy nền khi bạn ghi chép và báo khi hết giờ.
+163	Chỉ có số đếm. Không hiển thị buổi tập, mức tạ hay bạn tập của bất kỳ ai.
+164	Tạo Ngày {0}
+165	Tạo tài khoản
+166	Người tạo
+167	Cấp người tạo
+168	Phần trăm giảm tùy chỉnh
+169	Ngày hoàn thành
+170	Ngày bạn hoàn thành Ngày {0}
+171	Đã cập nhật ngày
+172	Ngày {0}
+173	Ngày {0} có thay đổi: {1} số hiệp đã đổi.
+174	Đã lưu Ngày {0}: ghi {1} buổi tập
+175	Xóa ngày
+176	Xóa tài khoản
+177	Xóa tài khoản vĩnh viễn
+178	Xóa chương trình
+179	Xóa tuần {0}
+180	Đang xóa…
+181	Tập thêm một hiệp hay bớt một hiệp? Dùng − Bớt hiệp và + Thêm hiệp. Ngày này sẽ giữ như vậy cho đến khi bạn khôi phục.
+182	Tập mỗi bài một hiệp liền nhau không nghỉ, rồi nghỉ. Giữ ở ngày này mỗi tuần cho đến khi bạn tách ra.
+183	Tập bài này liền với bài khác, không nghỉ giữa hai bài. Chọn bài đã có trong ngày này hoặc từ thư viện.
+184	Xong
+185	Tải tất cả nhật ký (CSV)
+186	Không tải xuống được ở đây nên CSV đã được sao chép. Hãy dán vào bảng tính.
+187	Tải dữ liệu của tôi
+188	Bản nháp · {0} tuần · {1} ngày/tuần · {2} bài tập
+189	Máy tính drop set
+190	Drop set
+191	Mức giảm
+192	Thanh EZ
+193	Từng bài tập
+194	Mỗi bên:
+195	Mỗi bên: <b>{0} × {1}</b>
+196	Sửa
+197	Sửa lựa chọn
+198	Sửa tuần của tôi
+199	Tám tuần tập sức mạnh tập trung cho người tập trung cấp.
+200	Email
+201	Gửi liên kết đặt lại cho tôi
+202	Hãy nhập email của họ trước
+203	Nhập mức tạ và rep, xem lần trước bạn làm gì, thêm hoặc bớt hiệp, đổi bài hoặc xem video kỹ thuật.
+204	Hãy nhập email.
+205	Dụng cụ
+206	Mọi buổi tập bạn đã lưu, theo ngày. Tải tất cả dưới dạng bảng tính bất cứ lúc nào.
+207	VD: Đẩy, Kéo, Chân, Ngày tập vai
+208	Ví dụ: {0} kg trên thanh {1} kg = {2} + {3} mỗi bên.
+209	Ví dụ: {0} lb trên thanh {1} lb = hai bánh {2} mỗi bên.
+210	Bài tập
+211	Bài tập <small>{0}</small>
+212	Các bài đánh dấu A{0} / A{1} được tập liền nhau không nghỉ. Chạm Tách để bỏ.
+213	Người tập có kinh nghiệm, squat tốt và hồi phục tốt. Giữ phần tập còn lại ở mức tối thiểu trong {0} tuần này.
+214	Giảm mỡ
+215	Số feet phải từ {0} đến {1}.
+216	Điền đúng những gì bạn đã làm buổi trước.
+217	Hoàn thành Ngày {0}
+218	Theo một chương trình được chia sẻ, hoặc tự tạo trên lịch theo tuần rồi chia sẻ.
+219	Theo một chương trình được chia sẻ
+220	Theo chương trình của huấn luyện viên và tự tạo chương trình
+221	Cho những bài không có trong danh sách
+222	Cẳng tay
+223	Cẳng tay <small>{0}</small>
+224	Quên mật khẩu?
+225	Kỹ thuật ↗
+226	Bốn buổi tập cân bằng mỗi tuần, vừa tăng sức mạnh vừa tăng cơ.
+227	Miễn phí
+228	Tài khoản miễn phí đăng được {0} chương trình. HLV đã xác minh và Pro đăng được {1}.
+229	T6
+230	Từ thư viện hoặc của bạn
+231	Từ chương trình của bạn · đã chọn
+232	Toàn thân
+233	Toàn thân <small>{0}</small>
+234	Toàn thân A
+235	Toàn thân B
+236	Toàn thân · Khởi đầu {0} ngày
+237	Phòng gym đầy đủ
+238	Thể lực chung
+239	Thể lực chung · Người mới
+240	Hãy đặt tên cho bài tập.
+241	Hãy đặt tên cho họ.
+242	Mông
+243	Mông <small>{0}</small>
+244	Quay lại lựa chọn gợi ý
+245	Quay lại {0}
+246	Đến Về bạn
+247	Mục tiêu
+248	Xanh lá
+249	Bạn tập
+250	Đùi sau
+251	Đùi sau <small>{0}</small>
+252	Chiều cao
+253	Chiều cao (feet)
+254	Chiều cao (cm)
+255	Chiều cao (inch)
+256	Chiều cao phải từ {0} đến {1} cm.
+257	Đây là một ngày mẫu. Mỗi bài hiện số hiệp × rep và các bài thay thế. ↑ để đưa lên trên, ✕ để bỏ, và + Thêm bài tập ở dưới cùng.
+258	Lịch sử
+259	Lịch sử, kỷ lục với bạn tập, đơn vị (lb hoặc kg), tuần của bạn và cài đặt tài khoản. Hẹn giờ nghỉ ở ngay bên cạnh.
+260	Bạn muốn bắt đầu thế nào?
+261	Mọi người bắt đầu thế nào
+262	Cách tiến bộ
+263	Cách ghi
+264	Có trong kế hoạch hôm nay
+265	Số inch phải từ {0} đến {1}.
+266	Bên trong một bài tập
+267	Bên trong một bài tập · {0}/{1}
+268	Instagram
+269	Trung cấp
+270	Chỉ hôm nay
+271	Giữ màn hình sáng khi hẹn giờ đang chạy
+272	Tạ ấm
+273	Ngôn ngữ
+274	Ngôn ngữ và múi giờ
+275	Sắp xếp buổi tập trên lịch theo tuần, thêm tuần, viết mô tả và đăng lên. Tiếp theo: một ngày trong trình tạo trông thế nào.
+276	Chân
+277	Chân và cơ lõi
+278	Cho phép người khác sao chép và chỉnh lại chương trình này
+279	Cấp độ
+280	Tập cùng bạn bè? Thêm họ và chỉ ghi hiệp nặng nhất của họ bên cạnh của bạn. Đẩy ngực, đẩy ngực dốc lên, đẩy vai quân đội, squat và deadlift để bắt đầu, và bạn có thể thêm bất kỳ bài nào khác. Họ không cần cài ứng dụng.
+281	Tập cùng bạn bè? Với các bài hai bạn so sánh (đẩy ngực, dốc lên, đẩy vai quân đội, squat và deadlift để bắt đầu), ghi hiệp nặng nhất của họ ngay đây bên cạnh của bạn. Chọn bài trong Nhật ký → Kỷ lục với bạn tập.
+282	LiftLog

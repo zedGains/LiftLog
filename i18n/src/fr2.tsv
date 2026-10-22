@@ -1,0 +1,284 @@
+283	LiftLog ne remplace pas un avis médical. Consulte un médecin avant de commencer un nouveau programme.
+284	Pratiquants qui peuvent s'entraîner {0} jours par semaine et veulent prendre du muscle.
+285	Pratiquants avec au moins {0}–{1} mois de squat régulier qui connaissent leur max actuel. Pas pour les débutants ni pour qui a mal au genou, à la hanche ou au dos.
+286	Chargement des stats…
+287	Chargement de ton plan…
+288	Lieu
+289	Journal
+290	Noter mon poids
+291	Note tes séries
+292	Note ton poids de temps en temps pour voir ta tendance et ta moyenne hebdomadaire.
+293	Note ton poids de temps en temps pour voir ta tendance. Ça garde aussi les estimations de calories précises.
+294	Tu notes une séance d'hier ? Change la date avant d'enregistrer.
+295	Les enregistrements vont sur ton compte, donc ils seront là la semaine prochaine sur n'importe quel appareil.
+296	Bas A
+297	Bas B
+298	Bas du corps
+299	Machine
+300	Machine prise ?
+301	Machine prise ? Fais plutôt un de ceux-ci (aujourd'hui seulement)
+302	Muscle principal
+303	Poids principal
+304	En faire un jour d'entraînement
+305	Marquer comme fait
+306	Marque-le comme fait
+307	Marque des séances à enregistrer
+308	Marqué. Enregistre le jour en bas quand tu as fini.
+309	Identique à ton programme d'origine.
+310	Moins {0} secondes
+311	Minutes
+312	Lun
+313	Plus populaires ⇅
+314	Muscle
+315	Muscle · Débutant
+316	Muscle · Intermédiaire
+317	Muscles et technique
+318	Muscles travaillés aujourd'hui
+319	Mes notes
+320	Mes programmes
+321	Nom
+322	Nomme le jour, par exemple Bras et abdos.
+323	Les nouveaux comptes peuvent publier après {0} jours ou {1} séances enregistrées.
+324	Nouveaux pratiquants, ou ceux qui reprennent après une longue pause et veulent une force de base.
+325	Nouveau mot de passe
+326	Nouvelles inscriptions par semaine
+327	Nouveau jour d'entraînement
+328	Plus récents d'abord ⇅
+329	Suivant
+330	Super. Choisis un autre sujet quand tu veux.
+331	Pas de barre
+332	Pas encore d'exercices.
+333	Pas encore noté
+334	Aucun signalement. 👍
+335	Aucune séance enregistrée pour l'instant. Termine un jour et touche
+336	Aucune séance enregistrée pour l'instant. Termine un jour et touche <b>Enregistrer</b> en bas : elle apparaîtra ici avec la date et l'heure.
+337	Pas encore de jours d'entraînement
+338	Aucun
+339	Pas encore connecté
+340	Pas dans la bibliothèque. Ajoute-le avec le bouton au-dessus.
+341	Non enregistré
+342	Note enregistrée
+343	Notes pour ce jour
+344	Rien de marqué pour l'instant
+345	Rien pour l'instant.
+346	Notifications
+347	Obliques
+348	Obliques <small>{0}</small>
+349	Désactivé : on peut le suivre, mais pas le copier dans ses programmes. Les copies te citent toujours.
+350	Offensant
+351	Hors ligne.
+352	Un appui pour les temps de repos courants. Utilise − et + pour ajuster par pas de {0} secondes.
+353	Ouvrir un programme
+354	S'ouvre dans Excel ou Google Sheets : une ligne par série, avec la date, le jour, l'exercice, le poids, les reps et l'heure d'enregistrement.
+355	Orange
+356	Autre
+357	Propriétaire uniquement · totaux, aucune donnée personnelle
+358	Propriétaire uniquement : inscriptions, personnes actives, séances, exercices populaires
+359	Partenaire
+360	Records avec partenaire
+361	Mot de passe
+362	Personnes
+363	Ceux qui suivent ton programme les voient quand une machine ou une place est prise. Ils peuvent quand même les changer pour eux.
+364	Choisis un exercice de remplacement pour aujourd'hui seulement. Ton plan reste le même et ton journal indique lequel tu as fait. Touche Modifier les choix pour définir tes propres alternatives.
+365	N'importe quel groupe musculaire, ou le tien
+366	Choisis les alternatives
+367	Choisis la date
+368	Choisis aujourd'hui ou un jour précédent
+369	Choisis des poids que tu peux soulever sur toute la fourchette de reps avec une bonne technique. Ajoute d'abord des reps, puis du poids. Associe-le à de la marche quotidienne si ton objectif est de perdre du gras.
+370	Plans
+371	Plans et programmes
+372	Plans et programmes · {0} sur {1}
+373	Plans à suivre ou à partager
+374	Disque
+375	Calculateur de disques
+376	Plus {0} secondes
+377	Raccourcis
+378	Raccourcis et commandes
+379	Aperçu
+380	Confidentialité
+381	Politique de confidentialité
+382	Notes privées pour cet exercice, comme la hauteur du siège ou la prise. Elles s'affichent chaque fois que tu l'ouvres, n'importe quel jour.
+383	Pro
+384	Profil et unités
+385	Profil enregistré
+386	Créateur de programme
+387	Programme supprimé
+388	Abonnés, j'aime et ventes des programmes
+389	Nom du programme
+390	Notes du programme
+391	Programme retiré
+392	Programmes
+393	Publie-le pour que tout le monde sur l'app puisse le voir, l'aimer et le copier. Seul le programme est partagé, jamais tes enregistrements ni tes infos corporelles.
+394	Publier dans la communauté
+395	Publié dans la communauté
+396	Version publiée mise à jour
+397	Publication…
+398	Tirage
+399	Violet
+400	Poussée
+401	Poussée / Tirage / Jambes · {0} jours
+402	Les jours poussée travaillent pectoraux, épaules et triceps ; les jours tirage, dos et biceps ; les jours jambes, quadriceps, ischios, mollets et gainage. Le faire deux fois par semaine donne deux séances à chaque muscle, idéal pour prendre du volume.
+403	Poussée, Tirage, Jambes le lundi, mercredi et vendredi. {0} séries de chaque, avec des exercices de salle courants.
+404	Quadriceps
+405	Quadriceps <small>{0}</small>
+406	Visite rapide
+407	Lis la description, à qui il s'adresse et les séances de chaque semaine. Utiliser ce programme le charge dans tes jours. Touche le nom du coach pour voir son profil et le suivre.
+408	Prêt
+409	Rouge
+410	Le rouge est le muscle principal de chaque exercice, le rouge clair le secondaire. Ça se met à jour quand tu changes ou ajoutes des exercices.
+411	Rappel pour enregistrer une séance non terminée
+412	Retirer du Jour {0}
+413	Retirer de la communauté (admin)
+414	Retirer de ce jour
+415	Retirer la série {0}
+416	Retire ✕, réordonne ↑, cherche n'importe quel exercice ou tape le tien. Ceux qui suivent ton programme les voient sous Machine prise ? et peuvent quand même les changer pour eux.
+417	Retiré de la communauté
+418	Série {0} retirée
+419	Réordonner
+420	Remplacer dans mon plan
+421	Remplace cet exercice par n'importe lequel de la bibliothèque. Il reste remplacé chaque semaine. Juste pour aujourd'hui ? Utilise plutôt les alternatives au-dessus.
+422	Remplace
+423	Remplacement
+424	Signaler
+425	Signalement ignoré
+426	Signaler ce programme
+427	Signalements
+428	Les signalements sont privés. Le propriétaire de l'app les examine.
+429	Reps de
+430	Réinitialiser le mot de passe
+431	Revenir à l'original
+432	Repos
+433	Minuteur de repos
+434	Repos entre les séries
+435	Jour de repos
+436	Jours de repos, échauffement et conseils de ton plan
+437	Repos
+438	Minuteur de repos · {0} sur {1}
+439	Restauré
+440	Arrondi aux {0} kg les plus proches.
+441	Arrondi aux {0} lb les plus proches.
+442	SÉRIE {0}
+443	Comme la case sur la carte. Tes chiffres sont enregistrés avec le jour.
+444	Même groupe musculaire
+445	Sam
+446	Enregistrer
+447	Enregistrer le Jour {0}
+448	Enregistrer et mettre dans mon plan
+449	Enregistrer la note
+450	Enregistrer le mot de passe
+451	Enregistrer le profil
+452	Enregistre le jour
+453	Enregistré
+454	Enregistré dans ton plan : {0} séries à chaque fois (avant {1}).
+455	Enregistré ✓
+456	Enregistre chaque séance marquée, avec ses poids et reps. Celles non marquées ne sont pas notées.
+457	Enregistre dans ton historique tout ce que tu as marqué fait. Enregistre à nouveau le même jour pour mettre à jour.
+458	Enregistré sur ce téléphone. La synchro se fera au retour du réseau.
+459	Rechercher
+460	Cherche par nom, ou filtre par objectif et groupe musculaire.
+461	Rechercher des exercices
+462	Rechercher des programmes
+463	Cherche, ou tape ton propre exercice
+464	Muscle secondaire
+465	Voir les calories brûlées :
+466	Vois quels muscles il travaille, et touche Technique pour une vidéo d'exécution.
+467	Envoyer le signalement
+468	Reps de la série {0}
+469	Poids de la série {0}
+470	Séries
+471	Séries, repos, notes, alternatives, partenaires, supersets, remplacements
+472	Réglages
+473	Réglages et outils
+474	Réglages et outils · {0} sur {1}
+475	Partager et utiliser
+476	Résumé court
+477	Jour épaules
+478	Épaules
+479	Épaules <small>{0}</small>
+480	Afficher une bannière « Repos terminé » sur les autres écrans
+481	Tout afficher
+482	Afficher en tableau
+483	Affiché sur les programmes que tu partages
+484	Visible par tous quand ils touchent ton nom sur un programme que tu as publié.
+485	Affiche le plan (séries × reps) et ce que tu as soulevé la dernière fois. Touche le nom pour ouvrir son écran de saisie. Le chapitre suivant couvre tout ce qu'il contient.
+486	Se connecter
+487	Se déconnecter
+488	Connecté en tant que
+489	Déconnexion…
+490	Passer la visite
+491	Ardoise
+492	Smith
+493	Squat Smolov Jr.
+494	Smolov Jr. est la version condensée du célèbre cycle de squat russe Smolov. Tu squattes quatre jours par semaine, et chaque jour utilise un schéma séries-reps différent à un pourcentage fixe de ton max actuel sur une répétition. Le volume est élevé et les charges montent chaque semaine, donc la force grimpe vite. C'est dur pour les jambes et la récupération : traite-le comme un court bloc de spécialisation, pas comme un programme permanent. Ça marche aussi pour le développé couché : change juste l'exercice.
+495	Squat Smolov · Cycle de base
+496	Son à la fin du repos
+497	Spam
+498	Séparer
+499	Barre standard
+500	Commence à ton poids principal, baisse de
+501	Commence à vide. Ajoute tes jours avec
+502	Commence à vide. Ajoute tes jours avec <b>+ Ajouter un jour</b>, puis choisis des exercices dans la bibliothèque ou crée les tiens.
+503	Commence assez léger pour finir chaque rep avec une bonne technique. Ajoute {0} lb ({1} kg) à chaque séance au squat, au couché, au rowing et au développé, et {2} lb ({3} kg) au soulevé de terre. Si tu rates des reps {4} séances d'affilée sur un exercice, baisse sa charge de {5} % et remonte.
+504	Commencer le
+505	Lancer le repos
+506	Lancer le repos ({0})
+507	Commencer la semaine {0}
+508	Plan débutant {0} jours
+509	Débutant {0} jours · Poussée / Tirage / Jambes
+510	Lance le décompte du repos. Il continue si tu changes d'écran et te prévient à la fin.
+511	Reste sur le Jour {0} chaque semaine. Retire-le quand tu veux depuis l'écran de l'exercice.
+512	Arrêté. Ta semaine revient aux Jours {0}–{1}.
+513	Force
+514	Force · Avancé
+515	Force · Débutant
+516	Force · Intermédiaire
+517	Choix suggérés
+518	Choix suggérés <small>{0}</small>
+519	Dim
+520	Superset
+521	Superset créé
+522	Superset séparé
+523	Superset · enchaîne-les, puis repose-toi
+524	Supersets
+525	Changer d'exercice
+526	Remplace par n'importe quoi, n'importe quel groupe, ou ajoute le tien
+527	Remplace-le pour de bon
+528	Changer de jour
+529	Changer de jour, réordonner, ajouter, réinitialiser, enregistrer
+530	Synchronisation de {0} modification…
+531	Le retire de ce jour.
+532	Le retire de ce jour. <b>Revenir à l'original</b> le remet. Tes enregistrements restent.
+533	Le retire de ce jour. Une barre Annuler apparaît quelques secondes, et Revenir à l'original le remet plus tard.
+534	Touche Réordonner sur un groupe musculaire, puis utilise les flèches ↑ ↓ pour changer l'ordre. Touche Terminé quand tu as fini. L'ordre reste chaque semaine.
+535	Touche un jour pour ajouter ou modifier sa séance. Touche ⇄ sur un exercice pour définir des alternatives si une machine est prise. Les changements s'enregistrent au fur et à mesure.
+536	Touche un jour de la semaine pour choisir sa séance, créer un jour par groupes musculaires ou en faire un jour de repos.
+537	Touche un jour de la semaine pour choisir sa séance. Choisis des groupes musculaires pour créer un jour, utilise un jour existant ou fais-en un jour de repos.
+538	Touche un exercice pour le noter
+539	Touche encore
+540	Touche encore pour vider
+541	Touche encore pour supprimer
+542	Touche encore pour supprimer le programme
+543	Touche encore pour supprimer la semaine
+544	Touche encore pour retirer
+545	Touche encore pour arrêter
+546	Touche encore : remplace la semaine {0}
+547	Touche un exercice pour noter les poids, voir les alternatives et des vidéos de technique.
+548	Touche la case quand tu finis un exercice. Rien n'entre dans ton historique avant d'avoir enregistré le jour en bas.
+549	Touche la case quand tu finis un exercice. Rien n'est noté avant d'avoir enregistré le jour.
+550	Touche le nom du jour pour passer à un autre jour, en ajouter un, ou choisir quelle séance tombe quel jour de la semaine. La séance du jour s'ouvre toute seule.
+551	Touche ↑ ou ↓ pour déplacer une séance. Enregistré au fur et à mesure.
+552	Touche ⇄ pour choisir vers quoi tes clients basculent si une machine ou une place est prise. « Alternatives suggérées » = les choix de l'app. « {0} alternatives » = tu les as choisies toi-même.
+553	Cibles
+554	Barre technique
+555	Conditions
+556	Conditions d'utilisation
+557	Merci. Le signalement a été envoyé.
+558	Cet e-mail a déjà un compte. Connecte-toi plutôt.
+559	L'e-mail et le mot de passe ne correspondent pas.
+560	Ce programme a été retiré.
+561	C'est moins que la barre ({0} lb).
+562	Le plan de force classique pour débuter : {0} séances à la barre par semaine, {1} séries de {2}.
+563	Le bloc central de {0} semaines du programme russe classique de squat Smolov.
+564	Le jour doit avoir un nom.
+565	Elles arriveront comme notifications quand LiftLog sera installé sur ton écran d'accueil.
+566	Cette copie n'est pas encore reliée à une base de données, donc tout ce que tu notes reste sur cet appareil.
