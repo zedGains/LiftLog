@@ -2394,7 +2394,7 @@ function bindTrainerPanel(){
 const PLATES={lb:[[45,"#1F5FC4",1],[35,"#D9A514",.9],[25,"#21875A",.8],[10,"#E8EAED",.62],[5,"#3A3F46",.5],[2.5,"#A9B0B8",.42]],
   kg:[[25,"#C92A2A",1],[20,"#1F5FC4",1],[15,"#D9A514",.9],[10,"#21875A",.8],[5,"#E8EAED",.6],[2.5,"#3A3F46",.48],[1.25,"#A9B0B8",.4]]};
 const BARS={lb:[[45,"Standard bar"],[35,"Women's bar"],[15,"Technique bar"],[0,"No bar"]],kg:[[20,"Standard bar"],[15,"Women's bar"],[10,"Technique bar"],[0,"No bar"]]};
-function plateBar(){const u=isKg()?"kg":"lb";const v=ls.get("ll.bar."+u,null);return BARS[u].some(b=>b[0]===v)?v:BARS[u][0][0]}
+function plateBar(){const u=isKg()?"kg":"lb";const v=Number(ls.get("ll.bar."+u,null));return v!=null&&isFinite(v)&&v>=0&&v<=(u==="kg"?150:330)&&ls.get("ll.bar."+u,null)!==null?v:BARS[u][0][0]}
 function platesFor(total,bar){const u=isKg()?"kg":"lb";let side=(total-bar)/2;const out=[];if(side<0)return {out,loaded:bar,short:true};
   for(const [p] of PLATES[u]){while(side>=p-1e-9){out.push(p);side-=p}}
   const loaded=bar+out.reduce((a,b)=>a+b,0)*2;return {out,loaded:Math.round(loaded*100)/100,short:false}}
@@ -2402,8 +2402,9 @@ function plateViz(list){const u=isKg()?"kg":"lb";const meta=Object.fromEntries(P
   return `<div class="pviz" aria-hidden="true"><span class="pbar"></span><span class="pcollar"></span>${list.map(p=>{const m=meta[p];return `<span class="pl" style="--pc:${m[1]};--ph:${m[2]};--pi:${/E8EAED|A9B0B8|D9A514/.test(m[1])?"#14171B":"#fff"}"><i>${p}</i></span>`}).join("")}<span class="pend"></span></div>`}
 function platePanel(){const u=isKg()?"kg":"lb";const bar=plateBar();
   return `<div class="panel" id="platep"><h2>Plate calculator</h2><p style="margin-top:0">Type the weight you want on the bar. It tells you which plates to put on <b>each side</b>.</p>
-   <div class="dlabel">Bar</div><div class="dchips" role="group" aria-label="Bar">${BARS[u].map(([w,l])=>`<button class="dchip ${w===bar?"on":""}" data-bar="${w}" aria-pressed="${w===bar}" title="${l}">${w?w+" "+u:"None"}</button>`).join("")}</div>
-   <div class="bwrow" style="margin-top:10px"><label class="field" style="max-width:170px"><input id="platew" inputmode="decimal" placeholder="${u==="kg"?"100":"225"}" aria-label="Total weight in ${u}"><span>${u}</span></label></div>
+   <div class="dlabel">Bar</div><div class="drow"><div class="dchips" role="group" aria-label="Bar">${BARS[u].map(([w,l])=>`<button class="dchip ${w===bar?"on":""}" data-bar="${w}" aria-pressed="${w===bar}" title="${l}">${w?w+" "+u:"None"}</button>`).join("")}</div><label class="field dcustom"><input id="pbc" inputmode="decimal" value="${BARS[u].some(x=>x[0]===bar)?"":bar}" placeholder="Other" aria-label="Bar weight in ${u}"><span style="white-space:nowrap">${u} bar</span></label></div>
+   <p class="savenote" style="margin:4px 0 0">Trap bar, safety squat bar or a heavier gym bar? Type its weight in Other.</p>
+   <div class="dlabel" style="margin-top:12px">Total weight</div><div class="bwrow"><label class="field" style="max-width:170px"><input id="platew" inputmode="decimal" placeholder="${u==="kg"?"100":"225"}" aria-label="Total weight in ${u}"><span>${u}</span></label></div>
    <div id="plateout" aria-live="polite"><p class="savenote">Example: ${u==="kg"?"100 kg on a 20 kg bar = 25 + 15 each side":"225 lb on a 45 lb bar = two 45s each side"}.</p></div></div>`}
 function bindPlates(){const i=$("#platew");if(!i)return;const u=isKg()?"kg":"lb";
   const draw=()=>{const w=Number((i.value||"").replace(/[^0-9.]/g,""));const bar=plateBar();const o=$("#plateout");if(!w){o.innerHTML=`<p class="savenote">Enter a weight to see the plates.</p>`;return}
@@ -2412,7 +2413,9 @@ function bindPlates(){const i=$("#platew");if(!i)return;const u=isKg()?"kg":"lb"
     const txt=r.out.length?Object.entries(cnt).sort((a,b)=>b[0]-a[0]).map(([p,n])=>`<b>${n} × ${p}</b>`).join(" + "):"Just the bar";
     o.innerHTML=`${plateViz(r.out)}<p class="ptxt">Each side: ${txt}</p>${Math.abs(r.loaded-w)>0.01?`<p class="savenote">Can't make exactly ${w} ${u} with standard plates. Closest without going over: <b>${r.loaded} ${u}</b>.</p>`:`<p class="savenote">Total: ${r.loaded} ${u} = ${bar} ${u} bar + ${Math.round((r.loaded-bar)/2*100)/100} ${u} per side.</p>`}`};
   i.oninput=draw;
-  document.querySelectorAll("[data-bar]").forEach(b=>b.onclick=()=>{ls.set("ll.bar."+u,+b.dataset.bar);document.querySelectorAll("[data-bar]").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()});
+  const pc=$("#pbc");
+  pc.oninput=()=>{const n=Number((pc.value||"").replace(/[^0-9.]/g,""));if(pc.value.trim()===""||!isFinite(n)||n>(u==="kg"?150:330))return;ls.set("ll.bar."+u,n);document.querySelectorAll("[data-bar]").forEach(x=>{const on=+x.dataset.bar===n;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()};
+  document.querySelectorAll("[data-bar]").forEach(b=>b.onclick=()=>{ls.set("ll.bar."+u,+b.dataset.bar);pc.value="";document.querySelectorAll("[data-bar]").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()});
 }
 
 /* ---------- toast ---------- */
