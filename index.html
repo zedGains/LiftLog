@@ -204,6 +204,8 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .pnotes summary h2::after{content:" ▾";font-size:16px;color:var(--muted)}.pnotes[open] summary h2::after{content:" ▴"}
 .pnote{margin-top:12px}.pnote .pnh{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--display)}.pnote p{margin:4px 0 0}
 .tick.soon{color:var(--muted);font-weight:500}
+.namechips{margin-top:2px}
+.fbadge{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -558,24 +560,25 @@ loadLocal();
 const queues={};
 
 /* ---------- exercise library, by body part ---------- */
-const GROUPS=["Chest","Back","Shoulders","Traps","Biceps","Triceps","Forearms","Quads","Hamstrings","Glutes","Calves","Abs","Obliques","Cardio"];
+const GROUPS=["Chest","Back","Shoulders","Traps","Biceps","Triceps","Forearms","Quads","Hamstrings","Glutes","Calves","Abs","Obliques","Full Body","Cardio"];
 const G2M={Chest:["chest"],Back:["lats","midback"],Shoulders:["shoulders"],Traps:["traps"],Biceps:["biceps"],Triceps:["triceps"],Forearms:["forearms"],
- Quads:["quads"],Hamstrings:["hamstrings"],Glutes:["glutes"],Calves:["calves"],Abs:["abs"],Obliques:["obliques"],Cardio:[]};
+ Quads:["quads"],Hamstrings:["hamstrings"],Glutes:["glutes"],Calves:["calves"],Abs:["abs"],Obliques:["obliques"],"Full Body":["quads","glutes","shoulders","traps"],Cardio:[]};
 const LIB_RAW={
- Chest:[["Barbell Bench Press","Barbell"],["Incline Barbell Bench Press","Barbell"],["Decline Barbell Bench Press","Barbell"],["Dumbbell Bench Press","Dumbbell"],["Incline Dumbbell Press","Dumbbell"],["Decline Dumbbell Press","Dumbbell"],["Flat Dumbbell Flies","Dumbbell"],["Incline Dumbbell Flies","Dumbbell"],["Cable Crossover","Cable"],["Low-to-High Cable Fly","Cable"],["High-to-Low Cable Fly","Cable"],["Pec Deck Fly","Machine"],["Chest Press Machine","Machine"],["Incline Chest Press Machine","Machine"],["Smith Machine Bench Press","Smith"],["Push-Ups","Bodyweight"],["Chest Dips","Bodyweight"],["Dumbbell Pullover","Dumbbell"]],
- Back:[["Pull-Ups","Bodyweight"],["Chin-Ups","Bodyweight"],["Assisted Pull-Up Machine","Machine"],["Lat Pulldown","Cable"],["Close-Grip Lat Pulldown","Cable"],["Underhand Lat Pulldown","Cable"],["Straight-Arm Pulldown","Cable"],["Barbell Row","Barbell"],["Underhand Barbell Row","Barbell"],["One-Arm Dumbbell Row","Dumbbell"],["Seated Cable Row","Cable"],["T-Bar Row","Barbell"],["Chest-Supported Row Machine","Machine"],["Pendlay Row","Barbell"],["Inverted Row","Bodyweight"],["Deadlift","Barbell",["lowerback","glutes"],["hamstrings","traps","lats"]],["Back Extension","Bodyweight",["lowerback"],["glutes","hamstrings"]]],
- Shoulders:[["Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Dumbbell Shoulder Press","Dumbbell"],["Standing Barbell Overhead Press","Barbell"],["Seated Barbell Shoulder Press","Barbell"],["Arnold Press","Dumbbell"],["Shoulder Press Machine","Machine"],["Smith Machine Shoulder Press","Smith"],["Dumbbell Lateral Raise","Dumbbell"],["Seated Dumbbell Lateral Raise","Dumbbell"],["Cable Lateral Raise","Cable"],["Lateral Raise Machine","Machine"],["Front Dumbbell Raise","Dumbbell"],["Front Plate Raise","Plate"],["Upright Row","Barbell",["shoulders"],["traps"]],["Bent-Over Rear Delt Fly","Dumbbell",["reardelts"],["midback"]],["Reverse Pec Deck","Machine",["reardelts"],["midback"]],["Face Pulls","Cable",["reardelts"],["traps","midback"]]],
- Traps:[["Barbell Shrugs","Barbell"],["Dumbbell Shrugs","Dumbbell"],["Smith Machine Shrugs","Smith"],["Shrug Machine","Machine"],["Trap Bar Shrugs","Trap bar"],["Cable Shrugs","Cable"],["Farmer's Carry","Dumbbell",["traps","forearms"],[]]],
- Biceps:[["Barbell Curl","Barbell"],["EZ-Bar Curl","EZ bar"],["Standing Dumbbell Curl","Dumbbell"],["Seated Dumbbell Curl","Dumbbell"],["Incline Dumbbell Curl","Dumbbell"],["Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Concentration Curl","Dumbbell"],["EZ-Bar Preacher Curl","EZ bar"],["Preacher Curl Machine","Machine"],["Cable Curl","Cable"],["Rope Hammer Curl","Cable",["biceps","forearms"],[]],["Spider Curl","Dumbbell"],["Bayesian Cable Curl","Cable"],["Drag Curl","Barbell"]],
- Triceps:[["Rope Pushdown","Cable"],["Straight-Bar Pushdown","Cable"],["V-Bar Pushdown","Cable"],["Single-Arm Cable Pushdown","Cable"],["Overhead Cable Rope Extension","Cable"],["EZ-Bar Skull Crushers","EZ bar"],["Dumbbell Skull Crushers","Dumbbell"],["Overhead Dumbbell Extension","Dumbbell"],["Close-Grip Bench Press","Barbell",["triceps"],["chest"]],["Parallel Bar Dips","Bodyweight",["triceps"],["chest","shoulders"]],["Bench Dips","Bodyweight"],["Triceps Dip Machine","Machine"],["Dumbbell Kickbacks","Dumbbell"],["Diamond Push-Ups","Bodyweight",["triceps"],["chest"]]],
- Forearms:[["Barbell Wrist Curl","Barbell"],["Reverse Wrist Curl","Barbell"],["Reverse-Grip EZ-Bar Curl","EZ bar",["forearms"],["biceps"]],["Dumbbell Reverse Curl","Dumbbell",["forearms"],["biceps"]],["Plate Pinch Hold","Plate"],["Dead Hang","Bodyweight"],["Wrist Roller","Other"]],
- Quads:[["Barbell Back Squat","Barbell",["quads","glutes"],["hamstrings"]],["Front Squat","Barbell"],["Hack Squat","Machine",["quads"],["glutes"]],["Leg Press","Machine",["quads"],["glutes","hamstrings"]],["Leg Extension","Machine"],["Smith Machine Squat","Smith",["quads"],["glutes"]],["Goblet Squat","Dumbbell",["quads"],["glutes"]],["Bulgarian Split Squat","Dumbbell",["quads","glutes"],[]],["Walking Lunges","Dumbbell",["quads","glutes"],["hamstrings"]],["Front Lunges","Dumbbell",["quads","glutes"],[]],["Step-Ups","Dumbbell",["quads","glutes"],[]],["Pendulum Squat","Machine"],["Belt Squat","Machine",["quads","glutes"],[]],["Sissy Squat","Bodyweight"]],
- Hamstrings:[["Lying Leg Curl","Machine"],["Seated Leg Curl","Machine"],["Romanian Deadlift","Barbell",["hamstrings"],["glutes","lowerback"]],["Dumbbell Romanian Deadlift","Dumbbell",["hamstrings"],["glutes"]],["Stiff-Leg Deadlift","Barbell",["hamstrings"],["glutes","lowerback"]],["Good Mornings","Barbell",["hamstrings"],["lowerback"]],["Nordic Curl","Bodyweight"],["Stability Ball Leg Curl","Bodyweight"],["Single-Leg Cable Curl","Cable"]],
- Glutes:[["Barbell Hip Thrust","Barbell",["glutes"],["hamstrings"]],["Smith Machine Hip Thrust","Smith"],["Glute Bridge","Bodyweight"],["Cable Glute Kickback","Cable"],["Glute Kickback Machine","Machine"],["Hip Abduction Machine","Machine"],["Dumbbell Sumo Squat","Dumbbell",["glutes","quads"],[]],["Cable Pull-Through","Cable",["glutes"],["hamstrings"]],["Reverse Lunge","Dumbbell",["glutes","quads"],[]]],
- Calves:[["Standing Calf Raise Machine","Machine"],["Seated Calf Raise Machine","Machine"],["Smith Machine Calf Raise","Smith"],["Leg Press Calf Raise","Machine"],["Single-Leg Dumbbell Calf Raise","Dumbbell"],["Donkey Calf Raise","Machine"]],
- Abs:[["Crunches","Bodyweight"],["Cable Crunch","Cable"],["Ab Crunch Machine","Machine"],["Decline Sit-Ups","Bodyweight"],["Hanging Leg Raises","Bodyweight"],["Captain's Chair Leg Raises","Bodyweight"],["Lying Leg Raises","Bodyweight"],["Reverse Crunches","Bodyweight"],["Ab Wheel Rollout","Bodyweight"],["Plank (seconds)","Bodyweight"],["Dead Bug","Bodyweight"],["Mountain Climbers","Bodyweight"]],
- Obliques:[["Dumbbell Side Bends","Dumbbell"],["Cable Side Bends","Cable"],["Russian Twists","Plate"],["Cable Woodchoppers","Cable"],["Side Plank (seconds)","Bodyweight"],["Bicycle Crunches","Bodyweight"],["Hanging Oblique Knee Raises","Bodyweight"],["Landmine Rotations","Barbell"]],
- Cardio:[["Treadmill Walk or Jog","Machine"],["Incline Treadmill Walk","Machine"],["Stationary Bike","Machine"],["Elliptical","Machine"],["StairMaster","Machine"],["Rowing Machine","Machine"],["Jump Rope","Other"],["Fast Walk Outside","Other"]]
+ Chest:[["Barbell Bench Press","Barbell"],["Incline Barbell Bench Press","Barbell"],["Decline Barbell Bench Press","Barbell"],["Dumbbell Bench Press","Dumbbell"],["Incline Dumbbell Press","Dumbbell"],["Decline Dumbbell Press","Dumbbell"],["Flat Dumbbell Flies","Dumbbell"],["Incline Dumbbell Flies","Dumbbell"],["Cable Crossover","Cable"],["Low-to-High Cable Fly","Cable"],["High-to-Low Cable Fly","Cable"],["Pec Deck Fly","Machine"],["Chest Press Machine","Machine"],["Incline Chest Press Machine","Machine"],["Smith Machine Bench Press","Smith"],["Push-Ups","Bodyweight"],["Chest Dips","Bodyweight"],["Dumbbell Pullover","Dumbbell"],["Floor Press","Barbell",["chest","triceps"],["shoulders"]],["Dumbbell Floor Press","Dumbbell"],["Close-Grip Dumbbell Press","Dumbbell",["chest","triceps"],[]],["Landmine Press","Barbell",["chest","shoulders"],["triceps"]],["Machine Fly","Machine"],["Single-Arm Cable Fly","Cable"],["Svend Press","Plate"],["Hammer Strength Chest Press","Machine"],["Decline Chest Press Machine","Machine"],["Incline Push-Ups","Bodyweight"],["Decline Push-Ups","Bodyweight",["chest"],["shoulders","triceps"]],["Deficit Push-Ups","Bodyweight"],["Weighted Dips","Bodyweight",["chest","triceps"],["shoulders"]],["Paused Bench Press","Barbell",["chest"],["triceps","shoulders"]],["Spoto Press","Barbell",["chest"],["triceps","shoulders"]]],
+ Back:[["Pull-Ups","Bodyweight"],["Chin-Ups","Bodyweight"],["Assisted Pull-Up Machine","Machine"],["Lat Pulldown","Cable"],["Close-Grip Lat Pulldown","Cable"],["Underhand Lat Pulldown","Cable"],["Straight-Arm Pulldown","Cable"],["Barbell Row","Barbell"],["Underhand Barbell Row","Barbell"],["One-Arm Dumbbell Row","Dumbbell"],["Seated Cable Row","Cable"],["T-Bar Row","Barbell"],["Chest-Supported Row Machine","Machine"],["Pendlay Row","Barbell"],["Inverted Row","Bodyweight"],["Deadlift","Barbell",["lowerback","glutes"],["hamstrings","traps","lats"]],["Back Extension","Bodyweight",["lowerback"],["glutes","hamstrings"]],["Trap Bar Deadlift","Trap bar",["quads","glutes","lowerback"],["hamstrings","traps"]],["Sumo Deadlift","Barbell",["glutes","quads","lowerback"],["hamstrings","traps"]],["Rack Pull","Barbell",["lowerback","traps"],["glutes","lats"]],["Deficit Deadlift","Barbell",["lowerback","hamstrings"],["glutes","traps"]],["Snatch-Grip Deadlift","Barbell",["lowerback","traps"],["hamstrings","glutes"]],["Meadows Row","Barbell"],["Seal Row","Barbell"],["Kroc Row","Dumbbell"],["Chest-Supported Dumbbell Row","Dumbbell"],["Single-Arm Cable Row","Cable"],["Machine Row","Machine"],["High Row Machine","Machine"],["Wide-Grip Lat Pulldown","Cable"],["Neutral-Grip Pull-Ups","Bodyweight"],["Weighted Pull-Ups","Bodyweight"],["Rope Straight-Arm Pulldown","Cable"],["Dumbbell Pullover (lats)","Dumbbell"],["Superman Hold (seconds)","Bodyweight",["lowerback"],["glutes"]],["Hyperextension (weighted)","Plate",["lowerback"],["glutes","hamstrings"]]],
+ Shoulders:[["Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Dumbbell Shoulder Press","Dumbbell"],["Standing Barbell Overhead Press","Barbell"],["Seated Barbell Shoulder Press","Barbell"],["Arnold Press","Dumbbell"],["Shoulder Press Machine","Machine"],["Smith Machine Shoulder Press","Smith"],["Dumbbell Lateral Raise","Dumbbell"],["Seated Dumbbell Lateral Raise","Dumbbell"],["Cable Lateral Raise","Cable"],["Lateral Raise Machine","Machine"],["Front Dumbbell Raise","Dumbbell"],["Front Plate Raise","Plate"],["Upright Row","Barbell",["shoulders"],["traps"]],["Bent-Over Rear Delt Fly","Dumbbell",["reardelts"],["midback"]],["Reverse Pec Deck","Machine",["reardelts"],["midback"]],["Face Pulls","Cable",["reardelts"],["traps","midback"]],["Push Press","Barbell",["shoulders"],["triceps","quads"]],["Z Press","Barbell",["shoulders"],["triceps","abs"]],["Landmine Shoulder Press","Barbell"],["Behind-the-Neck Press","Barbell"],["Seated Military Press Machine","Machine"],["Cable Front Raise","Cable"],["Lu Raise","Dumbbell"],["Y Raise","Dumbbell",["shoulders","reardelts"],["traps"]],["Leaning Cable Lateral Raise","Cable"],["Dumbbell Upright Row","Dumbbell",["shoulders"],["traps"]],["Rear Delt Cable Fly","Cable",["reardelts"],["midback"]],["Band Pull-Aparts","Other",["reardelts"],["midback"]],["Seated Rear Delt Raise","Dumbbell",["reardelts"],["midback"]],["Pike Push-Ups","Bodyweight",["shoulders"],["triceps"]],["Handstand Push-Ups","Bodyweight",["shoulders"],["triceps"]]],
+ Traps:[["Barbell Shrugs","Barbell"],["Dumbbell Shrugs","Dumbbell"],["Smith Machine Shrugs","Smith"],["Shrug Machine","Machine"],["Trap Bar Shrugs","Trap bar"],["Cable Shrugs","Cable"],["Farmer's Carry","Dumbbell",["traps","forearms"],[]],["Snatch-Grip Shrugs","Barbell"],["Behind-the-Back Shrugs","Barbell"],["Overhead Shrugs","Barbell",["traps"],["shoulders"]],["Kirk Shrugs","Barbell"],["Rack Pull Shrugs","Barbell"]],
+ Biceps:[["Barbell Curl","Barbell"],["EZ-Bar Curl","EZ bar"],["Standing Dumbbell Curl","Dumbbell"],["Seated Dumbbell Curl","Dumbbell"],["Incline Dumbbell Curl","Dumbbell"],["Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Concentration Curl","Dumbbell"],["EZ-Bar Preacher Curl","EZ bar"],["Preacher Curl Machine","Machine"],["Cable Curl","Cable"],["Rope Hammer Curl","Cable",["biceps","forearms"],[]],["Spider Curl","Dumbbell"],["Bayesian Cable Curl","Cable"],["Drag Curl","Barbell"],["Zottman Curl","Dumbbell",["biceps","forearms"],[]],["Cross-Body Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Machine Curl","Machine"],["21s","Barbell"],["Cable Rope Curl","Cable"],["High Cable Curl","Cable"],["Waiter Curl","Dumbbell"],["Preacher Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Chin-Ups (close grip)","Bodyweight",["biceps","lats"],[]]],
+ Triceps:[["Rope Pushdown","Cable"],["Straight-Bar Pushdown","Cable"],["V-Bar Pushdown","Cable"],["Single-Arm Cable Pushdown","Cable"],["Overhead Cable Rope Extension","Cable"],["EZ-Bar Skull Crushers","EZ bar"],["Dumbbell Skull Crushers","Dumbbell"],["Overhead Dumbbell Extension","Dumbbell"],["Close-Grip Bench Press","Barbell",["triceps"],["chest"]],["Parallel Bar Dips","Bodyweight",["triceps"],["chest","shoulders"]],["Bench Dips","Bodyweight"],["Triceps Dip Machine","Machine"],["Dumbbell Kickbacks","Dumbbell"],["Diamond Push-Ups","Bodyweight",["triceps"],["chest"]],["JM Press","Barbell",["triceps"],["chest"]],["Tate Press","Dumbbell"],["Cable Kickback","Cable"],["Triceps Extension Machine","Machine"],["French Press","EZ bar"],["Close-Grip Push-Ups","Bodyweight",["triceps"],["chest"]],["Single-Arm Overhead Extension","Dumbbell"],["Cross-Body Cable Extension","Cable"],["Reverse-Grip Pushdown","Cable"],["Board Press","Barbell",["triceps","chest"],["shoulders"]]],
+ Forearms:[["Barbell Wrist Curl","Barbell"],["Reverse Wrist Curl","Barbell"],["Reverse-Grip EZ-Bar Curl","EZ bar",["forearms"],["biceps"]],["Dumbbell Reverse Curl","Dumbbell",["forearms"],["biceps"]],["Plate Pinch Hold","Plate"],["Dead Hang","Bodyweight"],["Wrist Roller","Other"],["Behind-the-Back Wrist Curl","Barbell"],["Dumbbell Wrist Curl","Dumbbell"],["Hand Gripper","Other"],["Towel Pull-Up Hang (seconds)","Bodyweight"],["Wrist Roller (reverse)","Other"]],
+ Quads:[["Barbell Back Squat","Barbell",["quads","glutes"],["hamstrings"]],["Front Squat","Barbell"],["Hack Squat","Machine",["quads"],["glutes"]],["Leg Press","Machine",["quads"],["glutes","hamstrings"]],["Leg Extension","Machine"],["Smith Machine Squat","Smith",["quads"],["glutes"]],["Goblet Squat","Dumbbell",["quads"],["glutes"]],["Bulgarian Split Squat","Dumbbell",["quads","glutes"],[]],["Walking Lunges","Dumbbell",["quads","glutes"],["hamstrings"]],["Front Lunges","Dumbbell",["quads","glutes"],[]],["Step-Ups","Dumbbell",["quads","glutes"],[]],["Pendulum Squat","Machine"],["Belt Squat","Machine",["quads","glutes"],[]],["Sissy Squat","Bodyweight"],["Zercher Squat","Barbell",["quads","glutes"],["abs","lowerback"]],["Safety Bar Squat","Barbell",["quads","glutes"],["hamstrings","lowerback"]],["Box Squat","Barbell",["quads","glutes"],["hamstrings"]],["Pause Squat","Barbell",["quads","glutes"],["hamstrings"]],["High-Bar Squat","Barbell",["quads","glutes"],["hamstrings"]],["Low-Bar Squat","Barbell",["glutes","quads"],["hamstrings","lowerback"]],["Overhead Squat","Barbell",["quads","shoulders"],["glutes","abs"]],["Hatfield Squat","Barbell",["quads","glutes"],[]],["Split Squat","Dumbbell",["quads","glutes"],[]],["Cyclist Squat","Barbell"],["Heel-Elevated Goblet Squat","Dumbbell"],["Smith Machine Lunges","Smith",["quads","glutes"],[]],["Single-Leg Leg Press","Machine",["quads"],["glutes"]],["Pistol Squat","Bodyweight",["quads","glutes"],[]],["Jump Squats","Bodyweight",["quads","glutes"],["calves"]],["Wall Sit (seconds)","Bodyweight"],["Spanish Squat","Other"],["Reverse Nordic","Bodyweight"],["V-Squat Machine","Machine",["quads"],["glutes"]]],
+ Hamstrings:[["Lying Leg Curl","Machine"],["Seated Leg Curl","Machine"],["Romanian Deadlift","Barbell",["hamstrings"],["glutes","lowerback"]],["Dumbbell Romanian Deadlift","Dumbbell",["hamstrings"],["glutes"]],["Stiff-Leg Deadlift","Barbell",["hamstrings"],["glutes","lowerback"]],["Good Mornings","Barbell",["hamstrings"],["lowerback"]],["Nordic Curl","Bodyweight"],["Stability Ball Leg Curl","Bodyweight"],["Single-Leg Cable Curl","Cable"],["Glute-Ham Raise","Machine",["hamstrings"],["glutes","calves"]],["Single-Leg Romanian Deadlift","Dumbbell",["hamstrings","glutes"],[]],["Kettlebell Swing","Kettlebell",["hamstrings","glutes"],["lowerback"]],["Standing Leg Curl","Machine"],["Slider Leg Curl","Bodyweight"],["Seated Good Morning","Barbell",["hamstrings","lowerback"],[]],["Cable Romanian Deadlift","Cable",["hamstrings"],["glutes"]],["Trap Bar Romanian Deadlift","Trap bar",["hamstrings"],["glutes","lowerback"]]],
+ Glutes:[["Barbell Hip Thrust","Barbell",["glutes"],["hamstrings"]],["Smith Machine Hip Thrust","Smith"],["Glute Bridge","Bodyweight"],["Cable Glute Kickback","Cable"],["Glute Kickback Machine","Machine"],["Hip Abduction Machine","Machine"],["Dumbbell Sumo Squat","Dumbbell",["glutes","quads"],[]],["Cable Pull-Through","Cable",["glutes"],["hamstrings"]],["Reverse Lunge","Dumbbell",["glutes","quads"],[]],["B-Stance Hip Thrust","Barbell",["glutes"],["hamstrings"]],["Single-Leg Hip Thrust","Bodyweight",["glutes"],["hamstrings"]],["Hip Thrust Machine","Machine",["glutes"],["hamstrings"]],["Frog Pumps","Bodyweight"],["Cable Hip Abduction","Cable"],["Curtsy Lunge","Dumbbell",["glutes","quads"],[]],["Banded Lateral Walk","Other"],["Kas Glute Bridge","Barbell",["glutes"],[]],["Step-Up (high box)","Dumbbell",["glutes","quads"],[]],["45\u00b0 Back Extension (glute focus)","Bodyweight",["glutes"],["hamstrings","lowerback"]]],
+ Calves:[["Standing Calf Raise Machine","Machine"],["Seated Calf Raise Machine","Machine"],["Smith Machine Calf Raise","Smith"],["Leg Press Calf Raise","Machine"],["Single-Leg Dumbbell Calf Raise","Dumbbell"],["Donkey Calf Raise","Machine"],["Tibialis Raise","Other"],["Hack Squat Calf Raise","Machine"],["Seated Dumbbell Calf Raise","Dumbbell"],["Jump Rope (calves)","Other"],["Bodyweight Calf Raise","Bodyweight"]],
+ Abs:[["Crunches","Bodyweight"],["Cable Crunch","Cable"],["Ab Crunch Machine","Machine"],["Decline Sit-Ups","Bodyweight"],["Hanging Leg Raises","Bodyweight"],["Captain's Chair Leg Raises","Bodyweight"],["Lying Leg Raises","Bodyweight"],["Reverse Crunches","Bodyweight"],["Ab Wheel Rollout","Bodyweight"],["Plank (seconds)","Bodyweight"],["Dead Bug","Bodyweight"],["Mountain Climbers","Bodyweight"],["Hollow Hold (seconds)","Bodyweight"],["V-Ups","Bodyweight"],["Toes-to-Bar","Bodyweight"],["Weighted Plank (seconds)","Plate"],["Dragon Flag","Bodyweight"],["L-Sit (seconds)","Bodyweight"],["Stir the Pot","Other"],["Weighted Decline Crunch","Plate"],["Kneeling Cable Crunch","Cable"],["Flutter Kicks","Bodyweight"],["Bear Crawl","Bodyweight"]],
+ Obliques:[["Dumbbell Side Bends","Dumbbell"],["Cable Side Bends","Cable"],["Russian Twists","Plate"],["Cable Woodchoppers","Cable"],["Side Plank (seconds)","Bodyweight"],["Bicycle Crunches","Bodyweight"],["Hanging Oblique Knee Raises","Bodyweight"],["Landmine Rotations","Barbell"],["Pallof Press","Cable",["obliques","abs"],[]],["Windshield Wipers","Bodyweight"],["Suitcase Carry","Dumbbell",["obliques"],["forearms","traps"]],["Heel Touches","Bodyweight"],["Oblique Cable Crunch","Cable"],["Copenhagen Plank (seconds)","Bodyweight"]],
+ "Full Body":[["Power Clean","Barbell",["traps","glutes","quads"],["hamstrings","shoulders"]],["Hang Clean","Barbell",["traps","glutes"],["quads","shoulders"]],["Clean and Jerk","Barbell",["shoulders","quads","glutes"],["traps","triceps"]],["Snatch","Barbell",["shoulders","quads","glutes"],["traps"]],["Power Snatch","Barbell",["shoulders","glutes"],["traps","quads"]],["Thrusters","Barbell",["quads","shoulders"],["glutes","triceps"]],["Dumbbell Thrusters","Dumbbell",["quads","shoulders"],["glutes"]],["Turkish Get-Up","Kettlebell",["shoulders","abs"],["glutes"]],["Man Makers","Dumbbell",["chest","shoulders","quads"],["abs"]],["Kettlebell Clean and Press","Kettlebell",["shoulders","glutes"],["triceps"]],["Sandbag Carry","Other",["traps","abs"],["forearms","quads"]],["Sled Drag","Other",["quads","glutes"],["hamstrings"]],["Atlas Stone Lift","Other",["glutes","lowerback"],["biceps","traps"]]],
+ Cardio:[["Treadmill Walk or Jog","Machine"],["Incline Treadmill Walk","Machine"],["Stationary Bike","Machine"],["Elliptical","Machine"],["StairMaster","Machine"],["Rowing Machine","Machine"],["Jump Rope","Other"],["Fast Walk Outside","Other"],["Running","Other"],["Hill Sprints","Other"],["Assault Bike","Machine"],["Ski Erg","Machine"],["Sled Push","Machine"],["Battle Ropes","Other"],["Swimming","Other"],["Cycling Outside","Other"],["Burpees","Other"],["Box Jumps","Other"],["Rucking","Other"],["Stair Climbing","Other"]]
 };
 const slug=(t)=>t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2])=>LIB.push({id:slug(name),name,g,eq,
@@ -1506,7 +1509,7 @@ function progStats(p){const w0=(p.weeks&&p.weeks[0])||{days:{}};const dpw=Object
   const ex=(p.weeks||[]).reduce((a,w)=>a+Object.values(w.days).reduce((b,d)=>b+d.items.length,0),0);return {weeks:(p.weeks||[]).length,dpw,ex}}
 function exFromItem(it){return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,p:it.p||[],s:it.s||[],eq:it.eq||""}}
 function exText(x){return x.type==="cardio"?`${x.reps[0]} min`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`}
-function nameOf(id){if(!id)return "Someone";if(id===uid)return "you";return pg.names[id]||"Someone"}
+function nameOf(id){if(!id)return "Someone";if(id==="liftlog")return "LiftLog";if(id===uid)return "you";return pg.names[id]||"Someone"}
 function armBtn(b,txt,fn){if(!b)return;let armed=false;const orig=b.textContent;b.onclick=()=>{if(!armed){armed=true;b.textContent=txt;setTimeout(()=>{armed=false;if(b.isConnected)b.textContent=orig},4000);return}fn()}}
 function miniCal(w){return `<span class="minical" aria-hidden="true">${WEEK_ORDER.map(i=>{const d=w&&w.days[String(i)];return `<span class="mc ${d?"on":""}">${WD_SHORT[i][0]}</span>`}).join("")}</span>`}
 function calCells(w,clickable){return WEEK_ORDER.map(i=>{const d=w&&w.days[String(i)];const inner=`<b>${WD_SHORT[i]}</b>${d?`<span class="ct">${esc(d.title||"Workout")}</span><span class="cn">${d.items.length} ex</span>`:`<span class="ct rest">Rest</span>${clickable?'<span class="cn">+ add</span>':""}`}`;
@@ -1533,7 +1536,7 @@ function communityList(){
   const q=pg.q.trim().toLowerCase();
   return pg.community.filter(p=>(!pg.goal||p.goal===pg.goal)&&(!pg.target||(p.targets||[]).includes(pg.target))&&(!q||[p.title,p.summary,p.desc,p.who,(p.targets||[]).join(" ")].join(" ").toLowerCase().includes(q)))
    .map(p=>({...p,likes:pg.social.likes[p.key]||0,uses:pg.social.uses[p.key]||0}))
-   .sort((a,b)=>pg.sort==="new"?(b.updatedAt||0)-(a.updatedAt||0):((b.likes*2+b.uses)-(a.likes*2+a.uses))||((b.updatedAt||0)-(a.updatedAt||0)));
+   .sort((a,b)=>(!!b.featured-!!a.featured)||(pg.sort==="new"?(b.updatedAt||0)-(a.updatedAt||0):((b.likes*2+b.uses)-(a.likes*2+a.uses))||((b.updatedAt||0)-(a.updatedAt||0))));
 }
 function communityView(){
   if(state.mode!=="db") return `<div class="plan"><div class="panel"><h2>Community</h2><p>Community programs need your Claude account. Open this app while signed in to browse and share programs. You can still build programs under <b>My programs</b>.</p></div></div>`;
@@ -1548,7 +1551,7 @@ function communityView(){
 }
 function progCard(p){const st=progStats(p);return `<button class="pcard" data-pview="${esc(p.key)}">
   <span class="pct">${esc(p.title)}</span>
-  ${p.summary?`<span class="psum">${esc(p.summary)}</span>`:""}
+  ${p.featured?`<span class="fbadge">★ LiftLog classic</span>`:""}${p.summary?`<span class="psum">${esc(p.summary)}</span>`:""}
   <span class="pcm">by ${esc(nameOf(p.author))} · ${esc(p.goal||"General fitness")} · ${esc(p.level||"All levels")}</span>
   <span class="pcs"><span>${st.weeks} wk</span><span>${st.dpw} days/wk</span><span>♥ ${p.likes||0}</span><span>${p.uses||0} using</span></span>
   ${miniCal(p.weeks[0])}</button>`}
@@ -1658,17 +1661,19 @@ function openDayEdit(p,wi,wd){
   if(!d){
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="declose">Close</button><span class="eyebrow">${lbl}</span></div>
      <h3 id="sheet-title">Rest day</h3>
-     <div class="cform"><label>Workout name<span class="field"><input id="de-title" placeholder="e.g. Push, Legs, Upper body" maxlength="40" autocomplete="off"></span></label></div>
+     <div class="cform"><label>Workout name<span class="field"><input id="de-title" placeholder="Ex: Push, Pull, Legs, Shoulder Day" maxlength="40" autocomplete="off"></span></label>
+    <div class="gchips namechips">${["Push","Pull","Legs","Upper Body","Lower Body","Full Body","Chest & Arms","Back & Shoulders","Shoulder Day","Arm Day","Cardio & Core"].map(n=>`<button class="gchip small" data-dname="${n}">${n}</button>`).join("")}</div></div>
      <div class="btns"><button class="btn primary" id="demake" style="flex:1">Make it a training day</button></div>`;
     sh.scrollTop=0;
     $("#declose",sh).onclick=closeSheet;
+    sh.querySelectorAll("[data-dname]").forEach(b=>b.onclick=()=>{$("#de-title",sh).value=b.dataset.dname;$("#de-title",sh).focus()});
     $("#demake",sh).onclick=()=>{w.days[wd]={title:$("#de-title",sh).value.trim()||"Workout",items:[]};save();render();openDayEdit(p,wi,wd)};
     $("#de-title",sh).focus({preventScroll:true});
     return;
   }
   const st=sh.scrollTop;
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="declose">Done</button><span class="eyebrow">${lbl}</span></div>
-   <div class="cform"><label>Workout name<span class="field"><input id="de-title" value="${esc(d.title)}" maxlength="40" autocomplete="off"></span></label>
+   <div class="cform"><label>Workout name<span class="field"><input id="de-title" value="${esc(d.title)}" placeholder="Ex: Push, Pull, Legs, Shoulder Day" maxlength="40" autocomplete="off"></span></label>
     <label>Notes for this day <small class="opt">optional, shown to people following</small><span class="field"><textarea id="de-note" rows="2" maxlength="300" placeholder="e.g. Heavy day. Rest 2 minutes between sets.">${esc(d.note||"")}</textarea></span></label></div>
    <div class="lbl">Exercises <small>${d.items.length}</small></div>
    <div class="delist">${d.items.length?d.items.map((x,i)=>`<div class="derow"><span class="den"><b>${esc(x.name)}</b><small>${esc(x.g)} · ${exText(x)}${x.drop?" · drop sets":""}</small></span>
@@ -1727,7 +1732,7 @@ function startCommunity(){
   db.collection("programs").onSnapshot(snap=>{
     const list=[]; snap.docs.forEach(doc=>{const v=thaw(doc.data());if(!v||!Array.isArray(v.programs))return;
       v.programs.forEach(p=>{if(p&&p.id&&Array.isArray(p.weeks)&&p.weeks.length)list.push({...p,author:doc.id,key:doc.id+":"+p.id})})});
-    pg.community=list; pg.ready=true; resolveNames(); rerenderPrograms();
+    pg.community=[...featuredPrograms(),...list]; pg.ready=true; resolveNames(); rerenderPrograms();
   },()=>{pg.ready=true;rerenderPrograms()});
   db.collection("social").onSnapshot(snap=>{
     pg.socialDocs={}; snap.docs.forEach(doc=>{const v=thaw(doc.data());if(v)pg.socialDocs[doc.id]=v});
@@ -1767,8 +1772,8 @@ function openProgView(key){
      <div class="btns"><button class="btn primary" id="pvuse" style="flex:1">Use this program</button></div>
      ${mine||p.allowCopy?`<div class="btns"><button class="btn" id="pvcopy" style="flex:1">${mine?"Make a copy to edit":"Copy to my programs"}</button></div>`:`<p class="savenote">The creator hasn't allowed copies. You can still follow it with <b>Use this program</b>.</p>`}
      ${p.from?`<p class="savenote">Based on ${(()=>{const o=pg.community.find(x=>x.key===p.from);return o?`<b>${esc(o.title)}</b> by ${esc(nameOf(o.author))}`:"another creator's program"})()}.</p>`:""}
-     ${!mine&&window.LIFTLOG_RPC?`<div class="btns"><button class="linkbtn reportl" id="pvreport">Report this program</button></div>`:""}
-     ${pg.isOwner&&!mine?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
+     ${!mine&&!p.featured&&window.LIFTLOG_RPC?`<div class="btns"><button class="linkbtn reportl" id="pvreport">Report this program</button></div>`:""}
+     ${pg.isOwner&&!mine&&!p.featured?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
     $("#pvclose",sh).onclick=closeSheet;
     $("#pvlike",sh).onclick=()=>{toggleLike(key);draw()};
     sh.querySelectorAll("[data-pvw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.pvw;draw()});
@@ -2101,6 +2106,85 @@ function drawTour(steps,s){
 }
 window.addEventListener("resize",()=>{if(tourI>=0)showTour()});
 document.addEventListener("keydown",e=>{if(tourI>=0&&e.key==="Escape")endTour()});
+
+/* ---------- LiftLog classics: well-known public training programs, written up in our own words ---------- */
+function fx(name,sets,reps){const L=LIB.find(l=>l.name===name)||{name,g:"Quads",type:"lift",p:[],s:[],eq:""};
+  const r=Array.isArray(reps)?reps:[reps,reps];return {name:L.name,g:L.g,type:L.type||"lift",sets,reps:r,drop:false,p:L.p||[],s:L.s||[],eq:L.eq||""}}
+const SQ="Barbell Back Squat";
+function smolovWeek(add){return {days:{
+  "1":{title:"Squat · 4×9",note:`4 sets of 9 at 70% of your max${add}.`,items:[fx(SQ,4,9)]},
+  "3":{title:"Squat · 5×7",note:`5 sets of 7 at 75% of your max${add}.`,items:[fx(SQ,5,7)]},
+  "5":{title:"Squat · 7×5",note:`7 sets of 5 at 80% of your max${add}.`,items:[fx(SQ,7,5)]},
+  "6":{title:"Squat · 10×3",note:`10 sets of 3 at 85% of your max${add}.`,items:[fx(SQ,10,3)]}}}}
+function jrWeek(add){return {days:{
+  "1":{title:"Squat · 6×6",note:`6 sets of 6 at 70% of your max${add}.`,items:[fx(SQ,6,6)]},
+  "3":{title:"Squat · 7×5",note:`7 sets of 5 at 75% of your max${add}.`,items:[fx(SQ,7,5)]},
+  "5":{title:"Squat · 8×4",note:`8 sets of 4 at 80% of your max${add}.`,items:[fx(SQ,8,4)]},
+  "6":{title:"Squat · 10×3",note:`10 sets of 3 at 85% of your max${add}.`,items:[fx(SQ,10,3)]}}}}
+let FEATURED_CACHE=null;
+function featuredPrograms(){
+  if(FEATURED_CACHE) return FEATURED_CACHE;
+  const A=[fx(SQ,5,5),fx("Barbell Bench Press",5,5),fx("Barbell Row",5,5)];
+  const B=[fx(SQ,5,5),fx("Standing Barbell Overhead Press",5,5),fx("Deadlift",1,5)];
+  const push=[fx("Barbell Bench Press",4,[6,8]),fx("Seated Dumbbell Shoulder Press",3,[8,10]),fx("Incline Dumbbell Press",3,[8,10]),fx("Dumbbell Lateral Raise",3,[12,15]),fx("Rope Pushdown",3,[10,12]),fx("Overhead Cable Rope Extension",3,[10,12])];
+  const pull=[fx("Deadlift",3,5),fx("Pull-Ups",3,[6,10]),fx("Barbell Row",3,[8,10]),fx("Face Pulls",3,[12,15]),fx("EZ-Bar Curl",3,[8,10]),fx("Hammer Curl",3,[10,12])];
+  const legs=[fx(SQ,4,[6,8]),fx("Romanian Deadlift",3,[8,10]),fx("Leg Press",3,[10,12]),fx("Lying Leg Curl",3,[10,12]),fx("Standing Calf Raise Machine",4,[12,15]),fx("Hanging Leg Raises",3,[10,15])];
+  const upper1=[fx("Barbell Bench Press",4,[6,8]),fx("Barbell Row",4,[6,8]),fx("Standing Barbell Overhead Press",3,[8,10]),fx("Lat Pulldown",3,[8,10]),fx("EZ-Bar Curl",2,[10,12]),fx("Rope Pushdown",2,[10,12])];
+  const lower1=[fx(SQ,4,[6,8]),fx("Romanian Deadlift",3,[8,10]),fx("Walking Lunges",3,[10,12]),fx("Lying Leg Curl",3,[10,12]),fx("Standing Calf Raise Machine",3,[12,15]),fx("Cable Crunch",3,[12,15])];
+  const upper2=[fx("Incline Dumbbell Press",4,[8,10]),fx("Seated Cable Row",4,[8,10]),fx("Seated Dumbbell Shoulder Press",3,[8,10]),fx("Pull-Ups",3,[6,10]),fx("Hammer Curl",2,[10,12]),fx("Overhead Cable Rope Extension",2,[10,12])];
+  const lower2=[fx("Deadlift",3,5),fx("Front Squat",3,[6,8]),fx("Bulgarian Split Squat",3,[8,10]),fx("Barbell Hip Thrust",3,[8,10]),fx("Seated Calf Raise Machine",3,[12,15]),fx("Hanging Leg Raises",3,[10,15])];
+  const fbA=[fx("Goblet Squat",3,[8,10]),fx("Dumbbell Bench Press",3,[8,10]),fx("Lat Pulldown",3,[8,10]),fx("Dumbbell Romanian Deadlift",3,[8,10]),fx("Plank (seconds)",3,[30,45])];
+  const fbB=[fx("Leg Press",3,[10,12]),fx("Seated Dumbbell Shoulder Press",3,[8,10]),fx("Seated Cable Row",3,[8,10]),fx("Glute Bridge",3,[12,15]),fx("Dead Bug",3,[10,12])];
+  const base={author:"liftlog",featured:true,allowCopy:true,updatedAt:1792540800000};
+  FEATURED_CACHE=[
+   {...base,id:"smolov-jr",title:"Smolov Jr. Squat",goal:"Strength",level:"Intermediate",targets:["Strength","Legs"],
+    summary:"A short, intense 3-week squat block that can add serious weight to your max.",
+    desc:"Smolov Jr. is the condensed version of the famous Russian Smolov squat cycle. You squat four days a week, and each day uses a different set-and-rep scheme at a set percentage of your current one-rep max. The volume is high and the weights climb every week, so it pushes strength up fast. It's hard on your legs and recovery, so treat it as a short specialization block, not a forever program. It works for bench press too: just swap the exercise.",
+    who:"Lifters with at least 6–12 months of steady squatting who know their current max. Not for beginners or anyone nursing knee, hip or back pain.",
+    progress:"Use a conservative max (about 90% of your true best). Week 1 uses the listed percentages. Week 2: add 5–10 lb (2.5–5 kg) to every day's weight. Week 3: add another 5–10 lb. Week 4: rest early in the week, then test a new max on Saturday. Keep other leg training light during the block.",
+    equip:"Barbell, squat rack, plates",
+    weeks:[jrWeek(""),jrWeek(", plus 5–10 lb (2.5–5 kg) over last week"),jrWeek(", plus another 5–10 lb (2.5–5 kg) over last week"),
+      {days:{"6":{title:"Max test",note:"Rest Monday to Thursday. Warm up well and work up to a new 1-rep max.",items:[fx(SQ,1,1)]}}}]},
+   {...base,id:"smolov-base",title:"Smolov Squat · Base Cycle",goal:"Strength",level:"Advanced",targets:["Strength","Legs"],
+    summary:"The core 4-week block of the classic Russian Smolov squat program.",
+    desc:"This is the base mesocycle from Sergey Smolov's squat program, the part people mean when they say \"I ran Smolov.\" You squat four times a week with high volume at 70–85% of your max, and the weight goes up each week. The full original program also has a 2-week intro, a 2-week switching phase and a 4-week intense phase; this block is the one most lifters run on its own. Expect sore legs, a lot of eating and a noticeably stronger squat.",
+    who:"Experienced lifters with a solid squat and good recovery. Plan to keep the rest of your training minimal for these 4 weeks.",
+    progress:"Base your percentages on a recent, honest max. Week 1 uses the listed percentages. Week 2: add 20 lb (10 kg) to every day's weight from week 1. Week 3: week 1 weights plus 30 lb (15 kg). Week 4: rest Monday and Wednesday, then work up to a heavy single on Friday and Saturday. If a session goes badly, repeat that week instead of adding weight.",
+    equip:"Barbell, squat rack, plates",
+    weeks:[smolovWeek(""),smolovWeek(", plus 20 lb (10 kg) over week 1"),smolovWeek(", plus 30 lb (15 kg) over week 1"),
+      {days:{"5":{title:"Heavy single",note:"Rest Monday and Wednesday. Work up to a heavy single.",items:[fx(SQ,1,1)]},"6":{title:"Max test",note:"Work up to a new 1-rep max.",items:[fx(SQ,1,1)]}}}]},
+   {...base,id:"five-by-five",title:"5×5 Beginner Strength",goal:"Strength",level:"Beginner",targets:["Strength","Legs","Chest","Back"],
+    summary:"The classic starter strength plan: 3 barbell workouts a week, 5 sets of 5.",
+    desc:"Two short workouts, A and B, built around the big barbell lifts. You alternate them three days a week (A-B-A one week, B-A-B the next) and add a little weight every session. It's simple, it teaches the main lifts, and beginners usually get much stronger in the first few months. This is a general version of the well-known 5×5 approach.",
+    who:"New lifters, or anyone coming back after a long break who wants to build basic strength.",
+    progress:"Start light enough to finish every rep with good form. Add 5 lb (2.5 kg) each workout on squat, bench, row and press, and 10 lb (5 kg) on deadlift. If you miss reps 3 sessions in a row on a lift, drop that lift's weight 10% and build back up.",
+    equip:"Barbell, squat rack, bench, plates",
+    weeks:[{days:{"1":{title:"Workout A",items:A},"3":{title:"Workout B",items:B},"5":{title:"Workout A",items:A}}},
+           {days:{"1":{title:"Workout B",items:B},"3":{title:"Workout A",items:A},"5":{title:"Workout B",items:B}}}]},
+   {...base,id:"ppl-6",title:"Push / Pull / Legs · 6 Day",goal:"Muscle",level:"Intermediate",targets:["Muscle","Chest","Back","Legs","Shoulders","Arms"],
+    summary:"Train each muscle twice a week with the most popular bodybuilding split.",
+    desc:"Push days hit chest, shoulders and triceps; pull days hit back and biceps; leg days hit quads, hamstrings, calves and core. Running it twice a week gives every muscle two sessions, which is great for building size.",
+    who:"Lifters who can train 6 days a week and want to build muscle.",
+    progress:"Work in the listed rep ranges. When you hit the top of the range on every set, add a little weight next time. Rest 2 minutes on the big lifts and 60–90 seconds on the rest.",
+    equip:"Full gym",
+    weeks:[{days:{"1":{title:"Push",items:push},"2":{title:"Pull",items:pull},"3":{title:"Legs",items:legs},"4":{title:"Push",items:push},"5":{title:"Pull",items:pull},"6":{title:"Legs",items:legs}}}]},
+   {...base,id:"upper-lower-4",title:"Upper / Lower · 4 Day",goal:"Muscle",level:"Beginner",targets:["Muscle","Strength","Chest","Back","Legs"],
+    summary:"Four balanced workouts a week that build strength and size together.",
+    desc:"Two upper-body days and two lower-body days. The first pair leans heavier and the second pair adds variety, so every muscle gets worked twice a week without marathon sessions.",
+    who:"Beginners to intermediates who can train 4 days a week.",
+    progress:"Add weight when you hit the top of the rep range on every set. Keep 1–3 reps in the tank on most sets.",
+    equip:"Full gym",
+    weeks:[{days:{"1":{title:"Upper A",items:upper1},"2":{title:"Lower A",items:lower1},"4":{title:"Upper B",items:upper2},"5":{title:"Lower B",items:lower2}}}]},
+   {...base,id:"full-body-3",title:"Full Body · 3 Day Starter",goal:"General fitness",level:"Beginner",targets:["Fat loss","Muscle","Core"],
+    summary:"An easy-to-follow full body routine for your first months in the gym.",
+    desc:"Three short full-body workouts a week using dumbbells and machines, so it's friendly if barbells feel intimidating. You alternate two workouts and rest between gym days.",
+    who:"Complete beginners, or anyone short on time.",
+    progress:"Pick weights you can lift for the full rep range with good form. Add reps first, then weight. Pair it with daily walking if fat loss is the goal.",
+    equip:"Dumbbells, cable machine, leg press",
+    weeks:[{days:{"1":{title:"Full Body A",items:fbA},"3":{title:"Full Body B",items:fbB},"5":{title:"Full Body A",items:fbA}}}]}
+  ].map(p=>({...p,key:"liftlog:"+p.id}));
+  return FEATURED_CACHE;
+}
 
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
