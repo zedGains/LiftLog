@@ -153,8 +153,9 @@
       data.forEach((r) => map.set(colOf(r.path).id, r.data));
       if (data.length < page) break; from += page;
     }
-    // keep optimistic local writes that the server hasn't confirmed yet
+    // keep optimistic local writes that the server hasn't confirmed yet, and anything waiting offline
     (L.pending || new Map()).forEach((v, id) => map.set(id, v));
+    Object.keys(outbox).forEach((path) => { const o = outbox[path]; if (o.col === col) map.set(colOf(path).id, o.data); });
     L.map = map; L.loaded = true; emit(L);
   }
   function listen(col) {
@@ -171,6 +172,40 @@
       .subscribe((status) => { if (status === "SUBSCRIBED" && L.loaded) load(col, L).catch(() => {}); });
     return L;
   }
+  /* ---------- offline outbox: saves made without signal wait here and upload later ---------- */
+  const OUTBOX = "ll.outbox";
+  let outbox = {}; try { outbox = JSON.parse(lsGet(OUTBOX) || "{}") || {}; } catch (e) { outbox = {}; }
+  let flushing = false;
+  function saveOutbox() { lsSet(OUTBOX, JSON.stringify(outbox)); }
+  function syncState() {
+    const st = { offline: !navigator.onLine, pending: Object.keys(outbox).length, flushing };
+    window.LIFTLOG_SYNC = st; window.dispatchEvent(new CustomEvent("liftlog-sync", { detail: st }));
+  }
+  const isNetErr = (e) => !navigator.onLine || (e && (e.code === "unavailable" || /fetch|network|Failed to|timeout|offline|Load failed/i.test(String(e.message || e))));
+  async function flushOutbox() {
+    if (flushing || !currentUser || !Object.keys(outbox).length || !navigator.onLine) { syncState(); return; }
+    flushing = true; syncState();
+    try {
+      for (const path of Object.keys(outbox)) {
+        const o = outbox[path];
+        try {
+          const { error } = await sb.from("docs").upsert({ path, col: o.col, data: o.data, updated_at: new Date().toISOString() }, { onConflict: "path" });
+          if (error) throw mapErr(error);
+          if (outbox[path] === o) { delete outbox[path]; saveOutbox(); }
+        } catch (e) {
+          if (isNetErr(e)) break;                       // still no signal: try again later
+          delete outbox[path]; saveOutbox();            // refused by the server (e.g. a publishing rule): drop it
+          window.dispatchEvent(new CustomEvent("liftlog-sync-error", { detail: { path, message: String(e.message || e) } }));
+        }
+      }
+    } finally { flushing = false; syncState(); }
+  }
+  window.addEventListener("online", () => { syncState(); flushOutbox(); });
+  window.addEventListener("offline", syncState);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") flushOutbox(); });
+  setInterval(() => { if (Object.keys(outbox).length) flushOutbox(); }, 20000);
+  ready.then(() => { syncState(); flushOutbox(); });
+
   const refreshAll = () => listeners.forEach((L, col) => { if (L.cbs.size) load(col, L).catch(() => {}); });
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") refreshAll(); });
   window.addEventListener("online", refreshAll);
@@ -188,9 +223,15 @@
         const data = clone(body);
         const L = listeners.get(col);
         if (L) { L.pending.set(id, data); L.map.set(id, data); emit(L); }
+        const queue = () => { outbox[path] = { col, data, at: Date.now() }; saveOutbox(); syncState(); };
+        if (!navigator.onLine) { queue(); if (L && L.pending.get(id) === data) L.pending.delete(id); return; }
         try {
           const { error } = await sb.from("docs").upsert({ path, col, data, updated_at: new Date().toISOString() }, { onConflict: "path" });
           if (error) throw mapErr(error);
+          if (outbox[path]) { delete outbox[path]; saveOutbox(); syncState(); }
+        } catch (e) {
+          if (isNetErr(e)) { queue(); return; }       // saved on this phone; uploads when signal is back
+          throw e;
         } finally { if (L && L.pending.get(id) === data) L.pending.delete(id); }
       },
       async update(patch) { const cur = await this.get(); if (!cur.exists) throw err("invalid_argument", "missing"); return this.set({ ...cur.data(), ...patch }); },
@@ -237,6 +278,24 @@
       return out;
     }
   });
+
+  // Trainer profiles (bio, location, links, verified). Columns come from supabase/profiles.sql.
+  window.LIFTLOG_PROFILES = {
+    get: async (ids) => {
+      await ready; ids = [].concat(ids).filter(Boolean); const out = {};
+      if (!ids.length) return out;
+      const { data, error } = await sb.from("profiles").select("id,name,bio,location,links,verified").in("id", ids);
+      if (error) throw mapErr(error);
+      (data || []).forEach((p) => (out[p.id] = { name: p.name || "", bio: p.bio || "", location: p.location || "", links: p.links || {}, verified: !!p.verified }));
+      return out;
+    },
+    save: async (f) => {
+      await ready;
+      const row = { bio: String(f.bio || "").slice(0, 600), location: String(f.location || "").slice(0, 80), links: f.links || {} };
+      const { error } = await sb.from("profiles").update(row).eq("id", currentUser.id);
+      if (error) throw mapErr(error);
+    }
+  };
 
   // Server-side stats functions (counts only; see supabase/stats.sql).
   window.LIFTLOG_RPC = async (fn, args) => { await ready; const { data, error } = await sb.rpc(fn, args || {}); if (error) throw mapErr(error); return data; };

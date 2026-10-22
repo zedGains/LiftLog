@@ -14,6 +14,7 @@ Installable on a phone's home screen.
 | `config.js` | Supabase project URL + publishable key (public by design) |
 | `supabase/schema.sql` | Database tables and access rules — run once in Supabase |
 | `supabase/moderation.sql` | Publishing limits (free 2 / verified 25), new-account wait, content minimum, copy blocking, reports |
+| `supabase/profiles.sql` | Trainer profiles: bio, location, links, verified badge (only admins can set it) |
 | `supabase/stats.sql` | Owner dashboard + creator stats functions (counts only) |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen install |
 | `privacy.html`, `terms.html` | Privacy Policy and Terms of Use |

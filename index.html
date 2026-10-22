@@ -206,6 +206,41 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .tick.soon{color:var(--muted);font-weight:500}
 .namechips{margin-top:2px}
 .fbadge{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+#syncbar{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:12px;right:12px;max-width:536px;margin:0 auto;z-index:45;display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--line);font-size:13.5px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+#syncbar.ok{background:var(--ok-soft);color:var(--ok);font-weight:700;justify-content:center}
+.dotoff{width:8px;height:8px;border-radius:50%;background:#D9A514;flex:none}.dotoff.spin{animation:pulse 1s infinite alternate}@keyframes pulse{to{opacity:.3}}
+.sbn{font-weight:700}
+#undobar{position:fixed;left:16px;right:16px;bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));max-width:528px;margin:0 auto;background:#14171B;color:#fff;border-radius:12px;padding:12px 14px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;z-index:40;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.3);overflow:hidden;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s}
+#undobar.show{opacity:1;transform:none}#undobar.hide{opacity:0;transform:translateY(8px)}
+#undobar button{all:unset;cursor:pointer;color:#7FD8A8;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;padding:4px 2px}
+#undobar i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#7FD8A8;transform-origin:left}
+#undobar.show i{animation:undoline 6s linear forwards}@keyframes undoline{to{transform:scaleX(0)}}
+.mynote{all:unset;box-sizing:border-box;cursor:pointer;width:100%;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;background:var(--surface-2);display:grid;gap:4px;margin:6px 0 4px}
+div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynote .u{text-decoration:underline}.mynote .nt{white-space:pre-wrap;font-size:15px}
+.mynote textarea{all:unset;width:100%;font-size:15px;line-height:1.4;white-space:pre-wrap;padding:6px 0;border-bottom:1px solid var(--line)}
+.addnote{display:block;margin:4px 0 6px;font-size:13.5px;color:var(--muted)}
+.ssgroup{border-left:4px solid var(--accent);padding-left:8px;display:grid;gap:8px}
+.sslbl{font-family:var(--display);font-weight:700;letter-spacing:.08em;font-size:12px;text-transform:uppercase;color:var(--accent);display:flex;justify-content:space-between;align-items:center}
+.sslbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;color:var(--accent)}
+.sstag{font-family:var(--mono);font-size:11px;font-weight:700;background:var(--accent);color:var(--accent-ink);border-radius:5px;padding:1px 6px;margin-right:6px;vertical-align:2px}
+.ssnote{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-size:14px}
+.bwchart{width:100%;height:auto;display:block;margin-top:6px}
+.bwchart .ln{fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.bwchart .pt{fill:var(--accent);stroke:var(--surface);stroke-width:2;cursor:pointer}.bwchart .pt:focus{outline:none;stroke:var(--fg)}
+.bwchart .gl{stroke:var(--line);stroke-width:1}.bwchart text{font:600 10px var(--body);fill:var(--muted)}
+.stats b.dn{color:var(--ok)}
+.tprof{display:grid;gap:10px}.thead{display:flex;gap:14px;align-items:center}.thead h3{margin:0}
+.tav{width:68px;height:68px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:800 26px var(--display);flex:none}
+.tsub{color:var(--muted);font-size:14px}.vbadge{color:var(--blue);font-weight:700}
+.tlinks{display:flex;gap:8px;flex-wrap:wrap}.tlinks a{font-size:13px;font-weight:600;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:5px 10px;text-decoration:none;background:var(--surface-2)}
+
+.pviz{display:flex;align-items:center;height:96px;margin:10px 0 4px;padding:0 4px;overflow:hidden}
+.pbar{width:34px;height:12px;background:linear-gradient(#C9CED4,#8A939C);border-radius:3px 0 0 3px;flex:none}
+.pcollar{width:10px;height:26px;background:#7A838D;border-radius:2px;flex:none;margin-right:2px}
+.pl{flex:none;width:20px;height:calc(90px * var(--ph));background:var(--pc);border-radius:4px;margin-right:2px;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.pl i{font:700 9.5px var(--mono);font-style:normal;writing-mode:vertical-rl;transform:rotate(180deg);color:var(--pi)}
+.pend{flex:1;min-width:20px;height:12px;background:linear-gradient(#C9CED4,#8A939C);border-radius:0 3px 3px 0}
+.ptxt{font-size:17px;margin:6px 0 2px}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -585,7 +620,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -700,7 +735,8 @@ function extraItem(dayKey,x){const L=libById(x.ex);if(!L)return null;const type=
     sec:sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
 function applyPick(it,exId,sets,reps,drop){
   if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
-  if(it.addMode){(plan.extra[it.dayKey]=plan.extra[it.dayKey]||[]).push({sid:Date.now().toString(36),ex:exId,sets,reps,drop})}
+  if(it.addMode){const sid=Date.now().toString(36);(plan.extra[it.dayKey]=plan.extra[it.dayKey]||[]).push({sid,ex:exId,sets,reps,drop});
+    const ps=state.pendingSuper; if(ps&&ps.day===it.dayKey){state.pendingSuper=null;setSuper(it.dayKey,ps.slot,it.dayKey+":+"+sid)}}
   else if(it.extra){const x=(plan.extra[it.dayKey]||[]).find(y=>y.sid===it.extra);if(x)Object.assign(x,{ex:exId,sets,reps,drop})}
   else plan.slots[it.slot]={ex:exId,sets,reps,drop};
   if(!it.addMode&&it.slot) delete plan.sets[it.slot];
@@ -716,7 +752,7 @@ function daySections(dayKey){
   const ord=(plan.order&&plan.order[dayKey])||{};
   Object.keys(map).forEach(k=>{const o=ord[k];if(!o||!o.length)return;const pos=x=>{const i=o.indexOf(x.slot);return i<0?1e6:i};
     map[k]=map[k].map((x,i)=>[x,i]).sort((a,b)=>(pos(a[0])-pos(b[0]))||(a[1]-b[1])).map(a=>a[0])});
-  return order.filter(k=>map[k]&&map[k].length).map(k=>({sec:k,items:map[k]}));
+  return applySupers(dayKey,order.filter(k=>map[k]&&map[k].length).map(k=>({sec:k,items:map[k]})));
 }
 function setOrder(dayKey,sec,slots){(plan.order[dayKey]=plan.order[dayKey]||{})[sec]=slots;savePlan()}
 function isReordered(k){const o=plan.order[k];return !!o&&Object.keys(o).some(sec=>o[sec]&&o[sec].length)}
@@ -938,7 +974,7 @@ function render(){
   ${secs.length?"":`<div class="banner" style="background:var(--surface)"><b>This day is empty.</b> Tap <b>Add exercise</b> to build it from the library or your own exercises.</div>`}
   ${secs.map(s=>{const ro=state.reorder===s.sec;return `<div class="section ${ro?"reordering":""}" data-sec="${esc(s.sec)}"><h2><span>${esc(s.sec)}</span>${s.items.length>1?`<button class="btn small rob ${ro?"on":""}" data-reorder="${esc(s.sec)}" aria-pressed="${ro}">${ro?"Done":"Reorder"}</button>`:""}</h2>
     ${ro?`<p class="ronote">Tap ↑ or ↓ to move a workout. Saves as you go.</p><div class="rolist">${s.items.map((it,i)=>`<div class="rorow" data-slot="${esc(it.slot)}"><span class="ronum">${i+1}</span><span class="ron">${esc(it.name)}<small>${rxText(it)}</small></span><span class="roctl"><button class="iconbtn robtn" data-mv="-1" data-i="${i}" ${i?"":"disabled"} aria-label="Move ${esc(it.name)} up">↑</button><button class="iconbtn robtn" data-mv="1" data-i="${i}" ${i<s.items.length-1?"":"disabled"} aria-label="Move ${esc(it.name)} down">↓</button></span></div>`).join("")}</div>`
-     :s.items.map(card).join("")}</div>`}).join("")}
+     :groupCards(s.items)}</div>`}).join("")}
   <button class="browse addex" id="addex"><span><b>+ Add exercise</b><br><small>Pick from any body part or add your own</small></span><span aria-hidden="true">›</span></button>
   ${(()=>{const c=dayChanges(tab);if(d.custom)return items.length?`<div class="resetrow"><span>${items.length} exercise${items.length===1?"":"s"} on ${esc(d.label)}.</span><button class="btn small" id="resetday">Clear all exercises</button></div>`:"";
      return `<div class="resetrow"><span>${c.total?c.text:"Matches your original training split."}</span><button class="btn small" id="resetday" ${c.total?"":"disabled"}>Reset to original</button></div>`})()}
@@ -965,6 +1001,7 @@ function render(){
   const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
   $("#addex").onclick=()=>openAdd(tab);
   const ed=$("#editday"); if(ed) ed.onclick=()=>openDayEditor(tab);
+  app.querySelectorAll("[data-split]").forEach(b=>b.onclick=()=>withUndo("Superset split",()=>{splitSuper(b.dataset.sday,b.dataset.split);savePlan();render()}));
   const dp=$("#daypick"); if(dp) dp.onclick=()=>{state.dayMenu=!state.dayMenu;renderDayMenu(tab)};
   renderDayMenu(tab);
   const ga=$("#gotoabout"); if(ga) ga.onclick=goAbout;
@@ -990,7 +1027,7 @@ function card(it){
   const status=(kc?`<span class="st kc">~${Math.round(kc)} kcal</span>`:"")+(m?(pend?'<span class="st pend">Not saved</span>':'<span class="st ok">Saved</span>'):(pend?'<span class="st pend">Unmarked, not saved</span>':""));
   return `<div class="card ${m?"done":""}">
    <button class="main" data-open="${it.id}" aria-label="Open ${esc(it.name)}">
-     <span class="name">${esc(it.name)}${alt?`<br><span class="swap">Doing: ${esc(alt)}</span>`:""}</span>
+     <span class="name">${it.ss?`<span class="sstag">${it.ss}</span>`:""}${esc(it.name)}${alt?`<br><span class="swap">Doing: ${esc(alt)}</span>`:""}</span>
      <span class="meta"><span class="tag">${esc(it.target)}</span><span class="rx">${rxText(it)}</span>${it.drop?'<span class="tag ghost">Drop sets</span>':""}${status}</span>
      ${cur.length?`<span class="last today">Today: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
      <span class="last">${lastTxt}</span>
@@ -1024,7 +1061,7 @@ function dropChips(prefix){return `<div class="dchips" role="group" aria-label="
 
 /* ---------- sheet ---------- */
 function openSheet(id,keepScroll){
-  const it=ALL[id]; state.open=id; const d=draftFor(it); const m=!!d.marked;
+  const it=ALL[id]; if(state.open!==id) state.noteEdit=null; state.open=id; const d=draftFor(it); const m=!!d.marked;
   const sh=$("#sheet"); const st=keepScroll?sh.scrollTop:0;
   const hist=entriesOf(id).filter(e=>e.done).slice(-6).reverse();
   const last=lastEntry(id);
@@ -1042,6 +1079,7 @@ function openSheet(id,keepScroll){
   sh.innerHTML=`<div class="grab"></div>
   <h3 id="sheet-title">${esc(it.name)}</h3>
   <div class="sub"><span class="tag">${esc(it.target)}</span><span class="rx">${rxText(it)}</span>${it.drop?'<span class="tag ghost">Drop sets</span>':""}<span class="chip">${esc(it.sec)}</span></div>
+  ${noteBox(it)}
   ${it.p.length?`<div class="sheet-grid">${bodyMap(it.p,it.s)}<div style="display:grid;gap:8px">
      ${it.note?`<p class="coach">${esc(it.note)}</p>`:""}
      ${it.drop?`<div class="coach">${dropAuto?`Drop set: enter your first weight and the next sets fill in, each <b>${dropPct}%</b> of it lighter. Change any box by hand if you need to.`:`Drop set: main weight, then drop <b>${dropPct}%</b> and keep going, then drop another ${dropPct}% to finish. Each set below is one drop set.`}<div class="dlabel">Drop size</div>${dropChips("sdp")}
@@ -1071,6 +1109,7 @@ function openSheet(id,keepScroll){
       <button class="pick" data-alt="${i?esc(a):""}" aria-pressed="${(d.alt||it.name)===a}"><span class="an">${esc(a)}</span><span class="am">${i?"Alternate":"From your program"}${(d.alt||it.name)===a?" · selected":""}</span></button>
       <a class="form" href="${yt(a)}" target="_blank" rel="noopener">Form ↗</a></div>`).join("")}
   </div>
+  ${it.type==="cardio"?"":superBox(it)}
   <button class="btn danger rmbtn" id="removeex">Remove from ${esc(DAYS[it.dayKey].label)}</button>
   <p class="savenote">${it.extra?"Takes it off this day.":`Takes it off this day. <b>Reset to original</b> brings it back.`} Your saved logs stay.</p>
   <button class="browse" id="browse"><span><b>Browse all exercises</b><br><small>Swap in anything, any body part, or add your own</small></span><span aria-hidden="true">›</span></button>
@@ -1090,7 +1129,7 @@ function openSheet(id,keepScroll){
   sh.querySelectorAll("[data-alt]").forEach(b=>b.onclick=()=>{d.alt=b.dataset.alt||null;saveDrafts();openSheet(id,true);render()});
   const cl=$("#copylast",sh); if(cl) cl.onclick=()=>{last.sets.forEach((s,i)=>{if(d.sets[i]){d.sets[i].w=s.w??"";d.sets[i].r=s.r??""}});d.autoIdx=[];saveDrafts();openSheet(id,true)};
   const as=$("#addset",sh); if(as) as.onclick=()=>{const n=nSets(it,d);if(n>=12)return;while(d.sets.length<n+1)d.sets.push({w:"",r:""});d.n=null;planSets(it,n+1);refillDrops(ALL[id]||it,d);saveDrafts();openSheet(id,true);render();const f=$("#sheet").querySelector(`#w-${id}-${n}`);if(f)f.focus({preventScroll:true})};
-  const rm=$("#rmset",sh); if(rm) rm.onclick=()=>{const n=nSets(it,d);if(n<=1)return;d.sets=d.sets.slice(0,n-1);d.autoIdx=(d.autoIdx||[]).filter(x=>x<n-1);d.n=null;planSets(it,n-1);saveDrafts();openSheet(id,true);render()};
+  const rm=$("#rmset",sh); if(rm) rm.onclick=()=>{const n=nSets(it,d);if(n<=1)return;withUndo(`Removed set ${n}`,()=>{d.sets=d.sets.slice(0,n-1);d.autoIdx=(d.autoIdx||[]).filter(x=>x<n-1);d.n=null;planSets(it,n-1);saveDrafts();openSheet(id,true);render()})};
   const ks=$("#keepsets",sh); if(ks) ks.onclick=()=>{const n=nSets(it,d);d.n=null;planSets(it,n);openSheet(id,true);render();toast(`${it.name}: ${n} sets every week`)};
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
@@ -1101,11 +1140,15 @@ function openSheet(id,keepScroll){
   sh.querySelectorAll("[data-sdp]").forEach(b=>b.onclick=()=>{setDropPct(b.dataset.sdp);refillDrops(it,d);saveDrafts();openSheet(id,true);render()});
   const da=$("#dropauto",sh); if(da) da.onchange=()=>{dropAuto=da.checked;ls.set("ll.dropAuto",dropAuto);if(dropAuto)refillDrops(it,d);else d.autoIdx=[];saveDrafts();openSheet(id,true);render()};
   $("#browse",sh).onclick=()=>openPicker(it);
-  const rx=$("#removeex",sh); if(rx) rx.onclick=()=>{
+  bindNote(sh,it);
+  const mk=$("#mkss",sh); if(mk) mk.onclick=()=>openSuperPick(it);
+  const sp=$("#splitss",sh); if(sp) sp.onclick=()=>withUndo("Superset split",()=>{splitSuper(it.dayKey,it.slot);savePlan();closeSheet();render()});
+  const rx=$("#removeex",sh); if(rx) rx.onclick=()=>withUndo(`Removed ${it.name}`,()=>{
     if(it.extra) plan.extra[it.dayKey]=(plan.extra[it.dayKey]||[]).filter(y=>y.sid!==it.extra);
     else { plan.hidden[it.slot]=true; delete plan.slots[it.slot]; }
+    splitSuper(it.dayKey,it.slot);
     if(!todayEntry(it.id)){delete state.drafts[it.id];saveDrafts()}
-    savePlan();closeSheet();render();toast(`Removed ${it.name} from ${DAYS[it.dayKey].label}`)};
+    savePlan();closeSheet();render()});
   const rs=$("#resetslot",sh); if(rs) rs.onclick=()=>{if(!todayEntry(it.id)){delete state.drafts[it.id];saveDrafts()}delete plan.slots[it.slot];savePlan();closeSheet();render();toast(`Switched back to ${it.replaced}`)};
   if(!keepScroll) $("#closesheet",sh).focus({preventScroll:true});
 }
@@ -1235,13 +1278,13 @@ function openResetDay(k){
    <div class="btns"><button class="btn" id="rcancel2" style="flex:1">Keep my changes</button></div>`;
   state.open="__reset"; sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=0;
   $("#rcancel",sh).onclick=closeSheet; $("#rcancel2",sh).onclick=closeSheet;
-  $("#rgo",sh).onclick=()=>{
-    const before=daySections(k).flatMap(x=>x.items).map(x=>x.id);
+  $("#rgo",sh).onclick=()=>withUndo(cust?`${DAYS[k].label} cleared`:`${DAYS[k].label} reset`,()=>{
+    const before=daySections(k).flatMap(x=>x.items).map(x=>x.id); if(plan.supers) delete plan.supers[k];
     Object.keys(plan.slots).forEach(x=>{if(x.startsWith(k+":"))delete plan.slots[x]}); delete plan.extra[k]; delete plan.order[k]; Object.keys(plan.sets).forEach(x=>{if(x.startsWith(k+":"))delete plan.sets[x]});
     Object.keys(plan.hidden).forEach(x=>{if(x.startsWith(k+":"))delete plan.hidden[x]});
     const after=daySections(k).flatMap(x=>x.items).map(x=>x.id);
     new Set([...before,...after]).forEach(id=>{delete state.drafts[id]});
-    saveDrafts(); savePlan(); closeSheet(); render(); toast(cust?`${DAYS[k].label} cleared. Logs kept.`:`${DAYS[k].label} is back to the original. Logs kept.`)};
+    saveDrafts(); savePlan(); closeSheet(); render();});
 }
 function goAbout(){closeSheet();state.settings=true;state.tab="plan";ls.set("ll.tab","plan");render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});window.scrollTo(0,0)}
 function nextDayLabel(){return "Day "+(trainKeys().length+1);const nums=Object.values(DAYS).map(d=>parseInt(String(d.label).replace(/\D/g,""),10)).filter(n=>!isNaN(n));return "Day "+((nums.length?Math.max(...nums):0)+1)}
@@ -1297,7 +1340,7 @@ function showKcalHow(){
   $("#bwupd",sh).onclick=goAbout;
 }
 
-function closeSheet(){$("#sheet").hidden=true;$("#scrim").hidden=true;state.open=null}
+function closeSheet(){if(state.open==="__add")state.pendingSuper=null;$("#sheet").hidden=true;$("#scrim").hidden=true;state.open=null}
 $("#scrim").onclick=closeSheet;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.open)closeSheet()});
 
@@ -1378,6 +1421,7 @@ function planView(){
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="btn small gearbtn" id="opensettings" aria-label="Settings">⚙️ Settings</button></div></header>
   <div class="plan">
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
+   ${weightPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
@@ -1412,6 +1456,7 @@ function settingsView(){
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
+   ${trainerPanel()}
    <div class="panel" id="notifs"><h2>Notifications</h2>
     <div class="lbl" style="margin-top:4px">Rest timer</div>
     ${[["sound","Sound when rest is over"],["vibrate","Vibrate when rest is over (Android)"],["banner","Show a “Rest's over” banner on other screens"],["awake","Keep the screen on while the timer runs"]].map(([k,l])=>`<label class="tick"><input type="checkbox" data-np="${k}" ${nPref(k)?"checked":""}> ${l}</label>`).join("")}
@@ -1425,6 +1470,7 @@ function settingsView(){
     <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="${isKg()?"100":"225"}" aria-label="Main weight"><span>${wU()}</span></label>
      <output id="c1">—</output><output id="c2">—</output><output id="c3">—</output></div>
     <p class="savenote">Rounded to the nearest ${isKg()?"2.5 kg":"5 lb"}.</p></div>
+   ${platePanel()}
    ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
    <div class="panel"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
   </div>`}
@@ -1465,7 +1511,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindWeight();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1485,7 +1531,7 @@ function bindPlan(){const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.setti
     if(cm!=null){if(!(cm>=90&&cm<=250)){err.textContent="Height should be between 90 and 250 cm.";return}const ti=Math.round(cm/2.54);ft=Math.floor(ti/12);inch=ti%12}
     if(ft!=null&&!(ft>=3&&ft<=8)){err.textContent="Feet should be between 3 and 8.";return}
     if(inch!=null&&!(inch>=0&&inch<12)){err.textContent="Inches should be 0 to 11.";return}
-    plan.bw=w; plan.profile={age,ft,inch,updated:Date.now()}; savePlan(); render(); toast("Saved")};const i=$("#calcw");if(!i)return;
+    if(w&&w!==plan.bw) logWeighIn(w); plan.bw=w; plan.profile={age,ft,inch,updated:Date.now()}; savePlan(); render(); toast("Saved")};const i=$("#calcw");if(!i)return;
   const calc=()=>{const wd=Number(i.value.replace(/[^0-9.]/g,""));const w=wd?Number(fromDisp(wd)):0;$("#c1").textContent=w?wd:"—";$("#c2").textContent=w?toDisp(dropW(w,1)):"—";$("#c3").textContent=w?toDisp(dropW(w,2)):"—";
     $("#dpt").textContent=dropPct+"%";$("#dpt2").textContent=dropPct+"%";
     document.querySelectorAll("[data-pdp]").forEach(b=>{const on=+b.dataset.pdp===dropPct;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})};
@@ -1720,7 +1766,7 @@ function showNotice(title,text){const sh=$("#sheet");sh.innerHTML=`<div class="g
   state.open="__notice";sh.hidden=false;$("#scrim").hidden=false;$("#ntok").onclick=closeSheet;$("#ntok").focus()}
 
 let socQ=Promise.resolve();
-function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted}}; pg.socialPending++;
+function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted},follows:[...(pg.myFollows||[])]}; pg.socialPending++;
   const run=()=>db.doc("social/"+uid).set(payload); socQ=socQ.then(run,run).catch(()=>{}).finally(()=>{pg.socialPending--}); }
 function recount(){const likes={},uses={};const docs={...pg.socialDocs};if(uid)docs[uid]={likes:[...pg.myLikes],uses:[...pg.myUses]};
   Object.values(docs).forEach(v=>{(v.likes||[]).forEach(k=>likes[k]=(likes[k]||0)+1);(v.uses||[]).forEach(k=>uses[k]=(uses[k]||0)+1)});pg.social={likes,uses}}
@@ -1736,7 +1782,7 @@ function startCommunity(){
   },()=>{pg.ready=true;rerenderPrograms()});
   db.collection("social").onSnapshot(snap=>{
     pg.socialDocs={}; snap.docs.forEach(doc=>{const v=thaw(doc.data());if(v)pg.socialDocs[doc.id]=v});
-    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[]);pg.myStarted={...(pg.socialDocs[uid].started||{})}}
+    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[]);pg.myStarted={...(pg.socialDocs[uid].started||{})};pg.myFollows=new Set(pg.socialDocs[uid].follows||[])}
     delete pg.socialDocs[uid]; recount(); rerenderPrograms();
   },()=>{});
 }
@@ -1761,7 +1807,7 @@ function openProgView(key){
     const w=p.weeks[wi]||{days:{}}; const liked=pg.myLikes.has(key); const mine=p.author===uid;
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pvclose">Close</button><span class="eyebrow">${esc(p.goal||"")} · ${esc(p.level||"")}</span></div>
      <h3 id="sheet-title">${esc(p.title)}</h3>
-     <p class="savenote">by ${esc(nameOf(p.author))} · ${p.weeks.length} week${p.weeks.length===1?"":"s"} · updated ${fmtStamp(p.updatedAt)}</p>
+     <p class="savenote">by ${p.featured?esc(nameOf(p.author)):`<button class="linkbtn" id="pvtrainer">${esc(nameOf(p.author))}</button>`} · ${p.weeks.length} week${p.weeks.length===1?"":"s"} · updated ${fmtStamp(p.updatedAt)}</p>
      ${p.summary?`<p class="pvsum">${esc(p.summary)}</p>`:""}
      ${(p.targets||[]).length?`<div class="gchips pvtags">${p.targets.map(t=>`<span class="gchip on">${esc(t)}</span>`).join("")}</div>`:""}
      ${[["About this program",p.desc],["Who it's for",p.who],["How to progress",p.progress],["Equipment",p.equip]].filter(x=>(x[1]||"").trim()).map(([h,t])=>`<div class="lbl">${h}</div><p class="pvtext">${esc(t)}</p>`).join("")}
@@ -1779,6 +1825,7 @@ function openProgView(key){
     sh.querySelectorAll("[data-pvw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.pvw;draw()});
     $("#pvuse",sh).onclick=()=>openUse(p);
     const rp=$("#pvreport",sh); if(rp) rp.onclick=()=>openReport(p);
+    const pt=$("#pvtrainer",sh); if(pt) pt.onclick=()=>openTrainer(p.author);
     const pc=$("#pvcopy",sh); if(pc) pc.onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
       plan.myPrograms.unshift(c);savePlan();closeSheet();pg.seg="mine";state.builder={id:c.id,week:0};render();window.scrollTo(0,0);toast("Copied to My programs. Edit away.")};
     armBtn($("#pvmod",sh),"Tap again to remove",()=>{const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
@@ -2184,6 +2231,188 @@ function featuredPrograms(){
     weeks:[{days:{"1":{title:"Full Body A",items:fbA},"3":{title:"Full Body B",items:fbB},"5":{title:"Full Body A",items:fbA}}}]}
   ].map(p=>({...p,key:"liftlog:"+p.id}));
   return FEATURED_CACHE;
+}
+
+/* ---------- sync status bar (offline saving) ---------- */
+let syncWas=false;
+function renderSync(){const st=window.LIFTLOG_SYNC||{};let el=$("#syncbar");if(!el){el=document.createElement("div");el.id="syncbar";el.setAttribute("role","status");el.hidden=true;document.body.appendChild(el)}
+  if(st.offline){el.className="sb";el.innerHTML=`<span class="dotoff"></span><span><b>Offline.</b> Saving on this phone. It'll sync when you're back online.${st.pending?` <span class="sbn">${st.pending} waiting</span>`:""}</span>`;el.hidden=false}
+  else if(st.pending){el.className="sb";el.innerHTML=`<span class="dotoff spin"></span><span>Syncing ${st.pending} save${st.pending===1?"":"s"}…</span>`;el.hidden=false}
+  else if(syncWas){el.className="sb ok";el.innerHTML=`<span>✓ All synced</span>`;el.hidden=false;setTimeout(()=>{if(!(window.LIFTLOG_SYNC||{}).pending&&!(window.LIFTLOG_SYNC||{}).offline)el.hidden=true},1800)}
+  else el.hidden=true;
+  syncWas=!!(st.offline||st.pending)}
+window.addEventListener("liftlog-sync",renderSync);
+window.addEventListener("liftlog-sync-error",e=>toast("A change made offline couldn't be saved: "+pubErrText({message:e.detail&&e.detail.message})));
+
+/* ---------- undo bar ---------- */
+let undoT=null;
+function withUndo(label,fn){
+  const snap={plan:JSON.parse(JSON.stringify(plan)),drafts:JSON.parse(JSON.stringify(state.drafts))};
+  fn();
+  showUndo(label,()=>{plan=normPlan(snap.plan);state.drafts=snap.drafts;saveDrafts();savePlan();syncDays();rebuildAll();closeSheet();render();toast("Restored")});
+}
+function showUndo(label,onUndo){
+  let el=$("#undobar"); if(el) el.remove(); clearTimeout(undoT);
+  el=document.createElement("div"); el.id="undobar"; el.setAttribute("role","status");
+  el.innerHTML=`<span>${esc(label)}</span><button type="button">Undo</button><i aria-hidden="true"></i>`; document.body.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("show")));
+  el.querySelector("button").onclick=()=>{clearTimeout(undoT);el.remove();onUndo()};
+  undoT=setTimeout(()=>{el.classList.remove("show");el.classList.add("hide");setTimeout(()=>el.remove(),450)},6000);
+}
+
+/* ---------- my notes per exercise ---------- */
+const noteKey=(it)=>String(it.name||"").toLowerCase();
+function noteBox(it){
+  const n=(plan.exNotes||{})[noteKey(it)]||"";
+  if(state.noteEdit===it.id) return `<div class="mynote"><small>📝 My notes · only you see these</small>
+    <textarea id="ntxt" rows="3" maxlength="400" placeholder="e.g. Seat height 4, grip on the rings, use the left cable stack">${esc(n)}</textarea>
+    <div class="btns" style="margin-top:4px"><button class="btn small primary" id="nsave">Save note</button><button class="btn small" id="ncancel">Cancel</button></div></div>`;
+  return n?`<button class="mynote" id="nedit" type="button"><small>📝 My notes · only you see these</small><span class="nt">${esc(n)}</span><small class="u">Edit</small></button>`
+          :`<button class="linkbtn addnote" id="nedit" type="button">📝 Add a note (seat height, grip, cues…)</button>`;
+}
+function bindNote(sh,it){
+  const e=$("#nedit",sh); if(e) e.onclick=()=>{state.noteEdit=it.id;openSheet(it.id,true);const t=$("#ntxt");if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}};
+  const sv=$("#nsave",sh); if(sv) sv.onclick=()=>{const v=$("#ntxt",sh).value.trim();plan.exNotes={...(plan.exNotes||{})};if(v)plan.exNotes[noteKey(it)]=v;else delete plan.exNotes[noteKey(it)];savePlan();state.noteEdit=null;openSheet(it.id,true);toast(v?"Note saved":"Note removed")};
+  const c=$("#ncancel",sh); if(c) c.onclick=()=>{state.noteEdit=null;openSheet(it.id,true)};
+}
+
+/* ---------- supersets ---------- */
+function supersOf(k){return (plan.supers&&plan.supers[k])||[]}
+function setSuper(k,a,b){plan.supers={...(plan.supers||{})};plan.supers[k]=supersOf(k).filter(g=>!g.includes(a)&&!g.includes(b)).concat([[a,b]]);savePlan()}
+function splitSuper(k,slot){plan.supers={...(plan.supers||{})};plan.supers[k]=supersOf(k).filter(g=>!g.includes(slot));if(!plan.supers[k].length)delete plan.supers[k]}
+function applySupers(k,secs){
+  const sup=supersOf(k); if(!sup.length) return secs;
+  const find=slot=>{for(const s of secs){const i=s.items.findIndex(x=>x.slot===slot);if(i>=0)return [s,i]}return null};
+  let n=0;
+  sup.forEach(([a,b])=>{const fa=find(a),fb=find(b);if(!fa||!fb||a===b)return;
+    const B=fb[0].items.splice(fb[1],1)[0]; const f2=find(a); const L=String.fromCharCode(65+n++);
+    f2[0].items[f2[1]]={...f2[0].items[f2[1]],ss:L+"1",ssGroup:L,ssWith:B.name};
+    f2[0].items.splice(f2[1]+1,0,{...B,ss:L+"2",ssGroup:L,ssWith:f2[0].items[f2[1]].name})});
+  return secs.filter(s=>s.items.length);
+}
+function groupCards(items){let out="",i=0;
+  while(i<items.length){const it=items[i];
+    if(it.ssGroup&&items[i+1]&&items[i+1].ssGroup===it.ssGroup){out+=`<div class="ssgroup"><div class="sslbl"><span>Superset · do these back to back, then rest</span><button class="linkbtn" data-split="${esc(it.slot)}" data-sday="${esc(it.dayKey)}">Split</button></div>${card(it)}${card(items[i+1])}</div>`;i+=2}
+    else{out+=card(it);i++}}
+  return out}
+function superBox(it){
+  if(it.ss) return `<div class="ssnote"><b>Superset ${it.ss}</b> with ${esc(it.ssWith)}. ${it.ss.endsWith("1")?`Go straight into ${esc(it.ssWith)}, then rest.`:"Rest after this one."}</div>
+    <div class="btns"><button class="btn" id="splitss" style="flex:1">Split superset</button></div>`;
+  return `<div class="btns"><button class="btn" id="mkss" style="flex:1">⇄ Make a superset</button></div>`;
+}
+function openSuperPick(it){
+  const k=it.dayKey; const taken=new Set(supersOf(k).flat());
+  const others=daySections(k).flatMap(s=>s.items).filter(x=>x.slot!==it.slot&&!taken.has(x.slot)&&x.type!=="cardio");
+  const sh=$("#sheet");
+  sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="ssback">‹ Back</button><span class="eyebrow">Superset</span></div>
+   <h3 id="sheet-title">Do ${esc(it.name)} back to back with…</h3>
+   <p class="savenote">Do one set of each with no rest in between, then rest. Stays on this day every week until you split it.</p>
+   <div class="plist" style="margin-top:10px">${others.map(x=>`<button class="prow" data-ssw="${esc(x.slot)}"><span class="pn">${esc(x.name)}</span><span class="pe">${esc(x.target||x.sec)}</span></button>`).join("")||`<p class="savenote">No other exercises on this day yet.</p>`}</div>
+   <button class="browse" id="sslib"><span><b>+ Pick from the library</b><br><small>Adds it to this day and makes the superset</small></span><span aria-hidden="true">›</span></button>`;
+  sh.scrollTop=0;
+  $("#ssback",sh).onclick=()=>openSheet(it.id,true);
+  sh.querySelectorAll("[data-ssw]").forEach(b=>b.onclick=()=>{setSuper(k,it.slot,b.dataset.ssw);closeSheet();render();toast("Superset made")});
+  $("#sslib",sh).onclick=()=>{state.pendingSuper={day:k,slot:it.slot};openAdd(k)};
+}
+
+/* ---------- body weight ---------- */
+function logWeighIn(lb,date){date=date||TODAY;const list=(plan.weighins||[]).filter(x=>x.d!==date);list.push({d:date,w:Math.round(lb*10)/10});list.sort((a,b)=>a.d<b.d?-1:1);
+  plan.weighins=list.slice(-104);const last=plan.weighins[plan.weighins.length-1];plan.bw=last.w;plan.profile={...(plan.profile||{}),updated:Date.now()}}
+function weightChart(list){
+  const data=list.slice(-26); if(data.length<2) return "";
+  const vals=data.map(x=>toDisp(x.w)); let mn=Math.min(...vals),mx=Math.max(...vals); const pad=Math.max(1,(mx-mn)*.15); mn=Math.floor(mn-pad); mx=Math.ceil(mx+pad);
+  const W=320,H=150,l=26,r=26,t=16,bt=24; const x=i=>l+i*(W-l-r)/(data.length-1), y=v=>t+(mx-v)/(mx-mn)*(H-t-bt);
+  const ticks=[mn,Math.round((mn+mx)/2),mx];
+  const grid=ticks.map(v=>`<line class="gl" x1="${l}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text x="0" y="${y(v)+3}">${v}</text>`).join("");
+  const path=vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
+  const step=Math.max(1,Math.ceil(data.length/5));
+  const labs=data.map((d,i)=>(i%step===0||i===data.length-1)&&!(i!==data.length-1&&data.length-1-i<step)?`<text x="${x(i)}" y="${H-6}" text-anchor="middle">${new Date(d.d+"T00:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})}</text>`:"").join("");
+  const pts=data.map((d,i)=>`<circle class="pt" cx="${x(i)}" cy="${y(vals[i])}" r="${data.length>14?3:4}" tabindex="0"><title>${fmtDate(d.d)}: ${vals[i]} ${wU()}</title></circle>`).join("");
+  return `<svg class="bwchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Body weight, ${data.length} weigh-ins, from ${vals[0]} to ${vals[vals.length-1]} ${wU()}">${grid}<path class="ln" d="${path}"/>${pts}${labs}</svg>
+   <details class="stable"><summary>Show as table</summary><table><thead><tr><th>Date</th><th>${wU()}</th></tr></thead><tbody>${data.slice().reverse().map((d,i)=>`<tr><td>${fmtDate(d.d)}</td><td>${toDisp(d.w)}</td></tr>`).join("")}</tbody></table></details>`;
+}
+function weightPanel(){
+  const list=plan.weighins||[]; const last=list[list.length-1], first=list[0];
+  const days=last&&first?Math.max(1,(new Date(last.d)-new Date(first.d))/864e5):0;
+  const ch=last&&first&&list.length>1?toDisp(last.w)-toDisp(first.w):null; const wk=ch!=null&&days>=7?ch/(days/7):null;
+  const f=v=>(v>0?"+":"")+(Math.round(v*10)/10);
+  return `<div class="panel" id="bwpanel"><h2>Body weight</h2>
+   ${last?`<div class="stats"><div><b>${toDisp(last.w)}</b><small>${wU()} now</small></div><div><b class="${ch<0?"dn":ch>0?"up":""}">${ch==null?"—":f(ch)}</b><small>${ch==null?"log again to track":wU()+" since "+fmtDate(first.d)}</small></div><div><b>${wk==null?"—":f(wk)}</b><small>${wU()} / week avg</small></div></div>`:`<p>Log your weight now and then to see your trend. It also keeps calorie estimates accurate.</p>`}
+   ${weightChart(list)}
+   <div class="bwrow" style="margin-top:8px"><label class="field" style="max-width:160px"><input id="bwin" placeholder="Today's weight" inputmode="decimal" aria-label="Today's weight in ${wU()}"><span>${wU()}</span></label><button class="btn small" id="bwlog">Log weigh-in</button></div></div>`;
+}
+function bindWeight(){const b=$("#bwlog");if(!b)return;b.onclick=()=>{const v=Number(($("#bwin").value||"").replace(/[^0-9.]/g,""));const lb=Number(fromDisp(v));
+  if(!(lb>=60&&lb<=700)){toast(isKg()?"Enter a weight like 100":"Enter a weight like 220");return}
+  const had=!!(plan.weighins||[]).find(x=>x.d===TODAY); withUndo(had?"Today's weigh-in updated":"Weigh-in logged",()=>{logWeighIn(lb);savePlan();render()})}}
+
+/* ---------- trainer profiles + follow ---------- */
+const profCache={};
+function safeUrl(u,kind){u=String(u||"").trim();if(!u)return "";if(kind==="instagram"&&!/^https?:/i.test(u))return "https://instagram.com/"+u.replace(/^@/,"").replace(/[^A-Za-z0-9._]/g,"");
+  if(kind==="youtube"&&!/^https?:/i.test(u))return "https://youtube.com/@"+u.replace(/^@/,"").replace(/[^A-Za-z0-9._-]/g,"");
+  if(!/^https?:\/\//i.test(u))u="https://"+u; try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.href:""}catch(e){return ""}}
+function followersOf(id){let n=0;Object.values(pg.socialDocs||{}).forEach(d=>{if((d.follows||[]).includes(id))n++});if(pg.myFollows&&pg.myFollows.has(id)&&uid!==id)n++;return n}
+function openTrainer(id){
+  if(!id||id==="liftlog") return;
+  const sh=$("#sheet"); state.open="__trainer"; sh.hidden=false; $("#scrim").hidden=false;
+  const draw=()=>{const pr=profCache[id]||{name:nameOf(id)}; const progs=pg.community.filter(p=>p.author===id); const mine=id===uid; const fol=pg.myFollows&&pg.myFollows.has(id);
+    const nm=pr.name||nameOf(id); const ini=nm.split(/\s+/).map(w=>w[0]||"").join("").slice(0,2).toUpperCase()||"?";
+    const links=[["instagram","Instagram"],["youtube","YouTube"],["website","Website"]].map(([k,l])=>{const u=safeUrl((pr.links||{})[k],k);return u?`<a href="${esc(u)}" target="_blank" rel="noopener nofollow">${l}</a>`:""}).join("");
+    const likes=progs.reduce((a,p)=>a+(pg.social.likes[p.key]||0),0);
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="trback">Close</button><span class="eyebrow">Trainer</span></div>
+     <div class="tprof"><div class="thead"><div class="tav" aria-hidden="true">${esc(ini)}</div><div><h3 id="sheet-title">${esc(nm)}</h3><div class="tsub">${pr.verified?`<span class="vbadge">✓ Verified trainer</span>`:"Creator"}${pr.location?` · ${esc(pr.location)}`:""}</div></div></div>
+     ${pr.bio?`<p class="pvtext">${esc(pr.bio)}</p>`:mine?`<p class="savenote">Add a bio, location and links in Log → Settings → Trainer profile.</p>`:""}
+     ${links?`<div class="tlinks">${links}</div>`:""}
+     <div class="stats"><div><b>${progs.length}</b><small>program${progs.length===1?"":"s"}</small></div><div><b>${followersOf(id)}</b><small>followers</small></div><div><b>${likes}</b><small>likes</small></div></div>
+     ${!mine&&state.mode==="db"?`<div class="btns"><button class="btn ${fol?"":"primary"}" id="trfollow" style="flex:1">${fol?"✓ Following":"Follow "+esc(nm.split(" ")[0])}</button></div>`:""}
+     <div class="lbl">Programs</div>${progs.map(progCard).join("")||`<p class="savenote">No published programs yet.</p>`}</div>`;
+    $("#trback",sh).onclick=closeSheet;
+    sh.querySelectorAll("[data-pview]").forEach(b=>b.onclick=()=>openProgView(b.dataset.pview));
+    const fb=$("#trfollow",sh); if(fb) fb.onclick=()=>{pg.myFollows=pg.myFollows||new Set();pg.myFollows.has(id)?pg.myFollows.delete(id):pg.myFollows.add(id);writeSocial();draw();toast(pg.myFollows.has(id)?`Following ${nm}`:`Unfollowed ${nm}`)};
+  };
+  draw(); sh.scrollTop=0;
+  if(window.LIFTLOG_PROFILES) window.LIFTLOG_PROFILES.get([id]).then(r=>{if(r&&r[id]){profCache[id]=r[id];if(state.open==="__trainer")draw()}}).catch(()=>{});
+}
+function trainerPanel(){
+  if(!window.LIFTLOG_PROFILES) return "";
+  return `<div class="panel" id="tprofp"><h2>Trainer profile</h2><p class="savenote" style="margin-top:0">Shown to everyone when they tap your name on a program you published.</p>
+   <div class="cform"><label>Bio<span class="field"><textarea id="tp-bio" rows="4" maxlength="600" placeholder="Who you are, your experience, who you help"></textarea></span></label>
+   <label>Location<span class="field"><input id="tp-loc" maxlength="80" placeholder="e.g. Baltimore, MD" autocomplete="off"></span></label>
+   <div class="two"><label>Instagram<span class="field"><input id="tp-ig" maxlength="100" placeholder="@handle" autocomplete="off"></span></label><label>YouTube<span class="field"><input id="tp-yt" maxlength="200" placeholder="@channel or link" autocomplete="off"></span></label></div>
+   <label>Website<span class="field"><input id="tp-web" maxlength="200" placeholder="yoursite.com" autocomplete="off"></span></label></div>
+   <div class="btns"><button class="btn primary" id="tp-save" style="flex:1">Save profile</button><button class="btn" id="tp-view">Preview</button></div></div>`;
+}
+function bindTrainerPanel(){
+  if(!$("#tp-save")||!window.LIFTLOG_PROFILES) return;
+  window.LIFTLOG_PROFILES.get([uid]).then(r=>{const p=(r&&r[uid])||{};profCache[uid]=p;const L=p.links||{};
+    const set=(id,v)=>{const e=$(id);if(e&&!e.value)e.value=v||""};set("#tp-bio",p.bio);set("#tp-loc",p.location);set("#tp-ig",L.instagram);set("#tp-yt",L.youtube);set("#tp-web",L.website)}).catch(()=>{});
+  $("#tp-save").onclick=()=>{const f={bio:$("#tp-bio").value.trim(),location:$("#tp-loc").value.trim(),links:{instagram:$("#tp-ig").value.trim(),youtube:$("#tp-yt").value.trim(),website:$("#tp-web").value.trim()}};
+    window.LIFTLOG_PROFILES.save(f).then(()=>{profCache[uid]={...(profCache[uid]||{}),...f};toast("Profile saved")}).catch(e=>toast(/column|schema/i.test(String(e&&e.message))?"Run liftlog-update-3.sql in Supabase first.":"Couldn't save. Try again."))};
+  $("#tp-view").onclick=()=>openTrainer(uid);
+}
+
+/* ---------- plate calculator ---------- */
+const PLATES={lb:[[45,"#1F5FC4",1],[35,"#D9A514",.9],[25,"#21875A",.8],[10,"#E8EAED",.62],[5,"#3A3F46",.5],[2.5,"#A9B0B8",.42]],
+  kg:[[25,"#C92A2A",1],[20,"#1F5FC4",1],[15,"#D9A514",.9],[10,"#21875A",.8],[5,"#E8EAED",.6],[2.5,"#3A3F46",.48],[1.25,"#A9B0B8",.4]]};
+const BARS={lb:[[45,"Standard bar"],[35,"Women's bar"],[15,"Technique bar"],[0,"No bar"]],kg:[[20,"Standard bar"],[15,"Women's bar"],[10,"Technique bar"],[0,"No bar"]]};
+function plateBar(){const u=isKg()?"kg":"lb";const v=ls.get("ll.bar."+u,null);return BARS[u].some(b=>b[0]===v)?v:BARS[u][0][0]}
+function platesFor(total,bar){const u=isKg()?"kg":"lb";let side=(total-bar)/2;const out=[];if(side<0)return {out,loaded:bar,short:true};
+  for(const [p] of PLATES[u]){while(side>=p-1e-9){out.push(p);side-=p}}
+  const loaded=bar+out.reduce((a,b)=>a+b,0)*2;return {out,loaded:Math.round(loaded*100)/100,short:false}}
+function plateViz(list){const u=isKg()?"kg":"lb";const meta=Object.fromEntries(PLATES[u].map(x=>[x[0],x]));
+  return `<div class="pviz" aria-hidden="true"><span class="pbar"></span><span class="pcollar"></span>${list.map(p=>{const m=meta[p];return `<span class="pl" style="--pc:${m[1]};--ph:${m[2]};--pi:${/E8EAED|A9B0B8|D9A514/.test(m[1])?"#14171B":"#fff"}"><i>${p}</i></span>`}).join("")}<span class="pend"></span></div>`}
+function platePanel(){const u=isKg()?"kg":"lb";const bar=plateBar();
+  return `<div class="panel" id="platep"><h2>Plate calculator</h2><p style="margin-top:0">Type the weight you want on the bar. It tells you which plates to put on <b>each side</b>.</p>
+   <div class="dlabel">Bar</div><div class="dchips" role="group" aria-label="Bar">${BARS[u].map(([w,l])=>`<button class="dchip ${w===bar?"on":""}" data-bar="${w}" aria-pressed="${w===bar}" title="${l}">${w?w+" "+u:"None"}</button>`).join("")}</div>
+   <div class="bwrow" style="margin-top:10px"><label class="field" style="max-width:170px"><input id="platew" inputmode="decimal" placeholder="${u==="kg"?"100":"225"}" aria-label="Total weight in ${u}"><span>${u}</span></label></div>
+   <div id="plateout" aria-live="polite"><p class="savenote">Example: ${u==="kg"?"100 kg on a 20 kg bar = 25 + 15 each side":"225 lb on a 45 lb bar = two 45s each side"}.</p></div></div>`}
+function bindPlates(){const i=$("#platew");if(!i)return;const u=isKg()?"kg":"lb";
+  const draw=()=>{const w=Number((i.value||"").replace(/[^0-9.]/g,""));const bar=plateBar();const o=$("#plateout");if(!w){o.innerHTML=`<p class="savenote">Enter a weight to see the plates.</p>`;return}
+    if(w<bar){o.innerHTML=`<p class="savenote">That's less than the bar (${bar} ${u}).</p>`;return}
+    const r=platesFor(w,bar);const cnt={};r.out.forEach(p=>cnt[p]=(cnt[p]||0)+1);
+    const txt=r.out.length?Object.entries(cnt).sort((a,b)=>b[0]-a[0]).map(([p,n])=>`<b>${n} × ${p}</b>`).join(" + "):"Just the bar";
+    o.innerHTML=`${plateViz(r.out)}<p class="ptxt">Each side: ${txt}</p>${Math.abs(r.loaded-w)>0.01?`<p class="savenote">Can't make exactly ${w} ${u} with standard plates. Closest without going over: <b>${r.loaded} ${u}</b>.</p>`:`<p class="savenote">Total: ${r.loaded} ${u} = ${bar} ${u} bar + ${Math.round((r.loaded-bar)/2*100)/100} ${u} per side.</p>`}`};
+  i.oninput=draw;
+  document.querySelectorAll("[data-bar]").forEach(b=>b.onclick=()=>{ls.set("ll.bar."+u,+b.dataset.bar);document.querySelectorAll("[data-bar]").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()});
 }
 
 /* ---------- toast ---------- */

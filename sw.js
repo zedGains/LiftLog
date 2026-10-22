@@ -1,7 +1,7 @@
 // LiftLog service worker: makes the app installable and quick to open.
 // Pages and scripts are network-first (so updates show up right away) with a cached fallback for bad gym signal.
 // Database and sign-in requests always go straight to the network.
-const CACHE = "liftlog-v9";
+const CACHE = "liftlog-v10";
 const SHELL = ["./", "index.html", "config.js", "shim.js", "vendor/supabase.js", "manifest.webmanifest", "icons/icon-192.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => {
