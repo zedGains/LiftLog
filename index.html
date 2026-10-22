@@ -243,6 +243,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .ptxt{font-size:17px;margin:6px 0 2px}
 .altlbl{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.altlbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;white-space:nowrap}
 .pltlist{display:grid;gap:2px}
+.ownalt{margin:0 0 8px}
 .tlist{display:grid;gap:6px;margin:6px 0 4px}
 .tlrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
 .tlrow b{display:block;font-size:15px}.tlrow small{color:var(--muted);font-size:12.5px}.tln{color:var(--muted);font:600 13px var(--mono);white-space:nowrap}
@@ -2440,8 +2441,9 @@ function openAltEdit(o){
   const res=()=>{const list=o.get();const used=new Set([o.name.toLowerCase(),...list.map(x=>x.toLowerCase())]);const ql=q.trim().toLowerCase();
     const pool=[...LIB,...plan.customs];
     const xs=ql?pool.filter(x=>x.name.toLowerCase().includes(ql)&&!used.has(x.name.toLowerCase())).slice(0,30):pool.filter(x=>x.g===o.g&&!used.has(x.name.toLowerCase())).slice(0,10);
-    return `${ql?"":`<div class="lbl" style="margin-top:4px">Same body part</div>`}<div class="plist">${xs.map(x=>`<button class="prow" data-aadd="${esc(x.name)}"><span class="pn">${esc(x.name)}</span><span class="pe">+ Add</span></button>`).join("")||`<p class="savenote">Nothing matches.</p>`}</div>`};
-  const bindRes=()=>sh.querySelectorAll("[data-aadd]").forEach(b=>b.onclick=()=>{const l=o.get().slice();if(l.length>=8){toast("Up to 8 backup choices");return}l.push(b.dataset.aadd);o.set(l);draw()});
+    const nm=q.trim().replace(/\s+/g," ").slice(0,40); const exact=xs.some(x=>x.name.toLowerCase()===ql)||used.has(ql);
+    return `${ql?"":`<div class="lbl" style="margin-top:4px">Same body part</div>`}${nm&&!exact?`<button class="browse ownalt" data-aown="${esc(nm)}"><span><b>+ Add "${esc(nm)}"</b><br><small>Use your own exercise name, even one you made up</small></span><span aria-hidden="true">›</span></button>`:""}<div class="plist">${xs.map(x=>`<button class="prow" data-aadd="${esc(x.name)}"><span class="pn">${esc(x.name)}</span><span class="pe">+ Add</span></button>`).join("")||(nm?`<p class="savenote">Not in the library. Add it with the button above.</p>`:`<p class="savenote">Nothing matches.</p>`)}</div>`};
+  const bindRes=()=>sh.querySelectorAll("[data-aadd],[data-aown]").forEach(b=>b.onclick=()=>{const l=o.get().slice();if(l.length>=8){toast("Up to 8 backup choices");return}l.push(b.dataset.aadd||b.dataset.aown);o.set(l);if(b.dataset.aown){q="";toast(`Added ${b.dataset.aown}`)}draw()});
   const draw=()=>{const list=o.get();
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="altback">‹ Back</button><span class="eyebrow">Backup choices</span></div>
      <h3 id="sheet-title">If ${esc(o.name)} is taken…</h3><p class="savenote">${esc(o.note)}</p>
@@ -2449,7 +2451,7 @@ function openAltEdit(o){
      <div class="delist">${list.map((a,i)=>`<div class="derow"><span class="den"><b>${esc(a)}</b></span><span class="dect"><button class="iconbtn" data-aup="${i}" aria-label="Move ${esc(a)} up" ${i?"":"disabled"}>↑</button><button class="iconbtn" data-arm="${i}" aria-label="Remove ${esc(a)}">✕</button></span></div>`).join("")||`<p class="savenote">No backups. Add one below.</p>`}</div>
      ${o.custom()?`<button class="linkbtn" id="altreset" style="margin-top:8px">Go back to the suggested choices</button>`:""}
      <div class="lbl">Add a choice</div>
-     <label class="field"><input id="altq" placeholder="Search all exercises" value="${esc(q)}" autocomplete="off" aria-label="Search exercises"></label>
+     <label class="field"><input id="altq" placeholder="Search, or type your own exercise" value="${esc(q)}" autocomplete="off" aria-label="Search exercises"></label>
      <div id="altres">${res()}</div>
      <div class="btns"><button class="btn primary" id="altdone" style="flex:1">Done</button></div>`;
     $("#altback",sh).onclick=o.back; $("#altdone",sh).onclick=o.back;
@@ -2518,7 +2520,7 @@ const GUIDE=[
   {sel:"#markbtn",t:"Mark done",x:"Same as the box on the card. Your numbers save with the day."},
   {sel:"#nedit",t:"My notes",x:"Private notes for this exercise, like seat height or grip. They show every time you open it, on any day."},
   {sel:"#sheet .alts",t:"Machine taken?",x:"Pick a backup exercise for today only. Your plan stays the same and your log shows which one you did. Tap Edit choices to set your own backups."},
-  {p:gAlts,sel:"#sheet .delist",t:"Your own backup choices",x:"This is Edit choices. Remove one with ✕, move your favorite to the top with ↑, or search any exercise below to add it. Go back to the suggested choices anytime. Your list shows on this exercise every day it's on."},
+  {p:gAlts,sel:"#sheet .delist",t:"Your own backup choices",x:"This is Edit choices. Remove one with ✕, move your favorite to the top with ↑, or search any exercise below to add it, or type your own made-up one. Go back to the suggested choices anytime. Your list shows on this exercise every day it's on."},
   {p:gEx,sel:"#sheet .pbox, #ptrackon",t:"Gym partner",x:"Lift with a friend? Log their top set next to yours and compare maxes in the Log."},
   {sel:"#mkss, #splitss",t:"Supersets",x:"Do this back to back with another exercise, no rest in between. Pick one already on this day, or one from the library."},
   {sel:"#removeex",t:"Remove from this day",x:"Takes it off this day. An Undo bar shows for a few seconds, and Reset to original brings it back later."},
@@ -2530,7 +2532,7 @@ const GUIDE=[
   {p:()=>gTab("programs","mine"),sel:"#newprog",t:"Build your own",x:"Lay out workouts on a weekly calendar, add weeks, write it up and publish it. Next: what a day looks like inside the builder."},
   {p:gDemoDay,sel:"#sheet .delist",t:"A day in the builder",x:"Here's an example day. Each exercise shows its sets × reps and its backups. ↑ moves it up in the order, ✕ removes it, and + Add exercise is at the bottom."},
   {sel:"#sheet [data-alts]",t:"⇄ Backup choices",x:"Tap ⇄ to choose what your clients switch to if a machine or spot is taken. \"Suggested backups\" means the app's picks. \"2 backups\" means you chose them yourself."},
-  {p:gDemoAlts,sel:"#sheet .delist",t:"Pick the backups",x:"Remove ✕, reorder ↑, or search any exercise to add it. People following your program see these under Machine taken? and can still change them for themselves."}]},
+  {p:gDemoAlts,sel:"#sheet .delist",t:"Pick the backups",x:"Remove ✕, reorder ↑, search any exercise, or type your own. People following your program see these under Machine taken? and can still change them for themselves."}]},
  {id:"timer",t:"Rest timer",d:"Presets and controls",p:()=>gTab("timer"),steps:[
   {sel:"#app .ring",t:"Rest timer",x:"Counts down your rest. It runs in the background while you log, and alerts you when it's done."},
   {sel:"#app .presets",t:"Presets",x:"One tap for common rest times. Use − and + to fine-tune by 15 seconds."}]},
