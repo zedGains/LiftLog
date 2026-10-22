@@ -198,6 +198,12 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .creatorbar{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:14px}.creatorbar small{color:var(--muted);font-size:12.5px}
 .reportl{font-size:13px;color:var(--muted)}
 .rrow{display:grid;gap:6px;padding:10px 0;border-bottom:1px dashed var(--line)}.rrow small{display:block;color:var(--muted);font-size:12.5px}.rrow .rn{font-style:italic}.rrow .btns{margin-top:0}
+.gearbtn{white-space:nowrap;flex:none}
+.pnotes summary{cursor:pointer;list-style:none;display:grid;gap:2px}.pnotes summary::-webkit-details-marker{display:none}
+.pnotes summary h2{margin:0}.pnotes summary span{font-size:13px;color:var(--muted)}
+.pnotes summary h2::after{content:" ▾";font-size:16px;color:var(--muted)}.pnotes[open] summary h2::after{content:" ▴"}
+.pnote{margin-top:12px}.pnote .pnh{display:block;font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--display)}.pnote p{margin:4px 0 0}
+.tick.soon{color:var(--muted);font-weight:500}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -576,7 +582,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -895,6 +901,7 @@ function render(){
   const app=$("#app");
   if(state.stats){app.innerHTML=statsView(); bindStats(); return}
   if(tab==="timer"){app.innerHTML=timerView(); bindTimerView(); updateTimer(); return}
+  if(tab==="plan"&&state.settings){app.innerHTML=settingsView(); bindPlan(); return}
   if(tab==="plan"){app.innerHTML=planView(); bindPlan(); return}
   if(tab==="programs"){app.innerHTML=programsView(); bindPrograms(); return}
   if(!DAYS[tab]){app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow">Workout</div><h1>No workout days yet</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
@@ -1233,7 +1240,7 @@ function openResetDay(k){
     new Set([...before,...after]).forEach(id=>{delete state.drafts[id]});
     saveDrafts(); savePlan(); closeSheet(); render(); toast(cust?`${DAYS[k].label} cleared. Logs kept.`:`${DAYS[k].label} is back to the original. Logs kept.`)};
 }
-function goAbout(){closeSheet();state.tab="plan";ls.set("ll.tab","plan");render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});window.scrollTo(0,0)}
+function goAbout(){closeSheet();state.settings=true;state.tab="plan";ls.set("ll.tab","plan");render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});window.scrollTo(0,0)}
 function nextDayLabel(){return "Day "+(trainKeys().length+1);const nums=Object.values(DAYS).map(d=>parseInt(String(d.label).replace(/\D/g,""),10)).filter(n=>!isNaN(n));return "Day "+((nums.length?Math.max(...nums):0)+1)}
 function dayForm(title,color,heading,btn){return `<div class="grab"></div>
   <div class="pkhead"><button class="btn small" id="dfclose">Close</button><span class="eyebrow">${heading}</span></div>
@@ -1295,17 +1302,20 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.open)closeShe
 const timer={preset:ls.get("ll.preset",90),endAt:null,remain:null,running:false,over:false};
 const fmtT=(s)=>{s=Math.max(0,Math.ceil(s));return `${Math.floor(s/60)}:${pad(s%60)}`};
 let audioCtx=null,wake=null,tickH=null;
+const NOTIFY_DEF={sound:true,vibrate:true,awake:true,banner:true};
+function nPref(k){const n=(plan&&plan.notify)||{};return n[k]==null?NOTIFY_DEF[k]:!!n[k]}
 function beep(){
-  try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  if(nPref("sound")) try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
     [0,.35,.7].forEach((t,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="square";o.frequency.value=i===2?1320:880;
       g.gain.setValueAtTime(.0001,audioCtx.currentTime+t);g.gain.exponentialRampToValueAtTime(.35,audioCtx.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+t+.28);
       o.connect(g).connect(audioCtx.destination);o.start(audioCtx.currentTime+t);o.stop(audioCtx.currentTime+t+.3)})}catch(e){}
-  try{navigator.vibrate&&navigator.vibrate([300,150,300,150,500])}catch(e){}
+  if(nPref("vibrate")) try{navigator.vibrate&&navigator.vibrate([300,150,300,150,500])}catch(e){}
+  if(nPref("banner")&&pickTab()!=="timer") toast("⏱ Rest's over. Next set!");
 }
 function startTimer(){
   try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume&&audioCtx.resume()}catch(e){}
   timer.endAt=Date.now()+timer.preset*1000;timer.running=true;timer.over=false;
-  try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}catch(e){}
+  if(nPref("awake")) try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}catch(e){}
   tick();
 }
 function stopTimer(){timer.running=false;timer.endAt=null;timer.over=false;try{wake&&wake.release()}catch(e){};wake=null;clearTimeout(tickH);updateTimer()}
@@ -1362,27 +1372,9 @@ function planView(){
   const thisMonth=ss.filter(x=>x.date.startsWith(monthKey)).length;
   const wkStart=(()=>{const d=new Date();const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)})();
   const thisWeek=ss.filter(x=>x.date>=wkStart).length;
-  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
+  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="btn small gearbtn" id="opensettings" aria-label="Settings">⚙️ Settings</button></div></header>
   <div class="plan">
-   ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
-   <div class="panel" id="about"><h2>About you</h2>
-    <div class="about">
-     <div class="unitrow"><span class="lbl" style="margin:0">Units</span><div class="dchips" role="group" aria-label="Units"><button class="dchip wide ${isKg()?"":"on"}" data-units="imperial" aria-pressed="${!isKg()}">lb · ft/in</button><button class="dchip wide ${isKg()?"on":""}" data-units="metric" aria-pressed="${isKg()}">kg · cm</button></div></div>
-     <label>Weight<span class="field"><input id="pf-w" inputmode="decimal" value="${plan.bw?toDisp(plan.bw):""}" placeholder="${isKg()?"100":"220"}" aria-label="Weight in ${isKg()?"kilograms":"pounds"}"><span>${wU()}</span></span></label>
-     <label>Age<span class="field"><input id="pf-age" inputmode="numeric" value="${plan.profile.age||""}" placeholder="30" aria-label="Age"><span>yrs</span></span></label>
-     ${isKg()?`<label>Height<span class="field"><input id="pf-cm" inputmode="numeric" value="${plan.profile.ft!=null?Math.round(((plan.profile.ft||0)*12+(plan.profile.inch||0))*2.54):""}" placeholder="178" aria-label="Height in centimeters"><span>cm</span></span></label>`
-     :`<label>Height<span class="hgt"><span class="field"><input id="pf-ft" inputmode="numeric" value="${plan.profile.ft||""}" placeholder="5" aria-label="Height feet"><span>ft</span></span><span class="field"><input id="pf-in" inputmode="numeric" value="${plan.profile.inch??""}" placeholder="10" aria-label="Height inches"><span>in</span></span></span></label>`}
-    </div>
-    <p class="savenote" id="pf-err" role="alert"></p>
-    <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
-    <p class="savenote">Your weight drives the calorie estimate. Update it as it changes. ${plan.profile.updated?`Last updated ${fmtStamp(plan.profile.updated)}.`:""}</p></div>
-   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button><button class="btn small" id="replaytour">▶ Replay the guide</button></div>
-    <p class="savenote"><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms</a></p>
-    <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
-     <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
-     <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
-   ${partnerPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
@@ -1396,13 +1388,42 @@ function planView(){
     <div class="week">${order.map(i=>{const k=schedOf(i);const c=k?DAYS[k].color:null;return `<button class="wk ${i===wd?"today":""} ${state.weekEdit===i?"sel":""}" data-wd="${i}" aria-label="${WD_LONG[i]}: ${k?esc(DAYS[k].label):"Rest"}" style="${c?`background:var(${c});color:${c==="--yellow"?"var(--on-yellow)":"#fff"}`:""}"><b>${names[i]}</b>${k?esc(DAYS[k].label):"Rest"}</button>`}).join("")}</div>
     <p>Tap a weekday to choose its workout. Pick body parts to build a new day, use a day you already have, or make it a rest day.</p></div>
 
+   ${partnerPanel()}
+   ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).length?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>Rest days, warm-up and tips from your plan</span></summary>${TPL.notes.panels.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""}
+  </div>`}
+function settingsView(){
+  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Log</div><h1>Settings</h1></div><button class="btn small" id="closesettings">‹ Back</button></div></header>
+  <div class="plan">
+   <div class="panel" id="about"><h2>Profile & units</h2>
+    <div class="about">
+     <div class="unitrow"><span class="lbl" style="margin:0">Units</span><div class="dchips" role="group" aria-label="Units"><button class="dchip wide ${isKg()?"":"on"}" data-units="imperial" aria-pressed="${!isKg()}">lb · ft/in</button><button class="dchip wide ${isKg()?"on":""}" data-units="metric" aria-pressed="${isKg()}">kg · cm</button></div></div>
+     <label>Weight<span class="field"><input id="pf-w" inputmode="decimal" value="${plan.bw?toDisp(plan.bw):""}" placeholder="${isKg()?"100":"220"}" aria-label="Weight in ${isKg()?"kilograms":"pounds"}"><span>${wU()}</span></span></label>
+     <label>Age<span class="field"><input id="pf-age" inputmode="numeric" value="${plan.profile.age||""}" placeholder="30" aria-label="Age"><span>yrs</span></span></label>
+     ${isKg()?`<label>Height<span class="field"><input id="pf-cm" inputmode="numeric" value="${plan.profile.ft!=null?Math.round(((plan.profile.ft||0)*12+(plan.profile.inch||0))*2.54):""}" placeholder="178" aria-label="Height in centimeters"><span>cm</span></span></label>`
+     :`<label>Height<span class="hgt"><span class="field"><input id="pf-ft" inputmode="numeric" value="${plan.profile.ft||""}" placeholder="5" aria-label="Height feet"><span>ft</span></span><span class="field"><input id="pf-in" inputmode="numeric" value="${plan.profile.inch??""}" placeholder="10" aria-label="Height inches"><span>in</span></span></span></label>`}
+    </div>
+    <p class="savenote" id="pf-err" role="alert"></p>
+    <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
+    <p class="savenote">Your weight drives the calorie estimate. Update it as it changes. ${plan.profile.updated?`Last updated ${fmtStamp(plan.profile.updated)}.`:""}</p></div>
+   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button></div>
+    <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
+     <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
+     <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
+   <div class="panel" id="notifs"><h2>Notifications</h2>
+    <div class="lbl" style="margin-top:4px">Rest timer</div>
+    ${[["sound","Sound when rest is over"],["vibrate","Vibrate when rest is over (Android)"],["banner","Show a “Rest's over” banner on other screens"],["awake","Keep the screen on while the timer runs"]].map(([k,l])=>`<label class="tick"><input type="checkbox" data-np="${k}" ${nPref(k)?"checked":""}> ${l}</label>`).join("")}
+    <div class="lbl">Coming soon</div>
+    ${["Workout day reminders","Reminder to save an unfinished workout","Program followers, likes and sales","Weekly recap"].map(l=>`<label class="tick soon"><input type="checkbox" disabled> ${l}</label>`).join("")}
+    <p class="savenote">These will arrive as phone notifications when LiftLog is installed on your home screen.</p></div>
+   <div class="panel"><h2>Help</h2><p>New to LiftLog, or want a refresher?</p><div class="btns"><button class="btn small" id="replaytour2">▶ Replay the guide</button></div></div>
    <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
     <div class="drow">${dropChips("pdp")}<label class="field dcustom"><input id="dpc" inputmode="numeric" value="${DROP_CHOICES.includes(dropPct)?"":dropPct}" placeholder="Other" aria-label="Custom drop percent"><span>%</span></label></div>
     <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="${isKg()?"100":"225"}" aria-label="Main weight"><span>${wU()}</span></label>
      <output id="c1">—</output><output id="c2">—</output><output id="c3">—</output></div>
     <p class="savenote">Rounded to the nearest ${isKg()?"2.5 kg":"5 lb"}.</p></div>
-   ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).map(x=>`<div class="panel"><h2>${esc(x.h)}</h2><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}
+   ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
+   <div class="panel"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
   </div>`}
 function fmtStamp(ms){if(!ms)return "—";const d=new Date(ms);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})}
 function isoLocal(ms){if(!ms)return "";const d=new Date(ms);return `${ymd(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
@@ -1441,7 +1462,10 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const rt=$("#replaytour");if(rt)rt.onclick=()=>{state.tab=defaultDay()||"workout";render();startTour()};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
+function bindPlan(){const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+  document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
+  const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
+  const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
   const ex=$("#exportme");if(ex)ex.onclick=()=>{ex.disabled=true;window.LIFTLOG_ACCOUNT.exportData().then(()=>toast("Your data is ready")).catch(e=>{if(!(e&&e.code==="declined"))toast("Couldn't download your data. Try again.")}).finally(()=>{ex.disabled=false})};
   const dc=$("#delconfirm"),da=$("#delacct");if(dc&&da){dc.oninput=()=>{da.disabled=dc.value.trim().toUpperCase()!=="DELETE"};
     da.onclick=()=>{da.disabled=true;da.textContent="Deleting…";window.LIFTLOG_ACCOUNT.deleteAccount().catch(()=>{da.disabled=false;da.textContent="Delete my account forever";toast("Couldn't delete your account. Check your connection and try again.")})}}bindPartnerPanel();document.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));const x=$("#exportcsv");if(x)x.onclick=exportCSV;
@@ -1458,7 +1482,7 @@ function bindPlan(){const rt=$("#replaytour");if(rt)rt.onclick=()=>{state.tab=de
     if(cm!=null){if(!(cm>=90&&cm<=250)){err.textContent="Height should be between 90 and 250 cm.";return}const ti=Math.round(cm/2.54);ft=Math.floor(ti/12);inch=ti%12}
     if(ft!=null&&!(ft>=3&&ft<=8)){err.textContent="Feet should be between 3 and 8.";return}
     if(inch!=null&&!(inch>=0&&inch<12)){err.textContent="Inches should be 0 to 11.";return}
-    plan.bw=w; plan.profile={age,ft,inch,updated:Date.now()}; savePlan(); render(); toast("Saved")};const i=$("#calcw");
+    plan.bw=w; plan.profile={age,ft,inch,updated:Date.now()}; savePlan(); render(); toast("Saved")};const i=$("#calcw");if(!i)return;
   const calc=()=>{const wd=Number(i.value.replace(/[^0-9.]/g,""));const w=wd?Number(fromDisp(wd)):0;$("#c1").textContent=w?wd:"—";$("#c2").textContent=w?toDisp(dropW(w,1)):"—";$("#c3").textContent=w?toDisp(dropW(w,2)):"—";
     $("#dpt").textContent=dropPct+"%";$("#dpt2").textContent=dropPct+"%";
     document.querySelectorAll("[data-pdp]").forEach(b=>{const on=+b.dataset.pdp===dropPct;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)})};
@@ -2083,7 +2107,7 @@ let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement
  t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,2200)}
 
 /* ---------- tabs ---------- */
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.dayMenu=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.dayMenu=false;state.settings=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
 
 render();
