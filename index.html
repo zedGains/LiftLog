@@ -241,6 +241,12 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .pl i{font:700 9.5px var(--mono);font-style:normal;writing-mode:vertical-rl;transform:rotate(180deg);color:var(--pi)}
 .pend{flex:1;min-width:20px;height:12px;background:linear-gradient(#C9CED4,#8A939C);border-radius:0 3px 3px 0}
 .ptxt{font-size:17px;margin:6px 0 2px}
+.altlbl{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.altlbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;white-space:nowrap}
+.pltlist{display:grid;gap:2px}
+.tlist{display:grid;gap:6px;margin:6px 0 4px}
+.tlrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.tlrow b{display:block;font-size:15px}.tlrow small{color:var(--muted);font-size:12.5px}.tln{color:var(--muted);font:600 13px var(--mono);white-space:nowrap}
+.tlrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -620,7 +626,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -731,7 +737,7 @@ function effItem(dayKey,orig,sec){
 }
 function extraItem(dayKey,x){const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
   return {id:(L.custom?"c_":"x_")+L.id,name:L.name,sets:x.sets,reps:x.reps,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
-    note:L.custom?`Your own exercise (${L.g}).`:"",alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name),
+    note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name),
     sec:sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
 function applyPick(it,exId,sets,reps,drop){
   if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
@@ -1103,9 +1109,9 @@ function openSheet(id,keepScroll){
   </div>
   ${it.extra?`<div class="swapnote"><span>You added this to ${esc(DAYS[it.dayKey].label)}.</span></div>`:""}
   ${it.replaced?`<div class="swapnote"><span>In your plan this replaces <b>${esc(it.replaced)}</b>.</span><button class="btn small" id="resetslot">Switch back</button></div>`:""}
-  <div class="lbl">Machine taken? Do one of these instead (today only)</div>
+  <div class="lbl altlbl"><span>Machine taken? Do one of these instead (today only)</span><button class="linkbtn" id="editalts">Edit choices</button></div>
   <div class="alts">
-    ${[it.name,...it.alts].map((a,i)=>`<div class="alt ${(d.alt||it.name)===a?"sel":""}">
+    ${[it.name,...altsOf(it)].map((a,i)=>`<div class="alt ${(d.alt||it.name)===a?"sel":""}">
       <button class="pick" data-alt="${i?esc(a):""}" aria-pressed="${(d.alt||it.name)===a}"><span class="an">${esc(a)}</span><span class="am">${i?"Alternate":"From your program"}${(d.alt||it.name)===a?" · selected":""}</span></button>
       <a class="form" href="${yt(a)}" target="_blank" rel="noopener">Form ↗</a></div>`).join("")}
   </div>
@@ -1141,6 +1147,7 @@ function openSheet(id,keepScroll){
   const da=$("#dropauto",sh); if(da) da.onchange=()=>{dropAuto=da.checked;ls.set("ll.dropAuto",dropAuto);if(dropAuto)refillDrops(it,d);else d.autoIdx=[];saveDrafts();openSheet(id,true);render()};
   $("#browse",sh).onclick=()=>openPicker(it);
   bindNote(sh,it);
+  const ea=$("#editalts",sh); if(ea) ea.onclick=()=>openMyAlts(it);
   const mk=$("#mkss",sh); if(mk) mk.onclick=()=>openSuperPick(it);
   const sp=$("#splitss",sh); if(sp) sp.onclick=()=>withUndo("Superset split",()=>{splitSuper(it.dayKey,it.slot);savePlan();closeSheet();render()});
   const rx=$("#removeex",sh); if(rx) rx.onclick=()=>withUndo(`Removed ${it.name}`,()=>{
@@ -1463,8 +1470,8 @@ function settingsView(){
     <div class="lbl">Coming soon</div>
     ${["Workout day reminders","Reminder to save an unfinished workout","Program followers, likes and sales","Weekly recap"].map(l=>`<label class="tick soon"><input type="checkbox" disabled> ${l}</label>`).join("")}
     <p class="savenote">These will arrive as phone notifications when LiftLog is installed on your home screen.</p></div>
-   <div class="panel"><h2>Help</h2><p>New to LiftLog, or want a refresher?</p><div class="btns"><button class="btn small" id="replaytour2">▶ Replay the guide</button></div></div>
-   <div class="panel"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
+   ${guidePanel()}
+   <div class="panel" id="dropp"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
     <div class="drow">${dropChips("pdp")}<label class="field dcustom"><input id="dpc" inputmode="numeric" value="${DROP_CHOICES.includes(dropPct)?"":dropPct}" placeholder="Other" aria-label="Custom drop percent"><span>%</span></label></div>
     <div class="calc"><label class="field"><input id="calcw" inputmode="decimal" placeholder="${isKg()?"100":"225"}" aria-label="Main weight"><span>${wU()}</span></label>
@@ -1511,7 +1518,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindWeight();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1553,7 +1560,7 @@ function progById(id){return plan.myPrograms.find(p=>p.id===id)}
 function emptyWeek(){return {days:{}}}
 function progStats(p){const w0=(p.weeks&&p.weeks[0])||{days:{}};const dpw=Object.keys(w0.days).length;
   const ex=(p.weeks||[]).reduce((a,w)=>a+Object.values(w.days).reduce((b,d)=>b+d.items.length,0),0);return {weeks:(p.weeks||[]).length,dpw,ex}}
-function exFromItem(it){return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,p:it.p||[],s:it.s||[],eq:it.eq||""}}
+function exFromItem(it){const mine=(plan.altsMine||{})[String(it.name||"").toLowerCase()];return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,p:it.p||[],s:it.s||[],eq:it.eq||"",...(Array.isArray(mine)?{alts:mine.slice()}:{})}}
 function exText(x){return x.type==="cardio"?`${x.reps[0]} min`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`}
 function nameOf(id){if(!id)return "Someone";if(id==="liftlog")return "LiftLog";if(id===uid)return "you";return pg.names[id]||"Someone"}
 function armBtn(b,txt,fn){if(!b)return;let armed=false;const orig=b.textContent;b.onclick=()=>{if(!armed){armed=true;b.textContent=txt;setTimeout(()=>{armed=false;if(b.isConnected)b.textContent=orig},4000);return}fn()}}
@@ -1630,7 +1637,7 @@ function builderView(){
    <div class="panel"><h2>Calendar</h2>
     <div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-week="${i}" aria-pressed="${i===wi}">Week ${i+1}</button>`).join("")}<button class="gchip ghost" id="addweek">+ Week</button></div>
     <div class="cal">${calCells(w,true)}</div>
-    <p class="savenote">Tap a day to add or edit its workout. Changes save as you go.</p>
+    <p class="savenote">Tap a day to add or edit its workout. Tap ⇄ on an exercise to set backups for when a machine is taken. Changes save as you go.</p>
     <div class="btns">${wi>0?`<button class="btn small" id="copyprev">Copy week ${wi} into week ${wi+1}</button>`:""}
       ${empty&&wi===0?`<button class="btn small" id="fromplan">Start from my current week</button>`:""}
       ${!empty?`<button class="btn small" id="clearweek">Clear week ${wi+1}</button>`:""}
@@ -1722,8 +1729,8 @@ function openDayEdit(p,wi,wd){
    <div class="cform"><label>Workout name<span class="field"><input id="de-title" value="${esc(d.title)}" placeholder="Ex: Push, Pull, Legs, Shoulder Day" maxlength="40" autocomplete="off"></span></label>
     <label>Notes for this day <small class="opt">optional, shown to people following</small><span class="field"><textarea id="de-note" rows="2" maxlength="300" placeholder="e.g. Heavy day. Rest 2 minutes between sets.">${esc(d.note||"")}</textarea></span></label></div>
    <div class="lbl">Exercises <small>${d.items.length}</small></div>
-   <div class="delist">${d.items.length?d.items.map((x,i)=>`<div class="derow"><span class="den"><b>${esc(x.name)}</b><small>${esc(x.g)} · ${exText(x)}${x.drop?" · drop sets":""}</small></span>
-      <span class="dect"><button class="iconbtn" data-up="${i}" aria-label="Move ${esc(x.name)} up" ${i?"":"disabled"}>↑</button><button class="iconbtn" data-rm="${i}" aria-label="Remove ${esc(x.name)}">✕</button></span></div>`).join(""):`<p class="savenote">No exercises yet.</p>`}</div>
+   <div class="delist">${d.items.length?d.items.map((x,i)=>`<div class="derow"><span class="den"><b>${esc(x.name)}</b><small>${esc(x.g)} · ${exText(x)}${x.drop?" · drop sets":""} · ${Array.isArray(x.alts)?x.alts.length+" backup"+(x.alts.length===1?"":"s"):"suggested backups"}</small></span>
+      <span class="dect"><button class="iconbtn" data-alts="${i}" aria-label="Backup choices for ${esc(x.name)}" title="Backup choices">⇄</button><button class="iconbtn" data-up="${i}" aria-label="Move ${esc(x.name)} up" ${i?"":"disabled"}>↑</button><button class="iconbtn" data-rm="${i}" aria-label="Remove ${esc(x.name)}">✕</button></span></div>`).join(""):`<p class="savenote">No exercises yet.</p>`}</div>
    <button class="browse" id="deadd"><span><b>+ Add exercise</b><br><small>From the library or your own</small></span><span aria-hidden="true">›</span></button>
    <div class="btns"><button class="btn" id="declear" style="flex:1" ${d.items.length?"":"disabled"}>Clear day</button><button class="btn danger" id="dedel" style="flex:1">Delete day</button></div>
    <p class="savenote">Clear day removes its exercises but keeps it a training day. Delete day turns it into a rest day.</p>`;
@@ -1733,6 +1740,7 @@ function openDayEdit(p,wi,wd){
   $("#de-title",sh).oninput=e=>{d.title=e.target.value;clearTimeout(window.__dt);window.__dt=setTimeout(()=>{save();render()},400)};
   sh.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{d.items.splice(+b.dataset.rm,1);save();render();openDayEdit(p,wi,wd)});
   sh.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>{const i=+b.dataset.up;[d.items[i-1],d.items[i]]=[d.items[i],d.items[i-1]];save();openDayEdit(p,wi,wd)});
+  sh.querySelectorAll("[data-alts]").forEach(b=>b.onclick=()=>openProgAlts(d.items[+b.dataset.alts],()=>openDayEdit(p,wi,wd),save));
   $("#deadd",sh).onclick=()=>openPicker({progMode:true,addMode:true,progLabel:lbl,progTitle:d.title,progUsed:d.items.map(x=>x.name.toLowerCase()),
     dayKey:null,sec:"",name:"",g:null,sets:3,reps:[8,12],drop:false,type:"lift",id:null,
     onBack:()=>openDayEdit(p,wi,wd),
@@ -1877,7 +1885,7 @@ function applyProgram(p,wi){
   const w=p.weeks[wi]; const colors=["--green","--purple","--orange","--slate","--blue","--red","--yellow"]; let ci=0;
   WEEK_ORDER.forEach(i=>{const d=w.days[String(i)];if(!d)return;const key="pw"+i;
     plan.days.push({key,label:WD_SHORT[i],title:d.title||"Workout",color:colors[ci++%colors.length],prog:true,note:(d.note||"").trim()||undefined});
-    plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop}));
+    plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop,...(Array.isArray(x.alts)?{alts:x.alts.slice(0,8)}:{})}));
     plan.schedule[String(i)]=key});
   plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks))};
   savePlan(); syncDays();
@@ -1963,8 +1971,8 @@ function partnerPanel(){
      const hist=entriesOf(it.id).filter(e=>e.done||(e.partners&&e.partners[sel.id])).slice(-12).reverse();
      return `<details class="mxr"><summary><span>${esc(it.name)}</span><span>${me.w?toDisp(me.w):"—"}${chg(me.w,mp.w)}</span><span>${pb.w?toDisp(pb.w):"—"}${chg(pb.w,pp.w)}</span></summary>
       ${hist.length?`<div class="history">${hist.map(e=>{const x=e.partners&&e.partners[sel.id];return `<div><span class="d">${fmtDate(e.date)}</span><span class="v">You ${topW(e.sets)?toDisp(topW(e.sets)):"—"} · ${esc(sel.name)} ${x?toDisp(x.w)+(x.r?"×"+x.r:""):"—"}</span></div>`}).join("")}</div>`:`<p class="savenote">No logs yet for this lift.</p>`}</details>`}).join("")}</div>`
-     :`<p>None of your days have a big lift right now. Open any lift and tap <b>Track a partner's max</b>.</p>`}
-   <div class="btns"><button class="btn small" id="pedit">Edit ${esc(sel.name)}</button><button class="btn small danger" id="prm">Remove ${esc(sel.name)}</button></div>
+     :`<p>No lifts picked yet. Tap <b>Choose lifts</b> to pick which ones you compare.</p>`}
+   <div class="btns"><button class="btn small primary" id="plifts">+ Choose lifts</button><button class="btn small" id="pedit">Edit ${esc(sel.name)}</button><button class="btn small danger" id="prm">Remove ${esc(sel.name)}</button></div>
    <p class="savenote">Heaviest top set on each lift, from your logs and the partner line. Tap a lift to see every week.</p>`
    :`<p>Lift with a friend? Add them and log just their top set on the big lifts (bench, incline, military press, squat, deadlift) next to yours. They don't need the app.</p>
    <div class="btns"><button class="btn primary" id="paddp2" style="flex:1">+ Add a gym partner</button></div>`}</div>`;
@@ -1972,6 +1980,7 @@ function partnerPanel(){
 function bindPartnerPanel(){
   document.querySelectorAll("[data-psel]").forEach(b=>b.onclick=()=>{state.pSel=b.dataset.psel;render();const x=$("#partners");if(x)x.scrollIntoView({block:"start"})});
   const a=$("#paddp2"); if(a) a.onclick=()=>openPartnerEdit(null);
+  const pl=$("#plifts"); if(pl) pl.onclick=openLiftPick;
   const sel=plan.partners.find(x=>x.id===state.pSel)||plan.partners[0];
   if(sel) armBtn($("#prm"),`Tap again: delete ${sel.name} and their numbers`,()=>{removePartner(sel.id);render()});
   const e=$("#pedit"); if(e) e.onclick=()=>{const sel=plan.partners.find(x=>x.id===state.pSel)||plan.partners[0];if(sel)openPartnerEdit(sel.id)};
@@ -2126,13 +2135,16 @@ const TOUR=[
 let tourI=-1;
 function tourSteps(){return TOUR.filter(s=>!s.day||trainKeys().length||dayKeys().length)}
 function startTour(){state.dayMenu=false;closeSheet();tourI=0;showTour()}
-function endTour(){tourI=-1;const o=$("#tourov");if(o)o.remove();if(!plan.tourDone){plan.tourDone=true;savePlan()}}
+function endTour(){tourI=-1;const o=$("#tourov");if(o)o.remove();if(!plan.tourDone){plan.tourDone=true;savePlan()}
+  if(tourList){tourList=null;gSet();setTimeout(()=>{const t=$("#tutorial");if(t)t.scrollIntoView({block:"start"})},30)}}
 function showTour(){
-  const steps=tourSteps(); if(tourI<0||tourI>=steps.length){endTour();return}
+  const steps=tourList||tourSteps(); if(tourI<0||tourI>=steps.length){endTour(true);return}
   const s=steps[tourI];
+  if(s.prep){try{s.prep()}catch(e){console.warn(e)}}
   if(s.day&&!DAYS[pickTab()]){state.tab=defaultDay();render()}
-  let el=document.querySelector(s.sel); if(!el){tourI++;return showTour()}
-  if(s.scroll) el.scrollIntoView({block:"center"}); else if(s.day) window.scrollTo(0,0);
+  let el=document.querySelector(s.sel); if(!el||!el.getClientRects().length){tourI+=tourDir;if(tourI<0){tourI=0;tourDir=1}return showTour()}
+  if(tourList){const r=el.getBoundingClientRect();if(r.top<80||r.bottom>innerHeight-110)el.scrollIntoView({block:"center"})}
+  else if(s.scroll) el.scrollIntoView({block:"center"}); else if(s.day) window.scrollTo(0,0);
   requestAnimationFrame(()=>drawTour(steps,s));
 }
 function drawTour(steps,s){
@@ -2142,13 +2154,13 @@ function drawTour(steps,s){
   ov.innerHTML=`<div class="tspot" style="left:${r.left-pad}px;top:${r.top-pad}px;width:${r.width+pad*2}px;height:${r.height+pad*2}px"></div>
    <div class="tcard" role="dialog" aria-modal="true" aria-labelledby="tour-t" style="${below?`top:${Math.max(12,r.bottom+14)}px`:`bottom:${Math.max(12,innerHeight-r.top+14)}px`}">
     <button class="tx" id="tourx" aria-label="Close the guide">×</button>
-    <div class="tstep">${tourI+1} of ${steps.length}</div>
+    <div class="tstep">${s.ch?esc(s.ch)+" · ":""}${tourI+1} of ${steps.length}</div>
     <h4 id="tour-t">${esc(s.title)}</h4><p>${esc(s.text)}</p>
     <div class="tbtns"><button class="tskip" id="tourskip">Skip tour</button><span>${tourI?'<button id="tourback">Back</button>':""}<button class="tnext" id="tournext">${last?"Done":"Next"}</button></span></div>
-    <div class="tdots" aria-hidden="true">${steps.map((_,j)=>`<i class="${j===tourI?"on":""}"></i>`).join("")}</div></div>`;
+    <div class="tdots" aria-hidden="true" ${steps.length>10?"hidden":""}>${steps.map((_,j)=>`<i class="${j===tourI?"on":""}"></i>`).join("")}</div></div>`;
   $("#tourx").onclick=endTour; $("#tourskip").onclick=endTour;
-  $("#tournext").onclick=()=>{if(last){endTour();toast("You're all set. Replay the guide anytime from Log → Account.")}else{tourI++;showTour()}};
-  const bk=$("#tourback"); if(bk) bk.onclick=()=>{tourI--;showTour()};
+  $("#tournext").onclick=()=>{if(last){const g=!!tourList;endTour();toast(g?"Nice. Pick another topic anytime.":"You're all set. The full tutorial is in Log → Settings.")}else{tourDir=1;tourI++;showTour()}};
+  const bk=$("#tourback"); if(bk) bk.onclick=()=>{tourDir=-1;tourI--;showTour()};
   $("#tournext").focus({preventScroll:true});
 }
 window.addEventListener("resize",()=>{if(tourI>=0)showTour()});
@@ -2417,6 +2429,121 @@ function bindPlates(){const i=$("#platew");if(!i)return;const u=isKg()?"kg":"lb"
   pc.oninput=()=>{const n=Number((pc.value||"").replace(/[^0-9.]/g,""));if(pc.value.trim()===""||!isFinite(n)||n>(u==="kg"?150:330))return;ls.set("ll.bar."+u,n);document.querySelectorAll("[data-bar]").forEach(x=>{const on=+x.dataset.bar===n;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()};
   document.querySelectorAll("[data-bar]").forEach(b=>b.onclick=()=>{ls.set("ll.bar."+u,+b.dataset.bar);pc.value="";document.querySelectorAll("[data-bar]").forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});draw()});
 }
+
+/* ---------- backup choices ("Machine taken?") ---------- */
+function altKey(it){return String(it.name||"").toLowerCase()}
+function defaultAlts(x){return LIB.filter(y=>y.g===x.g&&y.name!==x.name).slice(0,3).map(y=>y.name)}
+function progAlts(it){if(!it.lib)return null;for(const k in plan.extra){const x=(plan.extra[k]||[]).find(y=>y.ex===it.lib&&Array.isArray(y.alts));if(x)return x.alts}return null}
+function altsOf(it){const o=(plan.altsMine||{})[altKey(it)];return Array.isArray(o)?o:(progAlts(it)||it.alts||[])}
+function openAltEdit(o){
+  const sh=$("#sheet"); let q="";
+  const res=()=>{const list=o.get();const used=new Set([o.name.toLowerCase(),...list.map(x=>x.toLowerCase())]);const ql=q.trim().toLowerCase();
+    const pool=[...LIB,...plan.customs];
+    const xs=ql?pool.filter(x=>x.name.toLowerCase().includes(ql)&&!used.has(x.name.toLowerCase())).slice(0,30):pool.filter(x=>x.g===o.g&&!used.has(x.name.toLowerCase())).slice(0,10);
+    return `${ql?"":`<div class="lbl" style="margin-top:4px">Same body part</div>`}<div class="plist">${xs.map(x=>`<button class="prow" data-aadd="${esc(x.name)}"><span class="pn">${esc(x.name)}</span><span class="pe">+ Add</span></button>`).join("")||`<p class="savenote">Nothing matches.</p>`}</div>`};
+  const bindRes=()=>sh.querySelectorAll("[data-aadd]").forEach(b=>b.onclick=()=>{const l=o.get().slice();if(l.length>=8){toast("Up to 8 backup choices");return}l.push(b.dataset.aadd);o.set(l);draw()});
+  const draw=()=>{const list=o.get();
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="altback">‹ Back</button><span class="eyebrow">Backup choices</span></div>
+     <h3 id="sheet-title">If ${esc(o.name)} is taken…</h3><p class="savenote">${esc(o.note)}</p>
+     <div class="lbl">${o.custom()?"Your choices":"Suggested choices"} <small>${list.length}</small></div>
+     <div class="delist">${list.map((a,i)=>`<div class="derow"><span class="den"><b>${esc(a)}</b></span><span class="dect"><button class="iconbtn" data-aup="${i}" aria-label="Move ${esc(a)} up" ${i?"":"disabled"}>↑</button><button class="iconbtn" data-arm="${i}" aria-label="Remove ${esc(a)}">✕</button></span></div>`).join("")||`<p class="savenote">No backups. Add one below.</p>`}</div>
+     ${o.custom()?`<button class="linkbtn" id="altreset" style="margin-top:8px">Go back to the suggested choices</button>`:""}
+     <div class="lbl">Add a choice</div>
+     <label class="field"><input id="altq" placeholder="Search all exercises" value="${esc(q)}" autocomplete="off" aria-label="Search exercises"></label>
+     <div id="altres">${res()}</div>
+     <div class="btns"><button class="btn primary" id="altdone" style="flex:1">Done</button></div>`;
+    $("#altback",sh).onclick=o.back; $("#altdone",sh).onclick=o.back;
+    sh.querySelectorAll("[data-arm]").forEach(b=>b.onclick=()=>{const l=o.get().slice();l.splice(+b.dataset.arm,1);o.set(l);draw()});
+    sh.querySelectorAll("[data-aup]").forEach(b=>b.onclick=()=>{const l=o.get().slice();const i=+b.dataset.aup;[l[i-1],l[i]]=[l[i],l[i-1]];o.set(l);draw()});
+    const r=$("#altreset",sh); if(r) r.onclick=()=>{o.reset();draw();toast("Back to the suggested choices")};
+    $("#altq",sh).oninput=e=>{q=e.target.value;$("#altres",sh).innerHTML=res();bindRes()};
+    bindRes();
+  };
+  state.open="__alts"; sh.hidden=false; $("#scrim").hidden=false; draw(); sh.scrollTop=0;
+}
+function openMyAlts(it){const k=altKey(it);plan.altsMine=plan.altsMine||{};
+  openAltEdit({name:it.name,g:it.g||groupOf(it),note:`These show on ${it.name} on every day it's on. Picking one only swaps it for today. Your plan doesn't change.`,
+    get:()=>altsOf(it),set:l=>{plan.altsMine[k]=l;savePlan()},custom:()=>Array.isArray(plan.altsMine[k]),reset:()=>{delete plan.altsMine[k];savePlan()},
+    back:()=>{openSheet(it.id,true);render()}})}
+function openProgAlts(x,back,save){
+  openAltEdit({name:x.name,g:x.g,note:"People following your program see these when a machine or spot is taken. They can still change them for themselves.",
+    get:()=>Array.isArray(x.alts)?x.alts:defaultAlts(x),set:l=>{x.alts=l;save()},custom:()=>Array.isArray(x.alts),reset:()=>{delete x.alts;save()},back})}
+
+/* ---------- partner maxes: choose which lifts to compare ---------- */
+function openLiftPick(){
+  const sh=$("#sheet"); const seen=new Set(); const groups=[];
+  dayKeys().forEach(k=>{const items=daySections(k).flatMap(s=>s.items).filter(it=>it.type!=="cardio"&&!seen.has(it.id));items.forEach(it=>seen.add(it.id));if(items.length)groups.push({k,items})});
+  sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pltback">Close</button><span class="eyebrow">Partner maxes</span></div>
+   <h3 id="sheet-title">Which lifts do you compare?</h3>
+   <p class="savenote">Checked lifts show in Partner maxes, and get a partner line when you open them during a workout. Want one that isn't here? Add it to one of your days first.</p>
+   ${groups.map(g=>`<div class="lbl">${esc(DAYS[g.k].label)} · ${esc(DAYS[g.k].title)}</div><div class="pltlist">${g.items.map(it=>`<label class="tick"><input type="checkbox" data-plt="${esc(it.id)}" ${tracksPartner(it)?"checked":""}> ${esc(it.name)}</label>`).join("")}</div>`).join("")||`<p>No exercises on your days yet.</p>`}
+   <div class="btns"><button class="btn primary" id="pltdone" style="flex:1">Done</button></div>`;
+  state.open="__plt"; sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=0;
+  sh.querySelectorAll("[data-plt]").forEach(c=>c.onchange=()=>{sh.querySelectorAll(`[data-plt="${c.dataset.plt}"]`).forEach(o=>o.checked=c.checked);plan.ptrack[c.dataset.plt]=c.checked;savePlan()});
+  const done=()=>{closeSheet();render();const x=$("#partners");if(x)x.scrollIntoView({block:"start"})};
+  $("#pltback",sh).onclick=done; $("#pltdone",sh).onclick=done;
+}
+
+/* ---------- full tutorial: walks through every feature on the real screens ---------- */
+function gDay(){if(state.open)closeSheet();const was=state.settings||state.stats||!DAYS[pickTab()];state.settings=false;state.stats=null;state.builder=null;state.dayMenu=false;state.reorder=null;
+  if(!DAYS[pickTab()]){const k=defaultDay()||dayKeys()[0];if(k)state.tab=k}if(was)window.scrollTo(0,0);render()}
+function gEx(){if(state.settings||!DAYS[pickTab()]||(state.open&&!ALL[state.open])){gDay()}
+  const c=document.querySelector("#app [data-open]");if(!c)return;const id=c.dataset.open;if(state.open!==id||$("#sheet").hidden)openSheet(id)}
+function gTab(t,seg){closeSheet();state.settings=false;state.builder=null;state.stats=null;state.dayMenu=false;if(seg)pg.seg=seg;if(state.tab!==t){state.tab=t;window.scrollTo(0,0)}render()}
+function gSet(){if(state.open)closeSheet();if(!state.settings||pickTab()!=="plan"){state.tab="plan";state.settings=true;state.stats=null;window.scrollTo(0,0)}render()}
+const GUIDE=[
+ {id:"day",t:"Your workout day",d:"Switching days, reordering, adding, resetting, saving",p:gDay,steps:[
+  {sel:"#daypick",t:"Switch days",x:"Tap the day's name to jump to another day, add a new day, or set which workout lands on which weekday. Today's workout opens on its own."},
+  {sel:"#app .mapwrap",t:"Muscles hit today",x:"Red is the main muscle each exercise works, lighter red is secondary. It updates when you swap or add exercises."},
+  {sel:"#app [data-open]",t:"Each exercise",x:"Shows the plan (sets × reps) and what you lifted last time. Tap the name to open its logging screen. The next chapter covers everything in there."},
+  {sel:"#app .check",t:"Mark it done",x:"Tap the box when you finish an exercise. Nothing goes into your history until you save the day at the bottom."},
+  {sel:"#app [data-reorder]",t:"Reorder",x:"Tap Reorder on a body part, then use the ↑ ↓ arrows to change the order you do them in. Tap Done when you're finished. The order stays every week."},
+  {sel:"#app .ssgroup",opt:true,t:"Supersets",x:"Exercises marked A1 / A2 are done back to back with no rest between them. Tap Split to undo it."},
+  {sel:"#addex",t:"Add an exercise",x:"Add anything from 300+ exercises, any body part, or create your own. It stays on this day every week."},
+  {sel:"#resetday",t:"Reset to original",x:"Undoes every change to this day (swaps, added or removed exercises, set counts, order) and goes back to the original plan. Your saved logs are never touched. Tapped it by mistake? Hit Undo."},
+  {sel:"#logdate",t:"Pick the date",x:"Logging a workout you did yesterday? Change the date before saving."},
+  {sel:"#saveday",t:"Save the day",x:"Saves everything you marked done to your history. Save again the same day to update it."}]},
+ {id:"ex",t:"Inside an exercise",d:"Sets, rest, notes, backups, partners, supersets, swapping",p:gEx,steps:[
+  {sel:"#sheet .sheet-grid",t:"Muscles and form",x:"See which muscles it works, and tap Watch form for a video of how to do it right."},
+  {sel:"#sheet .setrow",t:"Log your sets",x:"Type the weight and reps for each set. Last time's numbers show in grey so you know what to beat."},
+  {sel:"#addset",t:"Add or remove sets",x:"Did an extra set or cut one? Use − Remove set and + Add set. It stays that way on this day until you reset it."},
+  {sel:"#copylast",opt:true,t:"Copy last time",x:"Fills in exactly what you did last session."},
+  {sel:"#startrest",t:"Rest timer",x:"Starts your rest countdown. It keeps going if you switch screens and tells you when rest is over."},
+  {sel:"#markbtn",t:"Mark done",x:"Same as the box on the card. Your numbers save with the day."},
+  {sel:"#nedit",t:"My notes",x:"Private notes for this exercise, like seat height or grip. They show every time you open it, on any day."},
+  {sel:"#sheet .alts",t:"Machine taken?",x:"Pick a backup exercise for today only. Your plan stays the same and your log shows which one you did. Tap Edit choices to set your own backups."},
+  {sel:"#sheet .pbox, #ptrackon",t:"Gym partner",x:"Lift with a friend? Log their top set next to yours and compare maxes in the Log."},
+  {sel:"#mkss, #splitss",t:"Supersets",x:"Do this back to back with another exercise, no rest in between. Pick one already on this day, or one from the library."},
+  {sel:"#removeex",t:"Remove from this day",x:"Takes it off this day. An Undo bar shows for a few seconds, and Reset to original brings it back later."},
+  {sel:"#browse",t:"Swap it for good",x:"Replace this exercise with anything in the library. It stays swapped every week. Only need a change today? Use the backups above instead."}]},
+ {id:"plans",t:"Plans & programs",d:"Following trainers' programs and building your own",p:()=>gTab("programs","community"),steps:[
+  {sel:"#app .seg",t:"Community and My programs",x:"Community has programs other lifters and trainers shared, plus LiftLog classics like 5×5 and Smolov Jr. My programs is where you build your own."},
+  {sel:"#pgq",opt:true,t:"Search",x:"Search by name, or filter by goal and body part."},
+  {sel:"#app [data-pview]",t:"Open a program",x:"Read the write-up, who it's for and every week's workouts. Use this program loads it into your days. Tap the trainer's name to see their profile and follow them."},
+  {p:()=>gTab("programs","mine"),sel:"#newprog",t:"Build your own",x:"Lay out workouts on a weekly calendar, add weeks, set backup exercises, write it up and publish it."}]},
+ {id:"timer",t:"Rest timer",d:"Presets and controls",p:()=>gTab("timer"),steps:[
+  {sel:"#app .ring",t:"Rest timer",x:"Counts down your rest. It runs in the background while you log, and alerts you when it's done."},
+  {sel:"#app .presets",t:"Presets",x:"One tap for common rest times. Use − and + to fine-tune by 15 seconds."}]},
+ {id:"log",t:"Your Log",d:"Body weight, history, your week, partner maxes",p:()=>gTab("plan"),steps:[
+  {sel:"#bwpanel",t:"Body weight",x:"Log your weight now and then to see your trend and weekly average."},
+  {sel:"#exportcsv",t:"History",x:"Every workout you saved, by date. Download them all as a spreadsheet anytime."},
+  {sel:"#yourweek",t:"Your week",x:"Tap a weekday to choose its workout, build a new day from body parts, or make it a rest day."},
+  {sel:"#partners",t:"Partner maxes",x:"You vs your gym partner on each lift. Tap Choose lifts to pick which ones you compare."},
+  {sel:"#opensettings",t:"Settings",x:"Units, notifications, calculators, your trainer profile and your account."}]},
+ {id:"settings",t:"Settings & tools",d:"Units, alerts, calculators, trainer profile, account",p:gSet,steps:[
+  {sel:"#about",t:"Profile & units",x:"Your weight, age and height (for calorie estimates) and whether you use lb or kg."},
+  {sel:"#notifs",t:"Notifications",x:"Choose sound, vibration and banners for when rest is over."},
+  {sel:"#dropp",t:"Drop set calculator",x:"Type your main weight to see each drop. Pick how big each drop is."},
+  {sel:"#platep",t:"Plate calculator",x:"Type a total weight to see which plates go on each side. Pick your bar or type its weight."},
+  {sel:"#tprofp",opt:true,t:"Trainer profile",x:"Your bio, location and links, shown when people tap your name on a program you published."}]}
+];
+let tourList=null,tourDir=1;
+function startGuide(ids){const out=[];GUIDE.filter(c=>!ids||ids.includes(c.id)).forEach(c=>{let p=c.p;c.steps.forEach(s=>{if(s.p)p=s.p;out.push({...s,prep:p,ch:c.t,title:s.t,text:s.x})})});
+  tourList=out;state.dayMenu=false;tourI=0;tourDir=1;showTour()}
+function guidePanel(){return `<div class="panel" id="tutorial"><h2>Tutorial</h2><p style="margin-top:0">A walk through every feature on your real screens. Pick a topic, or go through all of it (about 5 minutes).</p>
+  <div class="tlist">${GUIDE.map(c=>`<button class="tlrow" data-guide="${c.id}"><span><b>${esc(c.t)}</b><small>${esc(c.d)}</small></span><span class="tln">${c.steps.length} ›</span></button>`).join("")}</div>
+  <div class="btns"><button class="btn primary" id="guideall" style="flex:1">▶ Start the full tutorial</button><button class="btn" id="replaytour2">Quick tour</button></div></div>`}
+function bindGuide(){document.querySelectorAll("[data-guide]").forEach(b=>b.onclick=()=>startGuide([b.dataset.guide]));const a=$("#guideall");if(a)a.onclick=()=>startGuide(null)}
 
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
