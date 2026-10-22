@@ -194,6 +194,10 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .tbtns .tskip{background:none;border:0;color:var(--muted);padding-left:0;font-weight:600}
 .tdots{display:flex;gap:5px;justify-content:center;margin-top:10px}.tdots i{width:6px;height:6px;border-radius:3px;background:var(--line)}.tdots i.on{background:var(--accent);width:16px}
 @media (prefers-reduced-motion:reduce){.tspot{transition:none}}
+.ready{list-style:none;padding:0;margin:4px 0 8px;display:grid;gap:3px;font-size:13.5px;color:var(--muted)}.ready li.ok{color:var(--ok)}
+.creatorbar{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:14px}.creatorbar small{color:var(--muted);font-size:12.5px}
+.reportl{font-size:13px;color:var(--muted)}
+.rrow{display:grid;gap:6px;padding:10px 0;border-bottom:1px dashed var(--line)}.rrow small{display:block;color:var(--muted);font-size:12.5px}.rrow .rn{font-style:italic}.rrow .btns{margin-top:0}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -1524,9 +1528,12 @@ function progCard(p){const st=progStats(p);return `<button class="pcard" data-pv
   <span class="pcm">by ${esc(nameOf(p.author))} · ${esc(p.goal||"General fitness")} · ${esc(p.level||"All levels")}</span>
   <span class="pcs"><span>${st.weeks} wk</span><span>${st.dpw} days/wk</span><span>♥ ${p.likes||0}</span><span>${p.uses||0} using</span></span>
   ${miniCal(p.weeks[0])}</button>`}
+let creatorInfo=null,creatorAt=0;
+function loadCreator(force){if(!window.LIFTLOG_RPC||state.mode!=="db")return;if(!force&&Date.now()-creatorAt<60000)return;creatorAt=Date.now();
+  window.LIFTLOG_RPC("my_creator_status").then(d=>{creatorInfo=d;if(pickTab()==="programs"&&pg.seg==="mine"&&!state.builder)render()}).catch(()=>{})}
 function mineView(){
-  const ps=plan.myPrograms;
-  return `<div class="plan">${ps.some(p=>p.published)&&window.LIFTLOG_RPC?`<button class="browse" id="creatorstats" style="margin-top:4px"><span><b>📊 Creator stats</b><br><small>Starts, followers, likes and sales for your published programs</small></span><span aria-hidden="true">›</span></button>`:""}<button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
+  const ps=plan.myPrograms; loadCreator(false); const ci=creatorInfo;
+  return `<div class="plan">${ci?`<div class="creatorbar"><span><b>${ci.published} of ${ci.limit>=1000?"∞":ci.limit}</b> published · ${ci.tier==="free"?"Free account":ci.tier==="verified"?"Verified trainer ✓":"Pro"}</span>${ci.tier==="free"?`<small>Trainers can be verified to publish up to 25.</small>`:""}${ci.canPublish?"":`<small>New accounts can publish after 3 days or 3 logged workouts.</small>`}</div>`:""}${ps.some(p=>p.published)&&window.LIFTLOG_RPC?`<button class="browse" id="creatorstats" style="margin-top:4px"><span><b>📊 Creator stats</b><br><small>Starts, followers, likes and sales for your published programs</small></span><span aria-hidden="true">›</span></button>`:""}<button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
    ${ps.length?ps.map(p=>{const st=progStats(p);return `<button class="pcard" data-pedit="${esc(p.id)}"><span class="pct">${esc(p.title||"Untitled program")}</span>
      <span class="pcm">${p.published?'<b class="pub">Published</b>':"Draft"} · ${st.weeks} wk · ${st.dpw} days/wk · ${st.ex} exercises</span>${miniCal(p.weeks[0])}</button>`}).join("")
      :`<div class="panel"><p>No programs yet. Tap <b>+ New program</b> to build one, or open a community program and tap <b>Copy to my programs</b> to remix it.</p></div>`}</div>`;
@@ -1558,6 +1565,9 @@ function builderView(){
    </div>
    <div class="panel"><h2>Share & use</h2>
     ${state.mode==="db"?`<p>${p.published?`Published to the community${p.pubAt?` · last updated ${fmtStamp(p.pubAt)}`:""}. Edits go live when you tap Update.`:"Publish so anyone using this app can browse it, like it and copy it. Only the program is shared, never your logs or body info."}</p>
+    ${(()=>{const r=progReady(p);return r.every(x=>x.ok)?"":`<ul class="ready">${r.map(x=>`<li class="${x.ok?"ok":""}">${x.ok?"✓":"○"} ${esc(x.t)}</li>`).join("")}</ul>`})()}
+    <label class="tick"><input type="checkbox" id="bp-allowcopy" ${p.allowCopy?"checked":""}> Let others copy and remix this program</label>
+    <p class="savenote" style="margin-top:2px">Off: people can follow it, but not copy it into their own programs. Copies always credit you.</p>
     <div class="btns"><button class="btn primary" id="publish" style="flex:1">${p.published?"Update published version":"Publish to community"}</button></div>
     ${p.published?`<div class="btns"><button class="btn" id="unpublish" style="flex:1">Unpublish</button></div>`:""}`:`<p>Sign in to your Claude account to publish to the community.</p>`}
     <div class="btns"><button class="btn" id="useprog" style="flex:1">Use this program myself</button></div>
@@ -1607,7 +1617,8 @@ function bindBuilder(){
   armBtn($("#clearweek"),"Tap again to clear",()=>{p.weeks[wi]=emptyWeek();save();render();toast(`Week ${wi+1} cleared`)});
   armBtn($("#delweek"),"Tap again to delete week",()=>{p.weeks.splice(wi,1);state.builder.week=Math.max(0,wi-1);save();render();toast("Week deleted")});
   const pb=$("#publish"); if(pb) pb.onclick=()=>publishProg(p);
-  const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic();render();toast("Unpublished")};
+  const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic().then(()=>loadCreator(true)).catch(()=>{});render();toast("Unpublished")};
+  const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};
   $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks});
   armBtn($("#delprog"),"Tap again to delete program",()=>{plan.myPrograms=plan.myPrograms.filter(x=>x.id!==p.id);savePlan();if(p.published)writePublic();state.builder=null;pg.seg="mine";render();toast("Program deleted")});
 }
@@ -1656,16 +1667,29 @@ function openDayEdit(p,wi,wd){
 }
 
 /* ----- community data ----- */
-function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
+function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.from?{from:p.from}:{}),weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
 let pubQ=Promise.resolve();
-function writePublic(){ if(state.mode!=="db"||!db||!uid) return; const payload=JSON.parse(JSON.stringify(pubPayload()));
+function writePublic(){ if(state.mode!=="db"||!db||!uid) return Promise.resolve(); const payload=JSON.parse(JSON.stringify(pubPayload()));
   const run=()=>db.doc("programs/"+uid).set(payload);
-  pubQ=pubQ.then(run,run).catch(e=>{console.warn(e);toast("Couldn't update the community. Check your connection and tap Update again.")}); }
+  const job=pubQ.then(run,run); pubQ=job.catch(()=>{}); return job; }
+function pubErrText(e){const m=String((e&&e.message)||e||"");
+  let x=m.match(/LIMIT:(\d+)/); if(x) return `Your account can have ${x[1]} published program${x[1]==="1"?"":"s"}. Unpublish one first, or ask about becoming a verified trainer to publish more.`;
+  if(/NEW_ACCOUNT/.test(m)) return "New accounts can publish after 3 days, or once you've logged 3 workouts. Keep training and try again soon.";
+  if(/CONTENT/.test(m)) return "Add a bit more first: a write-up of a few sentences, at least 2 workout days and 6 exercises.";
+  x=m.match(/SIMILAR:(.*)/); if(x) return `This is too close to "${x[1].trim()}" by another creator. Make it your own and try again.`;
+  return "Couldn't update the community. Check your connection and try again.";}
+function progReady(p){const w=(p.weeks[0]||{days:{}}).days;const days=Object.values(w).filter(d=>(d.items||[]).length).length;const ex=Object.values(w).reduce((a,d)=>a+(d.items||[]).length,0);
+  return [{ok:(p.title||"").trim().length>=3,t:"A name"},{ok:(p.desc||"").trim().length>=40,t:"A write-up in About this program (a few sentences)"},{ok:days>=2,t:"At least 2 workout days in week 1"},{ok:ex>=6,t:"At least 6 exercises in week 1"}]}
 function publishProg(p){
-  if(!(p.title||"").trim()){toast("Give your program a name first.");const t=$("#bp-title");if(t)t.focus();return}
-  if(!progStats(p).ex){toast("Add at least one exercise before publishing.");return}
-  p.published=true;p.pubAt=Date.now();p.updatedAt=Date.now();savePlan();writePublic();render();toast("Published to the community");
+  const miss=progReady(p).filter(x=>!x.ok); if(miss.length){toast("Before publishing: "+miss.map(x=>x.t.toLowerCase()).join(", ")+".");return}
+  const was=p.published, wasAt=p.pubAt; p.published=true;p.pubAt=Date.now();p.updatedAt=Date.now();
+  const pb=$("#publish"); if(pb){pb.disabled=true;pb.textContent="Publishing…"}
+  writePublic().then(()=>{savePlan();render();toast(was?"Published version updated":"Published to the community");loadCreator(true)})
+   .catch(e=>{p.published=was;p.pubAt=wasAt;savePlan();render();showNotice("Not published",pubErrText(e))});
 }
+function showNotice(title,text){const sh=$("#sheet");sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">${esc(title)}</h3><p style="font-size:15px;margin:10px 0 0">${esc(text)}</p><div class="btns"><button class="btn primary" id="ntok" style="flex:1">OK</button></div>`;
+  state.open="__notice";sh.hidden=false;$("#scrim").hidden=false;$("#ntok").onclick=closeSheet;$("#ntok").focus()}
+
 let socQ=Promise.resolve();
 function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted}}; pg.socialPending++;
   const run=()=>db.doc("social/"+uid).set(payload); socQ=socQ.then(run,run).catch(()=>{}).finally(()=>{pg.socialPending--}); }
@@ -1689,6 +1713,18 @@ function startCommunity(){
 }
 
 /* ----- program detail, copy, moderation ----- */
+function openReport(p){const sh=$("#sheet");let reason="";
+  const draw=()=>{sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="rpback">‹ Back</button><span class="eyebrow">Report</span></div>
+    <h3 id="sheet-title">What's wrong with this program?</h3><p class="savenote">${esc(p.title)} · by ${esc(nameOf(p.author))}</p>
+    <div class="gchips" style="margin-top:10px">${["Spam","Copied from someone else","Unsafe or harmful","Offensive","Other"].map(r=>`<button class="gchip ${reason===r?"on":""}" data-rr="${r}">${r}</button>`).join("")}</div>
+    <label class="cform" style="margin-top:10px"><span class="field"><textarea id="rpnote" rows="3" maxlength="500" placeholder="Anything else? (optional)"></textarea></span></label>
+    <div class="btns"><button class="btn primary" id="rpsend" style="flex:1" ${reason?"":"disabled"}>Send report</button></div>
+    <p class="savenote">Reports are private. The app owner reviews them.</p>`;
+   $("#rpback",sh).onclick=()=>openProgView(p.key);
+   sh.querySelectorAll("[data-rr]").forEach(b=>b.onclick=()=>{const n=$("#rpnote",sh).value;reason=b.dataset.rr;draw();$("#rpnote",sh).value=n});
+   $("#rpsend",sh).onclick=()=>{const b=$("#rpsend",sh);b.disabled=true;window.LIFTLOG_RPC("report_program",{k:p.key,r:reason,n:$("#rpnote",sh).value.trim()||null})
+     .then(()=>{closeSheet();toast("Thanks. The report was sent.")}).catch(()=>{b.disabled=false;toast("Couldn't send the report. Try again.")})}};
+  draw();}
 function openProgView(key){
   const sh=$("#sheet"); let wi=0;
   const draw=()=>{
@@ -1705,13 +1741,16 @@ function openProgView(key){
      <div class="cal small">${calCells(w,false)}</div>
      ${WEEK_ORDER.filter(i=>w.days[String(i)]).map(i=>{const d=w.days[String(i)];return `<div class="lbl">${WD_LONG[i]} · ${esc(d.title||"Workout")}</div>${d.note?`<p class="pvnote">${esc(d.note)}</p>`:""}<div class="history">${d.items.map(x=>`<div><span class="d">${esc(x.name)}</span><span class="v">${exText(x)}${x.drop?" · drop":""}</span></div>`).join("")||`<div><span class="d">No exercises</span></div>`}</div>`}).join("")}
      <div class="btns"><button class="btn primary" id="pvuse" style="flex:1">Use this program</button></div>
-     <div class="btns"><button class="btn" id="pvcopy" style="flex:1">${mine?"Make a copy to edit":"Copy to my programs"}</button></div>
+     ${mine||p.allowCopy?`<div class="btns"><button class="btn" id="pvcopy" style="flex:1">${mine?"Make a copy to edit":"Copy to my programs"}</button></div>`:`<p class="savenote">The creator hasn't allowed copies. You can still follow it with <b>Use this program</b>.</p>`}
+     ${p.from?`<p class="savenote">Based on ${(()=>{const o=pg.community.find(x=>x.key===p.from);return o?`<b>${esc(o.title)}</b> by ${esc(nameOf(o.author))}`:"another creator's program"})()}.</p>`:""}
+     ${!mine&&window.LIFTLOG_RPC?`<div class="btns"><button class="linkbtn reportl" id="pvreport">Report this program</button></div>`:""}
      ${pg.isOwner&&!mine?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
     $("#pvclose",sh).onclick=closeSheet;
     $("#pvlike",sh).onclick=()=>{toggleLike(key);draw()};
     sh.querySelectorAll("[data-pvw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.pvw;draw()});
     $("#pvuse",sh).onclick=()=>openUse(p);
-    $("#pvcopy",sh).onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
+    const rp=$("#pvreport",sh); if(rp) rp.onclick=()=>openReport(p);
+    const pc=$("#pvcopy",sh); if(pc) pc.onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
       plan.myPrograms.unshift(c);savePlan();closeSheet();pg.seg="mine";state.builder={id:c.id,week:0};render();window.scrollTo(0,0);toast("Copied to My programs. Edit away.")};
     armBtn($("#pvmod",sh),"Tap again to remove",()=>{const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
       db.doc("programs/"+p.author).set({programs:rest,updatedAt:Date.now()}).then(()=>toast("Removed from the community")).catch(()=>toast("Couldn't remove it."));closeSheet()});
@@ -1890,7 +1929,8 @@ function hBars(rows,unit){
 }
 const tile=(n,l,sub)=>`<div><b>${n}</b><small>${l}</small>${sub?`<span>${sub}</span>`:""}</div>`;
 const pct=(a,b)=>b?Math.round(a/b*100)+"%":"—";
-function openStats(kind){state.stats={kind,data:null,err:null};render();window.scrollTo(0,0);
+function openStats(kind){state.stats={kind,data:null,err:null,reports:null};render();window.scrollTo(0,0);
+  if(kind==="owner"&&window.LIFTLOG_RPC) window.LIFTLOG_RPC("admin_reports").then(r=>{if(state.stats){state.stats.reports=r||[];render()}}).catch(()=>{if(state.stats){state.stats.reports=false;render()}});
   if(!window.LIFTLOG_RPC){state.stats.err="Stats need an account connection.";render();return}
   window.LIFTLOG_RPC(kind==="owner"?"admin_stats":"my_program_stats").then(d=>{if(state.stats&&state.stats.kind===kind){state.stats.data=d;render()}})
     .catch(e=>{if(state.stats){state.stats.err=/not allowed/i.test(String(e&&e.message))?"Only the app owner can see this.":/function|does not exist|schema cache/i.test(String(e&&e.message))?"Stats aren't set up in the database yet (run stats.sql in Supabase).":"Couldn't load stats. Check your connection and try again.";render()}});
@@ -1913,6 +1953,12 @@ function statsView(){
      <div class="panel"><h2>Community</h2><div class="stats">${tile(d.programs,"programs published")}${tile(d.following,"people following one")}${tile(d.partnerUsers,"track a partner")}</div>
       ${(d.topPrograms||[]).length?`<div class="mx"><div class="mxh"><span>Program</span><span>Using</span><span>Likes</span></div>${d.topPrograms.map(p=>`<div class="mxrow"><span>${esc(p.title||"Untitled")}<small>${p.author?"by "+esc(p.author):""}</small></span><span>${p.using}</span><span>${p.likes}</span></div>`).join("")}</div>`:""}</div>
      <div class="panel"><h2>Units</h2>${hBars(Object.keys(d.units||{}).map(k=>({label:k==="metric"?"kg · cm":k==="imperial"?"lb · ft/in":"Phone default",n:d.units[k]})),"people")}</div>
+     <div class="panel" id="reportsp"><h2>Reports</h2>${S.reports===null?`<p class="savenote">Loading…</p>`:S.reports===false?`<p class="savenote">Reports aren't set up yet (run moderation.sql in Supabase).</p>`:!S.reports.length?`<p>No reports. 👍</p>`:
+       S.reports.map(r=>`<div class="rrow"><div><b>${esc(r.title||"(already removed)")}</b><small>${r.author?"by "+esc(r.author)+" · ":""}${r.count} report${r.count===1?"":"s"} · ${esc((r.reasons||[]).join(", "))}</small>${(r.notes||[]).map(n=>`<small class="rn">“${esc(n)}”</small>`).join("")}</div>
+         <div class="btns">${pg.community.some(x=>x.key===r.key)?`<button class="btn small" data-rview="${esc(r.key)}">View</button><button class="btn small danger" data-rrm="${esc(r.key)}">Remove</button>`:""}<button class="btn small" data-rdis="${esc(r.key)}">Dismiss</button></div></div>`).join("")}</div>
+     <div class="panel"><h2>Creator tiers</h2><p class="savenote" style="margin-top:0">Free accounts can publish 2 programs. Verified trainers and Pro can publish 25.</p>
+      <div class="cform"><label>Email<span class="field"><input id="tieremail" type="email" placeholder="trainer@example.com" autocomplete="off"></span></label>
+      <div class="dchips">${["free","verified","pro"].map(t=>`<button class="dchip wide" data-settier="${t}">${t==="free"?"Free":t==="verified"?"Verified":"Pro"}</button>`).join("")}</div></div></div>
      <p class="savenote">Counts only. Nobody's individual workouts, weights or partners are shown here.</p></div>`;
   }
   const ps=d||[]; const sum=(k)=>ps.reduce((a,p)=>a+(Number(p[k])||0),0);
@@ -1929,6 +1975,13 @@ function statsView(){
 function bindStats(){
   const b=$("#statsback"); if(b) b.onclick=()=>{state.stats=null;render();window.scrollTo(0,0)};
   const r=$("#statsretry"); if(r) r.onclick=()=>openStats(state.stats.kind);
+  document.querySelectorAll("[data-rview]").forEach(b=>b.onclick=()=>openProgView(b.dataset.rview));
+  document.querySelectorAll("[data-rdis]").forEach(b=>armBtn(b,"Tap again",()=>window.LIFTLOG_RPC("dismiss_reports",{k:b.dataset.rdis}).then(()=>{state.stats.reports=state.stats.reports.filter(x=>x.key!==b.dataset.rdis);render();toast("Report dismissed")})));
+  document.querySelectorAll("[data-rrm]").forEach(b=>armBtn(b,"Tap again to remove",()=>{const k=b.dataset.rrm;const p=pg.community.find(x=>x.key===k);if(!p)return;
+    const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
+    db.doc("programs/"+p.author).set({programs:rest,updatedAt:Date.now()}).then(()=>window.LIFTLOG_RPC("dismiss_reports",{k})).then(()=>{state.stats.reports=state.stats.reports.filter(x=>x.key!==k);render();toast("Program removed")}).catch(()=>toast("Couldn't remove it."))}));
+  document.querySelectorAll("[data-settier]").forEach(b=>b.onclick=()=>{const e=$("#tieremail").value.trim();if(!e){toast("Enter their email first");return}
+    window.LIFTLOG_RPC("admin_set_tier",{target_email:e,new_tier:b.dataset.settier}).then(r=>toast(r&&r.ok?`${e} is now ${b.dataset.settier}`:(r&&r.error)||"Couldn't change it")).catch(()=>toast("Couldn't change it. Is moderation.sql installed?"))});
 }
 
 /* ---------- Your Week: build a weekday by body part ---------- */
