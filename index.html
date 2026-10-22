@@ -1947,8 +1947,10 @@ function buildDayFrom(parts,size){
     return q});
   const out=[]; const cap=n-(wantCardio&&lifts.length?1:0);
   for(let r=0;out.length<cap&&queues.some(q=>q.length);r++) queues.forEach(q=>{if(out.length<cap&&q.length){const x=q.shift();if(!out.includes(x))out.push(x)}});
-  if(wantCardio) out.push(PICKS.Cardio[0]);
-  return out.map(name=>LIB.find(x=>x.name===name)).filter(Boolean);
+  const partOf=(name)=>lifts.findIndex(p=>(BODY_PARTS.find(b=>b[0]===p)||[0,[]])[1].some(g=>(PICKS[g]||[]).includes(name)));
+  const sorted=out.map((n,i)=>[n,i]).sort((a,b)=>(partOf(a[0])-partOf(b[0]))||(a[1]-b[1])).map(x=>x[0]);
+  if(wantCardio) sorted.push(PICKS.Cardio[0]);
+  return sorted.map(name=>LIB.find(x=>x.name===name)).filter(Boolean);
 }
 function dayTitleFrom(parts){const p=parts.slice(); if(p.length<=1) return p[0]||"Workout"; return p.slice(0,-1).join(", ")+" & "+p[p.length-1]}
 function openWeekDay(wd){
