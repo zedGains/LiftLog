@@ -243,6 +243,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .ptxt{font-size:17px;margin:6px 0 2px}
 .altlbl{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.altlbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;white-space:nowrap}
 .pltlist{display:grid;gap:2px}
+.pelist{display:grid;gap:6px}.pelift{display:grid;grid-template-columns:1fr 120px;gap:8px;align-items:center;padding:4px 8px;border:1px solid var(--line);border-radius:10px;min-height:48px}.pelift:not(.on){grid-template-columns:1fr}.pelift.on{background:var(--surface-2)}.pelift .tick{margin:0}
 .ownalt{margin:0 0 8px}
 .tlist{display:grid;gap:6px;margin:6px 0 4px}
 .tlrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
@@ -1899,8 +1900,8 @@ function stopProgram(){
 }
 
 /* ---------- gym partners (their top set on the big lifts) ---------- */
-const COMPOUND=/bench press|military press|overhead press|shoulder press|squat|deadlift/i;
-const NOT_COMPOUND=/dumbbell|machine|smith|close-grip|split|goblet|sissy|sumo|hack|romanian|stiff|straight leg|pendulum|belt|calf/i;
+const COMPOUND=/bench press|squat|deadlift/i;
+const NOT_COMPOUND=/dumbbell|machine|smith|close-grip|incline|decline|floor|split|goblet|sissy|sumo|hack|romanian|stiff|straight leg|pendulum|belt|calf|front|zercher|box|pause|jump|overhead|landmine|trap bar|deficit|rack pull/i;
 function tracksPartner(it){if(!it||it.type==="cardio")return false;const v=plan.ptrack[it.id];if(v!=null)return !!v;return COMPOUND.test(it.name)&&!NOT_COMPOUND.test(it.name)}
 function topW(sets){return Math.max(0,...(sets||[]).map(s=>Number(s&&s.w)||0))}
 function myBest(id,before){let w=0,date=null;entriesOf(id).forEach(e=>{if(!e.done||(before&&e.date>=before))return;const t=topW(e.sets);if(t>w){w=t;date=e.date}});return {w,date}}
@@ -1912,7 +1913,7 @@ function vsLine(it){if(!plan.partners.length||!tracksPartner(it))return "";const
   return `<span class="vs">Best · You <b>${me?toDisp(me):"—"}</b>${plan.partners.map(p=>{const w=pBest(p.id,it.id).w;return ` · ${esc(p.name)} <b>${w?toDisp(w):"—"}</b>`}).join("")}</span>`}
 function partnerBox(it,d){
   if(it.type==="cardio") return "";
-  if(!tracksPartner(it)) return `<button class="linkbtn ptrack" id="ptrackon">+ Track a partner's max on this lift</button>`;
+  if(!tracksPartner(it)) return "";
   d.partners=d.partners||{};
   const rows=plan.partners.map(p=>{const b=pBest(p.id,it.id);const x=d.partners[p.id]||{w:"",r:""};const nw=Number(x.w)||0;
     return `<div class="ptrow"><span class="pname"><span class="pnh"><b>${esc(p.name)}</b><button class="linkbtn prmx" data-prmx="${p.id}" aria-label="Remove ${esc(p.name)}">Remove</button></span><small>${b.w?`Best ${toDisp(b.w)}${b.r?` × ${b.r}`:""}${b.date?` · ${fmtDate(b.date)}`:" · starting max"}`:"No max yet"}</small></span>
@@ -1922,7 +1923,7 @@ function partnerBox(it,d){
   return `<div class="pbox"><div class="pbh"><b>Partner</b><button class="linkbtn" id="paddp">+ Add partner</button></div>
    ${plan.partners.length?rows:`<p class="savenote" style="margin:0">Add your gym partner to log just their top set here.</p>`}
    ${plan.partners.length?`<p class="savenote" style="margin:0">Their top set saves with your day log once you mark this exercise done.</p>`:""}
-   <button class="linkbtn ptrack" id="ptrackoff">Stop tracking partners on this lift</button></div>`;
+   </div>`;
 }
 function bindPartnerBox(sh,it,d){
   sh.querySelectorAll("[data-pw],[data-pr]").forEach(inp=>{const pid=inp.dataset.pw||inp.dataset.pr,f=inp.dataset.pw?"w":"r";
@@ -1939,29 +1940,45 @@ function removePartner(pid){const p=plan.partners.find(x=>x.id===pid);if(!p)retu
     if(ch){state.logs[id]={entries:es};persist(id)}});
   Object.keys(state.drafts).forEach(id=>{const d=state.drafts[id];if(d.partners)delete d.partners[pid]});saveDrafts();
   savePlan();toast(`${p.name} removed, with all their numbers`)}
+function allLifts(){const seen=new Set(),out=[];dayKeys().forEach(k=>daySections(k).forEach(s=>s.items.forEach(it=>{if(it.type!=="cardio"&&!seen.has(it.id)){seen.add(it.id);out.push(it)}})));return out}
 function openPartnerEdit(pid,back){
-  const p=pid?plan.partners.find(x=>x.id===pid):null; const lifts=trackedLifts(); const sh=$("#sheet"); let armed=false;
-  sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pecancel">${back?"‹ Back":"Cancel"}</button><span class="eyebrow">${p?"Edit partner":"Add a partner"}</span></div>
-   <h3 id="sheet-title">${p?esc(p.name):"Gym partner"}</h3>
-   <div class="cform"><label>Name<span class="field"><input id="pe-name" value="${p?esc(p.name):""}" placeholder="e.g. Jay" autocomplete="off"></span></label>
-   <div class="lbl" style="margin-bottom:0">Starting maxes <small>(optional)</small></div>
-   <p class="savenote" style="margin:0">If you know their current heaviest weight, put it in so progress starts from there.</p>
-   ${lifts.map(it=>`<label class="pestart"><span>${esc(it.name)}</span><span class="field"><input inputmode="decimal" data-ps="${it.id}" value="${p&&p.start&&p.start[it.id]?toDisp(p.start[it.id]):""}" placeholder="${wU()}" aria-label="${esc(it.name)} starting max"><span>${wU()}</span></span></label>`).join("")}
-   <p class="err" id="pe-err" style="color:var(--red);margin:0;font-size:13px"></p></div>
-   <div class="btns"><button class="btn primary" id="pesave" style="flex:1">${p?"Save":"Add partner"}</button></div>
-   ${p?`<div class="btns"><button class="btn danger" id="pedel" style="flex:1">Remove ${esc(p.name)} completely</button></div><p class="savenote">Deletes ${esc(p.name)} and every number you logged for them. Your own logs aren't touched.</p>`:""}`;
-  state.open="__partner"; sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=0;
+  const p=pid?plan.partners.find(x=>x.id===pid):null; const sh=$("#sheet"); let armed=false;
+  const all=allLifts(); const on={}; all.forEach(it=>on[it.id]=tracksPartner(it));
+  const start={...((p&&p.start)||{})}; let name=p?p.name:""; let more=false;
+  const row=it=>`<div class="pelift ${on[it.id]?"on":""}"><label class="tick"><input type="checkbox" data-pl="${esc(it.id)}" ${on[it.id]?"checked":""}> ${esc(it.name)}</label>
+     ${on[it.id]?`<span class="field"><input inputmode="decimal" data-ps="${esc(it.id)}" value="${start[it.id]?toDisp(start[it.id]):""}" placeholder="max" aria-label="${esc(it.name)} starting max"><span>${wU()}</span></span>`:""}</div>`;
   const done=()=>{if(back)back();else closeSheet();render()};
-  $("#pecancel",sh).onclick=()=>back?back():closeSheet();
-  $("#pesave",sh).onclick=()=>{const n=$("#pe-name",sh).value.trim();if(!n){$("#pe-err",sh).textContent="Give them a name.";return}
-    const start={};sh.querySelectorAll("[data-ps]").forEach(i=>{const v=Number(fromDisp(i.value.replace(/[^0-9.]/g,"")));if(v>0)start[i.dataset.ps]=v});
-    if(p){p.name=n;p.start=start}else plan.partners.push({id:"p"+Date.now().toString(36),name:n,start});
-    if(!pid&&!state.pSel) state.pSel=plan.partners[plan.partners.length-1].id;
-    savePlan();done();toast(p?"Partner saved":`${n} added. Log their top set on the big lifts.`)};
-  const del=$("#pedel",sh); if(del) del.onclick=()=>{if(!armed){armed=true;del.textContent=`Tap again: delete ${p.name} and their numbers`;return}
-    removePartner(pid);done()};
+  const draw=()=>{const picked=all.filter(it=>on[it.id]), rest=all.filter(it=>!on[it.id]);
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pecancel">${back?"‹ Back":"Cancel"}</button><span class="eyebrow">${p?"Edit partner":"Add a partner"}</span></div>
+     <h3 id="sheet-title">${p?esc(p.name):"Gym partner"}</h3>
+     <div class="cform"><label>Name<span class="field"><input id="pe-name" value="${esc(name)}" placeholder="e.g. Jay" autocomplete="off"></span></label></div>
+     <div class="lbl">Lifts you compare <small>${picked.length}</small></div>
+     <p class="savenote" style="margin:0 0 6px">Bench press, squat and deadlift are picked for you. Add a starting max if you know their heaviest weight, so progress starts from there.</p>
+     <div class="pelist">${picked.map(row).join("")||`<p class="savenote">No lifts picked.</p>`}</div>
+     ${rest.length?(more?`<div class="lbl">More lifts from your days</div><div class="pelist">${rest.map(row).join("")}</div>`
+       :`<button class="browse" id="pemore"><span><b>+ Add a lift</b><br><small>Pick any exercise from your days to compare</small></span><span aria-hidden="true">›</span></button>`):""}
+     <p class="savenote">Missing one? Add it to one of your workout days first, then it shows up here.</p>
+     <p class="err" id="pe-err" style="color:var(--red);margin:0;font-size:13px"></p>
+     <div class="btns"><button class="btn primary" id="pesave" style="flex:1">${p?"Save":"Add partner"}</button></div>
+     ${p?`<div class="btns"><button class="btn danger" id="pedel" style="flex:1">Remove ${esc(p.name)} completely</button></div><p class="savenote">Deletes ${esc(p.name)} and every number you logged for them. Your own logs aren't touched.</p>`:""}`;
+    $("#pe-name",sh).oninput=e=>{name=e.target.value};
+    sh.querySelectorAll("[data-ps]").forEach(i=>i.oninput=()=>{const v=Number(fromDisp(i.value.replace(/[^0-9.]/g,"")));if(v>0)start[i.dataset.ps]=v;else delete start[i.dataset.ps]});
+    sh.querySelectorAll("[data-pl]").forEach(c=>c.onchange=()=>{on[c.dataset.pl]=c.checked;const y=sh.scrollTop;draw();sh.scrollTop=y});
+    const m=$("#pemore",sh); if(m) m.onclick=()=>{more=true;const y=sh.scrollTop;draw();sh.scrollTop=y};
+    $("#pecancel",sh).onclick=()=>back?back():closeSheet();
+    $("#pesave",sh).onclick=()=>{const n=name.trim();if(!n){$("#pe-err",sh).textContent="Give them a name.";$("#pe-name",sh).focus();return}
+      all.forEach(it=>{if(on[it.id]!==tracksPartner(it))plan.ptrack[it.id]=on[it.id]});
+      const st={};Object.keys(start).forEach(k=>{if(on[k]&&start[k]>0)st[k]=start[k]});
+      if(p){p.name=n;p.start=st}else plan.partners.push({id:"p"+Date.now().toString(36),name:n,start:st});
+      if(!pid&&!state.pSel) state.pSel=plan.partners[plan.partners.length-1].id;
+      savePlan();done();toast(p?"Partner saved":`${n} added. Log their top set when you do these lifts.`)};
+    const del=$("#pedel",sh); if(del) del.onclick=()=>{if(!armed){armed=true;del.textContent=`Tap again: delete ${p.name} and their numbers`;return}
+      removePartner(pid);done()};
+  };
+  state.open="__partner"; sh.hidden=false; $("#scrim").hidden=false; draw(); sh.scrollTop=0;
   if(!p) $("#pe-name",sh).focus({preventScroll:true});
 }
+
 function partnerPanel(){
   const ps=plan.partners; const sel=ps.find(x=>x.id===state.pSel)||ps[0]; const lifts=trackedLifts();
   const cut=ymd(new Date(Date.now()-28*864e5));
@@ -1975,7 +1992,7 @@ function partnerPanel(){
      :`<p>No lifts picked yet. Tap <b>Choose lifts</b> to pick which ones you compare.</p>`}
    <div class="btns"><button class="btn small primary" id="plifts">+ Choose lifts</button><button class="btn small" id="pedit">Edit ${esc(sel.name)}</button><button class="btn small danger" id="prm">Remove ${esc(sel.name)}</button></div>
    <p class="savenote">Heaviest top set on each lift, from your logs and the partner line. Tap a lift to see every week.</p>`
-   :`<p>Lift with a friend? Add them and log just their top set on the big lifts (bench, incline, military press, squat, deadlift) next to yours. They don't need the app.</p>
+   :`<p>Lift with a friend? Add them and log just their top set next to yours. Bench press, squat and deadlift to start, and you can add any other lift. They don't need the app.</p>
    <div class="btns"><button class="btn primary" id="paddp2" style="flex:1">+ Add a gym partner</button></div>`}</div>`;
 }
 function bindPartnerPanel(){
@@ -2521,7 +2538,7 @@ const GUIDE=[
   {sel:"#nedit",t:"My notes",x:"Private notes for this exercise, like seat height or grip. They show every time you open it, on any day."},
   {sel:"#sheet .alts",t:"Machine taken?",x:"Pick a backup exercise for today only. Your plan stays the same and your log shows which one you did. Tap Edit choices to set your own backups."},
   {p:gAlts,sel:"#sheet .delist",t:"Your own backup choices",x:"This is Edit choices. Remove one with ✕, move your favorite to the top with ↑, or search any exercise below to add it, or type your own made-up one. Go back to the suggested choices anytime. Your list shows on this exercise every day it's on."},
-  {p:gEx,sel:"#sheet .pbox, #ptrackon",t:"Gym partner",x:"Lift with a friend? Log their top set next to yours and compare maxes in the Log."},
+  {p:gEx,sel:"#sheet .pbox",t:"Gym partner",x:"Lift with a friend? On the lifts you compare (bench, squat and deadlift to start), log their top set right here next to yours. Pick the lifts in Log → Partner maxes."},
   {sel:"#mkss, #splitss",t:"Supersets",x:"Do this back to back with another exercise, no rest in between. Pick one already on this day, or one from the library."},
   {sel:"#removeex",t:"Remove from this day",x:"Takes it off this day. An Undo bar shows for a few seconds, and Reset to original brings it back later."},
   {sel:"#browse",t:"Swap it for good",x:"Replace this exercise with anything in the library. It stays swapped every week. Only need a change today? Use the backups above instead."}]},
@@ -2541,7 +2558,7 @@ const GUIDE=[
   {sel:"#exportcsv",t:"History",x:"Every workout you saved, by date. Download them all as a spreadsheet anytime."},
   {sel:"#yourweek",t:"Your week",x:"Tap a weekday to choose its workout, build a new day from body parts, or make it a rest day."},
   {sel:"#partners",t:"Partner maxes",x:"You vs your gym partner on each lift: your best next to theirs, and how much each of you went up in the last 4 weeks. Tap a lift to see every week."},
-  {p:gLifts,sel:"#sheet .pltlist",t:"Choose lifts",x:"Check the lifts you want to compare. Each checked lift gets a row in Partner maxes, and a box for your partner's top set when you open it during a workout. Bench press and squat start checked."},
+  {p:gLifts,sel:"#sheet .pltlist",t:"Choose lifts",x:"Bench press, squat and deadlift are checked to start. Check any other lift from your days to compare it too. You also pick lifts when you add a partner."},
   {p:()=>gTab("plan"),sel:"#opensettings",t:"Settings",x:"Units, notifications, calculators, your trainer profile and your account."}]},
  {id:"settings",t:"Settings & tools",d:"Units, alerts, calculators, trainer profile, account",p:gSet,steps:[
   {sel:"#about",t:"Profile & units",x:"Your weight, age and height (for calorie estimates) and whether you use lb or kg."},
