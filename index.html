@@ -251,6 +251,11 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .tlrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
 .tlrow b{display:block;font-size:15px}.tlrow small{color:var(--muted);font-size:12.5px}.tln{color:var(--muted);font:600 13px var(--mono);white-space:nowrap}
 .tlrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.savedbanner{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:0 12px 12px;padding:12px 14px;border-radius:12px;background:var(--ok-soft);border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+.savedbanner b{display:block;color:var(--ok);font-size:15px}.savedbanner span{font-size:13.5px;color:var(--fg)}.savedbanner .btn{flex:none}
+.welist{display:grid;gap:6px;margin:10px 0}.werow{display:grid;grid-template-columns:12px 1fr minmax(140px,52%);gap:10px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.werow.today{border-color:var(--fg)}.wedot{width:12px;height:12px;border-radius:50%;background:var(--line)}.wen{font-size:15px}.wen small{font-weight:600;color:var(--muted);font-size:11px;margin-left:4px}
+.wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -800,11 +805,14 @@ function persist(id){
 }
 function entriesOf(id){return (state.logs[id]&&state.logs[id].entries)||[]}
 function todayEntry(id){return entriesOf(id).find(e=>e.date===TODAY)}
-function lastEntry(id){const es=entriesOf(id).filter(e=>e.date<TODAY&&e.done);return es[es.length-1]}
+// After you save a day, its exercises start fresh again (the saved log stays in History).
+function freshSet(){return new Set(ls.get("ll.fresh."+TODAY,[]))}
+function shownToday(id){return freshSet().has(id)?null:todayEntry(id)}
+function lastEntry(id){const fr=freshSet().has(id);const es=entriesOf(id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done);return es[es.length-1]}
 
 function draftFor(it){
   if(!state.drafts[it.id]){
-    const t=todayEntry(it.id);
+    const t=shownToday(it.id);
     state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??""})),alt:t.alt||null,marked:true,partners:JSON.parse(JSON.stringify(t.partners||{}))}:{sets:Array.from({length:it.sets},()=>({w:"",r:""})),alt:null,marked:false};
   }
   const d=state.drafts[it.id];
@@ -823,9 +831,9 @@ function dSets(it,d){return d.sets.slice(0,nSets(it,d))}
 function saveDrafts(){ls.set("ll.drafts."+TODAY,state.drafts)}
 
 function cleanSets(sets){return sets.map(s=>({w:s.w===""?null:Number(s.w),r:s.r===""?null:Number(s.r)})).filter(s=>s.w!==null||s.r!==null)}
-function isMarked(id){const d=state.drafts[id];return d?!!d.marked:!!todayEntry(id)}
+function isMarked(id){const d=state.drafts[id];return d?!!d.marked:!!shownToday(id)}
 function isPending(id){
-  const d=state.drafts[id]; if(!d) return false; const t=todayEntry(id);
+  const d=state.drafts[id]; if(!d) return false; const t=shownToday(id);
   if(!d.marked) return !!t;
   if(!t) return true;
   const it0=ALL[id]||{sets:d.sets.length};return JSON.stringify(cleanSets(dSets(it0,d)))!==JSON.stringify(t.sets||[])||(d.alt||null)!==(t.alt||null)||JSON.stringify(cleanP(d.partners))!==JSON.stringify(t.partners||{});
@@ -858,7 +866,8 @@ function saveDay(dayKey){
     render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} workout${items.length===1?"":"s"} logged`); return}
   const n=all.filter(it=>todayEntry(it.id)).length;
   ls.set("ll.savedAt."+dayKey+"."+TODAY,Date.now());
-  render(); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged`);
+  const fr=freshSet(); items.forEach(it=>{fr.add(it.id);delete state.drafts[it.id]}); ls.set("ll.fresh."+TODAY,[...fr]); saveDrafts();
+  state.justSaved={day:dayKey,n}; render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`);
 }
 
 /* ---------- calorie estimate ---------- */
@@ -878,7 +887,7 @@ function exKcal(it,sets){
   });
   return k;
 }
-function curSets(it){const dr=state.drafts[it.id];const t=todayEntry(it.id);return dr?cleanSets(dSets(it,dr)):(t?t.sets:[])}
+function curSets(it){const dr=state.drafts[it.id];const t=shownToday(it.id);return dr?cleanSets(dSets(it,dr)):(t?t.sets:[])}
 
 function hintFor(it){
   const last=lastEntry(it.id); if(!last||it.type==="cardio") return "";
@@ -907,7 +916,29 @@ function renderTabs(){
   const cur=pickTab(); const sel=(DAYS[cur]||cur==="workout")?"workout":cur;
   $("#tabs").innerHTML=tabList().map(t=>`<button class="tab ntab" role="tab" id="tab-${t.k}" aria-selected="${t.k===sel}" data-tab="${t.k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">${NAV_ICONS[t.k]}</svg><span class="v">${t.v}</span></button>`).join("");
 }
-function goWeek(){state.dayMenu=false;state.tab="plan";ls.set("ll.tab","plan");closeSheet();render();const w=$("#yourweek");if(w){w.scrollIntoView({block:"start"});window.scrollBy(0,-80)}}
+function goWeek(){state.dayMenu=false;renderDayMenu(pickTab());openWeekEditor()}
+// Put a workout on a weekday. If that workout is already on another weekday, the two days trade places.
+function assignWeekday(wd,k){const cur=schedOf(wd);const from=k?[0,1,2,3,4,5,6].filter(i=>i!==wd&&plan.schedule[String(i)]===k):[];
+  if(k)plan.schedule[String(wd)]=k;else delete plan.schedule[String(wd)];
+  let msg=`${WD_LONG[wd]}: ${k?DAYS[k].title:"rest day"}`;
+  if(k&&from.length&&cur!==k){from.forEach(i=>{if(cur)plan.schedule[String(i)]=cur;else delete plan.schedule[String(i)]});
+    msg=cur?`Swapped: ${DAYS[k].title} is now ${WD_LONG[wd]}, ${DAYS[cur].title} is now ${from.map(i=>WD_LONG[i]).join(" & ")}`:`Moved ${DAYS[k].title} to ${WD_LONG[wd]}. ${from.map(i=>WD_LONG[i]).join(" & ")} is now a rest day`}
+  savePlan();syncDays();return msg}
+function openWeekEditor(){
+  const sh=$("#sheet"); const order=[1,2,3,4,5,6,0]; const today=nowD().getDay();
+  const draw=()=>{const keys=trainKeys();
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="wedone">Done</button><span class="eyebrow">Your week</span></div>
+     <h3 id="sheet-title">Which workout goes on which day?</h3>
+     <p class="savenote" style="margin-top:4px">Pick a workout for any weekday. If it's already on another day, the two days trade places.</p>
+     <div class="welist">${order.map(i=>{const k=schedOf(i);const c=k?DAYS[k].color:null;return `<div class="werow ${i===today?"today":""}"><span class="wedot" style="${c?`background:var(${c})`:""}"></span><b class="wen">${WD_LONG[i]}${i===today?` <small>Today</small>`:""}</b>
+       <label class="field wesel"><select data-wks="${i}" aria-label="Workout on ${WD_LONG[i]}"><option value="" ${k?"":"selected"}>Rest</option>${keys.map(x=>`<option value="${x}" ${x===k?"selected":""}>${esc(DAYS[x].title)}</option>`).join("")}</select></label></div>`}).join("")}</div>
+     <button class="browse" id="wenew"><span><b>+ Build a new day by body part</b><br><small>Pick a weekday, then choose muscles</small></span><span aria-hidden="true">›</span></button>`;
+    $("#wedone",sh).onclick=()=>{closeSheet();render()};
+    sh.querySelectorAll("[data-wks]").forEach(s=>s.onchange=()=>{const msg=assignWeekday(+s.dataset.wks,s.value);const y=sh.scrollTop;draw();sh.scrollTop=y;render();toast(msg)});
+    $("#wenew",sh).onclick=()=>{state.tab="plan";ls.set("ll.tab","plan");closeSheet();render();const w=$("#yourweek");if(w){w.scrollIntoView({block:"start"});window.scrollBy(0,-80)}toast("Tap a weekday to build its workout")};
+  };
+  state.open="__weekedit"; sh.hidden=false; $("#scrim").hidden=false; draw(); sh.scrollTop=0;
+}
 function renderDayMenu(tab){
   document.querySelectorAll(".dmenu,.mscrim").forEach(x=>x.remove());
   const dp=$("#daypick"); if(dp) dp.setAttribute("aria-expanded",String(!!state.dayMenu));
@@ -966,7 +997,8 @@ function render(){
   refreshTitles(); const d=DAYS[tab]; rebuildAll(); const secs=daySections(tab); const items=secs.flatMap(s=>s.items);
   const done=items.filter(it=>isMarked(it.id)).length;
   const pending=items.filter(it=>isPending(it.id)).length;
-  const savedN=items.filter(it=>todayEntry(it.id)).length;
+  const savedN=items.filter(it=>shownToday(it.id)).length;
+  const frIds=freshSet(); const savedFresh=items.filter(it=>frIds.has(it.id)&&todayEntry(it.id)).length;
   const savedAt=ls.get("ll.savedAt."+tab+"."+TODAY,null);
   const prim=new Set(),sec=new Set(); items.forEach(it=>{it.p.forEach(x=>prim.add(x));it.s.forEach(x=>sec.add(x))});
   const restDay=weekdayTab()===null;
@@ -979,6 +1011,7 @@ function render(){
     <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
+  ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${restDay?`<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
   <div class="mapwrap">${bodyMap([...prim],[...sec].filter(x=>!prim.has(x)))}
@@ -1007,6 +1040,7 @@ function render(){
     <p class="savenote">${state.mode==="db"?"Logs go to your account, so they're there next week on any device.":"Logs are saved on this phone only."}</p>
   </div>`;
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openSheet(b.dataset.open));
+  const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});ls.set("ll.fresh."+TODAY,[...fr]);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   app.querySelectorAll("[data-reorder]").forEach(b=>b.onclick=()=>{state.reorder=state.reorder===b.dataset.reorder?null:b.dataset.reorder;render()});
   app.querySelectorAll(".section.reordering").forEach(el=>bindReorder(el,tab));
   app.querySelectorAll("[data-check]").forEach(b=>b.onclick=()=>toggleMark(ALL[b.dataset.check]));
@@ -1032,7 +1066,7 @@ function bindReorder(sec,tab){
     const nb=document.querySelector(`.section.reordering [data-mv="${b.dataset.mv}"][data-i="${j}"]`)||document.querySelector(`.section.reordering [data-i="${j}"]`);if(nb&&!nb.disabled)nb.focus()});
 }
 function card(it){
-  const m=isMarked(it.id), pend=isPending(it.id), t=todayEntry(it.id), last=lastEntry(it.id), h=hintFor(it);
+  const m=isMarked(it.id), pend=isPending(it.id), t=shownToday(it.id), last=lastEntry(it.id), h=hintFor(it);
   const dr=state.drafts[it.id];
   const cur=dr?cleanSets(dSets(it,dr)):(t?t.sets:[]);
   const alt=dr?dr.alt:(t&&t.alt);
@@ -1132,7 +1166,9 @@ function openSheet(id,keepScroll){
   <div class="btns"><button class="btn" id="closesheet" style="flex:1">Close</button></div>`;
   sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=st;
   sh.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
-    const i=+inp.dataset.i; const raw=inp.value.replace(/[^0-9.]/g,""); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw; saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
+    const i=+inp.dataset.i; const raw=inp.value.replace(/[^0-9.]/g,""); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw;
+    if(raw!==""&&!d.marked){d.marked=true;const mb=$("#markbtn",sh);if(mb){mb.textContent="✓ Marked done";mb.className="btn okd"}}
+    saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
     if(it.drop&&inp.dataset.f==="w"){
       if(dropAuto){
         if(i>0){d.autoIdx=(d.autoIdx||[]).filter(x=>x!==i);inp.closest(".field").classList.remove("autofill")}
@@ -1449,7 +1485,8 @@ function planView(){
     <p class="savenote">Opens in Excel or Google Sheets: one row per set, with the workout date, day, exercise, weight, reps and the time you logged it.</p></div>
    <div class="panel" id="yourweek"><h2>Your week</h2>
     <div class="week">${order.map(i=>{const k=schedOf(i);const c=k?DAYS[k].color:null;return `<button class="wk ${i===wd?"today":""} ${state.weekEdit===i?"sel":""}" data-wd="${i}" aria-label="${WD_LONG[i]}: ${k?esc(DAYS[k].label):"Rest"}" style="${c?`background:var(${c});color:${c==="--yellow"?"var(--on-yellow)":"#fff"}`:""}"><b>${names[i]}</b>${k?esc(DAYS[k].label):"Rest"}</button>`}).join("")}</div>
-    <p>Tap a weekday to choose its workout. Pick body parts to build a new day, use a day you already have, or make it a rest day.</p></div>
+    <p>Tap a weekday to choose its workout. Pick body parts to build a new day, use a day you already have, or make it a rest day.</p>
+    <div class="btns"><button class="btn small" id="weekedit2">⇅ Rearrange my week</button></div></div>
 
    ${partnerPanel()}
    ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).length?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>Rest days, warm-up and tips from your plan</span></summary>${TPL.notes.panels.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""}
@@ -1528,7 +1565,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -2142,7 +2179,7 @@ function openWeekDay(wd){
     $("#wkcancel",sh).onclick=closeSheet;
     sh.querySelectorAll("[data-bp]").forEach(b=>b.onclick=()=>{const p=b.dataset.bp;ws.sel=ws.sel.includes(p)?ws.sel.filter(x=>x!==p):[...ws.sel,p];const st=sh.scrollTop;draw();sh.scrollTop=st});
     sh.querySelectorAll("[data-wsz]").forEach(b=>b.onclick=()=>{ws.size=b.dataset.wsz;const st=sh.scrollTop;draw();sh.scrollTop=st});
-    sh.querySelectorAll("[data-wsk]").forEach(b=>b.onclick=()=>{const k=b.dataset.wsk;if(k)plan.schedule[String(wd)]=k;else delete plan.schedule[String(wd)];savePlan();syncDays();closeSheet();render();toast(`${WD_LONG[wd]}: ${k?DAYS[k].label+" · "+DAYS[k].title:"rest day"}`)});
+    sh.querySelectorAll("[data-wsk]").forEach(b=>b.onclick=()=>{const msg=assignWeekday(wd,b.dataset.wsk);closeSheet();render();toast(msg)});
     const cr=$("#wkcreate",sh); if(cr) cr.onclick=()=>{
       const used=new Set(Object.values(DAYS).map(d=>d.color)); const col=(DAY_COLORS.find(([c])=>!used.has(c))||DAY_COLORS[plan.days.length%DAY_COLORS.length])[0];
       const key="u"+Date.now().toString(36);
