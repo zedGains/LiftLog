@@ -256,6 +256,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .welist{display:grid;gap:6px;margin:10px 0}.werow{display:grid;grid-template-columns:12px 1fr minmax(140px,52%);gap:10px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 .werow.today{border-color:var(--fg)}.wedot{width:12px;height:12px;border-radius:50%;background:var(--line)}.wen{font-size:15px}.wen small{font-weight:600;color:var(--muted);font-size:11px;margin-left:4px}
 .wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
+.skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
+.skipban .btns{margin-top:8px}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -640,7 +642,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -902,7 +904,12 @@ function hintFor(it){
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function schedOf(wd){const k=plan.schedule[String(wd)];return k&&DAYS[k]?k:null}
-function weekdayTab(){return schedOf(nowD().getDay())}
+function weekdayTab(){if((plan.skips||{})[TODAY])return null;return schedOf(nowD().getDay())}
+function plannedToday(){return schedOf(nowD().getDay())}
+// "Not training today": today becomes a rest day just this once. The workout is back on its weekday next week.
+function skipToday(){const k=plannedToday();if(!k)return;plan.skips=plan.skips||{};const keep={};Object.keys(plan.skips).filter(d=>d>=ymd(tzD(Date.now()-30*864e5))).forEach(d=>keep[d]=plan.skips[d]);keep[TODAY]=k;plan.skips=keep;savePlan();render();
+  toast(`Rest day. ${DAYS[k].title} is back next ${WD_LONG[nowD().getDay()]}.`)}
+function unskipToday(){if(plan.skips){delete plan.skips[TODAY];savePlan()}render();toast("Back on: today is a workout day again")}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
 function defaultDay(){const k=state.lastDay;return DAYS[k]?k:(weekdayTab()||trainKeys()[0]||null)}
@@ -1013,7 +1020,11 @@ function render(){
   </header>
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
-  ${restDay?`<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")}</div>`:""}
+  ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
+    if(sk&&DAYS[sk]) return `<div class="banner skipban"><b>You're resting today.</b> ${esc(DAYS[sk].title)} is back next ${wdName}. Feel like training after all? Log any day here and it counts for today.<div class="btns"><button class="btn small" id="unskip">Undo, I'm training today</button></div></div>`;
+    if(restDay) return `<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")} Want to train anyway? Mark and save this day like normal. It's logged for today, and your week stays the same.</div>`;
+    if(weekdayTab()===tab) return `<button class="linkbtn skiplink" id="skipday">Not training today? Make it a rest day</button>`;
+    return ""})()}
   <div class="mapwrap">${bodyMap([...prim],[...sec].filter(x=>!prim.has(x)))}
     <div class="legend"><p>Muscles hit today</p>
       <div><span class="sw" style="background:var(--accent)"></span>Main target</div>
@@ -1040,6 +1051,8 @@ function render(){
     <p class="savenote">${state.mode==="db"?"Logs go to your account, so they're there next week on any device.":"Logs are saved on this phone only."}</p>
   </div>`;
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openSheet(b.dataset.open));
+  const sk1=$("#skipday"); if(sk1) armBtn(sk1,"Tap again: rest today, this workout comes back next week",skipToday);
+  const us1=$("#unskip"); if(us1) us1.onclick=unskipToday;
   const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});ls.set("ll.fresh."+TODAY,[...fr]);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   app.querySelectorAll("[data-reorder]").forEach(b=>b.onclick=()=>{state.reorder=state.reorder===b.dataset.reorder?null:b.dataset.reorder;render()});
   app.querySelectorAll(".section.reordering").forEach(el=>bindReorder(el,tab));
