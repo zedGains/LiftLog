@@ -257,7 +257,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .werow.today{border-color:var(--fg)}.wedot{width:12px;height:12px;border-radius:50%;background:var(--line)}.wen{font-size:15px}.wen small{font-weight:600;color:var(--muted);font-size:11px;margin-left:4px}
 .wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
-.skipban .btns{margin-top:8px}
+.skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -1021,7 +1021,7 @@ function render(){
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
-    if(sk&&DAYS[sk]) return `<div class="banner skipban"><b>You're resting today.</b> ${esc(DAYS[sk].title)} is back next ${wdName}. Feel like training after all? Log any day here and it counts for today.<div class="btns"><button class="btn small" id="unskip">Undo, I'm training today</button></div></div>`;
+    if(sk&&DAYS[sk]) return `<div class="skipban"><span>😴 <b>Rest today</b> · ${esc(DAYS[sk].title)} back next ${wdName}</span><button class="linkbtn" id="unskip">Undo</button></div>`;
     if(restDay) return `<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")} Want to train anyway? Mark and save this day like normal. It's logged for today, and your week stays the same.</div>`;
     if(weekdayTab()===tab) return `<button class="linkbtn skiplink" id="skipday">Not training today? Make it a rest day</button>`;
     return ""})()}
