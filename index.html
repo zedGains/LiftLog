@@ -842,7 +842,6 @@ function isPending(id){
 }
 function toggleMark(it,on){
   const d=draftFor(it); d.marked=on===undefined?!d.marked:on; saveDrafts();
-  if(d.marked&&plan.skips&&plan.skips[TODAY]){delete plan.skips[TODAY];savePlan()}
   render(); if(state.open===it.id) openSheet(it.id,true);
 }
 function dayHas(k,id){return daySections(k).some(s=>s.items.some(x=>x.id===id))}
@@ -1022,7 +1021,7 @@ function render(){
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
-    if(done) return "";
+    if(done||items.some(it=>todayEntry(it.id))) return "";
     if(sk&&DAYS[sk]) return `<div class="skipban"><span>😴 <b>Rest today</b> · ${esc(DAYS[sk].title)} back next ${wdName}</span><button class="linkbtn" id="unskip">Undo</button></div>`;
     if(restDay) return `<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")} Want to train anyway? Mark and save this day like normal. It's logged for today, and your week stays the same.</div>`;
     if(weekdayTab()===tab) return `<button class="linkbtn skiplink" id="skipday">Not training today? Make it a rest day</button>`;
@@ -1182,7 +1181,7 @@ function openSheet(id,keepScroll){
   sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=st;
   sh.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
     const i=+inp.dataset.i; const raw=inp.value.replace(/[^0-9.]/g,""); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw;
-    if(raw!==""&&!d.marked){d.marked=true;if(plan.skips&&plan.skips[TODAY]){delete plan.skips[TODAY];savePlan()}const mb=$("#markbtn",sh);if(mb){mb.textContent="✓ Marked done";mb.className="btn okd"}}
+    if(raw!==""&&!d.marked){d.marked=true;const mb=$("#markbtn",sh);if(mb){mb.textContent="✓ Marked done";mb.className="btn okd"}}
     saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
     if(it.drop&&inp.dataset.f==="w"){
       if(dropAuto){
