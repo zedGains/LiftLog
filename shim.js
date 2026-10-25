@@ -14,6 +14,11 @@
   const CFG = window.LIFTLOG_CONFIG || {};
   const configured = !!(CFG.supabaseUrl && CFG.supabaseAnonKey && window.supabase);
   const LL_UID = "ll.uid";
+  // Invite links: ?ref=CODE is remembered until the new account claims it.
+  try {
+    const q = new URLSearchParams(location.search), r = (q.get("ref") || "").replace(/[^A-Za-z0-9]/g, "").slice(0, 12);
+    if (r) { localStorage.setItem("ll.ref", JSON.stringify(r.toUpperCase())); q.delete("ref"); history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash); }
+  } catch (e) {}
 
   /* ---------- tiny helpers ---------- */
   const clone = (v) => (v == null ? v : JSON.parse(JSON.stringify(v)));
@@ -21,7 +26,7 @@
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   function clearAppStorage() {
     try {
-      Object.keys(localStorage).filter((k) => k.startsWith("ll.") && !["ll.lang", "ll.tz"].includes(k)).forEach((k) => localStorage.removeItem(k));
+      Object.keys(localStorage).filter((k) => k.startsWith("ll.") && !["ll.lang", "ll.tz", "ll.ref"].includes(k)).forEach((k) => localStorage.removeItem(k));
     } catch (e) {}
   }
   function err(code, message) { const e = new Error(message || code); e.code = code; return e; }

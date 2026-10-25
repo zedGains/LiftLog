@@ -93,7 +93,7 @@ language sql stable security definer set search_path = public as $$
   ), ranked as (select *, rank() over (order by streak desc, last4 desc) r from lb),
   mine as (select public._board_stats(auth.uid()) m)
   select jsonb_build_object(
-    'rows', coalesce((select jsonb_agg(jsonb_build_object('rank', r, 'name', coalesce(name, 'Lifter'), 'streak', streak,
+    'rows', coalesce((select jsonb_agg(jsonb_build_object('rank', r, 'id', id, 'name', coalesce(name, 'Lifter'), 'streak', streak,
              'last4', last4, 'me', id = auth.uid()) order by r, name) from (select * from ranked order by r limit 50) t), '[]'::jsonb),
     'total', (select count(*) from lb),
     'rank', (select r from ranked where id = auth.uid()),

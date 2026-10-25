@@ -259,7 +259,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
 .skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
 .med{--t1:#B7713A;--t2:#E3A877;width:58px;height:58px;margin:0 auto 5px;position:relative;flex:none}
-.med.bronze{--t1:#B7713A;--t2:#E3A877}.med.silver{--t1:#8E99A6;--t2:#D5DCE3}.med.gold{--t1:#C9971A;--t2:#F4D36B}.med.plat{--t1:#4C7BD9;--t2:#A9C6F5}
+.med.bronze{--t1:#B7713A;--t2:#E3A877}.med.silver{--t1:#8E99A6;--t2:#D5DCE3}.med.gold{--t1:#C9971A;--t2:#F4D36B}.med.plat{--t1:#4C7BD9;--t2:#A9C6F5}.med.diamond{--t1:#139BB3;--t2:#B4F1F8}
 .med .rib{position:absolute;left:50%;top:60%;width:58%;height:45%;transform:translateX(-50%);display:flex;justify-content:space-between}
 .med .rib i{width:44%;height:100%;background:var(--rc,#C92A2A);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
 .med .disc{position:absolute;inset:0 7% 14% 7%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--t2),var(--t1) 70%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),0 2px 4px rgba(0,0,0,.2);display:grid;place-items:center;color:#fff;z-index:1}
@@ -268,6 +268,14 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .med.locked .disc{background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--line)}.med.locked svg{stroke:var(--muted);filter:none;opacity:.6}.med.locked .num{color:var(--muted);text-shadow:none;opacity:.7}.med.locked .rib i{background:var(--line)}
 .med.sm{width:44px;height:44px;margin:0}.med.sm .num{font-size:13px}
 .med.big{width:118px;height:118px}.med.big .num{font-size:34px}
+.rankrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);margin-top:12px;font-size:13px;color:var(--muted)}.rankrow b{display:block;color:var(--fg);font-size:15px}.rankrow>span:not(.go){flex:1;min-width:0}.rankrow .go{font-weight:700;color:var(--fg);white-space:nowrap}
+.remb{width:40px;height:45px;flex:none;display:block}.remb.xs{width:20px;height:23px}.remb.sm{width:34px;height:38px}.remb.big{width:84px;height:94px}
+.rankbox{display:flex;gap:16px;align-items:center;margin:14px 0;padding:14px;border-radius:12px;background:var(--surface-2)}.rkt{flex:1;min-width:0}.rkn{font:800 24px/1.1 var(--display);text-transform:uppercase;display:flex;align-items:center}.rkt p{margin:2px 0 8px;color:var(--muted);font-size:14px}.rkt small{display:block;margin-top:4px;color:var(--muted);font-size:12.5px}
+.rkt .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}.rkt .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.pgrid .bcell{cursor:default}.pgrid .med.sm{margin:0 auto 4px}.rklist{display:grid;gap:6px;margin:10px 0}.rklist>div{display:flex;align-items:center;gap:10px}.rklist b{flex:1}.rklist span{color:var(--muted);font-size:14px}
+.rkpts{display:flex;justify-content:space-between;margin:12px 0 16px;font-weight:700;font-size:14px}.rkpts>span{display:flex;flex-direction:column;align-items:center;gap:2px}
+.reflink{display:flex;gap:8px;align-items:center;background:var(--surface-2);border-radius:10px;padding:8px 8px 8px 12px}.reflink code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.lbrows li[data-prof]{cursor:pointer}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -275,16 +283,16 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .lbme{display:flex;align-items:baseline;gap:8px;margin:4px 0}.lbme b{font-size:28px}.lbme span{color:var(--muted);font-size:14px}.lbjoin{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--surface-2);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}.lbtabs{margin:4px 0 6px}.lbrules{padding-left:18px;margin:8px 0 14px;line-height:1.5}.lbrules li{margin:4px 0}
 #lvlpanel h2{display:flex;justify-content:space-between;align-items:baseline}#lvlpanel h2 .linkbtn{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:14px}
 .lvl{display:flex;gap:14px;align-items:center}
-.ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
-.ring>div{width:60px;height:60px;border-radius:50%;background:var(--surface);display:grid;place-items:center;align-content:center;text-align:center}
-.ring b{font:800 26px/1 var(--display)}.ring small{font:700 9px var(--display);letter-spacing:.1em;color:var(--muted);display:block}
+.lvring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
+.lvring>div{width:60px;height:60px;border-radius:50%;background:var(--surface);display:grid;place-items:center;align-content:center;text-align:center}
+.lvring b{font:800 26px/1 var(--display)}.lvring small{font:700 9px var(--display);letter-spacing:.1em;color:var(--muted);display:block}
 .lt{flex:1;min-width:0}.lt>b{font:800 22px/1.1 var(--display);text-transform:uppercase}.lt p{margin:2px 0 6px;color:var(--muted);font-size:13.5px}
 .lvl .bar,.nextb .bar,.bpop .bar,.cpop .bar{display:block;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.lvl .bar i,.nextb .bar i,.bpop .bar i,.cpop .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
 .recent{display:flex;gap:6px;margin-top:14px}
 .mini{all:unset;cursor:pointer;width:25%;text-align:center;font-size:11.5px;font-weight:600;line-height:1.2}.mini span{display:block}
 .nextb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:10px;border-radius:10px;background:var(--surface-2);margin-top:12px;font-size:13.5px}
 .nextb>span{flex:1;min-width:0}.nextb b{display:block;font-size:14px}.nextb .bar{margin-top:5px}
-.bcats{margin:0 12px 10px}
+.bcats{margin:0 12px 10px}.elitenote{margin:14px 0 0;font-size:13px;color:var(--muted);text-align:center}
 .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 6px}
 .bcell{all:unset;cursor:pointer;text-align:center;font-size:12px;line-height:1.2;display:block}.bcell b{display:block;font-weight:600}.bcell small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
 .bcell .pb{display:block;height:4px;border-radius:9px;background:var(--line);margin:4px 10px 0;overflow:hidden}.bcell .pb i{display:block;height:100%;background:var(--green)}
@@ -689,7 +697,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,lvlSeen:v.lvlSeen||1,supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -1537,6 +1545,7 @@ function planView(){
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    ${badgesPanel()}
    ${boardPanel()}
+   ${invitePanel()}
    ${weightPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
@@ -1631,7 +1640,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindBadgesPanel();bindBoard();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1887,7 +1896,7 @@ function showNotice(title,text){const sh=$("#sheet");sh.innerHTML=`<div class="g
   state.open="__notice";sh.hidden=false;$("#scrim").hidden=false;$("#ntok").onclick=closeSheet;$("#ntok").focus()}
 
 let socQ=Promise.resolve();
-function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted},follows:[...(pg.myFollows||[])]}; pg.socialPending++;
+function writeSocial(){ if(!db||!uid)return; const payload={likes:[...pg.myLikes],uses:[...pg.myUses],started:{...pg.myStarted},follows:[...(pg.myFollows||[])],...(pg.myCard?{card:pg.myCard}:{})}; pg.socialPending++;
   const run=()=>db.doc("social/"+uid).set(payload); socQ=socQ.then(run,run).catch(()=>{}).finally(()=>{pg.socialPending--}); }
 function recount(){const likes={},uses={};const docs={...pg.socialDocs};if(uid)docs[uid]={likes:[...pg.myLikes],uses:[...pg.myUses]};
   Object.values(docs).forEach(v=>{(v.likes||[]).forEach(k=>likes[k]=(likes[k]||0)+1);(v.uses||[]).forEach(k=>uses[k]=(uses[k]||0)+1)});pg.social={likes,uses}}
@@ -1903,7 +1912,7 @@ function startCommunity(){
   },()=>{pg.ready=true;rerenderPrograms()});
   db.collection("social").onSnapshot(snap=>{
     pg.socialDocs={}; snap.docs.forEach(doc=>{const v=thaw(doc.data());if(v)pg.socialDocs[doc.id]=v});
-    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[]);pg.myStarted={...(pg.socialDocs[uid].started||{})};pg.myFollows=new Set(pg.socialDocs[uid].follows||[])}
+    if(uid&&pg.socialDocs[uid]&&pg.socialPending===0){pg.myLikes=new Set(pg.socialDocs[uid].likes||[]);pg.myUses=new Set(pg.socialDocs[uid].uses||[]);pg.myStarted={...(pg.socialDocs[uid].started||{})};pg.myFollows=new Set(pg.socialDocs[uid].follows||[]);pg.myCard=pg.socialDocs[uid].card||null}
     delete pg.socialDocs[uid]; recount(); rerenderPrograms();
   },()=>{});
 }
@@ -2722,8 +2731,8 @@ const BICONS={cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 
  scale:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 9a5 5 0 0 1 8 0M12 9l1.5-2"/>', back:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/>',
  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', trophy:'<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 14v4M8 21h8M9 18h6"/>',
  down:'<path d="M12 4v14M6 12l6 6 6-6"/>', wknd:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M13 14h5v4h-5z"/>', book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"/>'};
-const TIERXP={bronze:50,silver:100,gold:250,plat:500};
-const RIB={bronze:"#C92A2A",silver:"#1F5FC4",gold:"#C92A2A",plat:"#6E44C9"};
+const TIERXP={bronze:50,silver:100,gold:250,plat:500,diamond:800};
+const RIB={bronze:"#C92A2A",silver:"#1F5FC4",gold:"#C92A2A",plat:"#6E44C9",diamond:"#0E6E85"};
 function medal(b,cls,locked){const ic=b.num!=null?`<span class="num">${esc(String(b.num))}</span>`:`<svg viewBox="0 0 24 24" aria-hidden="true">${BICONS[b.icon]||BICONS.star}</svg>`;
   return `<div class="med ${cls||""} ${locked?"locked":b.tier}"><div class="disc">${ic}</div><div class="rib" style="--rc:${b.rib||RIB[b.tier]}"><i></i><i></i></div></div>`}
 function wkStartOf(date){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d);dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return ymd(dt)}
@@ -2765,14 +2774,18 @@ function badgeDefs(){
   [[10,"bronze"],[25,"silver"],[50,"silver"],[100,"gold"],[250,"gold"],[500,"plat"]].forEach(([n,t])=>add("milestones","w"+n,t,`${n} workouts`,`Save ${n} workout days.`,S.workouts>=n,S.workouts,n,{num:n}));
   add("milestones","vol100k","silver",kg?"45,000 kg lifted":"100K lb lifted","Total weight moved across every set you've logged.",S.volume>=100000,Math.round(S.volume),100000,{num:"100K",fmt:"vol"});
   add("milestones","vol1m","plat",kg?"450,000 kg lifted":"Million lb lifted","Total weight moved across every set you've logged.",S.volume>=1000000,Math.round(S.volume),1000000,{num:"1M",fmt:"vol"});
-  const LAD={bench:{lb:[95,135,185,225,275,315,365,405],kg:[40,60,80,100,120,140,160,180],label:"Bench"},
-    squat:{lb:[135,185,225,275,315,365,405,455,495],kg:[60,80,100,120,140,160,180,200,220],label:"Squat"},
-    deadlift:{lb:[135,185,225,275,315,405,495,585],kg:[60,80,100,120,140,180,220,260],label:"Deadlift"},
-    military:{lb:[65,95,135,185,225],kg:[30,40,60,80,100],label:"Overhead press"}};
-  const PLATES={lb:{135:1,225:2,315:3,405:4,495:5,585:6},kg:{60:1,100:2,140:3,180:4,220:5,260:6}};
-  Object.keys(LAD).forEach(key=>{const l=LAD[key];const arr=kg?l.kg:l.lb;arr.forEach((v,i)=>{const w=kg?v*LB_PER_KG:v;const pl=PLATES[kg?"kg":"lb"][v];
-    const tier=i<2?"bronze":i<4?"silver":i<arr.length-1?"gold":"plat";
-    add("strength",key+v,tier,pl?`${pl}-plate ${l.label.toLowerCase()}`:`${l.label} ${v} ${kg?"kg":"lb"}`,`${l.label} ${v} ${kg?"kg":"lb"} for at least 1 rep. Lift more and you get every badge below it too.`,(S.big[key]||0)>=w-0.01,Math.round(S.big[key]||0),Math.round(w),{num:pl?null:v,icon:"plate",fmt:"w",sub:l.label})})});
+  const LAD={bench:{lb:[95,135,185,225,275,315,365,405],kg:[40,60,80,100,120,140,160,180],elb:[455,495,545,600],ekg:[200,220,250,275],label:"Bench"},
+    squat:{lb:[135,185,225,275,315,365,405,455,495],kg:[60,80,100,120,140,160,180,200,220],elb:[545,600,700,800],ekg:[250,275,315,365],label:"Squat"},
+    deadlift:{lb:[135,185,225,275,315,405,495,585],kg:[60,80,100,120,140,180,220,260],elb:[635,700,800,900],ekg:[290,315,365,405],label:"Deadlift"},
+    military:{lb:[65,95,135,185,225],kg:[30,40,60,80,100],elb:[275,315,365],ekg:[120,140,165],label:"Overhead press"}};
+  const U=kg?"kg":"lb", rung=(key,v,tier)=>{const l=LAD[key],w=kg?v*LB_PER_KG:v;
+    add("strength",key+v,tier,`${l.label} ${v} ${U}`,`${l.label} ${v} ${U} for at least 1 rep. Lift more and you get every badge below it too.`,(S.big[key]||0)>=w-0.01,Math.round(S.big[key]||0),Math.round(w),{num:v,fmt:"w",sub:l.label})};
+  S.eliteHidden=[];
+  Object.keys(LAD).forEach(key=>{const l=LAD[key];const arr=kg?l.kg:l.lb;
+    arr.forEach((v,i)=>rung(key,v,i<2?"bronze":i<4?"silver":i<arr.length-1?"gold":"plat"));
+    const top=arr[arr.length-1];
+    if((S.big[key]||0)>=(kg?top*LB_PER_KG:top)-0.01)(kg?l.ekg:l.elb).forEach(v=>rung(key,v,"diamond"));
+    else S.eliteHidden.push(`${l.label.toLowerCase()} ${top} ${U}`)});
   const bw=Number(plan.bw)||0;
   [["bench",1,"silver","Bodyweight bench"],["squat",1.5,"gold","1.5× bodyweight squat"],["deadlift",2,"gold","2× bodyweight deadlift"]].forEach(([k,x,t,nm])=>
     add("everyone","bw"+k,t,nm,bw?`${LAD[k].label} ${x}× your body weight (${toDisp(bw*x)} ${wU()} right now). Fair at any size.`:"Add your body weight in Settings → Profile to track this one. Fair at any size.",bw>0&&(S.big[k]||0)>=bw*x,bw?Math.round(S.big[k]||0):null,Math.round(bw*x)||1,{icon:"scale",fmt:"w"}));
@@ -2791,6 +2804,9 @@ function badgeDefs(){
   add("fun","comeback","silver","Comeback","Get back in the gym after 2+ weeks off.",S.comeback,null,1,{icon:"back",rib:"#21875A"});
   add("fun","partner","bronze","Partner up","Log a gym partner's top set.",S.partner,null,1,{icon:"pair",rib:"#21875A"});
   add("fun","creator","silver","Program creator","Publish a program to the community.",S.published,null,1,{icon:"book",rib:"#6E44C9"});
+  S.refs=plan.refActive||0;
+  [[1,"bronze","First recruit"],[3,"silver","Squad of 3"],[10,"gold","Crew builder"],[25,"plat","Team captain"],[50,"diamond","Movement"]].forEach(([n,t,nm])=>
+    add("friends","ref"+n,t,nm,`Invite ${n===1?"a friend":n+" friends"} who finish${n===1?"es":""} their first week. Share your link from Log → Invite friends.`,S.refs>=n,S.refs,n,{num:n,rib:"#21875A",icon:"pair"}));
   return {B,S}}
 const LVL_TITLES=[[1,"Rookie"],[5,"Regular"],[10,"Grinder"],[15,"Iron"],[20,"Steel"],[30,"Titan"],[40,"Legend"]];
 function levelInfo(B,S){const xp=S.workouts*100+S.prs*50+S.weeksHit*150+B.filter(b=>b.ok).reduce((a,b)=>a+TIERXP[b.tier],0);
@@ -2803,23 +2819,24 @@ function badgesPanel(){
   const {B,L}=badgeState(); const seen=plan.badgeSeen||{};
   const earned=B.filter(b=>b.ok).sort((a,b)=>(seen[b.id]||0)>(seen[a.id]||0)?1:-1);
   const next=B.filter(b=>!b.ok&&b.cur!=null).sort((a,b)=>b.cur/b.tgt-a.cur/a.tgt)[0];
-  const pct=Math.round(L.into/L.need*100);
+  const pct=Math.round(L.into/L.need*100), rk=rankInfo(B.filter(b=>b.ok).reduce((a,b)=>a+RPTS[b.tier],0));
   return `<div class="panel" id="lvlpanel"><h2>Level &amp; badges <button class="linkbtn" id="seebadges">See all ›</button></h2>
-   <div class="lvl"><div class="ring" style="--p:${pct}"><div><small>LEVEL</small><b>${L.lvl}</b></div></div>
+   <div class="lvl"><div class="lvring" style="--p:${pct}"><div><small>LEVEL</small><b>${L.lvl}</b></div></div>
     <div class="lt"><b>${esc(L.title)}</b><p>${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP to level ${L.lvl+1}${L.nextT?` · <i>${esc(L.nextT[1])}</i> at ${L.nextT[0]}`:""}</p><div class="bar"><i style="width:${pct}%"></i></div></div></div>
+   <button class="rankrow" id="myprofile">${rankEmblem(rk,"sm")}<span><b>${esc(rk.full)}</b>${rk.pts} rank points${rk.nextName?` · ${rk.toNext} to ${esc(rk.nextName)}`:""}</span><span class="go">Profile ›</span></button>
    ${earned.length?`<div class="recent">${earned.slice(0,4).map(b=>`<button class="mini" data-badge="${b.id}">${medal(b)}<span>${esc(b.name)}</span></button>`).join("")}</div>`:`<p class="savenote">Save your first workout to earn your first badge.</p>`}
    ${next?`<button class="nextb" data-badge="${next.id}">${medal(next,"sm",true)}<span><b>Next up: ${esc(next.name)}</b>${esc(fmtProg(next))}<span class="bar"><i style="width:${Math.round(next.cur/next.tgt*100)}%"></i></span></span></button>`:""}
   </div>`}
-const BCATS=[["all","All"],["consistency","Consistency"],["everyone","Personal bests"],["strength","Strength"],["milestones","Milestones"],["weight","Body weight"],["fun","Fun"]];
+const BCATS=[["all","All"],["consistency","Consistency"],["everyone","Personal bests"],["strength","Strength"],["milestones","Milestones"],["weight","Body weight"],["friends","Friends"],["fun","Fun"]];
 function badgesView(){
-  const {B,L}=badgeState(); const cat=state.badges.cat||"all"; const seen=plan.badgeSeen||{};
+  const {B,L,S}=badgeState(); const cat=state.badges.cat||"all"; const seen=plan.badgeSeen||{};
   const cats=BCATS.filter(([c])=>c!=="all"&&(cat==="all"||cat===c));
   const cell=b=>`<button class="bcell ${b.ok?"":"lockedc"}" data-badge="${b.id}">${medal(b,"",!b.ok)}<b>${esc(b.name)}</b><small>${b.ok?(seen[b.id]?fmtDate(seen[b.id]):"Earned"):b.lost?"Earn it back":esc(fmtProg(b))||"Not yet"}</small>${!b.ok&&b.cur!=null?`<span class="pb"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></span>`:""}</button>`;
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Level ${L.lvl} · ${esc(L.title)} · ${B.filter(b=>b.ok).length} of ${B.length} earned</div><h1>Badges</h1></div><button class="btn small" id="bback">‹ Back</button></div></header>
    <div class="gchips bcats">${BCATS.map(([c,l])=>`<button class="gchip ${cat===c?"on":""}" data-bcat="${c}" aria-pressed="${cat===c}">${l}</button>`).join("")}</div>
    <div class="plan">${cats.map(([c,l])=>`<div class="panel"><div class="lbl" style="margin-top:0">${l}</div>
      ${c==="weight"?`<div class="dlabel" style="margin-top:0">Your goal</div><div class="dchips" style="margin-bottom:12px">${[["lose","Lose weight"],["gain","Gain weight"],["maintain","Maintain"]].map(([g,gl])=>`<button class="dchip wide ${goalOf()===g?"on":""}" data-goal="${g}" aria-pressed="${goalOf()===g}">${gl}</button>`).join("")}</div>`:""}
-     <div class="bgrid">${B.filter(b=>b.cat===c).map(cell).join("")}</div></div>`).join("")}
+     <div class="bgrid">${B.filter(b=>b.cat===c).map(cell).join("")}</div>${c==="strength"&&S.eliteHidden.length?`<p class="elitenote">💎 Earn the top badge on a lift to reveal its secret badges.</p>`:""}</div>`).join("")}
    <p class="savenote" style="margin:0 16px 20px">You earn XP for every workout you save (+100), every PR (+50), every week you hit your plan (+150) and every badge.</p></div>`}
 function bindBadges(){
   $("#bback").onclick=()=>{state.badges=null;render();window.scrollTo(0,0)};
@@ -2827,10 +2844,10 @@ function bindBadges(){
   document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{plan.goal=b.dataset.goal;savePlan();render();checkBadges()});
   document.querySelectorAll("[data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge));
 }
-function bindBadgesPanel(){const s=$("#seebadges");if(s)s.onclick=()=>{state.badges={cat:"all"};render();window.scrollTo(0,0)};
+function bindBadgesPanel(){const mp=$("#myprofile");if(mp)mp.onclick=()=>openProfile(uid||"me");const s=$("#seebadges");if(s)s.onclick=()=>{state.badges={cat:"all"};render();window.scrollTo(0,0)};
   document.querySelectorAll("#lvlpanel [data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge))}
 function openBadge(id){const {B}=badgeState();const b=B.find(x=>x.id===id);if(!b)return;const seen=(plan.badgeSeen||{})[id];const sh=$("#sheet");
-  sh.innerHTML=`<div class="grab"></div><div class="bpop">${medal(b,"big",!b.ok)}<div class="ey">${b.ok?"Earned":b.lost?"Earn it back":"Locked"} · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum"})[b.tier]}</div>
+  sh.innerHTML=`<div class="grab"></div><div class="bpop">${medal(b,"big",!b.ok)}<div class="ey">${b.ok?"Earned":b.lost?"Earn it back":"Locked"} · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum",diamond:"Diamond"})[b.tier]}</div>
    <h3 id="sheet-title">${esc(b.name)}</h3><p>${esc(b.desc)}</p>${b.ok&&seen?`<p class="savenote">Earned ${fmtDate(seen)}</p>`:""}
    ${!b.ok&&b.cur!=null?`<div class="bar"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></div><p class="savenote">${esc(fmtProg(b))}</p>`:""}
    <div class="xp">+${TIERXP[b.tier]} XP</div><div class="btns"><button class="btn" id="bpclose" style="flex:1">Close</button></div></div>`;
@@ -2844,9 +2861,9 @@ function retryCheckin(){if(ls.get("ll.ciq",null)===TODAY||Object.values(state.lo
 function loadBoard(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||lb.busy)return;if(!force&&Date.now()-lb.at<60000)return;
   lb.busy=true;const p=lb.scope==="prog"&&lbProg();
   Promise.all([window.LIFTLOG_RPC("my_board_status"),window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
-   .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false}).catch(()=>{lb.err=true})
+   .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false;syncCard()}).catch(()=>{lb.err=true})
    .finally(()=>{lb.busy=false;lb.at=Date.now();const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}})}
-function lbRow(r){return `<li class="${r.me?"me":""}"><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span><span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
+function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?rankEmblem(rankInfo(c.pts),"xs"):""}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
 function boardPanel(){
   if(state.mode!=="db") return "";
   const head=`<h2>Leaderboard <button class="infob" id="lbinfo" aria-label="How the leaderboard works" title="One workout per day counts, only when you save it that day. A full week is 3 workout days. Unlocks after 2 full weeks in a row.">i</button></h2>`;
@@ -2868,6 +2885,7 @@ function bindBoard(){const i=$("#lbinfo");if(i)i.onclick=openBoardInfo;
   const j=$("#lbjoin");if(j)j.onclick=()=>setBoard(true);
   const a=$("#lball");if(a)a.onclick=()=>{lb.all=!lb.all;const el=$("#lbpanel");el.outerHTML=boardPanel();bindBoard()};
   document.querySelectorAll("[data-lbs]").forEach(b=>b.onclick=()=>{lb.scope=b.dataset.lbs;lb.all=false;loadBoard(true)});
+  document.querySelectorAll("#lbpanel [data-prof]").forEach(b=>{b.onclick=()=>openProfile(b.dataset.prof,b.dataset.pn);b.onkeydown=e=>{if(e.key==="Enter")b.click()}});
   loadBoard()}
 function setBoard(on){window.LIFTLOG_RPC("set_board",{on_board:on}).then(()=>{toast(on?"You're on the leaderboard.":"You're off the leaderboard.");closeSheet();loadBoard(true)}).catch(()=>toast("Couldn't update. Check your connection and try again."))}
 function openBoardInfo(){const sh=$("#sheet"),s=lb.status||{};
@@ -2885,8 +2903,78 @@ function openBoardInfo(){const sh=$("#sheet"),s=lb.status||{};
    <div class="btns">${s.board?`<button class="btn" id="lbleave">Leave the board</button>`:""}<button class="btn primary" id="lbclose" style="flex:1">Got it</button></div>`;
   state.open="__lb";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#lbclose",sh).onclick=closeSheet;
   const lv=$("#lbleave",sh);if(lv)armBtn(lv,"Tap again to leave",()=>setBoard(false))}
+/* ---------- ranks (from badge points) + profile ---------- */
+const RPTS={bronze:1,silver:2,gold:4,plat:8,diamond:12};
+const RANKS=[["Bronze",0,"#9A5B2C","#E7B07F"],["Silver",15,"#76818F","#E4E9EF"],["Gold",40,"#B07F0C","#F8DA7A"],["Platinum",80,"#22887B","#A6EEDF"],["Diamond",130,"#2563D6","#AED6FF"],["Master",190,"#6D35C8","#D8BDFF"],["Champion",260,"#B71C1C","#FFC857"]];
+function rankInfo(pts){pts=Math.max(0,Math.round(pts||0));let i=RANKS.length-1;while(i>0&&pts<RANKS[i][1])i--;
+  const [name,min,c1,c2]=RANKS[i],nx=RANKS[i+1];
+  if(!nx)return {i,name,full:name,div:"",pts,c1,c2,into:1,need:1,toNext:0,nextName:null};
+  const span=(nx[1]-min)/3,d=Math.min(2,Math.floor((pts-min)/span)),lo=min+d*span,hi=min+(d+1)*span;
+  const div=["III","II","I"][d],nextName=d<2?`${name} ${["III","II","I"][d+1]}`:`${nx[0]} III`;
+  return {i,name,div,full:`${name} ${div}`,pts,c1,c2,into:pts-lo,need:hi-lo,toNext:Math.ceil(hi-pts),nextName}}
+function rankEmblem(r,cls){const id="rg"+r.i+(cls||"");
+  return `<svg class="remb ${cls||""}" viewBox="0 0 64 72" role="img" aria-label="${esc(r.full)}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${r.c2}"/><stop offset="1" stop-color="${r.c1}"/></linearGradient></defs>
+   <path d="M32 3 59 13v22c0 16-11.5 27-27 34C16.5 62 5 51 5 35V13z" fill="url(#${id})" stroke="${r.c1}" stroke-width="2"/>
+   <path d="M32 11 51 18v17c0 11.5-8 19.5-19 25-11-5.5-19-13.5-19-25V18z" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
+   ${r.i>=4?`<path d="M32 20l9 9-9 15-9-15z" fill="rgba(255,255,255,.9)"/>`:`<text x="32" y="${r.div?44:42}" text-anchor="middle" font-size="${r.div.length>2?17:20}" font-weight="800" fill="#fff" style="font-family:var(--display)">${r.div||"★"}</text>`}</svg>`}
+function myCard(){const {B,L}=badgeState();const pub=B.filter(b=>b.ok);
+  return {pts:pub.reduce((a,b)=>a+RPTS[b.tier],0),lvl:L.lvl,
+    b:pub.filter(b=>b.cat!=="weight").map(b=>[b.id,b.tier,b.name,b.num==null?null:b.num,b.icon||null,b.rib||null])}}
+function syncCard(){if(state.mode!=="db"||!uid||!pg.ready)return;const on=!!(lb.status&&lb.status.board);
+  const c=on?myCard():null;if(JSON.stringify(c)===JSON.stringify(pg.myCard||null))return;pg.myCard=c;writeSocial()}
+function cardOf(id){if(id===uid){const c=myCard();return c}const d=pg.socialDocs[id];return d&&d.card||null}
+function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine?myCard():cardOf(id);
+  const name=mine?((window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You"):(nm||pg.names[id]||"Lifter"),ini=name.split(/\s+/).map(w=>w[0]||"").join("").slice(0,2).toUpperCase()||"?";
+  const r=rankInfo(c?c.pts:0),list=((c&&c.b)||[]).map(([bid,tier,bn,num,icon,rib])=>({id:bid,tier,name:bn,num,icon,rib}))
+    .sort((a,b)=>RPTS[b.tier]-RPTS[a.tier]);
+  const L=mine?badgeState().L:null;
+  sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="prclose">Close</button><span class="eyebrow">Profile</span></div>
+   <div class="tprof"><div class="thead"><div class="tav" aria-hidden="true">${esc(ini)}</div><div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
+   ${c?`<div class="rankbox">${rankEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
+     <p>${r.pts} rank points</p>${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
+    <div class="lbl">${list.length} badge${list.length===1?"":"s"}</div>
+    ${list.length?`<div class="bgrid pgrid">${list.map(b=>`<div class="bcell">${medal(b,"sm")}<b>${esc(b.name)}</b></div>`).join("")}</div>`:`<p class="savenote">No badges yet.</p>`}
+    ${mine?`<p class="savenote">${state.mode!=="db"?"":lb.status&&lb.status.board?"Others see this when they tap your name on the leaderboard.":"Only you can see this. Join the leaderboard to show it to others."} Body-weight badges always stay private.</p>`:""}`
+   :`<p class="savenote">This lifter's profile isn't available yet.</p>`}</div>`;
+  state.open="__profile";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#prclose",sh).onclick=closeSheet;
+  const ri=$("#rkinfo",sh);if(ri)ri.onclick=()=>openRankInfo(id,nm)}
+function openRankInfo(back,nm){const sh=$("#sheet");
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How ranks work</h3>
+   <p class="savenote" style="margin-top:0">Every badge you earn adds rank points. Each rank has three steps: III, II, then I.</p>
+   <div class="rklist">${RANKS.map((x,i)=>`<div>${rankEmblem({i,c1:x[2],c2:x[3],div:i===RANKS.length-1?"":"I",full:x[0]},"sm")}<b>${x[0]}</b><span>${x[1]}+ pts</span></div>`).join("")}</div>
+   <div class="rkpts">${["bronze","silver","gold","plat","diamond"].map(t=>`<span>${medal({tier:t,icon:"star"},"sm")}+${RPTS[t]}</span>`).join("")}</div>
+   <div class="btns"><button class="btn primary" id="rkback" style="flex:1">Got it</button></div>`;
+  sh.scrollTop=0;$("#rkback",sh).onclick=()=>openProfile(back,nm)}
+
+/* ---------- invites ---------- */
+const refs={data:null,at:0,busy:false};
+function refLink(code){return location.origin+location.pathname+"?ref="+code}
+function loadRefs(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||refs.busy)return;if(!force&&Date.now()-refs.at<120000)return;refs.busy=true;
+  window.LIFTLOG_RPC("my_ref_code").then(()=>window.LIFTLOG_RPC("my_referrals")).then(d=>{refs.data=d||{};
+    const a=+(refs.data.active||0);if(a!==(plan.refActive||0)){plan.refActive=a;savePlan();setTimeout(checkBadges,300)}})
+   .catch(()=>{refs.data=refs.data||{err:true}}).finally(()=>{refs.busy=false;refs.at=Date.now();const el=$("#refpanel");if(el){el.outerHTML=invitePanel();bindInvite()}})}
+function claimRef(){const code=ls.get("ll.ref",null);if(!code||state.mode!=="db"||!window.LIFTLOG_RPC)return;
+  window.LIFTLOG_RPC("claim_referral",{code}).then(r=>{try{localStorage.removeItem("ll.ref")}catch(e){}if(r==="ok")toast("Invite accepted. Your friend gets credit once you finish your first week.")}).catch(()=>{})}
+function invitePanel(){if(state.mode!=="db")return "";const d=refs.data;
+  return `<div class="panel" id="refpanel"><h2>Invite friends <button class="infob" id="refinfo" aria-label="How invites work" title="A friend counts once they finish their first week (3 workouts). Earn badges at 1, 3, 10, 25 and 50.">i</button></h2>
+   ${!d?`<p class="savenote">Loading…</p>`:d.err||!d.code?`<p class="savenote">Couldn't load your invite link. Check your connection.</p>`:
+   `<div class="reflink"><code>${esc(refLink(d.code).replace(/^https?:\/\//,""))}</code><button class="btn small primary" id="refshare">Share</button></div>
+    <p class="savenote">${d.joined||0} joined · ${d.active||0} finished week 1</p>`}</div>`}
+function bindInvite(){const i=$("#refinfo");if(i)i.onclick=openRefInfo;const s=$("#refshare");
+  if(s)s.onclick=()=>{const url=refLink(refs.data.code),text="Track your workouts with me on LiftLog";
+    if(navigator.share)navigator.share({title:"LiftLog",text,url}).catch(()=>{});
+    else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast("Link copied")).catch(()=>toast(url));else toast(url)};
+  loadRefs()}
+function openRefInfo(){const sh=$("#sheet");
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How invites work</h3>
+   <ul class="lbrules"><li>Share your link. Friends who sign up with it are linked to you.</li>
+    <li>A friend counts once they finish their <b>first full week</b> (3 workouts).</li>
+    <li>Earn badges at 1, 3, 10, 25 and 50 friends.</li>
+    <li>Only new accounts can use a link, and nobody can use their own.</li></ul>
+   <div class="btns"><button class="btn primary" id="refok" style="flex:1">Got it</button></div>`;
+  state.open="__ref";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#refok",sh).onclick=closeSheet}
 let celebQ=[];
-function checkBadges(){if(window.__noCeleb||(state.mode!=="db"&&state.mode!=="local"))return;
+function checkBadges(){try{syncCard()}catch(e){}if(window.__noCeleb||(state.mode!=="db"&&state.mode!=="local"))return;
   const {B,L}=badgeState(); const earned=B.filter(b=>b.ok).map(b=>b.id);
   if(!plan.badgeSeen){plan.badgeSeen={};earned.forEach(id=>plan.badgeSeen[id]=TODAY);plan.lvlSeen=L.lvl;savePlan();return}
   const fresh=earned.filter(id=>!plan.badgeSeen[id]);
@@ -2902,7 +2990,7 @@ function showCeleb(){const c=celebQ.shift();if(!c)return;const L=c.L||c.lvl;cons
   const el=document.createElement("div");el.id="celeb";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","celeb-t");
   el.innerHTML=`<div class="cscrim"></div><div class="conf">${conf}</div><div class="cpop">
    ${c.multi?`<div class="mstack">${c.multi.slice(0,5).map(x=>medal(x)).join("")}</div>`:c.b?medal(c.b,"big"):`<div class="lvlbig"><small>LEVEL</small><b>${L.lvl}</b></div>`}
-   <div class="ey">${c.multi?"New badges":c.b?`New badge · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum"})[c.b.tier]}`:"Level up"}</div>
+   <div class="ey">${c.multi?"New badges":c.b?`New badge · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum",diamond:"Diamond"})[c.b.tier]}`:"Level up"}</div>
    <h3 id="celeb-t">${c.multi?`${c.multi.length} badges unlocked`:c.b?esc(c.b.name):`Level ${L.lvl}!`}</h3><p>${c.multi?esc(c.multi.map(x=>x.name).join(", ")):c.b?esc(c.b.desc):`You're a ${esc(L.title)}. Keep stacking workouts.`}</p>
    ${c.multi?`<div class="xp">+${c.multi.reduce((a,x)=>a+TIERXP[x.tier],0)} XP</div>`:c.b?`<div class="xp">+${TIERXP[c.b.tier]} XP</div>`:""}
    <div class="bar"><i style="width:${pct}%"></i></div><div class="xpn">Level ${L.lvl} · ${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP</div>
@@ -2967,7 +3055,7 @@ render();
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account
