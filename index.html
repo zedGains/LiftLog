@@ -200,7 +200,7 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .creatorbar{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);font-size:14px}.creatorbar small{color:var(--muted);font-size:12.5px}
 .reportl{font-size:13px;color:var(--muted)}
 .rrow{display:grid;gap:6px;padding:10px 0;border-bottom:1px dashed var(--line)}.rrow small{display:block;color:var(--muted);font-size:12.5px}.rrow .rn{font-style:italic}.rrow .btns{margin-top:0}
-.gearbtn{white-space:nowrap;flex:none}
+.gearbtn{all:unset;box-sizing:border-box;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;height:42px;padding:0 14px 0 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:700 14px var(--body);white-space:nowrap;transition:background .15s}.gearbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s}.gearbtn:hover{background:var(--surface-2)}.gearbtn:hover svg,.gearbtn:focus-visible svg{transform:rotate(60deg)}.gearbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.gearbtn:active{transform:scale(.97)}
 .pnotes summary{cursor:pointer;list-style:none;display:grid;gap:2px}.pnotes summary::-webkit-details-marker{display:none}
 .pnotes summary h2{margin:0}.pnotes summary span{font-size:13px;color:var(--muted)}
 .pnotes summary h2::after{content:" ▾";font-size:16px;color:var(--muted)}.pnotes[open] summary h2::after{content:" ▴"}
@@ -311,7 +311,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .lvlbig{width:110px;height:110px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7FD8A8,var(--green) 70%);color:#fff;display:grid;place-items:center;align-content:center}
 .lvlbig small{font:700 11px var(--display);letter-spacing:.12em}.lvlbig b{font:800 46px/1 var(--display)}
 .mstack{display:flex;justify-content:center;gap:2px;margin-bottom:4px}.mstack .med{margin:0}
-.fblink{display:block;margin:4px auto 20px;font-size:14px}
+.fbtiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.fbtile{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);text-align:center}.fbic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}.fbic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.fbic.sm{width:30px;height:30px;background:var(--surface-2);color:var(--fg)}.fbic.sm svg{width:17px;height:17px}.fbtile b{font-size:13px;line-height:1.2}.fbtile:active,.fbrow:active{transform:scale(.98)}.fbrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;justify-content:space-between;align-items:center;width:100%;margin-top:8px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-weight:600;font-size:14px}
 .fbmsg{margin:6px 0 4px;white-space:pre-wrap;font-size:14.5px}.fbmeta{color:var(--muted);font-size:11.5px}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
@@ -1540,7 +1540,7 @@ function planView(){
   const thisMonth=ss.filter(x=>x.date.startsWith(monthKey)).length;
   const wkStart=(()=>{const d=nowD();const k=(d.getDay()+6)%7;d.setDate(d.getDate()-k);return ymd(d)})();
   const thisWeek=ss.filter(x=>x.date>=wkStart).length;
-  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="btn small gearbtn" id="opensettings" aria-label="Settings">⚙️ Settings</button></div></header>
+  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="gearbtn" id="opensettings" aria-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span>Settings</span></button></div></header>
   <div class="plan">
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    ${badgesPanel()}
@@ -1562,7 +1562,6 @@ function planView(){
     <div class="btns"><button class="btn small" id="weekedit2">⇅ Rearrange my week</button></div></div>
 
    ${partnerPanel()}
-   <button class="linkbtn fblink" id="sendfb2">💬 Send feedback</button>
    ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).length?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>Rest days, warm-up and tips from your plan</span></summary>${TPL.notes.panels.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""}
   </div>`}
 function settingsView(){
@@ -1592,7 +1591,9 @@ function settingsView(){
     <div class="lbl">Coming soon</div>
     ${["Workout day reminders","Reminder to save an unfinished workout","Program followers, likes and sales","Weekly recap"].map(l=>`<label class="tick soon"><input type="checkbox" disabled> ${l}</label>`).join("")}
     <p class="savenote">These will arrive as phone notifications when LiftLog is installed on your home screen.</p></div>
-   <div class="panel" id="fbpanel"><h2>Send feedback</h2><p style="margin-top:0">Found a bug, got an idea, or something's confusing? Tell us. Every message gets read.</p><div class="btns"><button class="btn primary" id="sendfb" style="flex:1">💬 Send feedback</button></div></div>
+   <div class="panel" id="fbpanel"><h2>Help &amp; feedback</h2><p class="savenote" style="margin-top:0">Every message goes straight to the person who builds LiftLog.</p>
+    <div class="fbtiles">${[["bug","Report a bug"],["idea","Suggest an idea"],["confusing","Something's confusing"]].map(([k,l])=>`<button class="fbtile" data-fbgo="${k}"><span class="fbic" aria-hidden="true"><svg viewBox="0 0 24 24">${FBICON[k]}</svg></span><b>${l}</b></button>`).join("")}</div>
+    <button class="fbrow" data-fbgo="other"><span class="fbic sm" aria-hidden="true"><svg viewBox="0 0 24 24">${FBICON.other}</svg></span><span style="flex:1">Anything else</span><span aria-hidden="true">›</span></button></div>
    ${guidePanel()}
    <div class="panel" id="dropp"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
@@ -1641,7 +1642,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -3148,7 +3149,8 @@ function showCeleb(){const c=celebQ.shift();if(!c)return;const L=c.L||c.lvl;cons
   $("#cnice").focus()}
 
 /* ---------- feedback ---------- */
-function openFeedback(){const sh=$("#sheet");let kind="";
+const FBICON={"bug": "<path d=\"M8 9a4 4 0 0 1 8 0v5a4 4 0 0 1-8 0zM12 9v9M4 11h4M16 11h4M5 17l3-1M19 17l-3-1M9 6 7.5 4M15 6l1.5-2\"/>", "idea": "<path d=\"M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z\"/>", "confusing": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.5h.01\"/>", "other": "<path d=\"M4 5h16v11H9l-5 4z\"/>"};
+function openFeedback(k){const sh=$("#sheet");let kind=typeof k==="string"?k:"";
   const draw=()=>{const msg=($("#fbmsg",sh)||{}).value||"";
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="fbcancel">Cancel</button><span class="eyebrow">Send feedback</span></div>
      <h3 id="sheet-title">What's on your mind?</h3><p class="savenote" style="margin-top:4px">Goes straight to the person who builds LiftLog. Every message gets read.</p>
