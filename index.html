@@ -276,6 +276,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 #refpanel .nextb .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}#refpanel .nextb .bar i{display:block;height:100%;background:#D6336C}
 .avrow{display:flex;gap:12px;align-items:center;font-size:13.5px;color:var(--muted)}.avrow b{display:block;color:var(--fg);font-size:15px}.avopts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.avopt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;text-align:center;font-size:13px}.avopt.on{border-color:var(--green);background:var(--surface-2)}.avopt .rframe.big,.avopt .helm.big{width:78px;height:82px}
 .avadd{width:78px;height:82px;display:grid;place-items:center;font:300 40px var(--body);color:var(--muted)}.avedit{all:unset;cursor:pointer;position:relative;display:block}.avedit>span{position:absolute;right:2px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px}
+.navrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin:0 0 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.navrow:hover{background:var(--surface-2)}.navrow:active{transform:scale(.99)}.navrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.nvic{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}.nvic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.nvt{flex:1;min-width:0}.nvt b{display:flex;align-items:center;gap:8px;font-size:15px}.nvt small{display:block;color:var(--muted);font-size:13px;margin-top:2px}.nvgo{color:var(--muted);font-size:20px}.ownertag{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+.cropbox{position:relative;width:min(260px,72vw);aspect-ratio:1;margin:8px auto 14px}.cropbox canvas{width:100%;height:100%;display:block;border-radius:50%;touch-action:none;cursor:grab;background:#000}.cropbox canvas:active{cursor:grabbing}.cropring{position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--accent);pointer-events:none;box-shadow:0 0 0 6px var(--surface-2)}.cropctl{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--muted)}.cropctl input{flex:1;accent-color:var(--accent)}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -1602,7 +1604,7 @@ function settingsView(){
      <output id="c1">—</output><output id="c2">—</output><output id="c3">—</output></div>
     <p class="savenote">Rounded to the nearest ${isKg()?"2.5 kg":"5 lb"}.</p></div>
    ${platePanel()}
-   ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="browse" id="ownerstats"><span><b>📊 App stats</b><br><small>Owner only: sign-ups, active people, workouts, top exercises</small></span><span aria-hidden="true">›</span></button>`:""}
+   ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="navrow" id="ownerstats"><span class="nvic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="nvt"><b>App stats <i class="ownertag">Owner</i></b><small>Sign-ups, active people, workouts, top exercises</small></span><span class="nvgo" aria-hidden="true">›</span></button>`:""}
    <div class="panel"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
   </div>`}
 function fmtStamp(ms){if(!ms)return "—";const d=tzD(ms);return d.toLocaleDateString(LOC,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"})}
@@ -1737,7 +1739,7 @@ function loadCreator(force){if(!window.LIFTLOG_RPC||state.mode!=="db")return;if(
   window.LIFTLOG_RPC("my_creator_status").then(d=>{creatorInfo=d;if(pickTab()==="programs"&&pg.seg==="mine"&&!state.builder)render()}).catch(()=>{})}
 function mineView(){
   const ps=plan.myPrograms; loadCreator(false); const ci=creatorInfo;
-  return `<div class="plan">${ci?`<div class="creatorbar"><span><b>${ci.published} of ${ci.limit>=1000?"∞":ci.limit}</b> published · ${ci.tier==="free"?"Free account":ci.tier==="verified"?"Verified trainer ✓":"Pro"}</span>${ci.tier==="free"?`<small>Trainers can be verified to publish up to 25.</small>`:""}${ci.canPublish?"":`<small>New accounts can publish after 3 days or 3 logged workouts.</small>`}</div>`:""}${ps.some(p=>p.published)&&window.LIFTLOG_RPC?`<button class="browse" id="creatorstats" style="margin-top:4px"><span><b>📊 Creator stats</b><br><small>Starts, followers, likes and sales for your published programs</small></span><span aria-hidden="true">›</span></button>`:""}<button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
+  return `<div class="plan">${ci?`<div class="creatorbar"><span><b>${ci.published} of ${ci.limit>=1000?"∞":ci.limit}</b> published · ${ci.tier==="free"?"Free account":ci.tier==="verified"?"Verified trainer ✓":"Pro"}</span>${ci.tier==="free"?`<small>Trainers can be verified to publish up to 25.</small>`:""}${ci.canPublish?"":`<small>New accounts can publish after 3 days or 3 logged workouts.</small>`}</div>`:""}${ps.some(p=>p.published)&&window.LIFTLOG_RPC?`<button class="navrow" id="creatorstats" style="margin-top:4px"><span class="nvic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="nvt"><b>Creator stats</b><small>Starts, followers, likes and sales for your published programs</small></span><span class="nvgo" aria-hidden="true">›</span></button>`:""}<button class="browse addex" id="newprog" style="margin-top:4px"><span><b>+ New program</b><br><small>Build it on a weekly calendar</small></span><span aria-hidden="true">›</span></button>
    ${ps.length?ps.map(p=>{const st=progStats(p);return `<button class="pcard" data-pedit="${esc(p.id)}"><span class="pct">${esc(p.title||"Untitled program")}</span>
      <span class="pcm">${p.published?'<b class="pub">Published</b>':"Draft"} · ${st.weeks} wk · ${st.dpw} days/wk · ${st.ex} exercises</span>${miniCal(p.weeks[0])}</button>`}).join("")
      :`<div class="panel"><p>No programs yet. Tap <b>+ New program</b> to build one, or open a community program and tap <b>Copy to my programs</b> to remix it.</p></div>`}</div>`;
@@ -3066,6 +3068,33 @@ const avWant=new Set();let avT=null;
 function needProfiles(ids){if(!window.LIFTLOG_PROFILES)return;ids.filter(x=>x&&!(x in profCache)).forEach(x=>avWant.add(x));if(!avWant.size||avT)return;
   avT=setTimeout(()=>{const list=[...avWant];avWant.clear();avT=null;window.LIFTLOG_PROFILES.get(list).then(r=>{let ch=false;list.forEach(x=>{profCache[x]=r[x]||{};ch=ch||!!(r[x]&&r[x].am&&r[x].am!=="crest")});
     if(ch){const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}const lv=$("#lvlpanel");if(lv&&uid&&list.includes(uid))render()}}).catch(()=>{})},60)}
+function loadImg(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{URL.revokeObjectURL(u);res(img)};img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("bad"))};img.src=u})}
+function openCropper(img,done,cancel){const sh=$("#sheet"),P=260,OUT=160,r=rankInfo(myCard().pts);let z=1,ox=0,oy=0,rot=0;
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Adjust photo</h3>
+   <p class="savenote" style="margin-top:0">Drag to move. Pinch or use the slider to zoom.</p>
+   <div class="cropbox"><canvas id="cropc" width="${P*2}" height="${P*2}" aria-label="Photo preview"></canvas><div class="cropring" aria-hidden="true"></div></div>
+   <div class="cropctl"><span aria-hidden="true">−</span><input type="range" id="cropz" min="1" max="4" step="0.01" value="1" aria-label="Zoom"><span aria-hidden="true">+</span>
+    <button class="btn small" id="croprot" aria-label="Rotate">⟳ Rotate</button></div>
+   <div class="btns"><button class="btn" id="cropcancel">Cancel</button><button class="btn primary" id="cropok">Use photo</button></div>`;
+  const cv=$("#cropc",sh),ctx=cv.getContext("2d"),zs=$("#cropz",sh);
+  const dims=()=>rot%180?[img.height,img.width]:[img.width,img.height];
+  const base=()=>{const [w,h]=dims();return P/Math.min(w,h)};
+  const clamp=()=>{const [w,h]=dims(),sc=base()*z,mx=Math.max(0,(w*sc-P)/2),my=Math.max(0,(h*sc-P)/2);ox=Math.max(-mx,Math.min(mx,ox));oy=Math.max(-my,Math.min(my,oy))};
+  const paint=(c,size)=>{const k=size/P,g=c.getContext("2d"),sc=base()*z*k;g.save();g.fillStyle="#000";g.fillRect(0,0,size,size);
+    g.translate(size/2+ox*k,size/2+oy*k);g.rotate(rot*Math.PI/180);g.drawImage(img,-img.width*sc/2,-img.height*sc/2,img.width*sc,img.height*sc);g.restore()};
+  const draw=()=>{clamp();paint(cv,P*2)};
+  zs.oninput=()=>{z=+zs.value;draw()};
+  $("#croprot",sh).onclick=()=>{rot=(rot+90)%360;ox=oy=0;draw()};
+  const pts=new Map();let last=null,pinch0=null;
+  cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===2){const [a,b]=[...pts.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),z}}};
+  cv.onpointermove=e=>{if(!pts.has(e.pointerId))return;const prev=pts.get(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2&&pinch0){const [a,b]=[...pts.values()];z=Math.max(1,Math.min(4,pinch0.z*Math.hypot(a.x-b.x,a.y-b.y)/pinch0.d));zs.value=z}
+    else if(pts.size===1){const s=P/cv.getBoundingClientRect().width;ox+=(e.clientX-prev.x)*s;oy+=(e.clientY-prev.y)*s}draw()};
+  cv.onpointerup=cv.onpointercancel=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch0=null};
+  cv.onwheel=e=>{e.preventDefault();z=Math.max(1,Math.min(4,z*(e.deltaY<0?1.08:1/1.08)));zs.value=z;draw()};
+  $("#cropcancel",sh).onclick=cancel;
+  $("#cropok",sh).onclick=()=>{const c=document.createElement("canvas");c.width=c.height=OUT;paint(c,OUT);let q=.85,d=c.toDataURL("image/jpeg",q);while(d.length>40000&&q>.4){q-=.12;d=c.toDataURL("image/jpeg",q)}done(d)};
+  draw()}
 function shrinkImage(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
   img.onload=()=>{const S=128,c=document.createElement("canvas");c.width=c.height=S;const k=Math.min(img.width,img.height),x=(img.width-k)/2,y=(img.height-k)/2;
     c.getContext("2d").drawImage(img,x,y,k,k,0,0,S,S);URL.revokeObjectURL(u);let q=.82,d=c.toDataURL("image/jpeg",q);while(d.length>40000&&q>.4){q-=.12;d=c.toDataURL("image/jpeg",q)}res(d)};
@@ -3083,7 +3112,7 @@ function openAvatarPick(){const sh=$("#sheet"),me=profCache[uid]||{},name=(windo
    ${mode==="photo"?`<button class="linkbtn" id="avchange">${photo?"Choose a different photo":"Choose a photo"}</button>`:""}
    <p class="savenote">Keep it friendly: pictures that break the rules get removed.</p>
    <div class="btns"><button class="btn" id="avcancel">Cancel</button><button class="btn primary" id="avsave" ${mode==="photo"&&!photo?"disabled":""}>Save</button></div>`;
-   const f=$("#avfile",sh);f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;shrinkImage(file).then(d=>{photo=d;mode="photo";draw()}).catch(()=>toast("Couldn't read that picture. Try another."))};
+   const f=$("#avfile",sh);f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;loadImg(file).then(img=>openCropper(img,d=>{photo=d;mode="photo";draw()},draw)).catch(()=>toast("Couldn't read that picture. Try another."))};
    sh.querySelectorAll("[data-am]").forEach(b=>b.onclick=()=>{mode=b.dataset.am;if(mode==="photo"&&!photo){f.click()}draw()});
    const ch=$("#avchange",sh);if(ch)ch.onclick=()=>f.click();
    $("#avcancel",sh).onclick=()=>{if(state.settings)closeSheet();else openProfile(uid)};
