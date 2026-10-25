@@ -265,7 +265,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .mspark{animation:mspark 1.8s ease-in-out infinite;transform-origin:50% 46%}@keyframes mspark{0%,100%{opacity:.2}50%{opacity:1}}
 @media (prefers-reduced-motion:reduce){.mshine,.mspark{animation:none}.mshine{opacity:0}}
 .rankrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);margin-top:12px;font-size:13px;color:var(--muted)}.rankrow b{display:block;color:var(--fg);font-size:15px}.rankrow>span:not(.go){flex:1;min-width:0}.rankrow .go{font-weight:700;color:var(--fg);white-space:nowrap}
-.rframe{width:46px;height:48px;flex:none;display:block;overflow:visible}.rframe.xs{width:44px;height:46px;margin:-4px 0}.rframe.md{width:66px;height:68px;margin:-8px -4px}.rframe.sm{width:46px;height:48px}.rframe.big{width:96px;height:100px}.rframe.av{width:88px;height:92px;margin:-8px -6px -8px -10px}.lbav{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font:800 13px var(--display);color:var(--muted)}
+.helm.sm{width:44px;height:46px}.helm{width:56px;height:60px;flex:none;display:block;overflow:visible}.helm.xs{width:40px;height:42px;margin:-4px 0}.helm.md{width:62px;height:64px;margin:-6px -2px}.helm.big{width:100px;height:104px}.helm.av{width:84px;height:88px;margin:-6px -4px -6px -8px}.rframe{width:46px;height:48px;flex:none;display:block;overflow:visible}.rframe.xs{width:44px;height:46px;margin:-4px 0}.rframe.md{width:66px;height:68px;margin:-8px -4px}.rframe.sm{width:46px;height:48px}.rframe.big{width:96px;height:100px}.rframe.av{width:88px;height:92px;margin:-8px -6px -8px -10px}.lbav{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font:800 13px var(--display);color:var(--muted)}
 .rankbox{display:flex;gap:16px;align-items:center;margin:14px 0;padding:14px;border-radius:12px;background:var(--surface-2)}.rkt{flex:1;min-width:0}.rkn{font:800 24px/1.1 var(--display);text-transform:uppercase;display:flex;align-items:center}.rkt p{margin:2px 0 8px;color:var(--muted);font-size:14px}.rkt small{display:block;margin-top:4px;color:var(--muted);font-size:12.5px}
 .rkt .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}.rkt .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
 .pgrid .bcell{cursor:default}.pgrid .med.sm{margin:0 auto 4px}.rklist{display:grid;gap:6px;margin:10px 0}.rklist>div{display:flex;align-items:center;gap:10px}.rklist b{flex:1}.rklist span{color:var(--muted);font-size:14px}
@@ -274,6 +274,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .lbrows li[data-prof]{cursor:pointer}
 .refhero .btn.primary,.reflink .btn.primary{flex:none;width:auto;padding-inline:18px}.refhero{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;margin-bottom:14px;background:linear-gradient(135deg,rgba(214,51,108,.14),rgba(110,68,201,.14))}.refhero>div{flex:1;min-width:0}.refhero b{display:block;font-size:16px}.refhero span{display:block;font-size:13px;color:var(--muted)}.refhero .bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px}.refhero .bar i{display:block;height:100%;background:#D6336C}.refhero small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
 #refpanel .nextb .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}#refpanel .nextb .bar i{display:block;height:100%;background:#D6336C}
+.avopts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.avopt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;text-align:center;font-size:13px}.avopt.on{border-color:var(--green);background:var(--surface-2)}.avopt .rframe.big,.avopt .helm.big{width:78px;height:82px}
+.avadd{width:78px;height:82px;display:grid;place-items:center;font:300 40px var(--body);color:var(--muted)}.avedit{all:unset;cursor:pointer;position:relative;display:block}.avedit>span{position:absolute;right:2px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -2517,7 +2519,7 @@ function openTrainer(id){
     const links=[["instagram","Instagram"],["youtube","YouTube"],["website","Website"]].map(([k,l])=>{const u=safeUrl((pr.links||{})[k],k);return u?`<a href="${esc(u)}" target="_blank" rel="noopener nofollow">${l}</a>`:""}).join("");
     const likes=progs.reduce((a,p)=>a+(pg.social.likes[p.key]||0),0);
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="trback">Close</button><span class="eyebrow">Trainer</span></div>
-     <div class="tprof"><div class="thead">${(()=>{const cd=cardOf(id);return cd?rankAvatar(rankInfo(cd.pts),nm,"av"):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`})()}<div><h3 id="sheet-title">${esc(nm)}</h3><div class="tsub">${pr.verified?`<span class="vbadge">✓ Verified trainer</span>`:"Creator"}${pr.location?` · ${esc(pr.location)}`:""}</div></div></div>
+     <div class="tprof"><div class="thead">${(()=>{const cd=cardOf(id);return cd?avatarFor(id,nm,rankInfo(cd.pts),"av"):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`})()}<div><h3 id="sheet-title">${esc(nm)}</h3><div class="tsub">${pr.verified?`<span class="vbadge">✓ Verified trainer</span>`:"Creator"}${pr.location?` · ${esc(pr.location)}`:""}</div></div></div>
      ${pr.bio?`<p class="pvtext">${esc(pr.bio)}</p>`:mine?`<p class="savenote">Add a bio, location and links in Log → Settings → Trainer profile.</p>`:""}
      ${links?`<div class="tlinks">${links}</div>`:""}
      <div class="stats"><div><b>${progs.length}</b><small>program${progs.length===1?"":"s"}</small></div><div><b>${followersOf(id)}</b><small>followers</small></div><div><b>${likes}</b><small>likes</small></div></div>
@@ -2873,7 +2875,7 @@ function badgesPanel(){
   return `<div class="panel" id="lvlpanel"><h2>Level &amp; badges <button class="linkbtn" id="seebadges">See all ›</button></h2>
    <div class="lvl"><div class="lvring" style="--p:${pct}"><div><small>LEVEL</small><b>${L.lvl}</b></div></div>
     <div class="lt"><b>${esc(L.title)}</b><p>${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP to level ${L.lvl+1}${L.nextT?` · <i>${esc(L.nextT[1])}</i> at ${L.nextT[0]}`:""}</p><div class="bar"><i style="width:${pct}%"></i></div></div></div>
-   <button class="rankrow" id="myprofile">${rankAvatar(rk,(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You","md")}<span><b>${esc(rk.full)}</b>${rk.pts} rank points${rk.nextName?` · ${rk.toNext} to ${esc(rk.nextName)}`:""}</span><span class="go">Profile ›</span></button>
+   <button class="rankrow" id="myprofile">${uid?avatarFor(uid,(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You",rk,"md"):rankAvatar(rk,"You","md")}<span><b>${esc(rk.full)}</b>${rk.pts} rank points${rk.nextName?` · ${rk.toNext} to ${esc(rk.nextName)}`:""}</span><span class="go">Profile ›</span></button>
    ${earned.length?`<div class="recent">${earned.slice(0,4).map(b=>`<button class="mini" data-badge="${b.id}">${medal(b)}<span>${esc(b.name)}</span></button>`).join("")}</div>`:`<p class="savenote">Save your first workout to earn your first badge.</p>`}
    ${next?`<button class="nextb" data-badge="${next.id}">${medal(next,"sm",true)}<span><b>Next up: ${esc(next.name)}</b>${esc(fmtProg(next))}<span class="bar"><i style="width:${Math.round(next.cur/next.tgt*100)}%"></i></span></span></button>`:""}
   </div>`}
@@ -2903,7 +2905,7 @@ function bindBadges(){const rg=$("#refgo");if(rg)rg.onclick=shareInvite;
   document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{plan.goal=b.dataset.goal;savePlan();render();checkBadges()});
   document.querySelectorAll("[data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge));
 }
-function bindBadgesPanel(){const mp=$("#myprofile");if(mp)mp.onclick=()=>openProfile(uid||"me");const s=$("#seebadges");if(s)s.onclick=()=>{state.badges={cat:"all"};render();window.scrollTo(0,0)};
+function bindBadgesPanel(){if(uid&&state.mode==="db")needProfiles([uid]);const mp=$("#myprofile");if(mp)mp.onclick=()=>openProfile(uid||"me");const s=$("#seebadges");if(s)s.onclick=()=>{state.badges={cat:"all"};render();window.scrollTo(0,0)};
   document.querySelectorAll("#lvlpanel [data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge))}
 function openBadge(id){const {B}=badgeState();const b=B.find(x=>x.id===id);if(!b)return;const seen=(plan.badgeSeen||{})[id];const sh=$("#sheet");
   sh.innerHTML=`<div class="grab"></div><div class="bpop">${medal(b,"big",!b.ok)}<div class="ey">${b.ok?"Earned":b.lost?"Earn it back":"Locked"} · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum",diamond:"Diamond"})[b.tier]}</div>
@@ -2922,7 +2924,7 @@ function loadBoard(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||lb.busy)ret
   Promise.all([window.LIFTLOG_RPC("my_board_status"),window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
    .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false;syncCard()}).catch(()=>{lb.err=true})
    .finally(()=>{lb.busy=false;lb.at=Date.now();const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}})}
-function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?rankAvatar(rankInfo(c.pts),r.name,"xs"):`<span class="lbav">${esc(initialsOf(r.name))}</span>`}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
+function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?avatarFor(r.id,r.name,rankInfo(c.pts),"xs"):`<span class="lbav">${esc(initialsOf(r.name))}</span>`}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
 function boardPanel(){
   if(state.mode!=="db") return "";
   const head=`<h2>Leaderboard <button class="infob" id="lbinfo" aria-label="How the leaderboard works" title="One workout per day counts, only when you save it that day. A full week is 3 workout days. Unlocks after 2 full weeks in a row.">i</button></h2>`;
@@ -2944,6 +2946,7 @@ function bindBoard(){const i=$("#lbinfo");if(i)i.onclick=openBoardInfo;
   const j=$("#lbjoin");if(j)j.onclick=()=>setBoard(true);
   const a=$("#lball");if(a)a.onclick=()=>{lb.all=!lb.all;const el=$("#lbpanel");el.outerHTML=boardPanel();bindBoard()};
   document.querySelectorAll("[data-lbs]").forEach(b=>b.onclick=()=>{lb.scope=b.dataset.lbs;lb.all=false;loadBoard(true)});
+  needProfiles([...document.querySelectorAll("#lbpanel [data-prof]")].map(b=>b.dataset.prof));
   document.querySelectorAll("#lbpanel [data-prof]").forEach(b=>{b.onclick=()=>openProfile(b.dataset.prof,b.dataset.pn);b.onkeydown=e=>{if(e.key==="Enter")b.click()}});
   loadBoard()}
 function setBoard(on){window.LIFTLOG_RPC("set_board",{on_board:on}).then(()=>{toast(on?"You're on the leaderboard.":"You're off the leaderboard.");closeSheet();loadBoard(true)}).catch(()=>toast("Couldn't update. Check your connection and try again."))}
@@ -2985,12 +2988,40 @@ function rankFrame(r,o,cls){o=o||{};const id="rf"+(++rfN),i=r.i||0,P=RANKS[i]||R
   const gemTop=i>=2?`<path d="M${cx} ${cy-R-(i>=4?9+i*1.5:5+i)}l3.2 4-3.2 4-3.2-4z" fill="#fff" opacity=".9"/>`:"";
   const pips=r.div?["III","II","I"].indexOf(r.div)+1:0;
   const pipS=Array.from({length:pips},(_,k)=>`<path d="M${cx+(k-(pips-1)/2)*8} ${cy+R+3}l3 3.5-3 3.5-3-3.5z" fill="#fff" stroke="${c1}" stroke-width=".8"/>`).join("");
-  const inner=o.ini!=null?`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="${o.ini.length>1?21:24}" font-weight="800" fill="#fff" style="font-family:var(--display)">${esc(o.ini)}</text>`
+  const inner=o.img?`<clipPath id="${id}c"><circle cx="${cx}" cy="${cy}" r="${R-4}"/></clipPath><image href="${esc(o.img)}" x="${cx-R+4}" y="${cy-R+4}" width="${2*R-8}" height="${2*R-8}" clip-path="url(#${id}c)" preserveAspectRatio="xMidYMid slice"/>`:o.ini!=null?`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="${o.ini.length>1?21:24}" font-weight="800" fill="#fff" style="font-family:var(--display)">${esc(o.ini)}</text>`
     :`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><path d="M${cx} ${cy-14}L${cx+11} ${cy-2}L${cx} ${cy+15}L${cx-11} ${cy-2}z" fill="url(#${id}g)" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/><path d="M${cx-11} ${cy-2}H${cx+11}M${cx} ${cy-14}V${cy+15}" stroke="#fff" stroke-opacity=".35" stroke-width="1"/>`;
   return `<svg class="rframe ${cls||""}" viewBox="0 -8 120 124" role="img" aria-label="${esc(r.full||P[0])}"><defs>
    <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c2}"/><stop offset="1" stop-color="${c1}"/></linearGradient>
    <radialGradient id="${id}d" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="#11151b"/></radialGradient></defs>
    ${back}<circle cx="${cx}" cy="${cy}" r="${R}" ${g} stroke="${c1}" stroke-width="1.5"/>${inner}<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="none" stroke="${c2}" stroke-width="1.5" opacity=".8"/>${gemTop}${pipS}</svg>`}
+let hmN=0;
+const HPLUME=["#C2410C","#3B82F6","#DC2626","#14B8A6","#8B5CF6","#EC4899","#F59E0B"];
+function helmEmblem(r,cls){const id="hm"+(++hmN),i=r.i||0,P=RANKS[i]||RANKS[0],c1=P[2],c2=P[3],pl=HPLUME[i];
+  const metal=`fill="url(#${id}m)"`,edge=`stroke="${c1}" stroke-width="2" stroke-linejoin="round"`;
+  const wing=(n,len,sd)=>{let s="";for(let k=0;k<n;k++){const L=len-k*5,x=sd>0?96:24,y=60-k*4;
+    s+=`<path d="M0 -6Q${L*.5} -10 ${L} 0Q${L*.5} 8 0 6z" transform="translate(${x} ${y}) rotate(${sd>0?-12-k*22:180+12+k*22})" ${metal} ${edge}/>`}return s};
+  const wings=i>=2?wing(i>=6?5:i>=4?4:3,[0,0,28,32,36,38,42][i],1)+wing(i>=6?5:i>=4?4:3,[0,0,28,32,36,38,42][i],-1):"";
+  const horns=i>=5?`<path d="M32 42C16 36 8 20 12 2C18 18 26 26 40 30Z" ${metal} ${edge}/><path d="M88 42C104 36 112 20 108 2C102 18 94 26 80 30Z" ${metal} ${edge}/>`:"";
+  const crown=i>=4?`<path d="M36 30L40 4L50 18L60 -6L70 18L80 4L84 30Z" ${metal} ${edge}/>`:"";
+  const halo=i>=6?`<circle cx="60" cy="58" r="56" fill="none" stroke="${c2}" stroke-width="2" opacity=".5"/><circle cx="60" cy="58" r="50" fill="url(#${id}h)"/>`:"";
+  const plate=i>=1?`<path d="M60 0L102 16V66C102 96 84 116 60 128C36 116 18 96 18 66V16Z" fill="url(#${id}b)" stroke="${c2}" stroke-width="2" stroke-opacity=".7"/><path d="M60 8L95 21V66C95 91 80 108 60 119C40 108 25 91 25 66V21Z" fill="none" stroke="${c1}" stroke-width="1.5" opacity=".9"/>`:"";
+  const ridge=`<path d="M60 20V44" stroke="${c2}" stroke-width="4" stroke-linecap="round" opacity=".55"/>`;
+  const cheeks=`<path d="M26 72C30 70 40 70 46 72V112C38 110 30 104 27 96Z" fill="rgba(0,0,0,.18)"/><path d="M94 72C90 70 80 70 74 72V112C82 110 90 104 93 96Z" fill="rgba(0,0,0,.25)"/>`;
+  const trim=`<path d="M23 88C23 102 32 110 44 114L50 116M97 88C97 102 88 110 76 114L70 116" fill="none" stroke="${c2}" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>`;
+  const plume=`<path d="M52 26C50 10 54 -2 60 ${i>=3?-12:-6}C66 -2 70 10 68 26Z" fill="url(#${id}p)" stroke="${c1}" stroke-width="1.5"/>`;
+  const shell=`<path d="M60 20C85 20 97 40 97 64V90C97 102 88 110 76 114L70 116V96L64 90H56L50 96V116L44 114C32 110 23 102 23 90V64C23 40 35 20 60 20Z" ${metal} ${edge}/>`;
+  const face=`<path d="M36 56H84V63C84 66 80 68 76 68H66V93L60 99L54 93V68H44C40 68 36 66 36 63Z" fill="url(#${id}f)"/>`;
+  const brow=i>=1?`<path d="M28 50C44 42 76 42 92 50" fill="none" stroke="${c2}" stroke-width="3" stroke-linecap="round" opacity=".9"/>${[34,47,60,73,86].map(x=>`<circle cx="${x}" cy="${x===60?44.5:x===47||x===73?45.5:48}" r="1.8" fill="${c2}"/>`).join("")}`:"";
+  const gem=i>=3?`<path d="M60 28l6 7-6 7-6-7z" fill="${pl}" stroke="#fff" stroke-width="1.2"/>`:"";
+  const shine=`<path d="M40 30C34 38 31 50 31 62" stroke="rgba(255,255,255,.45)" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  const pips=r.div?["III","II","I"].indexOf(r.div)+1:0;
+  const pipS=Array.from({length:pips},(_,k)=>`<path d="M${60+(k-(pips-1)/2)*10} 126l4 5-4 5-4-5z" fill="${c2}" stroke="${c1}" stroke-width="1"/>`).join("");
+  return `<svg class="helm ${cls||""}" viewBox="-14 -18 148 156" role="img" aria-label="${esc(r.full||P[0])}"><defs>
+   <linearGradient id="${id}m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c2}"/><stop offset=".5" stop-color="${c1}"/><stop offset="1" stop-color="#1a1d24"/></linearGradient>
+   <linearGradient id="${id}p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".25" stop-color="${pl}"/><stop offset="1" stop-color="${pl}" stop-opacity=".85"/></linearGradient>
+   <linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05070a"/><stop offset="1" stop-color="#1c2230"/></linearGradient>
+   <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}" stop-opacity=".95"/><stop offset="1" stop-color="#0d1015"/></linearGradient><radialGradient id="${id}h"><stop offset="0" stop-color="${c2}" stop-opacity=".35"/><stop offset="1" stop-color="${c2}" stop-opacity="0"/></radialGradient></defs>
+   ${halo}${plate}${wings}${horns}${crown}${plume}${shell}${ridge}${cheeks}${face}${trim}${brow}${gem}${shine}${pipS}</svg>`}
 function rankEmblem(r,cls){return rankFrame(r,{},cls)}
 function initialsOf(nm){return String(nm||"").split(/\s+/).map(w=>w[0]||"").join("").slice(0,2).toUpperCase()||"?"}
 function rankAvatar(r,nm,cls){return rankFrame(r,{ini:initialsOf(nm)},cls)}
@@ -3006,23 +3037,58 @@ function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine
     .sort((a,b)=>RPTS[b.tier]-RPTS[a.tier]);
   const L=mine?badgeState().L:null;
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="prclose">Close</button><span class="eyebrow">Profile</span></div>
-   <div class="tprof"><div class="thead">${c?rankAvatar(r,name,"av"):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`}<div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
-   ${c?`<div class="rankbox">${rankEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
+   <div class="tprof"><div class="thead">${c?(mine&&state.mode==="db"?`<button class="avedit" id="avedit" aria-label="Change profile picture">${avatarFor(uid,name,r,"av")}<span>✎</span></button>`:avatarFor(mine?uid:id,name,r,"av")):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`}<div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
+   ${c?`<div class="rankbox">${helmEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
      <p>${r.pts} rank points</p>${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
     <div class="lbl">${list.length} badge${list.length===1?"":"s"}</div>
     ${list.length?`<div class="bgrid pgrid">${list.map(b=>`<div class="bcell">${medal(b,"sm")}<b>${esc(b.name)}</b></div>`).join("")}</div>`:`<p class="savenote">No badges yet.</p>`}
     ${mine?`<p class="savenote">${state.mode!=="db"?"":lb.status&&lb.status.board?"Others see this when they tap your name on the leaderboard.":"Only you can see this. Join the leaderboard to show it to others."} Body-weight badges always stay private.</p>`:""}`
    :`<p class="savenote">This lifter's profile isn't available yet.</p>`}</div>`;
   state.open="__profile";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#prclose",sh).onclick=closeSheet;
-  const ri=$("#rkinfo",sh);if(ri)ri.onclick=()=>openRankInfo(id,nm)}
+  const ri=$("#rkinfo",sh);if(ri)ri.onclick=()=>openRankInfo(id,nm);const ae=$("#avedit",sh);if(ae)ae.onclick=openAvatarPick;
+  needProfiles([mine?uid:id].filter(x=>x&&x!=="me"))}
 function openRankInfo(back,nm){const sh=$("#sheet");
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How ranks work</h3>
    <p class="savenote" style="margin-top:0">Every badge you earn adds rank points. Each rank has three steps: III, II, then I.</p>
-   <div class="rklist">${RANKS.map((x,i)=>`<div>${rankEmblem({i,div:"",full:x[0]},"sm")}<b>${x[0]}</b><span>${x[1]}+ pts</span></div>`).join("")}</div>
+   <div class="rklist">${RANKS.map((x,i)=>`<div>${helmEmblem({i,div:"",full:x[0]},"sm")}<b>${x[0]}</b><span>${x[1]}+ pts</span></div>`).join("")}</div>
    <div class="rkpts">${["bronze","silver","gold","plat","diamond"].map(t=>`<span>${medal({tier:t,icon:"star",cat:"weight"},"sm")}+${RPTS[t]}</span>`).join("")}</div><p class="savenote">Referral badges count double.</p>
    <div class="btns"><button class="btn primary" id="rkback" style="flex:1">Got it</button></div>`;
   sh.scrollTop=0;$("#rkback",sh).onclick=()=>openProfile(back,nm)}
 
+/* ---------- profile pictures: rank crest, warrior helm, or own photo in a rank border ---------- */
+function avatarFor(id,name,r,cls){const pr=profCache[id]||{},am=pr.am||"crest";
+  if(am==="helm")return helmEmblem(r,cls);
+  if(am==="photo"&&pr.av)return rankFrame(r,{img:pr.av},cls);
+  return rankAvatar(r,name,cls)}
+const avWant=new Set();let avT=null;
+function needProfiles(ids){if(!window.LIFTLOG_PROFILES)return;ids.filter(x=>x&&!(x in profCache)).forEach(x=>avWant.add(x));if(!avWant.size||avT)return;
+  avT=setTimeout(()=>{const list=[...avWant];avWant.clear();avT=null;window.LIFTLOG_PROFILES.get(list).then(r=>{let ch=false;list.forEach(x=>{profCache[x]=r[x]||{};ch=ch||!!(r[x]&&r[x].am&&r[x].am!=="crest")});
+    if(ch){const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}const lv=$("#lvlpanel");if(lv&&uid&&list.includes(uid))render()}}).catch(()=>{})},60)}
+function shrinkImage(file){return new Promise((res,rej)=>{const img=new Image(),u=URL.createObjectURL(file);
+  img.onload=()=>{const S=128,c=document.createElement("canvas");c.width=c.height=S;const k=Math.min(img.width,img.height),x=(img.width-k)/2,y=(img.height-k)/2;
+    c.getContext("2d").drawImage(img,x,y,k,k,0,0,S,S);URL.revokeObjectURL(u);let q=.82,d=c.toDataURL("image/jpeg",q);while(d.length>40000&&q>.4){q-=.12;d=c.toDataURL("image/jpeg",q)}res(d)};
+  img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("bad"))};img.src=u})}
+function openAvatarPick(){const sh=$("#sheet"),me=profCache[uid]||{},name=(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You";
+  const r=rankInfo(myCard().pts);let mode=me.am||"crest",photo=me.av||"";
+  const draw=()=>{sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Profile picture</h3>
+   <p class="savenote" style="margin-top:0">Shown on your profile and the leaderboard. Your rank border grows as you rank up.</p>
+   <div class="avopts">
+    <button class="avopt ${mode==="crest"?"on":""}" data-am="crest" aria-pressed="${mode==="crest"}">${rankAvatar(r,name,"big")}<b>Initials</b></button>
+    <button class="avopt ${mode==="helm"?"on":""}" data-am="helm" aria-pressed="${mode==="helm"}">${helmEmblem(r,"big")}<b>Warrior helm</b></button>
+    <button class="avopt ${mode==="photo"?"on":""}" data-am="photo" aria-pressed="${mode==="photo"}">${photo?rankFrame(r,{img:photo},"big"):`<span class="avadd">+</span>`}<b>My photo</b></button>
+   </div>
+   <input type="file" id="avfile" accept="image/*" hidden>
+   ${mode==="photo"?`<button class="linkbtn" id="avchange">${photo?"Choose a different photo":"Choose a photo"}</button>`:""}
+   <p class="savenote">Keep it friendly: pictures that break the rules get removed.</p>
+   <div class="btns"><button class="btn" id="avcancel">Cancel</button><button class="btn primary" id="avsave" ${mode==="photo"&&!photo?"disabled":""}>Save</button></div>`;
+   const f=$("#avfile",sh);f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;shrinkImage(file).then(d=>{photo=d;mode="photo";draw()}).catch(()=>toast("Couldn't read that picture. Try another."))};
+   sh.querySelectorAll("[data-am]").forEach(b=>b.onclick=()=>{mode=b.dataset.am;if(mode==="photo"&&!photo){f.click()}draw()});
+   const ch=$("#avchange",sh);if(ch)ch.onclick=()=>f.click();
+   $("#avcancel",sh).onclick=()=>openProfile(uid);
+   $("#avsave",sh).onclick=()=>{const b=$("#avsave",sh);b.disabled=true;
+     window.LIFTLOG_RPC("set_avatar",{av:mode==="photo"?photo:(me.av||""),mode}).then(()=>{profCache[uid]={...(profCache[uid]||{}),av:mode==="photo"?photo:(me.av||""),am:mode};toast("Profile picture saved");render();openProfile(uid)})
+      .catch(e=>{b.disabled=false;toast(/function|schema|not find/i.test(String(e&&e.message))?"Run liftlog-update-7 SQL in Supabase first.":"Couldn't save. Try again.")})}};
+  state.open="__avatar";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;draw()}
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}

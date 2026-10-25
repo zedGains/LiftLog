@@ -289,9 +289,10 @@
     get: async (ids) => {
       await ready; ids = [].concat(ids).filter(Boolean); const out = {};
       if (!ids.length) return out;
-      const { data, error } = await sb.from("profiles").select("id,name,bio,location,links,verified").in("id", ids);
+      let { data, error } = await sb.from("profiles").select("id,name,bio,location,links,verified,avatar,avatar_mode").in("id", ids);
+      if (error && /avatar/i.test(error.message || "")) ({ data, error } = await sb.from("profiles").select("id,name,bio,location,links,verified").in("id", ids));   // avatars.sql not run yet
       if (error) throw mapErr(error);
-      (data || []).forEach((p) => (out[p.id] = { name: p.name || "", bio: p.bio || "", location: p.location || "", links: p.links || {}, verified: !!p.verified }));
+      (data || []).forEach((p) => (out[p.id] = { name: p.name || "", bio: p.bio || "", location: p.location || "", links: p.links || {}, verified: !!p.verified, av: p.avatar || "", am: p.avatar_mode || "crest" }));
       return out;
     },
     save: async (f) => {
