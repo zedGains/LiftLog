@@ -2728,7 +2728,10 @@ const BICONS={cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 
  moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>', pair:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M10 20c0-3 3-5 6-5s6 2 6 5"/>',
  scale:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 9a5 5 0 0 1 8 0M12 9l1.5-2"/>', back:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/>',
  star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', trophy:'<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 14v4M8 21h8M9 18h6"/>',
- down:'<path d="M12 4v14M6 12l6 6 6-6"/>', wknd:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M13 14h5v4h-5z"/>', book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"/>'};
+ down:'<path d="M12 4v14M6 12l6 6 6-6"/>', wknd:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M13 14h5v4h-5z"/>', book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"/>',
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', note:'<path d="M5 3h10l4 4v14H5zM15 3v4h4M8 11h8M8 15h8M8 19h5"/>',
+ week:'<path d="M3 6h18M3 12h18M3 18h18"/><circle cx="6" cy="6" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="18" cy="18" r="1"/>',
+ party:'<path d="M4 20 9 7l8 8zM12 4v2M17 5l-1 2M20 9h-2M15 3l1 1M20 13l-1-1"/>'};
 const TIERXP={bronze:50,silver:100,gold:250,plat:500,diamond:800};
 const RIB={bronze:"#C92A2A",silver:"#1F5FC4",gold:"#C92A2A",plat:"#6E44C9",diamond:"#0E6E85"};
 const TPAL={bronze:["#5C2E10","#A9652F","#F2BE8C"],silver:["#3F4852","#8D99A6","#F1F4F8"],gold:["#6B4500","#CF9410","#FFE68E"],plat:["#1E3F92","#4C7BD9","#CFE0FF"],diamond:["#075A6E","#17AECB","#D6FAFF"]};
@@ -2746,8 +2749,18 @@ const MSHAPE={
 function laurel(side){let s="";for(let i=0;i<7;i++){const deg=158-i*15,a=deg*Math.PI/180,x=50+side*45*Math.sin(a),y=47-45*Math.cos(a);
   let ang=Math.atan2(-Math.sin(a),-Math.cos(a))*180/Math.PI;ang=side>0?ang-38:180-ang+38;const k=1-i*.05;
   s+=`<path d="M0 0Q${6*k} ${-6*k} ${13*k} 0Q${6*k} ${6*k} 0 0z" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${ang.toFixed(0)})"/>`}return s}
-function medal(b,cls,locked){const id="md"+(++medN),cat=b.cat||catOf(b.id),tier=b.tier||"bronze",T=TPAL[tier]||TPAL.bronze,lv=["bronze","silver","gold","plat","diamond"].indexOf(tier);
-  const d=(MSHAPE[cat]||MSHAPE.weight)(),L=!!locked;
+const FUNART={early:{d:()=>poly(12,39,31,0),p:["#8A3B00","#F08C00","#FFE066"]},
+ night:{d:()=>"M50 10a36 36 0 1 0 .01 0z",p:["#14163A","#3B3F8F","#9AA5FF"],x:'<path d="M70 26a20 20 0 1 0 6 26 16 16 0 1 1-6-26z" fill="rgba(255,255,255,.18)"/>'},
+ weekend:{d:()=>"M20 14h60v18a6 6 0 0 0 0 12v20a14 14 0 0 1-14 14H34a14 14 0 0 1-14-14V44a6 6 0 0 0 0-12z",p:["#0B4D2E","#21875A","#9BE5BE"]},
+ comeback:{d:()=>poly(10,38,33,Math.PI/10),p:["#0B4E57","#1098AD","#99E9F2"]},
+ partner:{d:()=>"M36 18a28 28 0 1 1 0 56 28 28 0 0 1 0-56zM64 18a28 28 0 1 1 0 56 28 28 0 0 1 0-56z",p:["#17306B","#3B6BD6","#B7CCFF"]},
+ creator:{d:()=>"M22 12h44l12 12v50a6 6 0 0 1-6 6H22a6 6 0 0 1-6-6V18a6 6 0 0 1 6-6z",p:["#3F1D7A","#7048E8","#D0BFFF"]},
+ superset:{d:()=>"M50 6 84 26v40L50 86 16 66V26z",p:["#7A2A00","#E8590C","#FFC078"]},
+ notes5:{d:()=>"M16 16h56l12 12v52H16z",p:["#7A5A00","#E0A800","#FFF3BF"]},
+ alldays:{d:()=>poly(7,39,0,0),p:["#14306B","#1F5FC4","#A5C8FF"]},
+ newyear:{d:()=>poly(14,39,27,0),p:["#7A0F1C","#E03131","#FFC9C9"],x:'<circle cx="24" cy="18" r="2.5" fill="#FFD43B"/><circle cx="80" cy="22" r="2" fill="#69DB7C"/><circle cx="82" cy="70" r="2.5" fill="#74C0FC"/>'}};
+function medal(b,cls,locked){const id="md"+(++medN),cat=b.cat||catOf(b.id),tier=b.tier||"bronze",FA=FUNART[b.id],T=FA?FA.p:(TPAL[tier]||TPAL.bronze),lv=["bronze","silver","gold","plat","diamond"].indexOf(tier);
+  const d=FA?FA.d():(MSHAPE[cat]||MSHAPE.weight)(),L=!!locked;
   const rim=L?"style=\"fill:var(--line)\"":`fill="url(#${id}r)"`,face=L?"style=\"fill:var(--surface-2)\"":`fill="url(#${id}f)"`;
   const ink=L?"style=\"fill:var(--muted)\"":"fill=\"#fff\"",inkS=L?"var(--muted)":"#fff";
   const rib=L?"var(--line)":(b.rib||RIB[tier]||"#C92A2A");
@@ -2765,7 +2778,7 @@ function medal(b,cls,locked){const id="md"+(++medN),cat=b.cat||catOf(b.id),tier=
   const shine=!L&&lv>=2?`<g clip-path="url(#${id}c)"><g transform="rotate(20 50 46)"><rect class="mshine" x="-40" y="-20" width="16" height="140" fill="rgba(255,255,255,.38)"/></g></g>`:"";
   const spark=!L&&lv>=4?`<g class="mspark" fill="#fff" stroke="${T[1]}" stroke-width=".8"><path d="M84 18l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M14 64l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/></g>`:"";
   return `<div class="med ${cls||""} ${L?"locked":tier} c-${cat}"><svg viewBox="-6 -9 112 113" aria-hidden="true">${defs}
-   ${deco}<path d="M38 60 33 100 41 94 46 102 50 66z" fill="${rib}"/><path d="M62 60 67 100 59 94 54 102 50 66z" fill="${rib}" style="filter:brightness(.82)"/>${cat==="friends"?crestBlades(2+Math.min(lv,2),11+lv*2,30,50,46,-6,30,L?'style="fill:var(--line)"':`fill="url(#${id}r)"`)+`<path d="M41 18 50 ${3-lv*1.5} 59 18z" ${L?'style="fill:var(--line)"':`fill="url(#${id}r)"`}/>`:""}<path d="${d}" ${rim}/><path d="${d}" transform="translate(50 46) scale(.84) translate(-50 -46)" ${face}/>${ring}${shine}${ic}${spark}</svg></div>`}
+   ${deco}<path d="M38 60 33 100 41 94 46 102 50 66z" fill="${rib}"/><path d="M62 60 67 100 59 94 54 102 50 66z" fill="${rib}" style="filter:brightness(.82)"/>${cat==="friends"?crestBlades(2+Math.min(lv,2),11+lv*2,30,50,46,-6,30,L?'style="fill:var(--line)"':`fill="url(#${id}r)"`)+`<path d="M41 18 50 ${3-lv*1.5} 59 18z" ${L?'style="fill:var(--line)"':`fill="url(#${id}r)"`}/>`:""}<path d="${d}" ${rim}/><path d="${d}" transform="translate(50 46) scale(.84) translate(-50 -46)" ${face}/>${ring}${FA&&FA.x&&!L?FA.x:""}${shine}${ic}${spark}</svg></div>`}
 function wkStartOf(date){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d);dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return ymd(dt)}
 function addDays(date,n){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d+n);return ymd(dt)}
 function badgeStats(){
@@ -2792,6 +2805,8 @@ function badgeStats(){
     const recent=wi.filter(x=>x.d>=addDays(wi[wi.length-1].d,-84));const span=(new Date(wi[wi.length-1].d)-new Date(recent[0].d))/864e5;
     S.steadyWeeks=Math.floor(span/7);S.steady=recent.every(x=>Math.abs(x.w-last)<=3)}
   S.published=(plan.myPrograms||[]).some(p=>p.published);
+  S.superset=Object.keys(plan.supers||{}).length>0; S.notes=Object.values(plan.exNotes||{}).filter(v=>v&&String(v).trim()).length;
+  S.newyear=[...ds].some(d=>d.slice(5)==="01-01"); S.allDays=new Set([...ds].map(d=>{const [y,m,dd]=d.split("-").map(Number);return new Date(y,m-1,dd).getDay()})).size;
   return S}
 function goalOf(){return plan.goal||"lose"}
 function badgeDefs(){
@@ -2835,6 +2850,10 @@ function badgeDefs(){
   add("fun","comeback","silver","Comeback","Get back in the gym after 2+ weeks off.",S.comeback,null,1,{icon:"back",rib:"#21875A"});
   add("fun","partner","bronze","Partner up","Log a gym partner's top set.",S.partner,null,1,{icon:"pair",rib:"#21875A"});
   add("fun","creator","silver","Program creator","Publish a program to the community.",S.published,null,1,{icon:"book",rib:"#6E44C9"});
+  add("fun","superset","bronze","Superset starter","Pair two exercises into a superset.",S.superset,null,1,{icon:"bolt",rib:"#E8590C"});
+  add("fun","notes5","bronze","Note taker","Add notes to 5 exercises.",S.notes>=5,S.notes,5,{icon:"note",rib:"#D9A514"});
+  add("fun","alldays","silver","Every day counts","Train at least once on every day of the week, Monday through Sunday.",S.allDays>=7,S.allDays,7,{icon:"week",rib:"#1F5FC4"});
+  add("fun","newyear","gold","Fresh start","Train on New Year's Day.",S.newyear,null,1,{icon:"party",rib:"#C92A2A"});
   S.refs=plan.refActive||0;
   [[1,"bronze","First recruit"],[3,"silver","Squad of 3"],[5,"silver","High five"],[10,"gold","Crew builder"],[25,"plat","Team captain"],[50,"diamond","Movement"],[100,"diamond","Legend maker"]].forEach(([n,t,nm])=>
     add("friends","ref"+n,t,nm,`Invite ${n===1?"a friend":n+" friends"} who finish${n===1?"es":""} their first week. Referral badges count double toward your rank.`,S.refs>=n,S.refs,n,{num:n,rib:"#D6336C",icon:"pair"}));
