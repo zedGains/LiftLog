@@ -5,10 +5,10 @@
 1034	Esta semana: {0} de {1} entrenos
 1035	Esta semana: {0} de {1} entrenos · {2} de {3} semanas completas
 1036	Solo mide la <b>constancia</b>: semanas completas seguidas. Nunca pesos.
-1037	Una <b>semana completa</b> son {0} días de entreno, de lunes a domingo.
+1037	Una <b>semana completa</b> son {0} o más días de entreno, de lunes a domingo.
 1038	Cuenta un entreno por día, y solo si lo guardas ese mismo día.
 1039	Si fallas una semana, tu racha empieza de cero. La semana en curso nunca cuenta en tu contra.
-1040	<b>Pase de descanso:</b> una vez al mes, una semana de {0} entrenos cuenta como completa.
+1040	<b>Pase de descanso:</b> {0} al mes. Una semana de {1} entrenos cuenta como completa. Se renueva el día {2} y no se acumula.
 1041	Se desbloquea tras {0} semanas completas seguidas y no se vuelve a bloquear.
 1042	Solo se muestra tu nombre visible. Unirte es opcional.
 1043	Entendido

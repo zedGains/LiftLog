@@ -5,10 +5,10 @@
 1034	Esta semana: {0} de {1} treinos
 1035	Esta semana: {0} de {1} treinos · {2} de {3} semanas completas
 1036	Mede só a <b>constância</b>: semanas completas seguidas. Nunca cargas.
-1037	Uma <b>semana completa</b> são {0} dias de treino, de segunda a domingo.
+1037	Uma <b>semana completa</b> são {0} ou mais dias de treino, de segunda a domingo.
 1038	Conta um treino por dia, e só se você salvar no mesmo dia.
 1039	Perdeu uma semana, a sequência zera. A semana atual nunca conta contra você.
-1040	<b>Passe de descanso:</b> uma vez por mês, uma semana com {0} treinos conta como completa.
+1040	<b>Passe de descanso:</b> {0} por mês. Uma semana com {1} treinos conta como completa. Renova no dia {2} e não acumula.
 1041	Desbloqueia após {0} semanas completas seguidas e continua desbloqueado.
 1042	Só seu nome de exibição aparece. Participar é opcional.
 1043	Entendi

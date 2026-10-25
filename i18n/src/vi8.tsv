@@ -5,10 +5,10 @@
 1034	Tuần này: {0}/{1} buổi tập
 1035	Tuần này: {0}/{1} buổi tập · đã xong {2}/{3} tuần đủ
 1036	Chỉ xếp hạng <b>sự đều đặn</b>: số tuần đủ liên tiếp. Không bao giờ xét mức tạ.
-1037	Một <b>tuần đủ</b> là {0} ngày tập, từ thứ Hai đến Chủ nhật.
+1037	Một <b>tuần đủ</b> là từ {0} ngày tập trở lên, từ thứ Hai đến Chủ nhật.
 1038	Mỗi ngày tính một buổi, và chỉ khi bạn lưu ngay trong ngày đó.
 1039	Bỏ một tuần thì chuỗi bắt đầu lại. Tuần đang diễn ra không bao giờ bị tính là lỡ.
-1040	<b>Thẻ nghỉ:</b> mỗi tháng một lần, tuần có {0} buổi vẫn được tính là đủ.
+1040	<b>Thẻ nghỉ:</b> {0} thẻ mỗi tháng. Tuần có {1} buổi vẫn được tính là đủ. Thẻ làm mới vào ngày {2} và không cộng dồn.
 1041	Mở khóa sau {0} tuần đủ liên tiếp, và luôn mở từ đó.
 1042	Chỉ hiện tên hiển thị của bạn. Tham gia hay không là tùy bạn.
 1043	Đã hiểu

@@ -5,10 +5,10 @@
 1034	Cette semaine : {0} séances sur {1}
 1035	Cette semaine : {0} séances sur {1} · {2} semaines complètes sur {3}
 1036	Il classe uniquement la <b>régularité</b> : les semaines complètes d'affilée. Jamais les charges.
-1037	Une <b>semaine complète</b> = {0} jours d'entraînement, du lundi au dimanche.
+1037	Une <b>semaine complète</b> = {0} jours d'entraînement ou plus, du lundi au dimanche.
 1038	Une séance compte par jour, et seulement si tu l'enregistres le jour même.
 1039	Rate une semaine et ta série repart de zéro. La semaine en cours ne compte jamais contre toi.
-1040	<b>Pass repos :</b> une fois par mois, une semaine à {0} séances compte comme complète.
+1040	<b>Pass repos :</b> {0} par mois. Une semaine à {1} séances compte comme complète. Il se renouvelle le {2}er et ne se cumule pas.
 1041	Se débloque après {0} semaines complètes d'affilée, et reste débloqué.
 1042	Seul ton nom affiché est visible. Rejoindre est facultatif.
 1043	Compris

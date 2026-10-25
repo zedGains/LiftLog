@@ -258,24 +258,22 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
 .skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
-.med{--t1:#B7713A;--t2:#E3A877;width:58px;height:58px;margin:0 auto 5px;position:relative;flex:none}
-.med.bronze{--t1:#B7713A;--t2:#E3A877}.med.silver{--t1:#8E99A6;--t2:#D5DCE3}.med.gold{--t1:#C9971A;--t2:#F4D36B}.med.plat{--t1:#4C7BD9;--t2:#A9C6F5}.med.diamond{--t1:#139BB3;--t2:#B4F1F8}
-.med .rib{position:absolute;left:50%;top:60%;width:58%;height:45%;transform:translateX(-50%);display:flex;justify-content:space-between}
-.med .rib i{width:44%;height:100%;background:var(--rc,#C92A2A);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
-.med .disc{position:absolute;inset:0 7% 14% 7%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--t2),var(--t1) 70%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),0 2px 4px rgba(0,0,0,.2);display:grid;place-items:center;color:#fff;z-index:1}
-.med svg{width:42%;height:42%;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
-.med .num{font:800 17px/1 var(--display);color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3)}
-.med.locked .disc{background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--line)}.med.locked svg{stroke:var(--muted);filter:none;opacity:.6}.med.locked .num{color:var(--muted);text-shadow:none;opacity:.7}.med.locked .rib i{background:var(--line)}
-.med.sm{width:44px;height:44px;margin:0}.med.sm .num{font-size:13px}
-.med.big{width:118px;height:118px}.med.big .num{font-size:34px}
+.med{width:60px;height:67px;margin:0 auto 4px;position:relative;flex:none}.med>svg{width:100%;height:100%;display:block;overflow:visible}
+.med .mnum{font-family:var(--display);paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.5px}.med.locked .mnum{stroke:none;opacity:.75}
+.med.sm{width:44px;height:49px;margin:0}.med.big{width:124px;height:139px}
+.mshine{animation:mshine 3.6s ease-in-out infinite}@keyframes mshine{0%,55%{transform:translateX(0)}100%{transform:translateX(160px)}}
+.mspark{animation:mspark 1.8s ease-in-out infinite;transform-origin:50% 46%}@keyframes mspark{0%,100%{opacity:.2}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.mshine,.mspark{animation:none}.mshine{opacity:0}}
 .rankrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--line);margin-top:12px;font-size:13px;color:var(--muted)}.rankrow b{display:block;color:var(--fg);font-size:15px}.rankrow>span:not(.go){flex:1;min-width:0}.rankrow .go{font-weight:700;color:var(--fg);white-space:nowrap}
-.remb{width:40px;height:45px;flex:none;display:block}.remb.xs{width:20px;height:23px}.remb.sm{width:34px;height:38px}.remb.big{width:84px;height:94px}
+.rframe{width:46px;height:48px;flex:none;display:block;overflow:visible}.rframe.xs{width:44px;height:46px;margin:-4px 0}.rframe.md{width:66px;height:68px;margin:-8px -4px}.rframe.sm{width:46px;height:48px}.rframe.big{width:96px;height:100px}.rframe.av{width:88px;height:92px;margin:-8px -6px -8px -10px}.lbav{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font:800 13px var(--display);color:var(--muted)}
 .rankbox{display:flex;gap:16px;align-items:center;margin:14px 0;padding:14px;border-radius:12px;background:var(--surface-2)}.rkt{flex:1;min-width:0}.rkn{font:800 24px/1.1 var(--display);text-transform:uppercase;display:flex;align-items:center}.rkt p{margin:2px 0 8px;color:var(--muted);font-size:14px}.rkt small{display:block;margin-top:4px;color:var(--muted);font-size:12.5px}
 .rkt .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}.rkt .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
 .pgrid .bcell{cursor:default}.pgrid .med.sm{margin:0 auto 4px}.rklist{display:grid;gap:6px;margin:10px 0}.rklist>div{display:flex;align-items:center;gap:10px}.rklist b{flex:1}.rklist span{color:var(--muted);font-size:14px}
 .rkpts{display:flex;justify-content:space-between;margin:12px 0 16px;font-weight:700;font-size:14px}.rkpts>span{display:flex;flex-direction:column;align-items:center;gap:2px}
 .reflink{display:flex;gap:8px;align-items:center;background:var(--surface-2);border-radius:10px;padding:8px 8px 8px 12px}.reflink code{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
 .lbrows li[data-prof]{cursor:pointer}
+.refhero .btn.primary,.reflink .btn.primary{flex:none;width:auto;padding-inline:18px}.refhero{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;margin-bottom:14px;background:linear-gradient(135deg,rgba(214,51,108,.14),rgba(110,68,201,.14))}.refhero>div{flex:1;min-width:0}.refhero b{display:block;font-size:16px}.refhero span{display:block;font-size:13px;color:var(--muted)}.refhero .bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px}.refhero .bar i{display:block;height:100%;background:#D6336C}.refhero small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
+#refpanel .nextb .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}#refpanel .nextb .bar i{display:block;height:100%;background:#D6336C}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -2519,7 +2517,7 @@ function openTrainer(id){
     const links=[["instagram","Instagram"],["youtube","YouTube"],["website","Website"]].map(([k,l])=>{const u=safeUrl((pr.links||{})[k],k);return u?`<a href="${esc(u)}" target="_blank" rel="noopener nofollow">${l}</a>`:""}).join("");
     const likes=progs.reduce((a,p)=>a+(pg.social.likes[p.key]||0),0);
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="trback">Close</button><span class="eyebrow">Trainer</span></div>
-     <div class="tprof"><div class="thead"><div class="tav" aria-hidden="true">${esc(ini)}</div><div><h3 id="sheet-title">${esc(nm)}</h3><div class="tsub">${pr.verified?`<span class="vbadge">✓ Verified trainer</span>`:"Creator"}${pr.location?` · ${esc(pr.location)}`:""}</div></div></div>
+     <div class="tprof"><div class="thead">${(()=>{const cd=cardOf(id);return cd?rankAvatar(rankInfo(cd.pts),nm,"av"):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`})()}<div><h3 id="sheet-title">${esc(nm)}</h3><div class="tsub">${pr.verified?`<span class="vbadge">✓ Verified trainer</span>`:"Creator"}${pr.location?` · ${esc(pr.location)}`:""}</div></div></div>
      ${pr.bio?`<p class="pvtext">${esc(pr.bio)}</p>`:mine?`<p class="savenote">Add a bio, location and links in Log → Settings → Trainer profile.</p>`:""}
      ${links?`<div class="tlinks">${links}</div>`:""}
      <div class="stats"><div><b>${progs.length}</b><small>program${progs.length===1?"":"s"}</small></div><div><b>${followersOf(id)}</b><small>followers</small></div><div><b>${likes}</b><small>likes</small></div></div>
@@ -2733,8 +2731,41 @@ const BICONS={cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 
  down:'<path d="M12 4v14M6 12l6 6 6-6"/>', wknd:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M13 14h5v4h-5z"/>', book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"/>'};
 const TIERXP={bronze:50,silver:100,gold:250,plat:500,diamond:800};
 const RIB={bronze:"#C92A2A",silver:"#1F5FC4",gold:"#C92A2A",plat:"#6E44C9",diamond:"#0E6E85"};
-function medal(b,cls,locked){const ic=b.num!=null?`<span class="num">${esc(String(b.num))}</span>`:`<svg viewBox="0 0 24 24" aria-hidden="true">${BICONS[b.icon]||BICONS.star}</svg>`;
-  return `<div class="med ${cls||""} ${locked?"locked":b.tier}"><div class="disc">${ic}</div><div class="rib" style="--rc:${b.rib||RIB[b.tier]}"><i></i><i></i></div></div>`}
+const TPAL={bronze:["#5C2E10","#A9652F","#F2BE8C"],silver:["#3F4852","#8D99A6","#F1F4F8"],gold:["#6B4500","#CF9410","#FFE68E"],plat:["#1E3F92","#4C7BD9","#CFE0FF"],diamond:["#075A6E","#17AECB","#D6FAFF"]};
+function catOf(id){id=String(id||"");return /^(bench|squat|deadlift|military)\d|^club|^pr\d/.test(id)?"strength":/^(first|week1|streak)/.test(id)?"consistency":/^(w\d|vol)/.test(id)?"milestones":/^ref/.test(id)?"friends":/^(bw|gainpct)/.test(id)?"everyone":/^(lose|gain\d|steady|weigh)/.test(id)?"weight":"fun"}
+let medN=0;
+function poly(n,r1,r2,rot){const p=[];for(let i=0;i<n*(r2?2:1);i++){const a=(rot||0)+i*Math.PI*2/(n*(r2?2:1)),r=r2&&i%2?r2:r1;p.push((50+r*Math.sin(a)).toFixed(1)+","+(46-r*Math.cos(a)).toFixed(1))}return "M"+p.join("L")+"Z"}
+const MSHAPE={
+ strength:()=>poly(6,36,0,Math.PI/6),
+ consistency:()=>poly(16,37,32.5,0),
+ milestones:()=>poly(8,39,29.5,Math.PI/8),
+ everyone:()=>"M50 9 82 20v24c0 20-14 33-32 41C32 77 18 64 18 44V20z",
+ weight:()=>"M50 10a36 36 0 1 0 .01 0z",
+ friends:()=>"M50 15a31 31 0 1 0 .01 0z",
+ fun:()=>"M26 13h48a13 13 0 0 1 13 13v40a13 13 0 0 1-13 13H26a13 13 0 0 1-13-13V26a13 13 0 0 1 13-13z"};
+function laurel(side){let s="";for(let i=0;i<7;i++){const deg=158-i*15,a=deg*Math.PI/180,x=50+side*45*Math.sin(a),y=47-45*Math.cos(a);
+  let ang=Math.atan2(-Math.sin(a),-Math.cos(a))*180/Math.PI;ang=side>0?ang-38:180-ang+38;const k=1-i*.05;
+  s+=`<path d="M0 0Q${6*k} ${-6*k} ${13*k} 0Q${6*k} ${6*k} 0 0z" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${ang.toFixed(0)})"/>`}return s}
+function medal(b,cls,locked){const id="md"+(++medN),cat=b.cat||catOf(b.id),tier=b.tier||"bronze",T=TPAL[tier]||TPAL.bronze,lv=["bronze","silver","gold","plat","diamond"].indexOf(tier);
+  const d=(MSHAPE[cat]||MSHAPE.weight)(),L=!!locked;
+  const rim=L?"style=\"fill:var(--line)\"":`fill="url(#${id}r)"`,face=L?"style=\"fill:var(--surface-2)\"":`fill="url(#${id}f)"`;
+  const ink=L?"style=\"fill:var(--muted)\"":"fill=\"#fff\"",inkS=L?"var(--muted)":"#fff";
+  const rib=L?"var(--line)":(b.rib||RIB[tier]||"#C92A2A");
+  const n=b.num!=null?String(b.num):null,fs=n?(n.length>=4?19:n.length===3?23:28):0;
+  const ic=n?`<text x="50" y="${46+fs*0.36}" text-anchor="middle" font-size="${fs}" font-weight="800" ${ink} class="mnum">${esc(n)}</text>`
+    :`<svg x="35" y="31" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="${inkS}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">${BICONS[b.icon]||BICONS.star}</svg>`;
+  const leafC=L?"var(--line)":T[1], deco=
+    (lv>=2?`<g style="fill:${leafC}">${laurel(-1)}${laurel(1)}</g>`:"")+
+    (lv>=3&&lv<4?[30,50,70].map((x,i)=>`<path transform="translate(${x} ${i===1?2:7}) scale(${i===1?.62:.46})" d="M0-10 3-3 10-3 4 2 6 9 0 5-6 9-4 2-10-3-3-3z" ${L?'style="fill:var(--line)"':`fill="${T[1]}" stroke="${T[0]}" stroke-width="1.5"`}/>`).join(""):"")+
+    (lv>=4?`<path d="M33 13 36 -1 43 7 50 -6 57 7 64 -1 67 13z" ${L?'style="fill:var(--line)"':`fill="url(#${id}r)" stroke="${T[0]}" stroke-width="1.6" stroke-linejoin="round"`}/>${L?"":`<circle cx="50" cy="6" r="2.6" fill="#fff"/>`}`:"");
+  const defs=L?"":`<defs><linearGradient id="${id}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${T[1]}"/><stop offset="1" stop-color="${T[0]}"/></linearGradient>
+    <radialGradient id="${id}f" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${T[2]}"/><stop offset=".55" stop-color="${T[1]}"/><stop offset="1" stop-color="${T[0]}"/></radialGradient>
+    <clipPath id="${id}c"><path d="${d}"/></clipPath></defs>`;
+  const ring=lv>=1?`<path d="${d}" transform="translate(50 46) scale(.68) translate(-50 -46)" fill="none" stroke="${L?"var(--line)":"rgba(255,255,255,.55)"}" stroke-width="2" stroke-dasharray="${lv>=3?"0":"3 3"}"/>`:"";
+  const shine=!L&&lv>=2?`<g clip-path="url(#${id}c)"><g transform="rotate(20 50 46)"><rect class="mshine" x="-40" y="-20" width="16" height="140" fill="rgba(255,255,255,.38)"/></g></g>`:"";
+  const spark=!L&&lv>=4?`<g class="mspark" fill="#fff" stroke="${T[1]}" stroke-width=".8"><path d="M84 18l1.6 4 4 1.6-4 1.6-1.6 4-1.6-4-4-1.6 4-1.6z"/><path d="M14 64l1.2 3 3 1.2-3 1.2-1.2 3-1.2-3-3-1.2 3-1.2z"/></g>`:"";
+  return `<div class="med ${cls||""} ${L?"locked":tier} c-${cat}"><svg viewBox="-6 -9 112 113" aria-hidden="true">${defs}
+   ${deco}<path d="M38 60 33 100 41 94 46 102 50 66z" fill="${rib}"/><path d="M62 60 67 100 59 94 54 102 50 66z" fill="${rib}" style="filter:brightness(.82)"/>${cat==="friends"?crestBlades(2+Math.min(lv,2),11+lv*2,30,50,46,-6,30,L?'style="fill:var(--line)"':`fill="url(#${id}r)"`)+`<path d="M41 18 50 ${3-lv*1.5} 59 18z" ${L?'style="fill:var(--line)"':`fill="url(#${id}r)"`}/>`:""}<path d="${d}" ${rim}/><path d="${d}" transform="translate(50 46) scale(.84) translate(-50 -46)" ${face}/>${ring}${shine}${ic}${spark}</svg></div>`}
 function wkStartOf(date){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d);dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return ymd(dt)}
 function addDays(date,n){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d+n);return ymd(dt)}
 function badgeStats(){
@@ -2805,8 +2836,8 @@ function badgeDefs(){
   add("fun","partner","bronze","Partner up","Log a gym partner's top set.",S.partner,null,1,{icon:"pair",rib:"#21875A"});
   add("fun","creator","silver","Program creator","Publish a program to the community.",S.published,null,1,{icon:"book",rib:"#6E44C9"});
   S.refs=plan.refActive||0;
-  [[1,"bronze","First recruit"],[3,"silver","Squad of 3"],[10,"gold","Crew builder"],[25,"plat","Team captain"],[50,"diamond","Movement"]].forEach(([n,t,nm])=>
-    add("friends","ref"+n,t,nm,`Invite ${n===1?"a friend":n+" friends"} who finish${n===1?"es":""} their first week. Share your link from Log → Invite friends.`,S.refs>=n,S.refs,n,{num:n,rib:"#21875A",icon:"pair"}));
+  [[1,"bronze","First recruit"],[3,"silver","Squad of 3"],[5,"silver","High five"],[10,"gold","Crew builder"],[25,"plat","Team captain"],[50,"diamond","Movement"],[100,"diamond","Legend maker"]].forEach(([n,t,nm])=>
+    add("friends","ref"+n,t,nm,`Invite ${n===1?"a friend":n+" friends"} who finish${n===1?"es":""} their first week. Referral badges count double toward your rank.`,S.refs>=n,S.refs,n,{num:n,rib:"#D6336C",icon:"pair"}));
   return {B,S}}
 const LVL_TITLES=[[1,"Rookie"],[5,"Regular"],[10,"Grinder"],[15,"Iron"],[20,"Steel"],[30,"Titan"],[40,"Legend"]];
 function levelInfo(B,S){const xp=S.workouts*100+S.prs*50+S.weeksHit*150+B.filter(b=>b.ok).reduce((a,b)=>a+TIERXP[b.tier],0);
@@ -2819,15 +2850,15 @@ function badgesPanel(){
   const {B,L}=badgeState(); const seen=plan.badgeSeen||{};
   const earned=B.filter(b=>b.ok).sort((a,b)=>(seen[b.id]||0)>(seen[a.id]||0)?1:-1);
   const next=B.filter(b=>!b.ok&&b.cur!=null).sort((a,b)=>b.cur/b.tgt-a.cur/a.tgt)[0];
-  const pct=Math.round(L.into/L.need*100), rk=rankInfo(B.filter(b=>b.ok).reduce((a,b)=>a+RPTS[b.tier],0));
+  const pct=Math.round(L.into/L.need*100), rk=rankInfo(B.filter(b=>b.ok).reduce((a,b)=>a+bPts(b),0));
   return `<div class="panel" id="lvlpanel"><h2>Level &amp; badges <button class="linkbtn" id="seebadges">See all ›</button></h2>
    <div class="lvl"><div class="lvring" style="--p:${pct}"><div><small>LEVEL</small><b>${L.lvl}</b></div></div>
     <div class="lt"><b>${esc(L.title)}</b><p>${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP to level ${L.lvl+1}${L.nextT?` · <i>${esc(L.nextT[1])}</i> at ${L.nextT[0]}`:""}</p><div class="bar"><i style="width:${pct}%"></i></div></div></div>
-   <button class="rankrow" id="myprofile">${rankEmblem(rk,"sm")}<span><b>${esc(rk.full)}</b>${rk.pts} rank points${rk.nextName?` · ${rk.toNext} to ${esc(rk.nextName)}`:""}</span><span class="go">Profile ›</span></button>
+   <button class="rankrow" id="myprofile">${rankAvatar(rk,(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You","md")}<span><b>${esc(rk.full)}</b>${rk.pts} rank points${rk.nextName?` · ${rk.toNext} to ${esc(rk.nextName)}`:""}</span><span class="go">Profile ›</span></button>
    ${earned.length?`<div class="recent">${earned.slice(0,4).map(b=>`<button class="mini" data-badge="${b.id}">${medal(b)}<span>${esc(b.name)}</span></button>`).join("")}</div>`:`<p class="savenote">Save your first workout to earn your first badge.</p>`}
    ${next?`<button class="nextb" data-badge="${next.id}">${medal(next,"sm",true)}<span><b>Next up: ${esc(next.name)}</b>${esc(fmtProg(next))}<span class="bar"><i style="width:${Math.round(next.cur/next.tgt*100)}%"></i></span></span></button>`:""}
   </div>`}
-const BCATS=[["all","All"],["consistency","Consistency"],["everyone","Personal bests"],["strength","Strength"],["milestones","Milestones"],["weight","Body weight"],["friends","Friends"],["fun","Fun"]];
+const BCATS=[["all","All"],["friends","Referrals"],["consistency","Consistency"],["everyone","Personal bests"],["strength","Strength"],["milestones","Milestones"],["weight","Body weight"],["fun","Fun"]];
 function badgesView(){
   const {B,L,S}=badgeState(); const cat=state.badges.cat||"all"; const seen=plan.badgeSeen||{};
   const cats=BCATS.filter(([c])=>c!=="all"&&(cat==="all"||cat===c));
@@ -2835,10 +2866,19 @@ function badgesView(){
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Level ${L.lvl} · ${esc(L.title)} · ${B.filter(b=>b.ok).length} of ${B.length} earned</div><h1>Badges</h1></div><button class="btn small" id="bback">‹ Back</button></div></header>
    <div class="gchips bcats">${BCATS.map(([c,l])=>`<button class="gchip ${cat===c?"on":""}" data-bcat="${c}" aria-pressed="${cat===c}">${l}</button>`).join("")}</div>
    <div class="plan">${cats.map(([c,l])=>`<div class="panel"><div class="lbl" style="margin-top:0">${l}</div>
-     ${c==="weight"?`<div class="dlabel" style="margin-top:0">Your goal</div><div class="dchips" style="margin-bottom:12px">${[["lose","Lose weight"],["gain","Gain weight"],["maintain","Maintain"]].map(([g,gl])=>`<button class="dchip wide ${goalOf()===g?"on":""}" data-goal="${g}" aria-pressed="${goalOf()===g}">${gl}</button>`).join("")}</div>`:""}
+     ${c==="friends"?refHero(B):""}${c==="weight"?`<div class="dlabel" style="margin-top:0">Your goal</div><div class="dchips" style="margin-bottom:12px">${[["lose","Lose weight"],["gain","Gain weight"],["maintain","Maintain"]].map(([g,gl])=>`<button class="dchip wide ${goalOf()===g?"on":""}" data-goal="${g}" aria-pressed="${goalOf()===g}">${gl}</button>`).join("")}</div>`:""}
      <div class="bgrid">${B.filter(b=>b.cat===c).map(cell).join("")}</div>${c==="strength"&&S.eliteHidden.length?`<p class="elitenote">💎 Earn the top badge on a lift to reveal its secret badges.</p>`:""}</div>`).join("")}
    <p class="savenote" style="margin:0 16px 20px">You earn XP for every workout you save (+100), every PR (+50), every week you hit your plan (+150) and every badge.</p></div>`}
-function bindBadges(){
+function refHero(B){const nx=B.filter(b=>b.cat==="friends"&&!b.ok)[0];
+  return `<div class="refhero"><div><b>Bring your crew</b><span>Friends count once they finish their first week. Referral badges count double toward your rank.</span>
+   ${nx?`<span class="bar"><i style="width:${Math.round(nx.cur/nx.tgt*100)}%"></i></span><small>Next: ${esc(nx.name)} · ${nx.cur} of ${nx.tgt}</small>`:""}</div>
+   ${state.mode==="db"?`<button class="btn small primary" id="refgo">Invite</button>`:""}</div>`}
+function shareInvite(){const go=()=>{const url=refLink(refs.data.code),text="Track your workouts with me on LiftLog";
+    if(navigator.share)navigator.share({title:"LiftLog",text,url}).catch(()=>{});
+    else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast("Link copied")).catch(()=>toast(url));else toast(url)};
+  if(refs.data&&refs.data.code)return go();
+  window.LIFTLOG_RPC("my_ref_code").then(c=>{refs.data={...(refs.data||{}),code:c};go()}).catch(()=>toast("Couldn't load your invite link. Check your connection."))}
+function bindBadges(){const rg=$("#refgo");if(rg)rg.onclick=shareInvite;
   $("#bback").onclick=()=>{state.badges=null;render();window.scrollTo(0,0)};
   document.querySelectorAll("[data-bcat]").forEach(b=>b.onclick=()=>{state.badges.cat=b.dataset.bcat;render()});
   document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{plan.goal=b.dataset.goal;savePlan();render();checkBadges()});
@@ -2863,7 +2903,7 @@ function loadBoard(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||lb.busy)ret
   Promise.all([window.LIFTLOG_RPC("my_board_status"),window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
    .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false;syncCard()}).catch(()=>{lb.err=true})
    .finally(()=>{lb.busy=false;lb.at=Date.now();const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}})}
-function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?rankEmblem(rankInfo(c.pts),"xs"):""}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
+function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?rankAvatar(rankInfo(c.pts),r.name,"xs"):`<span class="lbav">${esc(initialsOf(r.name))}</span>`}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
 function boardPanel(){
   if(state.mode!=="db") return "";
   const head=`<h2>Leaderboard <button class="infob" id="lbinfo" aria-label="How the leaderboard works" title="One workout per day counts, only when you save it that day. A full week is 3 workout days. Unlocks after 2 full weeks in a row.">i</button></h2>`;
@@ -2892,10 +2932,10 @@ function openBoardInfo(){const sh=$("#sheet"),s=lb.status||{};
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How the leaderboard works</h3>
    <ul class="lbrules">
     <li>It ranks <b>consistency</b> only: full weeks in a row. Never weights.</li>
-    <li>A <b>full week</b> is 3 workout days, Monday to Sunday.</li>
+    <li>A <b>full week</b> is 3 or more workout days, Monday to Sunday.</li>
     <li>One workout counts per day, and only when you save it that same day.</li>
     <li>Miss a week and your streak starts over. The week in progress never counts against you.</li>
-    <li><b>Rest pass:</b> once a month, a 2-workout week still counts as full.</li>
+    <li><b>Rest pass:</b> 1 per month. A 2-workout week still counts as full. It resets on the 1st and doesn't stack.</li>
     <li>Unlocks after 2 full weeks in a row, and stays unlocked.</li>
     <li>Only your display name is shown. Joining is up to you.</li>
    </ul>
@@ -2906,19 +2946,37 @@ function openBoardInfo(){const sh=$("#sheet"),s=lb.status||{};
 /* ---------- ranks (from badge points) + profile ---------- */
 const RPTS={bronze:1,silver:2,gold:4,plat:8,diamond:12};
 const RANKS=[["Bronze",0,"#9A5B2C","#E7B07F"],["Silver",15,"#76818F","#E4E9EF"],["Gold",40,"#B07F0C","#F8DA7A"],["Platinum",80,"#22887B","#A6EEDF"],["Diamond",130,"#2563D6","#AED6FF"],["Master",190,"#6D35C8","#D8BDFF"],["Champion",260,"#B71C1C","#FFC857"]];
+function bPts(b){return RPTS[b.tier]*(catOf(b.id)==="friends"?2:1)}
 function rankInfo(pts){pts=Math.max(0,Math.round(pts||0));let i=RANKS.length-1;while(i>0&&pts<RANKS[i][1])i--;
   const [name,min,c1,c2]=RANKS[i],nx=RANKS[i+1];
   if(!nx)return {i,name,full:name,div:"",pts,c1,c2,into:1,need:1,toNext:0,nextName:null};
   const span=(nx[1]-min)/3,d=Math.min(2,Math.floor((pts-min)/span)),lo=min+d*span,hi=min+(d+1)*span;
   const div=["III","II","I"][d],nextName=d<2?`${name} ${["III","II","I"][d+1]}`:`${nx[0]} III`;
   return {i,name,div,full:`${name} ${div}`,pts,c1,c2,into:pts-lo,need:hi-lo,toNext:Math.ceil(hi-pts),nextName}}
-function rankEmblem(r,cls){const id="rg"+r.i+(cls||"");
-  return `<svg class="remb ${cls||""}" viewBox="0 0 64 72" role="img" aria-label="${esc(r.full)}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${r.c2}"/><stop offset="1" stop-color="${r.c1}"/></linearGradient></defs>
-   <path d="M32 3 59 13v22c0 16-11.5 27-27 34C16.5 62 5 51 5 35V13z" fill="url(#${id})" stroke="${r.c1}" stroke-width="2"/>
-   <path d="M32 11 51 18v17c0 11.5-8 19.5-19 25-11-5.5-19-13.5-19-25V18z" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
-   ${r.i>=4?`<path d="M32 20l9 9-9 15-9-15z" fill="rgba(255,255,255,.9)"/>`:`<text x="32" y="${r.div?44:42}" text-anchor="middle" font-size="${r.div.length>2?17:20}" font-weight="800" fill="#fff" style="font-family:var(--display)">${r.div||"★"}</text>`}</svg>`}
+function crestBlades(n,len,R,cx,cy,from,step,fill){let s="";for(let k=0;k<n;k++){const a=from-k*step,L=len-k*3.2,w=4.6-k*.35;
+  [1,-1].forEach(sd=>{const ang=sd>0?a:180-a,rad=ang*Math.PI/180,x=cx+R*Math.cos(rad),y=cy+R*Math.sin(rad);
+   s+=`<path d="M0 ${-w}Q${L*.55} ${-w*1.3} ${L} 0Q${L*.55} ${w*1.3} 0 ${w}z" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${ang.toFixed(1)})" ${fill}/>`})}return s}
+let rfN=0;
+function rankFrame(r,o,cls){o=o||{};const id="rf"+(++rfN),i=r.i||0,P=RANKS[i]||RANKS[0],c1=P[2],c2=P[3],cx=60,cy=58,R=30;
+  const g=`fill="url(#${id}g)"`,blades=[1,2,3,3,4,4,5][i],len=[12,15,18,21,23,26,29][i];
+  const back=crestBlades(blades,len,R+1,cx,cy,i>=5?-8:4,i>=5?24:26,`${g} stroke="${c1}" stroke-width="1"`)+
+    (i>=1?`<path d="M${cx-14} ${cy+R-4}L${cx} ${cy+R+14+i}L${cx+14} ${cy+R-4}z" ${g} stroke="${c1}" stroke-width="1.2" stroke-linejoin="round"/>`:"")+
+    (i>=2?`<path d="M${cx-9} ${cy-R+3}L${cx} ${cy-R-10-i*1.5}L${cx+9} ${cy-R+3}z" ${g} stroke="${c1}" stroke-width="1.2" stroke-linejoin="round"/>`:"")+
+    (i>=4?`<path d="M${cx-20} ${cy-R+6}L${cx-17} ${cy-R-8-i}L${cx-8} ${cy-R-1}L${cx} ${cy-R-14-i*1.5}L${cx+8} ${cy-R-1}L${cx+17} ${cy-R-8-i}L${cx+20} ${cy-R+6}z" ${g} stroke="${c1}" stroke-width="1.3" stroke-linejoin="round"/>`:"");
+  const gemTop=i>=2?`<path d="M${cx} ${cy-R-(i>=4?9+i*1.5:5+i)}l3.2 4-3.2 4-3.2-4z" fill="#fff" opacity=".9"/>`:"";
+  const pips=r.div?["III","II","I"].indexOf(r.div)+1:0;
+  const pipS=Array.from({length:pips},(_,k)=>`<path d="M${cx+(k-(pips-1)/2)*8} ${cy+R+3}l3 3.5-3 3.5-3-3.5z" fill="#fff" stroke="${c1}" stroke-width=".8"/>`).join("");
+  const inner=o.ini!=null?`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="${o.ini.length>1?21:24}" font-weight="800" fill="#fff" style="font-family:var(--display)">${esc(o.ini)}</text>`
+    :`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><path d="M${cx} ${cy-14}L${cx+11} ${cy-2}L${cx} ${cy+15}L${cx-11} ${cy-2}z" fill="url(#${id}g)" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/><path d="M${cx-11} ${cy-2}H${cx+11}M${cx} ${cy-14}V${cy+15}" stroke="#fff" stroke-opacity=".35" stroke-width="1"/>`;
+  return `<svg class="rframe ${cls||""}" viewBox="0 -8 120 124" role="img" aria-label="${esc(r.full||P[0])}"><defs>
+   <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c2}"/><stop offset="1" stop-color="${c1}"/></linearGradient>
+   <radialGradient id="${id}d" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="#11151b"/></radialGradient></defs>
+   ${back}<circle cx="${cx}" cy="${cy}" r="${R}" ${g} stroke="${c1}" stroke-width="1.5"/>${inner}<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="none" stroke="${c2}" stroke-width="1.5" opacity=".8"/>${gemTop}${pipS}</svg>`}
+function rankEmblem(r,cls){return rankFrame(r,{},cls)}
+function initialsOf(nm){return String(nm||"").split(/\s+/).map(w=>w[0]||"").join("").slice(0,2).toUpperCase()||"?"}
+function rankAvatar(r,nm,cls){return rankFrame(r,{ini:initialsOf(nm)},cls)}
 function myCard(){const {B,L}=badgeState();const pub=B.filter(b=>b.ok);
-  return {pts:pub.reduce((a,b)=>a+RPTS[b.tier],0),lvl:L.lvl,
+  return {pts:pub.reduce((a,b)=>a+bPts(b),0),lvl:L.lvl,
     b:pub.filter(b=>b.cat!=="weight").map(b=>[b.id,b.tier,b.name,b.num==null?null:b.num,b.icon||null,b.rib||null])}}
 function syncCard(){if(state.mode!=="db"||!uid||!pg.ready)return;const on=!!(lb.status&&lb.status.board);
   const c=on?myCard():null;if(JSON.stringify(c)===JSON.stringify(pg.myCard||null))return;pg.myCard=c;writeSocial()}
@@ -2929,7 +2987,7 @@ function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine
     .sort((a,b)=>RPTS[b.tier]-RPTS[a.tier]);
   const L=mine?badgeState().L:null;
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="prclose">Close</button><span class="eyebrow">Profile</span></div>
-   <div class="tprof"><div class="thead"><div class="tav" aria-hidden="true">${esc(ini)}</div><div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
+   <div class="tprof"><div class="thead">${c?rankAvatar(r,name,"av"):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`}<div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
    ${c?`<div class="rankbox">${rankEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
      <p>${r.pts} rank points</p>${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
     <div class="lbl">${list.length} badge${list.length===1?"":"s"}</div>
@@ -2941,8 +2999,8 @@ function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine
 function openRankInfo(back,nm){const sh=$("#sheet");
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How ranks work</h3>
    <p class="savenote" style="margin-top:0">Every badge you earn adds rank points. Each rank has three steps: III, II, then I.</p>
-   <div class="rklist">${RANKS.map((x,i)=>`<div>${rankEmblem({i,c1:x[2],c2:x[3],div:i===RANKS.length-1?"":"I",full:x[0]},"sm")}<b>${x[0]}</b><span>${x[1]}+ pts</span></div>`).join("")}</div>
-   <div class="rkpts">${["bronze","silver","gold","plat","diamond"].map(t=>`<span>${medal({tier:t,icon:"star"},"sm")}+${RPTS[t]}</span>`).join("")}</div>
+   <div class="rklist">${RANKS.map((x,i)=>`<div>${rankEmblem({i,div:"",full:x[0]},"sm")}<b>${x[0]}</b><span>${x[1]}+ pts</span></div>`).join("")}</div>
+   <div class="rkpts">${["bronze","silver","gold","plat","diamond"].map(t=>`<span>${medal({tier:t,icon:"star",cat:"weight"},"sm")}+${RPTS[t]}</span>`).join("")}</div><p class="savenote">Referral badges count double.</p>
    <div class="btns"><button class="btn primary" id="rkback" style="flex:1">Got it</button></div>`;
   sh.scrollTop=0;$("#rkback",sh).onclick=()=>openProfile(back,nm)}
 
@@ -2956,20 +3014,18 @@ function loadRefs(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||refs.busy)re
 function claimRef(){const code=ls.get("ll.ref",null);if(!code||state.mode!=="db"||!window.LIFTLOG_RPC)return;
   window.LIFTLOG_RPC("claim_referral",{code}).then(r=>{try{localStorage.removeItem("ll.ref")}catch(e){}if(r==="ok")toast("Invite accepted. Your friend gets credit once you finish your first week.")}).catch(()=>{})}
 function invitePanel(){if(state.mode!=="db")return "";const d=refs.data;
-  return `<div class="panel" id="refpanel"><h2>Invite friends <button class="infob" id="refinfo" aria-label="How invites work" title="A friend counts once they finish their first week (3 workouts). Earn badges at 1, 3, 10, 25 and 50.">i</button></h2>
+  return `<div class="panel" id="refpanel"><h2>Invite friends <button class="infob" id="refinfo" aria-label="How invites work" title="A friend counts once they finish their first week (3 workouts). Referral badges count double toward your rank.">i</button></h2>
    ${!d?`<p class="savenote">Loading…</p>`:d.err||!d.code?`<p class="savenote">Couldn't load your invite link. Check your connection.</p>`:
    `<div class="reflink"><code>${esc(refLink(d.code).replace(/^https?:\/\//,""))}</code><button class="btn small primary" id="refshare">Share</button></div>
-    <p class="savenote">${d.joined||0} joined · ${d.active||0} finished week 1</p>`}</div>`}
+    <p class="savenote">${d.joined||0} joined · ${d.active||0} finished week 1</p>${(()=>{const nx=badgeState().B.find(b=>b.cat==="friends"&&!b.ok);return nx?`<button class="nextb" data-badge="${nx.id}">${medal(nx,"sm",true)}<span><b>Next up: ${esc(nx.name)}</b>${nx.cur} of ${nx.tgt} friends<span class="bar"><i style="width:${Math.round(nx.cur/nx.tgt*100)}%"></i></span></span></button>`:""})()}`}</div>`}
 function bindInvite(){const i=$("#refinfo");if(i)i.onclick=openRefInfo;const s=$("#refshare");
-  if(s)s.onclick=()=>{const url=refLink(refs.data.code),text="Track your workouts with me on LiftLog";
-    if(navigator.share)navigator.share({title:"LiftLog",text,url}).catch(()=>{});
-    else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast("Link copied")).catch(()=>toast(url));else toast(url)};
+  if(s)s.onclick=shareInvite;document.querySelectorAll("#refpanel [data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge));
   loadRefs()}
 function openRefInfo(){const sh=$("#sheet");
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How invites work</h3>
    <ul class="lbrules"><li>Share your link. Friends who sign up with it are linked to you.</li>
     <li>A friend counts once they finish their <b>first full week</b> (3 workouts).</li>
-    <li>Earn badges at 1, 3, 10, 25 and 50 friends.</li>
+    <li>Earn badges at 1, 3, 5, 10, 25, 50 and 100 friends. They count double toward your rank.</li>
     <li>Only new accounts can use a link, and nobody can use their own.</li></ul>
    <div class="btns"><button class="btn primary" id="refok" style="flex:1">Got it</button></div>`;
   state.open="__ref";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#refok",sh).onclick=closeSheet}

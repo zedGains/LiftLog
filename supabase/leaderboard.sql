@@ -5,8 +5,8 @@
 -- Fair-play rules, all enforced here on the server:
 --  * One check-in per person per day, recorded when they save a workout day.
 --  * A check-in only counts for today (±1 day for time zones). Back-dated logs stay in history but don't count.
---  * A full week = 3+ workout days, Monday–Sunday.
---  * One rest pass a month: a finished week with 2 workouts still counts as full.
+--  * A full week = 3 or more workout days, Monday–Sunday.
+--  * One rest pass per month: a finished week with 2 workouts still counts as full. Resets each month, never stacks.
 --  * The board unlocks after 2 full weeks in a row and stays unlocked.
 --  * Score = full weeks in a row. The week in progress never breaks a streak.
 --  * Only people who opted in are shown, by display name only. No weights.
