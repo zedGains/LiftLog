@@ -268,6 +268,11 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .med.locked .disc{background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--line)}.med.locked svg{stroke:var(--muted);filter:none;opacity:.6}.med.locked .num{color:var(--muted);text-shadow:none;opacity:.7}.med.locked .rib i{background:var(--line)}
 .med.sm{width:44px;height:44px;margin:0}.med.sm .num{font-size:13px}
 .med.big{width:118px;height:118px}.med.big .num{font-size:34px}
+.infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
+#lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
+.lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
+.lblock{position:relative}.lbrows.blur{filter:blur(4px);opacity:.55;pointer-events:none;user-select:none}.lbover{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;text-align:center;padding:0 12px}.lbover span{font-size:14px;color:var(--muted)}.lbover .bar{display:block;width:70%;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.lbover .bar i{display:block;height:100%;background:var(--green)}
+.lbme{display:flex;align-items:baseline;gap:8px;margin:4px 0}.lbme b{font-size:28px}.lbme span{color:var(--muted);font-size:14px}.lbjoin{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--surface-2);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}.lbtabs{margin:4px 0 6px}.lbrules{padding-left:18px;margin:8px 0 14px;line-height:1.5}.lbrules li{margin:4px 0}
 #lvlpanel h2{display:flex;justify-content:space-between;align-items:baseline}#lvlpanel h2 .linkbtn{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:14px}
 .lvl{display:flex;gap:14px;align-items:center}
 .ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
@@ -911,7 +916,7 @@ function saveDay(dayKey){
   const n=all.filter(it=>todayEntry(it.id)).length;
   ls.set("ll.savedAt."+dayKey+"."+TODAY,Date.now());
   const fr=freshSet(); items.forEach(it=>{fr.add(it.id);delete state.drafts[it.id]}); ls.set("ll.fresh."+TODAY,[...fr]); saveDrafts();
-  state.justSaved={day:dayKey,n}; render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`); setTimeout(checkBadges,900);
+  state.justSaved={day:dayKey,n}; checkinToday(); render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`); setTimeout(checkBadges,900);
 }
 
 /* ---------- calorie estimate ---------- */
@@ -1531,6 +1536,7 @@ function planView(){
   <div class="plan">
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    ${badgesPanel()}
+   ${boardPanel()}
    ${weightPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
@@ -1625,7 +1631,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindBadgesPanel();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindBadgesPanel();bindBoard();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -2829,6 +2835,56 @@ function openBadge(id){const {B}=badgeState();const b=B.find(x=>x.id===id);if(!b
    ${!b.ok&&b.cur!=null?`<div class="bar"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></div><p class="savenote">${esc(fmtProg(b))}</p>`:""}
    <div class="xp">+${TIERXP[b.tier]} XP</div><div class="btns"><button class="btn" id="bpclose" style="flex:1">Close</button></div></div>`;
   state.open="__badge";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#bpclose",sh).onclick=closeSheet}
+/* ---------- leaderboard (consistency only) ---------- */
+const lb={data:null,status:null,at:0,busy:false,scope:"all",all:false,err:false};
+function lbProg(){const a=plan.activeProgram;return a&&a.key&&!String(a.key).startsWith("mine:")?a:null}
+function checkinToday(){if(state.mode!=="db"||!window.LIFTLOG_RPC)return;ls.set("ll.ciq",TODAY);
+  window.LIFTLOG_RPC("checkin",{d:TODAY}).then(()=>{ls.set("ll.ciq",null);lb.at=0;if(state.tab==="plan"&&!state.settings)loadBoard()}).catch(()=>{})}
+function retryCheckin(){if(ls.get("ll.ciq",null)===TODAY||Object.values(state.logs).some(l=>(l.entries||[]).some(e=>e.date===TODAY&&e.done)))checkinToday()}
+function loadBoard(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||lb.busy)return;if(!force&&Date.now()-lb.at<60000)return;
+  lb.busy=true;const p=lb.scope==="prog"&&lbProg();
+  Promise.all([window.LIFTLOG_RPC("my_board_status"),window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
+   .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false}).catch(()=>{lb.err=true})
+   .finally(()=>{lb.busy=false;lb.at=Date.now();const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}})}
+function lbRow(r){return `<li class="${r.me?"me":""}"><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span><span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
+function boardPanel(){
+  if(state.mode!=="db") return "";
+  const head=`<h2>Leaderboard <button class="infob" id="lbinfo" aria-label="How the leaderboard works" title="One workout per day counts, only when you save it that day. A full week is 3 workout days. Unlocks after 2 full weeks in a row.">i</button></h2>`;
+  const s=lb.status, d=lb.data;
+  if(!s) return `<div class="panel" id="lbpanel">${head}<p class="savenote">${lb.err?"Couldn't load the leaderboard. Check your connection.":"Loading…"}</p></div>`;
+  if(!s.unlocked){const n=Math.min(3,s.thisWeek||0),run=s.streak||0;
+    return `<div class="panel" id="lbpanel">${head}<div class="lblock"><ol class="lbrows blur" aria-hidden="true">${[["Alex",9],["Sam",7],["Jordan",6],["Riley",4]].map(([nm,w],i)=>`<li><span class="rk">${i+1}</span><span class="nm">${nm}</span><span class="wk">${w} wk</span></li>`).join("")}</ol>
+     <div class="lbover"><b>🔒 Unlocks after 2 full weeks</b><span>This week: ${n} of 3 workouts${run?` · ${run} of 2 full weeks done`:""}</span><span class="bar"><i style="width:${Math.round(n/3*100)}%"></i></span></div></div></div>`}
+  const rows=(d&&d.rows)||[], prog=lbProg();
+  const tabs=prog?`<div class="dchips lbtabs"><button class="dchip ${lb.scope==="all"?"on":""}" data-lbs="all" aria-pressed="${lb.scope==="all"}">Everyone</button><button class="dchip ${lb.scope==="prog"?"on":""}" data-lbs="prog" aria-pressed="${lb.scope==="prog"}">${esc(prog.title||"My program")}</button></div>`:"";
+  const meRow=rows.find(r=>r.me), shown=lb.all?rows:rows.slice(0,5);
+  const extra=!lb.all&&!shown.some(r=>r.me)&&meRow?`<li class="gap">…</li>${lbRow(meRow)}`:"";
+  return `<div class="panel" id="lbpanel">${head}${tabs}
+   <div class="lbme"><b>${s.streak||0}</b><span>full week${(s.streak||0)===1?"":"s"} in a row${d&&d.pct!=null&&s.board?` · more consistent than ${d.pct}% of lifters`:""}</span></div>
+   ${!s.board?`<div class="lbjoin"><span>You've unlocked the board. Show your name on it?</span><button class="btn small primary" id="lbjoin">Join</button></div>`:""}
+   ${rows.length?`<ol class="lbrows">${shown.map(lbRow).join("")}${extra}</ol>${rows.length>5?`<button class="linkbtn" id="lball">${lb.all?"Show less":`See top ${rows.length} ›`}</button>`:""}`:`<p class="savenote">No one's on this board yet.${s.board?"":" Be the first."}</p>`}
+  </div>`}
+function bindBoard(){const i=$("#lbinfo");if(i)i.onclick=openBoardInfo;
+  const j=$("#lbjoin");if(j)j.onclick=()=>setBoard(true);
+  const a=$("#lball");if(a)a.onclick=()=>{lb.all=!lb.all;const el=$("#lbpanel");el.outerHTML=boardPanel();bindBoard()};
+  document.querySelectorAll("[data-lbs]").forEach(b=>b.onclick=()=>{lb.scope=b.dataset.lbs;lb.all=false;loadBoard(true)});
+  loadBoard()}
+function setBoard(on){window.LIFTLOG_RPC("set_board",{on_board:on}).then(()=>{toast(on?"You're on the leaderboard.":"You're off the leaderboard.");closeSheet();loadBoard(true)}).catch(()=>toast("Couldn't update. Check your connection and try again."))}
+function openBoardInfo(){const sh=$("#sheet"),s=lb.status||{};
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How the leaderboard works</h3>
+   <ul class="lbrules">
+    <li>It ranks <b>consistency</b> only: full weeks in a row. Never weights.</li>
+    <li>A <b>full week</b> is 3 workout days, Monday to Sunday.</li>
+    <li>One workout counts per day, and only when you save it that same day.</li>
+    <li>Miss a week and your streak starts over. The week in progress never counts against you.</li>
+    <li><b>Rest pass:</b> once a month, a 2-workout week still counts as full.</li>
+    <li>Unlocks after 2 full weeks in a row, and stays unlocked.</li>
+    <li>Only your display name is shown. Joining is up to you.</li>
+   </ul>
+   ${s.passUsed?`<p class="savenote">You've used this month's rest pass.</p>`:""}
+   <div class="btns">${s.board?`<button class="btn" id="lbleave">Leave the board</button>`:""}<button class="btn primary" id="lbclose" style="flex:1">Got it</button></div>`;
+  state.open="__lb";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#lbclose",sh).onclick=closeSheet;
+  const lv=$("#lbleave",sh);if(lv)armBtn(lv,"Tap again to leave",()=>setBoard(false))}
 let celebQ=[];
 function checkBadges(){if(window.__noCeleb||(state.mode!=="db"&&state.mode!=="local"))return;
   const {B,L}=badgeState(); const earned=B.filter(b=>b.ok).map(b=>b.id);
@@ -2911,7 +2967,7 @@ render();
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      if(first){state.loading=false;setTimeout(checkBadges,1200); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account

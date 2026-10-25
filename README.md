@@ -15,6 +15,8 @@ Installable on a phone's home screen.
 | `supabase/schema.sql` | Database tables and access rules — run once in Supabase |
 | `supabase/moderation.sql` | Publishing limits (free 2 / verified 25), new-account wait, content minimum, copy blocking, reports |
 | `supabase/profiles.sql` | Trainer profiles: bio, location, links, verified badge (only admins can set it) |
+| `supabase/feedback.sql` | In-app "Send feedback" inbox (owner reads it in Stats) |
+| `supabase/leaderboard.sql` | Consistency leaderboard: daily check-ins, unlock after 2 full weeks, opt-in board |
 | `supabase/stats.sql` | Owner dashboard + creator stats functions (counts only) |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen install |
 | `privacy.html`, `terms.html` | Privacy Policy and Terms of Use |
