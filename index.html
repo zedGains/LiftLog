@@ -258,6 +258,48 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
 .skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
+.med{--t1:#B7713A;--t2:#E3A877;width:58px;height:58px;margin:0 auto 5px;position:relative;flex:none}
+.med.bronze{--t1:#B7713A;--t2:#E3A877}.med.silver{--t1:#8E99A6;--t2:#D5DCE3}.med.gold{--t1:#C9971A;--t2:#F4D36B}.med.plat{--t1:#4C7BD9;--t2:#A9C6F5}
+.med .rib{position:absolute;left:50%;top:60%;width:58%;height:45%;transform:translateX(-50%);display:flex;justify-content:space-between}
+.med .rib i{width:44%;height:100%;background:var(--rc,#C92A2A);clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+.med .disc{position:absolute;inset:0 7% 14% 7%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--t2),var(--t1) 70%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.35),0 2px 4px rgba(0,0,0,.2);display:grid;place-items:center;color:#fff;z-index:1}
+.med svg{width:42%;height:42%;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+.med .num{font:800 17px/1 var(--display);color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.med.locked .disc{background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--line)}.med.locked svg{stroke:var(--muted);filter:none;opacity:.6}.med.locked .num{color:var(--muted);text-shadow:none;opacity:.7}.med.locked .rib i{background:var(--line)}
+.med.sm{width:44px;height:44px;margin:0}.med.sm .num{font-size:13px}
+.med.big{width:118px;height:118px}.med.big .num{font-size:34px}
+#lvlpanel h2{display:flex;justify-content:space-between;align-items:baseline}#lvlpanel h2 .linkbtn{font-family:var(--body);text-transform:none;letter-spacing:0;font-size:14px}
+.lvl{display:flex;gap:14px;align-items:center}
+.ring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
+.ring>div{width:60px;height:60px;border-radius:50%;background:var(--surface);display:grid;place-items:center;align-content:center;text-align:center}
+.ring b{font:800 26px/1 var(--display)}.ring small{font:700 9px var(--display);letter-spacing:.1em;color:var(--muted);display:block}
+.lt{flex:1;min-width:0}.lt>b{font:800 22px/1.1 var(--display);text-transform:uppercase}.lt p{margin:2px 0 6px;color:var(--muted);font-size:13.5px}
+.lvl .bar,.nextb .bar,.bpop .bar,.cpop .bar{display:block;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.lvl .bar i,.nextb .bar i,.bpop .bar i,.cpop .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.recent{display:flex;gap:6px;margin-top:14px}
+.mini{all:unset;cursor:pointer;width:25%;text-align:center;font-size:11.5px;font-weight:600;line-height:1.2}.mini span{display:block}
+.nextb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:10px;border-radius:10px;background:var(--surface-2);margin-top:12px;font-size:13.5px}
+.nextb>span{flex:1;min-width:0}.nextb b{display:block;font-size:14px}.nextb .bar{margin-top:5px}
+.bcats{margin:0 12px 10px}
+.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 6px}
+.bcell{all:unset;cursor:pointer;text-align:center;font-size:12px;line-height:1.2;display:block}.bcell b{display:block;font-weight:600}.bcell small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.bcell .pb{display:block;height:4px;border-radius:9px;background:var(--line);margin:4px 10px 0;overflow:hidden}.bcell .pb i{display:block;height:100%;background:var(--green)}
+.bpop{text-align:center;padding:8px 4px 4px}.bpop .ey,.cpop .ey{font:700 12px var(--display);letter-spacing:.14em;color:var(--green);text-transform:uppercase;margin-top:6px}
+.bpop h3,.cpop h3{font:800 30px/1.05 var(--display);text-transform:uppercase;margin:6px 0}.bpop p,.cpop p{margin:0 0 6px;color:var(--muted)}
+.xp{display:inline-block;font:700 14px var(--mono);color:var(--green);background:var(--ok-soft);border-radius:99px;padding:4px 12px;margin:8px 0 6px}
+.xpn{font:600 12px var(--mono);color:var(--muted);margin-top:4px;text-align:left}
+#celeb{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px}
+#celeb .cscrim{position:absolute;inset:0;background:rgba(10,12,15,.6)}
+#celeb .cpop{position:relative;width:100%;max-width:400px;background:var(--surface);border-radius:20px;padding:24px 20px 18px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:cpop .35s cubic-bezier(.2,1.4,.4,1)}
+@keyframes cpop{from{transform:scale(.8);opacity:0}}
+#celeb .conf{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+#celeb .conf i{position:absolute;top:-20px;width:8px;height:14px;border-radius:2px;transform:rotate(var(--r));animation:cfall 2.6s ease-in forwards}
+@keyframes cfall{to{top:110%;transform:rotate(calc(var(--r) + 540deg))}}
+@media (prefers-reduced-motion:reduce){#celeb .conf{display:none}#celeb .cpop{animation:none}}
+.lvlbig{width:110px;height:110px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#7FD8A8,var(--green) 70%);color:#fff;display:grid;place-items:center;align-content:center}
+.lvlbig small{font:700 11px var(--display);letter-spacing:.12em}.lvlbig b{font:800 46px/1 var(--display)}
+.mstack{display:flex;justify-content:center;gap:2px;margin-bottom:4px}.mstack .med{margin:0}
+.fblink{display:block;margin:4px auto 20px;font-size:14px}
+.fbmsg{margin:6px 0 4px;white-space:pre-wrap;font-size:14.5px}.fbmeta{color:var(--muted);font-size:11.5px}
 .boot{padding:40px 0;text-align:center;color:var(--muted)}
 .welcome{display:grid;gap:12px;padding-bottom:24px}
 .welcome h1{font-size:30px}
@@ -642,7 +684,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,lvlSeen:v.lvlSeen||1,supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -865,11 +907,11 @@ function saveDay(dayKey){
     persist(it.id);
   });
   if(past){items.forEach(it=>{delete state.drafts[it.id]});saveDrafts();state.logDate=null;
-    render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} workout${items.length===1?"":"s"} logged`); return}
+    render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} workout${items.length===1?"":"s"} logged`); setTimeout(checkBadges,900); return}
   const n=all.filter(it=>todayEntry(it.id)).length;
   ls.set("ll.savedAt."+dayKey+"."+TODAY,Date.now());
   const fr=freshSet(); items.forEach(it=>{fr.add(it.id);delete state.drafts[it.id]}); ls.set("ll.fresh."+TODAY,[...fr]); saveDrafts();
-  state.justSaved={day:dayKey,n}; render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`);
+  state.justSaved={day:dayKey,n}; render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`); setTimeout(checkBadges,900);
 }
 
 /* ---------- calorie estimate ---------- */
@@ -965,7 +1007,7 @@ function renderDayMenu(tab){
   const cur=document.querySelector(".dmi.on")||document.querySelector(".dmi"); if(cur) cur.focus({preventScroll:true});
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.dayMenu){state.dayMenu=false;renderDayMenu(pickTab());const d=$("#daypick");if(d)d.focus()}});
-function bootLocal(){if(!state.loading)return;state.loading=false;if(!HAD_LOCAL_PLAN&&!plan.template)state.needsStart=true;render()}
+function bootLocal(){if(!state.loading)return;state.loading=false;setTimeout(()=>{if(!state.needsStart)checkBadges()},1200);if(!HAD_LOCAL_PLAN&&!plan.template)state.needsStart=true;render()}
 function startWith(kind){
   plan.template=kind==="community"?"blank":kind; plan.schedule={...((kind==="starter"?STARTER_SPEC.schedule:{}))};
   state.needsStart=false; refreshTemplate(); savePlan(); syncDays();
@@ -992,6 +1034,7 @@ function render(){
   else{document.body.style.removeProperty("--accent");document.body.style.removeProperty("--accent-ink")}
   const app=$("#app");
   if(state.stats){app.innerHTML=statsView(); bindStats(); return}
+  if(state.badges&&tab==="plan"){app.innerHTML=badgesView(); bindBadges(); return}
   if(tab==="timer"){app.innerHTML=timerView(); bindTimerView(); updateTimer(); return}
   if(tab==="plan"&&state.settings){app.innerHTML=settingsView(); bindPlan(); return}
   if(tab==="plan"){app.innerHTML=planView(); bindPlan(); return}
@@ -1487,6 +1530,7 @@ function planView(){
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(tplNote("eyebrow")||"Your plan")}</div><h1>Workout Log</h1></div><button class="btn small gearbtn" id="opensettings" aria-label="Settings">⚙️ Settings</button></div></header>
   <div class="plan">
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
+   ${badgesPanel()}
    ${weightPanel()}
    <div class="panel"><h2>History</h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
@@ -1503,6 +1547,7 @@ function planView(){
     <div class="btns"><button class="btn small" id="weekedit2">⇅ Rearrange my week</button></div></div>
 
    ${partnerPanel()}
+   <button class="linkbtn fblink" id="sendfb2">💬 Send feedback</button>
    ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).length?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>Rest days, warm-up and tips from your plan</span></summary>${TPL.notes.panels.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""}
   </div>`}
 function settingsView(){
@@ -1531,6 +1576,7 @@ function settingsView(){
     <div class="lbl">Coming soon</div>
     ${["Workout day reminders","Reminder to save an unfinished workout","Program followers, likes and sales","Weekly recap"].map(l=>`<label class="tick soon"><input type="checkbox" disabled> ${l}</label>`).join("")}
     <p class="savenote">These will arrive as phone notifications when LiftLog is installed on your home screen.</p></div>
+   <div class="panel" id="fbpanel"><h2>Send feedback</h2><p style="margin-top:0">Found a bug, got an idea, or something's confusing? Tell us. Every message gets read.</p><div class="btns"><button class="btn primary" id="sendfb" style="flex:1">💬 Send feedback</button></div></div>
    ${guidePanel()}
    <div class="panel" id="dropp"><h2>Drop set calculator</h2><p>Start at your main weight, drop <b id="dpt">${dropPct}%</b>, then drop another <b id="dpt2">${dropPct}%</b> to finish the set.${tplNote("dropNote")?" "+esc(tplNote("dropNote")):""}</p>
     <div class="dlabel">Drop size</div>
@@ -1579,7 +1625,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindBadgesPanel();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1828,7 +1874,7 @@ function publishProg(p){
   const miss=progReady(p).filter(x=>!x.ok); if(miss.length){toast("Before publishing: "+miss.map(x=>x.t.toLowerCase()).join(", ")+".");return}
   const was=p.published, wasAt=p.pubAt; p.published=true;p.pubAt=Date.now();p.updatedAt=Date.now();
   const pb=$("#publish"); if(pb){pb.disabled=true;pb.textContent="Publishing…"}
-  writePublic().then(()=>{savePlan();render();toast(was?"Published version updated":"Published to the community");loadCreator(true)})
+  writePublic().then(()=>{savePlan();render();toast(was?"Published version updated":"Published to the community");loadCreator(true);setTimeout(checkBadges,900)})
    .catch(e=>{p.published=was;p.pubAt=wasAt;savePlan();render();showNotice("Not published",pubErrText(e))});
 }
 function showNotice(title,text){const sh=$("#sheet");sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">${esc(title)}</h3><p style="font-size:15px;margin:10px 0 0">${esc(text)}</p><div class="btns"><button class="btn primary" id="ntok" style="flex:1">OK</button></div>`;
@@ -2097,6 +2143,7 @@ function hBars(rows,unit){
 const tile=(n,l,sub)=>`<div><b>${n}</b><small>${l}</small>${sub?`<span>${sub}</span>`:""}</div>`;
 const pct=(a,b)=>b?Math.round(a/b*100)+"%":"—";
 function openStats(kind){state.stats={kind,data:null,err:null,reports:null};render();window.scrollTo(0,0);
+  if(kind==="owner"&&window.LIFTLOG_RPC) window.LIFTLOG_RPC("admin_feedback").then(r=>{if(state.stats){state.stats.feedback=r||[];render()}}).catch(()=>{if(state.stats){state.stats.feedback=false;render()}});
   if(kind==="owner"&&window.LIFTLOG_RPC) window.LIFTLOG_RPC("admin_reports").then(r=>{if(state.stats){state.stats.reports=r||[];render()}}).catch(()=>{if(state.stats){state.stats.reports=false;render()}});
   if(!window.LIFTLOG_RPC){state.stats.err="Stats need an account connection.";render();return}
   window.LIFTLOG_RPC(kind==="owner"?"admin_stats":"my_program_stats").then(d=>{if(state.stats&&state.stats.kind===kind){state.stats.data=d;render()}})
@@ -2120,6 +2167,9 @@ function statsView(){
      <div class="panel"><h2>Community</h2><div class="stats">${tile(d.programs,"programs published")}${tile(d.following,"people following one")}${tile(d.partnerUsers,"track a partner")}</div>
       ${(d.topPrograms||[]).length?`<div class="mx"><div class="mxh"><span>Program</span><span>Using</span><span>Likes</span></div>${d.topPrograms.map(p=>`<div class="mxrow"><span>${esc(p.title||"Untitled")}<small>${p.author?"by "+esc(p.author):""}</small></span><span>${p.using}</span><span>${p.likes}</span></div>`).join("")}</div>`:""}</div>
      <div class="panel"><h2>Units</h2>${hBars(Object.keys(d.units||{}).map(k=>({label:k==="metric"?"kg · cm":k==="imperial"?"lb · ft/in":"Phone default",n:d.units[k]})),"people")}</div>
+     <div class="panel" id="fbadmin"><h2>Feedback</h2>${S.feedback==null?`<p class="savenote">Loading…</p>`:S.feedback===false?`<p class="savenote">Feedback isn't set up yet (run feedback.sql in Supabase).</p>`:!S.feedback.length?`<p class="savenote">No new feedback.</p>`:
+       S.feedback.map(f=>`<div class="rrow"><div><b>${({bug:"🐞 Bug",idea:"💡 Idea",confusing:"🤔 Confusing",other:"💬 Other"})[f.kind]||esc(f.kind)}</b> <small>${esc(f.name||"")}${f.email?" · "+esc(f.email):""} · ${fmtStamp(Date.parse(f.created_at))}</small><p class="fbmsg">${esc(f.message)}</p><small class="fbmeta">${esc((f.meta&&f.meta.screen)||"")} · ${esc(((f.meta&&f.meta.ua)||"").replace(/^Mozilla\/5\.0 /,"").slice(0,70))}</small></div>
+         <div class="btns">${f.email?`<a class="btn small" href="mailto:${esc(f.email)}?subject=${encodeURIComponent("Re: your LiftLog feedback")}">Reply</a>`:""}<button class="btn small" data-fbdone="${f.id}">Done</button></div></div>`).join("")}</div>
      <div class="panel" id="reportsp"><h2>Reports</h2>${S.reports===null?`<p class="savenote">Loading…</p>`:S.reports===false?`<p class="savenote">Reports aren't set up yet (run moderation.sql in Supabase).</p>`:!S.reports.length?`<p>No reports. 👍</p>`:
        S.reports.map(r=>`<div class="rrow"><div><b>${esc(r.title||"(already removed)")}</b><small>${r.author?"by "+esc(r.author)+" · ":""}${r.count} report${r.count===1?"":"s"} · ${esc((r.reasons||[]).join(", "))}</small>${(r.notes||[]).map(n=>`<small class="rn">“${esc(n)}”</small>`).join("")}</div>
          <div class="btns">${pg.community.some(x=>x.key===r.key)?`<button class="btn small" data-rview="${esc(r.key)}">View</button><button class="btn small danger" data-rrm="${esc(r.key)}">Remove</button>`:""}<button class="btn small" data-rdis="${esc(r.key)}">Dismiss</button></div></div>`).join("")}</div>
@@ -2143,6 +2193,7 @@ function bindStats(){
   const b=$("#statsback"); if(b) b.onclick=()=>{state.stats=null;render();window.scrollTo(0,0)};
   const r=$("#statsretry"); if(r) r.onclick=()=>openStats(state.stats.kind);
   document.querySelectorAll("[data-rview]").forEach(b=>b.onclick=()=>openProgView(b.dataset.rview));
+  document.querySelectorAll("[data-fbdone]").forEach(b=>b.onclick=()=>{const id=+b.dataset.fbdone;window.LIFTLOG_RPC("resolve_feedback",{fid:id}).then(()=>{state.stats.feedback=state.stats.feedback.filter(x=>x.id!==id);render()}).catch(()=>toast("Couldn't update it"))});
   document.querySelectorAll("[data-rdis]").forEach(b=>armBtn(b,"Tap again",()=>window.LIFTLOG_RPC("dismiss_reports",{k:b.dataset.rdis}).then(()=>{state.stats.reports=state.stats.reports.filter(x=>x.key!==b.dataset.rdis);render();toast("Report dismissed")})));
   document.querySelectorAll("[data-rrm]").forEach(b=>armBtn(b,"Tap again to remove",()=>{const k=b.dataset.rrm;const p=pg.community.find(x=>x.key===k);if(!p)return;
     const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
@@ -2437,7 +2488,7 @@ function weightPanel(){
 }
 function bindWeight(){const b=$("#bwlog");if(!b)return;b.onclick=()=>{const v=Number(($("#bwin").value||"").replace(/[^0-9.]/g,""));const lb=Number(fromDisp(v));
   if(!(lb>=60&&lb<=700)){toast(isKg()?"Enter a weight like 100":"Enter a weight like 220");return}
-  const had=!!(plan.weighins||[]).find(x=>x.d===TODAY); withUndo(had?"Today's weigh-in updated":"Weigh-in logged",()=>{logWeighIn(lb);savePlan();render()})}}
+  const had=!!(plan.weighins||[]).find(x=>x.d===TODAY); withUndo(had?"Today's weigh-in updated":"Weigh-in logged",()=>{logWeighIn(lb);savePlan();render()});setTimeout(checkBadges,600)}}
 
 /* ---------- trainer profiles + follow ---------- */
 const profCache={};
@@ -2656,12 +2707,184 @@ function langPanel(){const I=window.LIFTLOG_I18N; if(!I) return "";
 function bindLang(){const l=$("#langsel");if(l)l.onchange=()=>{window.LIFTLOG_I18N.set(l.value)};
   const z=$("#tzsel");if(z)z.onchange=()=>{ls.set("ll.tz",z.value||null);location.reload()}}
 
+/* ---------- badges & levels ---------- */
+const BICONS={cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2.5 2.5L16 13"/>',
+ fire:'<path d="M12 22c4 0 7-3 7-7 0-4-3-6-4-10-2 2-3 4-3 6-1-1-2-2-2-4-2 2-5 5-5 8 0 4 3 7 7 7z"/>',
+ db:'<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>', plate:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/>',
+ up:'<path d="M4 18l6-6 4 4 6-8M14 8h6v6"/>', sun:'<circle cx="12" cy="13" r="4"/><path d="M12 3v3M4.9 6.9l2 2M19.1 6.9l-2 2M3 17h18M7 21h10"/>',
+ moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>', pair:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c0-3 3-5 6-5s6 2 6 5M10 20c0-3 3-5 6-5s6 2 6 5"/>',
+ scale:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 9a5 5 0 0 1 8 0M12 9l1.5-2"/>', back:'<path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/>',
+ star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', trophy:'<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4a3 3 0 0 0 4 4M16 6h4a3 3 0 0 1-4 4M12 14v4M8 21h8M9 18h6"/>',
+ down:'<path d="M12 4v14M6 12l6 6 6-6"/>', wknd:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M13 14h5v4h-5z"/>', book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5"/>'};
+const TIERXP={bronze:50,silver:100,gold:250,plat:500};
+const RIB={bronze:"#C92A2A",silver:"#1F5FC4",gold:"#C92A2A",plat:"#6E44C9"};
+function medal(b,cls,locked){const ic=b.num!=null?`<span class="num">${esc(String(b.num))}</span>`:`<svg viewBox="0 0 24 24" aria-hidden="true">${BICONS[b.icon]||BICONS.star}</svg>`;
+  return `<div class="med ${cls||""} ${locked?"locked":b.tier}"><div class="disc">${ic}</div><div class="rib" style="--rc:${b.rib||RIB[b.tier]}"><i></i><i></i></div></div>`}
+function wkStartOf(date){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d);dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return ymd(dt)}
+function addDays(date,n){const [y,m,d]=date.split("-").map(Number);const dt=new Date(y,m-1,d+n);return ymd(dt)}
+function badgeStats(){
+  const ss=sessions().slice().reverse(); const S={workouts:ss.length};
+  const target=Math.max(1,[0,1,2,3,4,5,6].filter(i=>schedOf(i)).length||3);
+  const perWeek={}; ss.forEach(s=>{const w=wkStartOf(s.date);perWeek[w]=(perWeek[w]||0)+1});
+  const curWk=wkStartOf(TODAY); let best=0,run=0,hit=0;
+  if(ss.length){let w=wkStartOf(ss[0].date);while(w<=curWk){const ok=(perWeek[w]||0)>=target;if(ok){run++;hit++;best=Math.max(best,run)}else if(w!==curWk)run=0;w=addDays(w,7)}}
+  S.target=target;S.bestStreak=best;S.streak=run;S.weeksHit=hit;S.thisWeek=perWeek[curWk]||0;
+  let vol=0,prs=0,partner=false; const bestBig={},bestId={},firstId={};
+  const all=[];Object.keys(state.logs).forEach(id=>entriesOf(id).forEach(e=>{if(e.done)all.push({id,e})}));
+  all.sort((a,b)=>a.e.date<b.e.date?-1:1);
+  all.forEach(({id,e})=>{if(e.type==="cardio")return;const t=topW(e.sets);(e.sets||[]).forEach(s=>{vol+=(Number(s.w)||0)*(Number(s.r)||0)});
+    if(t>0){if(bestId[id]&&t>bestId[id])prs++;if(!firstId[id])firstId[id]=t;bestId[id]=Math.max(bestId[id]||0,t);const b=big5({name:e.alt||e.name});if(b)bestBig[b]=Math.max(bestBig[b]||0,t)}
+    if(e.partners&&Object.keys(e.partners).length)partner=true});
+  S.gainPct=Math.max(0,...Object.keys(bestId).filter(i=>firstId[i]>=20).map(i=>(bestId[i]-firstId[i])/firstId[i]));
+  S.volume=vol;S.prs=prs;S.big=bestBig;S.partner=partner;S.total=(bestBig.bench||0)+(bestBig.squat||0)+(bestBig.deadlift||0);
+  const hours=ss.filter(s=>s.loggedAt).map(s=>tzD(s.loggedAt).getHours()); S.early=hours.some(h=>h<7);S.night=hours.some(h=>h>=21);
+  const ds=new Set(ss.map(s=>s.date)); S.weekend=[...ds].some(d=>{const [y,m,dd]=d.split("-").map(Number);return new Date(y,m-1,dd).getDay()===6&&ds.has(addDays(d,1))});
+  const dl=[...ds].sort(); S.comeback=dl.some((d,i)=>i&&(new Date(d)-new Date(dl[i-1]))/864e5>=14);
+  const wi=(plan.weighins||[]).slice().sort((a,b)=>a.d<b.d?-1:1); S.weighWeeks=new Set(wi.map(x=>wkStartOf(x.d))).size;
+  S.wi=wi; if(wi.length>=2){const last=wi[wi.length-1].w;let mx=-1,mn=1e9,bestDrop=0,bestGain=0;wi.forEach(x=>{mx=Math.max(mx,x.w);mn=Math.min(mn,x.w);bestDrop=Math.max(bestDrop,mx-x.w);bestGain=Math.max(bestGain,x.w-mn)});
+    S.drop=Math.max(0,mx-last);S.gain=Math.max(0,last-mn);S.bestDrop=bestDrop;S.bestGain=bestGain;
+    const recent=wi.filter(x=>x.d>=addDays(wi[wi.length-1].d,-84));const span=(new Date(wi[wi.length-1].d)-new Date(recent[0].d))/864e5;
+    S.steadyWeeks=Math.floor(span/7);S.steady=recent.every(x=>Math.abs(x.w-last)<=3)}
+  S.published=(plan.myPrograms||[]).some(p=>p.published);
+  return S}
+function goalOf(){return plan.goal||"lose"}
+function badgeDefs(){
+  const kg=isKg(), L=v=>kg?Math.round(v/LB_PER_KG/2.5)*2.5+" kg":v+" lb", B=[];
+  const add=(cat,id,tier,name,desc,ok,cur,tgt,extra)=>B.push({cat,id,tier,name,desc,ok:!!ok,cur:cur==null?null:Math.min(cur,tgt),tgt,...(extra||{})});
+  const S=badgeStats(); const T=S.target;
+  add("consistency","first","bronze","First workout","Save your first workout day.",S.workouts>=1,S.workouts,1,{num:1});
+  add("consistency","week1","bronze","Week 1 done",`Hit your plan for a week (${T} workout${T===1?"":"s"}).`,S.weeksHit>=1,S.weeksHit,1,{icon:"cal"});
+  [[2,"silver","2 weeks strong"],[4,"gold","1 month strong"],[6,"gold","6-week streak"],[12,"gold","3 months strong"],[26,"plat","6 months strong"],[52,"plat","1 year strong"]].forEach(([n,t,nm])=>
+    add("consistency","streak"+n,t,nm,`Hit your plan ${n} weeks in a row.`,S.bestStreak>=n,S.streak,n,{icon:n>=12?"trophy":n===6?"fire":"cal"}));
+  [[10,"bronze"],[25,"silver"],[50,"silver"],[100,"gold"],[250,"gold"],[500,"plat"]].forEach(([n,t])=>add("milestones","w"+n,t,`${n} workouts`,`Save ${n} workout days.`,S.workouts>=n,S.workouts,n,{num:n}));
+  add("milestones","vol100k","silver",kg?"45,000 kg lifted":"100K lb lifted","Total weight moved across every set you've logged.",S.volume>=100000,Math.round(S.volume),100000,{num:"100K",fmt:"vol"});
+  add("milestones","vol1m","plat",kg?"450,000 kg lifted":"Million lb lifted","Total weight moved across every set you've logged.",S.volume>=1000000,Math.round(S.volume),1000000,{num:"1M",fmt:"vol"});
+  const LAD={bench:{lb:[95,135,185,225,275,315,365,405],kg:[40,60,80,100,120,140,160,180],label:"Bench"},
+    squat:{lb:[135,185,225,275,315,365,405,455,495],kg:[60,80,100,120,140,160,180,200,220],label:"Squat"},
+    deadlift:{lb:[135,185,225,275,315,405,495,585],kg:[60,80,100,120,140,180,220,260],label:"Deadlift"},
+    military:{lb:[65,95,135,185,225],kg:[30,40,60,80,100],label:"Overhead press"}};
+  const PLATES={lb:{135:1,225:2,315:3,405:4,495:5,585:6},kg:{60:1,100:2,140:3,180:4,220:5,260:6}};
+  Object.keys(LAD).forEach(key=>{const l=LAD[key];const arr=kg?l.kg:l.lb;arr.forEach((v,i)=>{const w=kg?v*LB_PER_KG:v;const pl=PLATES[kg?"kg":"lb"][v];
+    const tier=i<2?"bronze":i<4?"silver":i<arr.length-1?"gold":"plat";
+    add("strength",key+v,tier,pl?`${pl}-plate ${l.label.toLowerCase()}`:`${l.label} ${v} ${kg?"kg":"lb"}`,`${l.label} ${v} ${kg?"kg":"lb"} for at least 1 rep. Lift more and you get every badge below it too.`,(S.big[key]||0)>=w-0.01,Math.round(S.big[key]||0),Math.round(w),{num:pl?null:v,icon:"plate",fmt:"w",sub:l.label})})});
+  const bw=Number(plan.bw)||0;
+  [["bench",1,"silver","Bodyweight bench"],["squat",1.5,"gold","1.5× bodyweight squat"],["deadlift",2,"gold","2× bodyweight deadlift"]].forEach(([k,x,t,nm])=>
+    add("everyone","bw"+k,t,nm,bw?`${LAD[k].label} ${x}× your body weight (${toDisp(bw*x)} ${wU()} right now). Fair at any size.`:"Add your body weight in Settings → Profile to track this one. Fair at any size.",bw>0&&(S.big[k]||0)>=bw*x,bw?Math.round(S.big[k]||0):null,Math.round(bw*x)||1,{icon:"scale",fmt:"w"}));
+  [[0.1,"bronze","+10% stronger"],[0.25,"silver","+25% stronger"],[0.5,"gold","+50% stronger"],[1,"plat","Doubled it"]].forEach(([x,t,nm])=>
+    add("everyone","gainpct"+x,t,nm,`Grow any exercise's top weight ${x>=1?"to double":"by "+Math.round(x*100)+"%"} compared to the first time you logged it. Everyone starts from their own number.`,S.gainPct>=x,Math.round(S.gainPct*100),Math.round(x*100),{icon:"up"}));
+  add("strength","club1000","plat",kg?"450 kg club":"1,000 lb club","Your best bench + squat + deadlift add up to it.",S.total>=1000,Math.round(S.total),1000,{num:"1K",fmt:"w"});
+  [[1,"bronze","First PR"],[10,"silver","10 PRs"],[50,"gold","50 PRs"]].forEach(([n,t,nm])=>add("strength","pr"+n,t,nm,"Beat your heaviest top set on an exercise.",S.prs>=n,S.prs,n,{icon:"up"}));
+  const g=goalOf(); const lbs=kg?[2.5,5,7.5,10,12.5,15,20,25].map(x=>x*LB_PER_KG):[5,10,15,20,25,30,40,50];
+  if(g==="lose") lbs.forEach((t,i)=>add("weight","lose"+i,i<2?"bronze":i<4?"silver":i<6?"gold":"plat",`${kg?[2.5,5,7.5,10,12.5,15,20,25][i]+" kg":[5,10,15,20,25,30,40,50][i]+" lb"} down`,"Measured from your heaviest weigh-in. Gain it back and the badge locks until you're under it again.",(S.drop||0)>=t-0.05,Math.round((S.drop||0)*10)/10,Math.round(t*10)/10,{icon:"down",fmt:"w",lost:(S.bestDrop||0)>=t-0.05&&(S.drop||0)<t-0.05}));
+  if(g==="gain") lbs.slice(0,6).forEach((t,i)=>add("weight","gain"+i,["bronze","bronze","silver","silver","gold","plat"][i],`${kg?[2.5,5,7.5,10,12.5,15][i]+" kg":[5,10,15,20,25,30][i]+" lb"} gained`,"Measured from your lightest weigh-in. Building muscle counts.",(S.gain||0)>=t-0.05,Math.round((S.gain||0)*10)/10,Math.round(t*10)/10,{icon:"up",fmt:"w",lost:(S.bestGain||0)>=t-0.05&&(S.gain||0)<t-0.05}));
+  if(g==="maintain") [[4,"silver"],[12,"gold"]].forEach(([n,t])=>add("weight","steady"+n,t,`Steady ${n} weeks`,`Weigh-ins over ${n} weeks all within ${kg?"1.5 kg":"3 lb"} of today's.`,!!S.steady&&(S.steadyWeeks||0)>=n,S.steady?(S.steadyWeeks||0):0,n,{icon:"scale"}));
+  add("weight","weighhabit","bronze","Weigh-in habit","Log your weight in 4 different weeks.",S.weighWeeks>=4,S.weighWeeks,4,{icon:"scale"});
+  add("fun","early","bronze","Early bird","Save a workout before 7 am.",S.early,null,1,{icon:"sun",rib:"#D9A514"});
+  add("fun","night","bronze","Night owl","Save a workout after 9 pm.",S.night,null,1,{icon:"moon",rib:"#4A5563"});
+  add("fun","weekend","bronze","Weekend warrior","Train on both Saturday and Sunday of the same weekend.",S.weekend,null,1,{icon:"wknd",rib:"#21875A"});
+  add("fun","comeback","silver","Comeback","Get back in the gym after 2+ weeks off.",S.comeback,null,1,{icon:"back",rib:"#21875A"});
+  add("fun","partner","bronze","Partner up","Log a gym partner's top set.",S.partner,null,1,{icon:"pair",rib:"#21875A"});
+  add("fun","creator","silver","Program creator","Publish a program to the community.",S.published,null,1,{icon:"book",rib:"#6E44C9"});
+  return {B,S}}
+const LVL_TITLES=[[1,"Rookie"],[5,"Regular"],[10,"Grinder"],[15,"Iron"],[20,"Steel"],[30,"Titan"],[40,"Legend"]];
+function levelInfo(B,S){const xp=S.workouts*100+S.prs*50+S.weeksHit*150+B.filter(b=>b.ok).reduce((a,b)=>a+TIERXP[b.tier],0);
+  let lvl=1,need=300,base=0;while(xp>=base+need){base+=need;lvl++;need=300+100*(lvl-1)}
+  const title=LVL_TITLES.filter(([l])=>lvl>=l).pop()[1]; const nextT=LVL_TITLES.find(([l])=>l>lvl);
+  return {xp,lvl,into:xp-base,need,title,nextT}}
+function badgeState(){const {B,S}=badgeDefs();return {B,S,L:levelInfo(B,S)}}
+function fmtProg(b){if(b.cur==null)return "";const f=v=>b.fmt==="w"?toDisp(v)+" "+wU():b.fmt==="vol"?(isKg()?Math.round(v/LB_PER_KG).toLocaleString(LOC)+" kg":Math.round(v).toLocaleString(LOC)+" lb"):String(v);return `${f(b.cur)} of ${f(b.tgt)}`}
+function badgesPanel(){
+  const {B,L}=badgeState(); const seen=plan.badgeSeen||{};
+  const earned=B.filter(b=>b.ok).sort((a,b)=>(seen[b.id]||0)>(seen[a.id]||0)?1:-1);
+  const next=B.filter(b=>!b.ok&&b.cur!=null).sort((a,b)=>b.cur/b.tgt-a.cur/a.tgt)[0];
+  const pct=Math.round(L.into/L.need*100);
+  return `<div class="panel" id="lvlpanel"><h2>Level &amp; badges <button class="linkbtn" id="seebadges">See all ›</button></h2>
+   <div class="lvl"><div class="ring" style="--p:${pct}"><div><small>LEVEL</small><b>${L.lvl}</b></div></div>
+    <div class="lt"><b>${esc(L.title)}</b><p>${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP to level ${L.lvl+1}${L.nextT?` · <i>${esc(L.nextT[1])}</i> at ${L.nextT[0]}`:""}</p><div class="bar"><i style="width:${pct}%"></i></div></div></div>
+   ${earned.length?`<div class="recent">${earned.slice(0,4).map(b=>`<button class="mini" data-badge="${b.id}">${medal(b)}<span>${esc(b.name)}</span></button>`).join("")}</div>`:`<p class="savenote">Save your first workout to earn your first badge.</p>`}
+   ${next?`<button class="nextb" data-badge="${next.id}">${medal(next,"sm",true)}<span><b>Next up: ${esc(next.name)}</b>${esc(fmtProg(next))}<span class="bar"><i style="width:${Math.round(next.cur/next.tgt*100)}%"></i></span></span></button>`:""}
+  </div>`}
+const BCATS=[["all","All"],["consistency","Consistency"],["everyone","Personal bests"],["strength","Strength"],["milestones","Milestones"],["weight","Body weight"],["fun","Fun"]];
+function badgesView(){
+  const {B,L}=badgeState(); const cat=state.badges.cat||"all"; const seen=plan.badgeSeen||{};
+  const cats=BCATS.filter(([c])=>c!=="all"&&(cat==="all"||cat===c));
+  const cell=b=>`<button class="bcell ${b.ok?"":"lockedc"}" data-badge="${b.id}">${medal(b,"",!b.ok)}<b>${esc(b.name)}</b><small>${b.ok?(seen[b.id]?fmtDate(seen[b.id]):"Earned"):b.lost?"Earn it back":esc(fmtProg(b))||"Not yet"}</small>${!b.ok&&b.cur!=null?`<span class="pb"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></span>`:""}</button>`;
+  return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Level ${L.lvl} · ${esc(L.title)} · ${B.filter(b=>b.ok).length} of ${B.length} earned</div><h1>Badges</h1></div><button class="btn small" id="bback">‹ Back</button></div></header>
+   <div class="gchips bcats">${BCATS.map(([c,l])=>`<button class="gchip ${cat===c?"on":""}" data-bcat="${c}" aria-pressed="${cat===c}">${l}</button>`).join("")}</div>
+   <div class="plan">${cats.map(([c,l])=>`<div class="panel"><div class="lbl" style="margin-top:0">${l}</div>
+     ${c==="weight"?`<div class="dlabel" style="margin-top:0">Your goal</div><div class="dchips" style="margin-bottom:12px">${[["lose","Lose weight"],["gain","Gain weight"],["maintain","Maintain"]].map(([g,gl])=>`<button class="dchip wide ${goalOf()===g?"on":""}" data-goal="${g}" aria-pressed="${goalOf()===g}">${gl}</button>`).join("")}</div>`:""}
+     <div class="bgrid">${B.filter(b=>b.cat===c).map(cell).join("")}</div></div>`).join("")}
+   <p class="savenote" style="margin:0 16px 20px">You earn XP for every workout you save (+100), every PR (+50), every week you hit your plan (+150) and every badge.</p></div>`}
+function bindBadges(){
+  $("#bback").onclick=()=>{state.badges=null;render();window.scrollTo(0,0)};
+  document.querySelectorAll("[data-bcat]").forEach(b=>b.onclick=()=>{state.badges.cat=b.dataset.bcat;render()});
+  document.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{plan.goal=b.dataset.goal;savePlan();render();checkBadges()});
+  document.querySelectorAll("[data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge));
+}
+function bindBadgesPanel(){const s=$("#seebadges");if(s)s.onclick=()=>{state.badges={cat:"all"};render();window.scrollTo(0,0)};
+  document.querySelectorAll("#lvlpanel [data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge))}
+function openBadge(id){const {B}=badgeState();const b=B.find(x=>x.id===id);if(!b)return;const seen=(plan.badgeSeen||{})[id];const sh=$("#sheet");
+  sh.innerHTML=`<div class="grab"></div><div class="bpop">${medal(b,"big",!b.ok)}<div class="ey">${b.ok?"Earned":b.lost?"Earn it back":"Locked"} · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum"})[b.tier]}</div>
+   <h3 id="sheet-title">${esc(b.name)}</h3><p>${esc(b.desc)}</p>${b.ok&&seen?`<p class="savenote">Earned ${fmtDate(seen)}</p>`:""}
+   ${!b.ok&&b.cur!=null?`<div class="bar"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></div><p class="savenote">${esc(fmtProg(b))}</p>`:""}
+   <div class="xp">+${TIERXP[b.tier]} XP</div><div class="btns"><button class="btn" id="bpclose" style="flex:1">Close</button></div></div>`;
+  state.open="__badge";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#bpclose",sh).onclick=closeSheet}
+let celebQ=[];
+function checkBadges(){if(window.__noCeleb||(state.mode!=="db"&&state.mode!=="local"))return;
+  const {B,L}=badgeState(); const earned=B.filter(b=>b.ok).map(b=>b.id);
+  if(!plan.badgeSeen){plan.badgeSeen={};earned.forEach(id=>plan.badgeSeen[id]=TODAY);plan.lvlSeen=L.lvl;savePlan();return}
+  const fresh=earned.filter(id=>!plan.badgeSeen[id]);
+  if(!fresh.length&&!(L.lvl>(plan.lvlSeen||1)))return;
+  fresh.forEach(id=>plan.badgeSeen[id]=TODAY);
+  const lvlUp=L.lvl>(plan.lvlSeen||1); plan.lvlSeen=Math.max(plan.lvlSeen||1,L.lvl); savePlan();
+  if(fresh.length>3)celebQ.push({multi:fresh.map(id=>B.find(x=>x.id===id)),L});else fresh.forEach(id=>celebQ.push({b:B.find(x=>x.id===id),L}));
+  if(lvlUp)celebQ.push({lvl:L});
+  if(!$("#celeb"))showCeleb()}
+function showCeleb(){const c=celebQ.shift();if(!c)return;const L=c.L||c.lvl;const pct=Math.round(L.into/L.need*100);
+  const cols=["#C92A2A","#1F5FC4","#D9A514","#21875A","#6E44C9","#C85512"];
+  const conf=Array.from({length:40},(_,i)=>`<i style="left:${Math.random()*100}%;background:${cols[i%6]};animation-delay:${(Math.random()*0.6).toFixed(2)}s;--r:${Math.round(Math.random()*360)}deg"></i>`).join("");
+  const el=document.createElement("div");el.id="celeb";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","celeb-t");
+  el.innerHTML=`<div class="cscrim"></div><div class="conf">${conf}</div><div class="cpop">
+   ${c.multi?`<div class="mstack">${c.multi.slice(0,5).map(x=>medal(x)).join("")}</div>`:c.b?medal(c.b,"big"):`<div class="lvlbig"><small>LEVEL</small><b>${L.lvl}</b></div>`}
+   <div class="ey">${c.multi?"New badges":c.b?`New badge · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum"})[c.b.tier]}`:"Level up"}</div>
+   <h3 id="celeb-t">${c.multi?`${c.multi.length} badges unlocked`:c.b?esc(c.b.name):`Level ${L.lvl}!`}</h3><p>${c.multi?esc(c.multi.map(x=>x.name).join(", ")):c.b?esc(c.b.desc):`You're a ${esc(L.title)}. Keep stacking workouts.`}</p>
+   ${c.multi?`<div class="xp">+${c.multi.reduce((a,x)=>a+TIERXP[x.tier],0)} XP</div>`:c.b?`<div class="xp">+${TIERXP[c.b.tier]} XP</div>`:""}
+   <div class="bar"><i style="width:${pct}%"></i></div><div class="xpn">Level ${L.lvl} · ${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP</div>
+   <button class="btn primary" id="cnice" style="width:100%;margin-top:12px">Nice!</button><button class="btn" id="call" style="width:100%;margin-top:8px">See all badges</button></div>`;
+  document.body.appendChild(el);
+  const close=()=>{el.remove();if(celebQ.length)setTimeout(showCeleb,250)};
+  $("#cnice").onclick=close; el.querySelector(".cscrim").onclick=close;
+  $("#call").onclick=()=>{celebQ=[];el.remove();closeSheet();state.tab="plan";state.settings=false;state.badges={cat:"all"};render();window.scrollTo(0,0)};
+  $("#cnice").focus()}
+
+/* ---------- feedback ---------- */
+function openFeedback(){const sh=$("#sheet");let kind="";
+  const draw=()=>{const msg=($("#fbmsg",sh)||{}).value||"";
+    sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="fbcancel">Cancel</button><span class="eyebrow">Send feedback</span></div>
+     <h3 id="sheet-title">What's on your mind?</h3><p class="savenote" style="margin-top:4px">Goes straight to the person who builds LiftLog. Every message gets read.</p>
+     <div class="gchips" style="margin-top:10px">${[["bug","🐞 Something's broken"],["idea","💡 Idea"],["confusing","🤔 Confusing"],["other","💬 Other"]].map(([k,l])=>`<button class="gchip ${kind===k?"on":""}" data-fbk="${k}" aria-pressed="${kind===k}">${l}</button>`).join("")}</div>
+     <label class="cform" style="margin-top:10px"><span class="field"><textarea id="fbmsg" rows="5" maxlength="2000" placeholder="${kind==="bug"?"What did you tap, what did you expect, and what happened?":"Tell us anything"}"></textarea></span></label>
+     <p class="savenote">We include which screen you're on and your phone type, so bugs are easier to find. Never your workouts or weights.</p>
+     <div class="btns"><button class="btn primary" id="fbsend" style="flex:1" ${kind?"":"disabled"}>Send</button></div>`;
+    $("#fbmsg",sh).value=msg;
+    $("#fbcancel",sh).onclick=closeSheet;
+    sh.querySelectorAll("[data-fbk]").forEach(b=>b.onclick=()=>{kind=b.dataset.fbk;draw();$("#fbmsg",sh).focus()});
+    $("#fbsend",sh).onclick=()=>{const m=$("#fbmsg",sh).value.trim();if(m.length<3){toast("Write a few words first");return}
+      const meta={screen:pickTab()+(state.settings?"/settings":""),lang:(window.LIFTLOG_I18N||{}).lang||"en",ua:navigator.userAgent.slice(0,180),w:innerWidth,ver:"web"};
+      const b=$("#fbsend",sh);b.disabled=true;b.textContent="Sending…";
+      const mail=()=>{location.href=`mailto:zedannguyen07@gmail.com?subject=${encodeURIComponent("LiftLog feedback ("+kind+")")}&body=${encodeURIComponent(m+"\n\n"+JSON.stringify(meta))}`};
+      if(!window.LIFTLOG_RPC||state.mode!=="db"){closeSheet();mail();return}
+      window.LIFTLOG_RPC("send_feedback",{k:kind,m,meta}).then(()=>{closeSheet();toast("Thanks! Your feedback was sent.")})
+       .catch(e=>{b.disabled=false;b.textContent="Send";if(/function|does not exist|schema cache/i.test(String(e&&e.message))){closeSheet();mail()}else toast("Couldn't send. Check your connection and try again.")})};
+  };
+  state.open="__fb";sh.hidden=false;$("#scrim").hidden=false;draw();sh.scrollTop=0}
+
 /* ---------- toast ---------- */
 let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
  t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,2200)}
 
 /* ---------- tabs ---------- */
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.dayMenu=false;state.settings=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.badges=null;state.dayMenu=false;state.settings=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
 
 render();
@@ -2688,7 +2911,7 @@ render();
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      if(first){state.loading=false; if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      if(first){state.loading=false;setTimeout(checkBadges,1200); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account

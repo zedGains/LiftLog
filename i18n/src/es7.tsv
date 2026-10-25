@@ -1,0 +1,145 @@
+885	Primer entrenamiento
+886	Guarda tu primer día de entrenamiento.
+887	Semana {0} lista
+888	Cumple tu plan durante una semana ({0} entrenamientos).
+889	{0} semanas firme
+890	Cumple tu plan {0} semanas seguidas.
+891	{0} mes firme
+892	Racha de {0} semanas
+893	{0} meses firme
+894	{0} año firme
+895	{0} entrenamientos
+896	Guarda {0} días de entrenamiento.
+897	{0}K lb levantadas
+898	Peso total movido en todas las series que registraste.
+899	Un millón de lb levantadas
+900	Banca {0} lb
+901	Banca {0} lb por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+902	Banca de {0} discos
+903	Sentadilla de {0} discos
+904	Sentadilla {0} lb por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+905	Sentadilla {0} lb
+906	Peso muerto de {0} discos
+907	Peso muerto {0} lb por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+908	Peso muerto {0} lb
+909	Press militar {0} lb
+910	Press militar {0} lb por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+911	Press militar de {0} discos
+912	Banca con tu peso corporal
+913	Agrega tu peso corporal en Ajustes → Perfil para seguir esta. Justa para cualquier tamaño.
+914	Sentadilla {0}× tu peso corporal
+915	Peso muerto {0}× tu peso corporal
+916	+{0}% más fuerte
+917	Sube el peso máximo de cualquier ejercicio un {0}% respecto a la primera vez que lo registraste. Cada quien parte de su propio número.
+918	Lo duplicaste
+919	Duplica el peso máximo de cualquier ejercicio respecto a la primera vez que lo registraste. Cada quien parte de su propio número.
+920	Club de las {0} lb
+921	Tu mejor banca + sentadilla + peso muerto suman eso.
+922	Primer récord
+923	Supera tu serie más pesada en un ejercicio.
+924	{0} récords
+925	{0} lb menos
+926	Se mide desde tu pesaje más alto. Si lo recuperas, la insignia se bloquea hasta que vuelvas a estar por debajo.
+927	Hábito de pesarse
+928	Registra tu peso en {0} semanas distintas.
+929	Madrugador
+930	Guarda un entrenamiento antes de las {0} a. m.
+931	Ave nocturna
+932	Guarda un entrenamiento después de las {0} p. m.
+933	Guerrero de fin de semana
+934	Entrena sábado y domingo del mismo fin de semana.
+935	El regreso
+936	Vuelve al gym después de {0}+ semanas sin ir.
+937	En equipo
+938	Registra la serie más pesada de un compañero.
+939	Creador de programas
+940	Publica un programa en la comunidad.
+941	Banca {0}× tu peso corporal ({1} lb ahora). Justa para cualquier tamaño.
+942	Sentadilla {0}× tu peso corporal ({1} lb ahora). Justa para cualquier tamaño.
+943	Peso muerto {0}× tu peso corporal ({1} lb ahora). Justa para cualquier tamaño.
+944	{0} lb ganadas
+945	Se mide desde tu pesaje más bajo. Ganar músculo cuenta.
+946	Estable {0} semanas
+947	Pesajes de {0} semanas, todos a menos de {1} lb del de hoy.
+948	{0} kg levantados
+949	Banca {0} kg
+950	Banca {0} kg por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+951	Sentadilla {0} kg por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+952	Sentadilla {0} kg
+953	Peso muerto {0} kg por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+954	Peso muerto {0} kg
+955	Press militar {0} kg
+956	Press militar {0} kg por al menos {1} rep. Levanta más y obtienes también todas las insignias de abajo.
+957	Club de los {0} kg
+958	{0} kg menos
+959	Banca {0}× tu peso corporal ({1} kg ahora). Justa para cualquier tamaño.
+960	Sentadilla {0}× tu peso corporal ({1} kg ahora). Justa para cualquier tamaño.
+961	Peso muerto {0}× tu peso corporal ({1} kg ahora). Justa para cualquier tamaño.
+962	{0} kg ganados
+963	Pesajes de {0} semanas, todos a menos de {1} kg del de hoy.
+964	Nivel e insignias
+965	Ver todo ›
+966	NIVEL
+967	Guarda tu primer entrenamiento para ganar tu primera insignia.
+968	Siguiente: {x}
+969	{0} lb de {1} lb
+970	{0} kg de {1} kg
+971	Ganada
+972	Recupérala
+973	Aún no
+974	Bloqueada
+975	Bronce
+976	Plata
+977	Oro
+978	Platino
+979	Ganada {x}
+980	+{0} XP
+981	Insignias
+982	Récords personales
+983	Hitos
+984	Divertidas
+985	Constancia
+986	Tu objetivo
+987	Bajar de peso
+988	Subir de peso
+989	Mantener
+990	Ganas XP por cada entrenamiento que guardas (+100), cada récord (+50), cada semana que cumples tu plan (+150) y cada insignia.
+991	Nivel {x} · {x2} · {x3} de {x4} ganadas
+992	Nueva insignia · {x}
+993	Nuevas insignias
+994	{0} insignias desbloqueadas
+995	Subiste de nivel
+996	¡Nivel {0}!
+997	Eres {x}. Sigue sumando entrenamientos.
+998	Nivel {0} · {1} / {2} XP
+999	¡Genial!
+1000	Ver todas las insignias
+1001	Novato
+1002	Constante
+1003	Esforzado
+1004	Hierro
+1005	Acero
+1006	Titán
+1007	Leyenda
+1008	{x} XP para el nivel {x2} · <i>{x3}</i> en el {x4}
+1009	{x} XP para el nivel {x2}
+1010	Ganada · {x}
+1011	Recupérala · {x}
+1012	Bloqueada · {x}
+1013	Enviar comentarios
+1014	¿Encontraste un error, tienes una idea o algo es confuso? Cuéntanos. Leemos cada mensaje.
+1015	💬 Enviar comentarios
+1016	¿Qué tienes en mente?
+1017	Llega directo a quien crea LiftLog. Leemos cada mensaje.
+1018	🐞 Algo no funciona
+1019	💡 Idea
+1020	🤔 Confuso
+1021	💬 Otro
+1022	¿Qué tocaste, qué esperabas y qué pasó?
+1023	Cuéntanos lo que sea
+1024	Incluimos en qué pantalla estás y tu tipo de teléfono para encontrar errores más fácil. Nunca tus entrenamientos ni pesos.
+1025	Enviar
+1026	Enviando…
+1027	Escribe unas palabras primero
+1028	¡Gracias! Tus comentarios se enviaron.
+1029	No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.
