@@ -274,7 +274,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .lbrows li[data-prof]{cursor:pointer}
 .refhero .btn.primary,.reflink .btn.primary{flex:none;width:auto;padding-inline:18px}.refhero{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;margin-bottom:14px;background:linear-gradient(135deg,rgba(214,51,108,.14),rgba(110,68,201,.14))}.refhero>div{flex:1;min-width:0}.refhero b{display:block;font-size:16px}.refhero span{display:block;font-size:13px;color:var(--muted)}.refhero .bar{height:7px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px}.refhero .bar i{display:block;height:100%;background:#D6336C}.refhero small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
 #refpanel .nextb .bar{display:block;height:8px;border-radius:99px;background:var(--line);overflow:hidden}#refpanel .nextb .bar i{display:block;height:100%;background:#D6336C}
-.avopts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.avopt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;text-align:center;font-size:13px}.avopt.on{border-color:var(--green);background:var(--surface-2)}.avopt .rframe.big,.avopt .helm.big{width:78px;height:82px}
+.avrow{display:flex;gap:12px;align-items:center;font-size:13.5px;color:var(--muted)}.avrow b{display:block;color:var(--fg);font-size:15px}.avopts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.avopt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border:2px solid var(--line);border-radius:12px;text-align:center;font-size:13px}.avopt.on{border-color:var(--green);background:var(--surface-2)}.avopt .rframe.big,.avopt .helm.big{width:78px;height:82px}
 .avadd{width:78px;height:82px;display:grid;place-items:center;font:300 40px var(--body);color:var(--muted)}.avedit{all:unset;cursor:pointer;position:relative;display:block}.avedit>span{position:absolute;right:2px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
@@ -1584,6 +1584,7 @@ function settingsView(){
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
    ${langPanel()}
+   ${avatarPanel()}
    ${trainerPanel()}
    <div class="panel" id="notifs"><h2>Notifications</h2>
     <div class="lbl" style="margin-top:4px">Rest timer</div>
@@ -1640,7 +1641,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();const fbb=$("#sendfb");if(fbb)fbb.onclick=openFeedback;const fbb2=$("#sendfb2");if(fbb2)fbb2.onclick=openFeedback;const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -3084,11 +3085,15 @@ function openAvatarPick(){const sh=$("#sheet"),me=profCache[uid]||{},name=(windo
    const f=$("#avfile",sh);f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;shrinkImage(file).then(d=>{photo=d;mode="photo";draw()}).catch(()=>toast("Couldn't read that picture. Try another."))};
    sh.querySelectorAll("[data-am]").forEach(b=>b.onclick=()=>{mode=b.dataset.am;if(mode==="photo"&&!photo){f.click()}draw()});
    const ch=$("#avchange",sh);if(ch)ch.onclick=()=>f.click();
-   $("#avcancel",sh).onclick=()=>openProfile(uid);
+   $("#avcancel",sh).onclick=()=>{if(state.settings)closeSheet();else openProfile(uid)};
    $("#avsave",sh).onclick=()=>{const b=$("#avsave",sh);b.disabled=true;
-     window.LIFTLOG_RPC("set_avatar",{av:mode==="photo"?photo:(me.av||""),mode}).then(()=>{profCache[uid]={...(profCache[uid]||{}),av:mode==="photo"?photo:(me.av||""),am:mode};toast("Profile picture saved");render();openProfile(uid)})
+     window.LIFTLOG_RPC("set_avatar",{av:mode==="photo"?photo:(me.av||""),mode}).then(()=>{profCache[uid]={...(profCache[uid]||{}),av:mode==="photo"?photo:(me.av||""),am:mode};toast("Profile picture saved");render();if(state.settings)closeSheet();else openProfile(uid)})
       .catch(e=>{b.disabled=false;toast(/function|schema|not find/i.test(String(e&&e.message))?"Run liftlog-update-7 SQL in Supabase first.":"Couldn't save. Try again.")})}};
   state.open="__avatar";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;draw()}
+function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You",r=rankInfo(myCard().pts),am=(profCache[uid]||{}).am||"crest";
+  return `<div class="panel" id="avpanel"><h2>Profile picture</h2><div class="avrow">${avatarFor(uid,name,r,"md")}<span><b>${am==="photo"?"My photo":am==="helm"?"Warrior helm":"Initials"}</b>Upload your own photo or show your rank's warrior helm. Your rank border shows either way.</span></div>
+   <div class="btns"><button class="btn primary" id="avchange2" style="flex:1">Change picture</button></div></div>`}
+function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;needProfiles([uid])}
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}
