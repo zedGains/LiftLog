@@ -3487,7 +3487,7 @@ function curSkin(){return document.documentElement.getAttribute("data-skin")||""
 function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
 function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");skinFx();
   const bg=getComputedStyle(document.body).backgroundColor;document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{if(k)m.setAttribute("content",getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||bg)});render()}
-const SKIN_OPENS=(()=>{const n=nowD(),y=n.getFullYear();let t=tetDate(y);if(!t||n>new Date(t.getFullYear(),t.getMonth()+1,8))t=tetDate(y+1);const M=n=>new Date(2024,n-1,1).toLocaleDateString(LOC,{month:"short",day:"numeric"});
+const SKIN_OPENS=(()=>{const n=nowD(),y=n.getFullYear();let t=tetDate(y);if(!t||n>new Date(Math.max(new Date(t.getFullYear(),t.getMonth()+1,1)-1,+t+8*864e5)))t=tetDate(y+1);const M=n=>new Date(2024,n-1,1).toLocaleDateString(LOC,{month:"short",day:"numeric"});
   return {halloween:M(10),thanks:M(11),xmas:M(12),newyear:M(1),valentine:M(2),tet:t?M(t.getMonth()+1):M(1)}})();
 function skinPanel(){const cur=curSkin();
   SKINS.forEach(x=>{if(x.f&&x.id!==cur&&(!x.season||x.season()))loadSkinFont(x.id)});
