@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LiftLog</title>
 <meta name="description" content="Workout log for lifters and their gym partners.">
-<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",notebook:"Permanent+Marker"};
-var d=new Date(),m=d.getMonth()+1,day=d.getDate();if(k==="halloween"&&!((m===10)||(m===11&&day<=10)))k="";
-if(k&&F[k]){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
+<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700"};
+var d=new Date(),m=d.getMonth()+1,day=d.getDate(),S={halloween:m===10||(m===11&&day<=3),thanks:m===11,xmas:m===12&&day<=30,newyear:m===1||(m===12&&day===31)};
+if(k in S&&!S[k])k="";if(k&&!F[k])k="";
+if(k){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
 <meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1114" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
@@ -311,7 +312,8 @@ html:root[data-skin="halloween"] .tabs{background:#170E20;border-top-color:#3A2A
 html:root[data-skin="halloween"] .tab[aria-selected="true"]::after{height:4px;background:linear-gradient(90deg,#FF7A1A,#FFB703);box-shadow:0 0 10px #FF7A1A}
 html:root[data-skin="halloween"] .dayhead h1::after{content:" 🎃";font-size:.55em;vertical-align:.35em}
 html:root[data-skin="halloween"] .skinfx{display:block;position:fixed;inset:0 0 auto 0;height:180px;pointer-events:none;z-index:4;overflow:hidden}
-.skinfx i{position:absolute;top:30px;left:-60px;width:34px;height:16px;opacity:.55;animation:bat 16s linear infinite;
+.skinfx i{position:absolute;top:30px;left:-60px;width:34px;height:16px;opacity:.55}
+html:root[data-skin="halloween"] .skinfx i{animation:bat 16s linear infinite;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 32'%3E%3Cpath fill='%23000' d='M34 10c-2-4-1-8 0-9 1 1 2 1 2 0 1 1 2 5 0 9 6-6 18-8 32-2-6 1-10 5-11 10-3-3-7-3-9 1-3-3-7-2-9 2-2-3-3-5-5-5s-3 2-5 5c-2-4-6-5-9-2-2-4-6-4-9-1C10 13 6 9 0 8c14-6 26-4 34 2z'/%3E%3C/svg%3E") center/contain no-repeat}
 .skinfx i:nth-child(2){top:80px;width:24px;height:12px;animation-duration:22s;animation-delay:-7s}
 .skinfx i:nth-child(3){top:120px;width:18px;height:9px;animation-duration:27s;animation-delay:-15s}
@@ -345,17 +347,73 @@ html:root[data-skin="iron"] .btn{border-radius:4px}
 html:root[data-skin="iron"] .btn.primary{background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,color-mix(in srgb,var(--accent) 82%,#000) 14px 28px);text-shadow:0 1px 0 rgba(0,0,0,.4)}
 html:root[data-skin="iron"] .dayhead{background:#141414;border-bottom:3px solid transparent;border-image:repeating-linear-gradient(-45deg,#F5C518 0 10px,#141414 10px 20px) 3}
 html:root[data-skin="iron"] .tabs{background:linear-gradient(#262626,#1A1A1A);border-top:2px solid #3A3A3A}
-/* Notebook (light) */
-html:root[data-skin="notebook"]{--bg:#F6F1E6;--surface:#FFFDF7;--surface-2:#F2ECDD;--fg:#26313D;--muted:#6E7680;--line:#DCD3C0;--map-base:#E8E0CE;--map-muscle:#CFC4AC;
-  --red:#D1495B;--blue:#2F6CB3;--yellow:#E0A100;--green:#2E8B57;--purple:#7353BA;--orange:#D9731F;--on-yellow:#1A1400;--ok:#2E8B57;--ok-soft:#E1F1E6;--warn-soft:#FBEFC8;--accent-soft:#F8E0E3;
-  --display:"Permanent Marker","Barlow Condensed",cursive;color-scheme:light}
-html:root[data-skin="notebook"] body{background:linear-gradient(90deg,transparent 38px,rgba(209,73,91,.25) 38px 40px,transparent 40px),repeating-linear-gradient(transparent 0 27px,rgba(47,108,179,.13) 27px 28px),var(--bg);background-attachment:fixed}
-html:root[data-skin="notebook"] .dayhead{background:var(--bg)}
-html:root[data-skin="notebook"] .panel{border:1.5px solid #CFC4AC;border-radius:3px;box-shadow:3px 4px 0 rgba(38,49,61,.08);transform:rotate(-.15deg)}
-html:root[data-skin="notebook"] .panel:nth-child(even){transform:rotate(.15deg)}
-html:root[data-skin="notebook"] h1,html:root[data-skin="notebook"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.02em;text-transform:none}
-html:root[data-skin="notebook"] .btn.primary{box-shadow:2px 3px 0 rgba(38,49,61,.18)}
-html:root[data-skin="notebook"] .tabs{background:#FFFDF7;border-top:1.5px dashed #CFC4AC}
+/* Christmas (seasonal, December) */
+html:root[data-skin="xmas"]{--bg:#0B1F17;--surface:#12291F;--surface-2:#1A3428;--fg:#F7F3EA;--muted:#A9BFB2;--line:#2A4A3A;--map-base:#1D3A2D;--map-muscle:#2F5443;
+  --red:#E23D3D;--blue:#3FA0D9;--yellow:#F2C14E;--green:#3FBF7F;--purple:#A97BE0;--orange:#E8833A;--on-yellow:#1A1200;--accent-soft:#3A1515;--display:"Mountains of Christmas","Barlow Condensed",cursive;color-scheme:dark}
+html:root[data-skin="xmas"] body{background:radial-gradient(900px 400px at 50% -5%,#1E4D38,transparent 65%),var(--bg);background-attachment:fixed}
+html:root[data-skin="xmas"] .dayhead{background:linear-gradient(#0B1F17 75%,rgba(11,31,23,0))}
+html:root[data-skin="xmas"] .panel{border:1px solid #3A6A52;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+html:root[data-skin="xmas"] .panel::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:8px;border-radius:12px 12px 0 0;background:repeating-linear-gradient(90deg,#E23D3D 0 14px,#F7F3EA 14px 28px);opacity:.9}
+html:root[data-skin="xmas"] h1,html:root[data-skin="xmas"] .panel h2{font-family:var(--display);font-weight:700;letter-spacing:.02em;text-transform:none}
+html:root[data-skin="xmas"] .panel h2{color:#F2C14E;font-size:24px}
+html:root[data-skin="xmas"] .dayhead h1::after{content:" 🎄";font-size:.5em;vertical-align:.35em}
+html:root[data-skin="xmas"] .tabs{background:#0E2419;border-top:2px solid #F2C14E}
+html:root[data-skin="xmas"] .skinfx{display:block;position:fixed;inset:0;pointer-events:none;z-index:4;
+  background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 140px 80px,#fff,transparent),radial-gradient(1.5px 1.5px at 260px 150px,#fff,transparent),radial-gradient(2px 2px at 330px 40px,#fff,transparent),radial-gradient(1.5px 1.5px at 90px 210px,#fff,transparent),radial-gradient(2px 2px at 200px 260px,#fff,transparent);background-size:380px 300px;opacity:.6}
+html:root[data-skin="xmas"] .skinfx i{display:none}
+/* Pixel Arcade (8-bit) */
+html:root[data-skin="pixel"]{--bg:#000000;--surface:#0D0D1A;--surface-2:#1A1A33;--fg:#F8F8F8;--muted:#9A9AC0;--line:#3C3CFF;--map-base:#1A1A33;--map-muscle:#2E2E5C;
+  --red:#FF3B3B;--blue:#3CBCFC;--yellow:#FCE03C;--green:#58F858;--purple:#B880F8;--orange:#FC9838;--on-yellow:#000;--accent-soft:#330000;--display:"Press Start 2P",monospace;color-scheme:dark}
+html:root[data-skin="pixel"] body{background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 4px),#000;image-rendering:pixelated}
+html:root[data-skin="pixel"] .dayhead{background:#000}
+html:root[data-skin="pixel"] .panel,html:root[data-skin="pixel"] .card{border-radius:0;border:none;box-shadow:0 -4px 0 0 #3C3CFF,0 4px 0 0 #3C3CFF,-4px 0 0 0 #3C3CFF,4px 0 0 0 #3C3CFF;margin:4px}
+html:root[data-skin="pixel"] h1,html:root[data-skin="pixel"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:0;line-height:1.4}
+html:root[data-skin="pixel"] h1{font-size:26px}html:root[data-skin="pixel"] .panel h2{font-size:14px;color:#FCE03C}
+html:root[data-skin="pixel"] .btn{border-radius:0}html:root[data-skin="pixel"] .btn.primary{box-shadow:4px 4px 0 #3C3CFF}
+html:root[data-skin="pixel"] .tabs{background:#000;border-top:4px solid #3C3CFF}
+/* Sakura (light, calm) */
+html:root[data-skin="sakura"]{--bg:#FFF5F7;--surface:#FFFFFF;--surface-2:#FCEBF0;--fg:#3A2B33;--muted:#8E7280;--line:#F2D3DE;--map-base:#F6E1E8;--map-muscle:#E8C2D0;
+  --red:#E25D8A;--blue:#6A8FD8;--yellow:#E8A33D;--green:#5DA87E;--purple:#9B7BD6;--orange:#E58B5B;--on-yellow:#2A1700;--accent-soft:#FBE0EA;--display:"Yuji Syuku","Barlow Condensed",serif;color-scheme:light}
+html:root[data-skin="sakura"] body{background:radial-gradient(700px 360px at 100% 0,#FFD6E3,transparent 60%),radial-gradient(600px 300px at 0 100%,#FFE3EC,transparent 60%),var(--bg);background-attachment:fixed}
+html:root[data-skin="sakura"] .dayhead{background:rgba(255,245,247,.95)}
+html:root[data-skin="sakura"] .panel{border:1px solid #F2D3DE;border-radius:20px;box-shadow:0 8px 24px rgba(226,93,138,.08)}
+html:root[data-skin="sakura"] h1,html:root[data-skin="sakura"] .panel h2{font-family:var(--display);font-weight:400;text-transform:none;letter-spacing:.02em}
+html:root[data-skin="sakura"] .panel h2{color:#C9467A}
+html:root[data-skin="sakura"] .btn{border-radius:999px}
+html:root[data-skin="sakura"] .tabs{background:rgba(255,255,255,.95);border-top:1px solid #F2D3DE}
+html:root[data-skin="sakura"] .skinfx{display:block;position:fixed;inset:0 0 auto 0;height:100%;pointer-events:none;z-index:4}
+html:root[data-skin="sakura"] .skinfx i{background:radial-gradient(ellipse at 30% 30%,#FFC2D4,#F58FB1);border-radius:80% 0 80% 0;width:12px;height:12px;opacity:.7;animation:petal 14s linear infinite;top:-20px}
+html:root[data-skin="sakura"] .skinfx i:nth-child(2){left:30%;animation-duration:18s;animation-delay:-6s}html:root[data-skin="sakura"] .skinfx i:nth-child(3){left:70%;animation-duration:22s;animation-delay:-11s}
+@keyframes petal{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(40vw,110vh) rotate(540deg)}}
+/* Thanksgiving (seasonal, November) */
+html:root[data-skin="thanks"]{--bg:#1E130C;--surface:#2A1B11;--surface-2:#352317;--fg:#FBEBD6;--muted:#C7A98A;--line:#4A3221;--map-base:#3A2618;--map-muscle:#5A3C26;
+  --red:#C2412D;--blue:#5B8BA8;--yellow:#E9A33A;--green:#7E9B3E;--purple:#9C5A7A;--orange:#E07A2E;--on-yellow:#2A1500;--accent-soft:#3D1F16;--display:"Lobster","Barlow Condensed",cursive;color-scheme:dark}
+html:root[data-skin="thanks"] body{background:radial-gradient(900px 420px at 50% -8%,#5A2E14,transparent 62%),radial-gradient(700px 300px at 50% 110%,#3A1D0C,transparent 60%),var(--bg);background-attachment:fixed}
+html:root[data-skin="thanks"] .dayhead{background:linear-gradient(#1E130C 75%,rgba(30,19,12,0))}
+html:root[data-skin="thanks"] .panel{position:relative;border:1px solid #5A3C26;box-shadow:0 8px 24px rgba(0,0,0,.35);overflow:hidden}
+html:root[data-skin="thanks"] .panel::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;background:linear-gradient(90deg,rgba(194,65,45,.9) 0 50%,rgba(233,163,58,.9) 50%) 0 0/24px 100%,linear-gradient(rgba(126,155,62,.5),rgba(126,155,62,.5));opacity:.85}
+html:root[data-skin="thanks"] h1,html:root[data-skin="thanks"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.01em;text-transform:none}
+html:root[data-skin="thanks"] .panel h2{color:#E9A33A;font-size:24px}
+html:root[data-skin="thanks"] .dayhead h1::after{content:" 🦃";font-size:.5em;vertical-align:.35em}
+html:root[data-skin="thanks"] .btn.primary{box-shadow:0 0 16px rgba(224,122,46,.35)}
+html:root[data-skin="thanks"] .tabs{background:#24170E;border-top:2px solid #E07A2E}
+html:root[data-skin="thanks"] .skinfx{display:block;position:fixed;inset:0;height:100%;pointer-events:none;z-index:4}
+html:root[data-skin="thanks"] .skinfx i{top:-30px;width:20px;height:20px;opacity:.6;animation:leaf 16s linear infinite;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E07A2E' d='M12 2l1.6 4.2 3.2-1.6-.8 3.6 3.8.2-2.6 2.8 3.4 1.8-3.8 1-.2 3.2-3-1.8L12 22l-1.6-6.6-3 1.8-.2-3.2-3.8-1 3.4-1.8-2.6-2.8 3.8-.2-.8-3.6 3.2 1.6z'/%3E%3C/svg%3E") center/contain no-repeat}
+html:root[data-skin="thanks"] .skinfx i:nth-child(2){left:35%;animation-duration:20s;animation-delay:-7s;filter:hue-rotate(-25deg)}
+html:root[data-skin="thanks"] .skinfx i:nth-child(3){left:75%;animation-duration:24s;animation-delay:-13s;filter:hue-rotate(20deg)}
+@keyframes leaf{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(-8vw,55vh) rotate(200deg)}100%{transform:translate(10vw,112vh) rotate(420deg)}}
+/* New Year (seasonal, January) */
+html:root[data-skin="newyear"]{--bg:#07080F;--surface:#11131F;--surface-2:#1A1D2D;--fg:#F5F1E6;--muted:#A4A6B8;--line:#2C2F45;--map-base:#1A1D2D;--map-muscle:#2C3048;
+  --red:#E8B54A;--blue:#7C8CFF;--yellow:#F2D27A;--green:#4FD1A5;--purple:#B48CFF;--orange:#F0A34A;--on-yellow:#1A1400;--accent-soft:#2E2610;--display:"Cinzel","Barlow Condensed",serif;color-scheme:dark}
+html:root[data-skin="newyear"] body{background:radial-gradient(1.5px 1.5px at 30px 40px,rgba(242,210,122,.7),transparent),radial-gradient(1px 1px at 120px 90px,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 210px 20px,rgba(242,210,122,.6),transparent),radial-gradient(1px 1px at 300px 140px,rgba(255,255,255,.5),transparent) 0 0/340px 180px,radial-gradient(900px 420px at 50% -10%,#232850,transparent 65%),var(--bg);background-attachment:fixed}
+html:root[data-skin="newyear"] body[data-day]{--accent:#E8B54A;--accent-ink:#1A1400}
+html:root[data-skin="newyear"] .dayhead{background:linear-gradient(#07080F 75%,rgba(7,8,15,0))}
+html:root[data-skin="newyear"] .panel{border:1px solid rgba(232,181,74,.45);box-shadow:0 0 0 1px rgba(232,181,74,.08),0 10px 28px rgba(0,0,0,.4)}
+html:root[data-skin="newyear"] h1,html:root[data-skin="newyear"] .panel h2{font-family:var(--display);font-weight:700;letter-spacing:.06em;background:linear-gradient(180deg,#FFF1C2,#E8B54A 55%,#B07F1E);-webkit-background-clip:text;background-clip:text;color:transparent}
+html:root[data-skin="newyear"] .dayhead h1::after{content:" 🎆";background:none;-webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:initial;color:initial;font-size:.5em;vertical-align:.35em}
+html:root[data-skin="newyear"] .btn.primary{background:linear-gradient(180deg,#F2D27A,#C8932C);color:#1A1400;border:none;box-shadow:0 0 16px rgba(232,181,74,.35)}
+html:root[data-skin="newyear"] .tabs{background:#0A0C16;border-top:1px solid rgba(232,181,74,.5)}
 @media (prefers-reduced-motion:reduce){.skinfx i{animation:none;display:none}}
 /* design picker */
 .skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
@@ -364,7 +422,11 @@ html:root[data-skin="notebook"] .tabs{background:#FFFDF7;border-top:1.5px dashed
 .skprev{height:74px;position:relative;padding:10px;display:flex;flex-direction:column;gap:6px}
 .skprev b{font-size:20px;line-height:1}.skprev span{display:block;height:14px;border-radius:4px}.skprev span+span{width:62%}
 .skopt>.skl{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:8px 10px;font-weight:700;font-size:13.5px;background:var(--surface)}
-.sktag{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:#FF7A1A;color:#2A1500}
+.skoff{cursor:default}.skoff .skprev>*:not(.sklock){filter:grayscale(.7);opacity:.45}.sklock{position:absolute;inset:auto 8px 8px auto;font-style:normal;font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:99px;background:rgba(0,0,0,.65);color:#fff}.sktag{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:#FF7A1A;color:#2A1500}
+#holi{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(5,6,12,.72);backdrop-filter:blur(2px)}#holi canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.holicard{position:relative;max-width:340px;margin:0 20px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px 20px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:holipop .5s cubic-bezier(.2,1.4,.4,1)}
+.holiem{font-size:58px;line-height:1;margin-bottom:6px}.holicard h3{margin:0 0 6px;font:800 28px/1.1 var(--display);text-transform:uppercase}.holicard p{margin:0 0 6px;color:var(--muted)}
+@keyframes holipop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -787,7 +849,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -3371,24 +3433,61 @@ function bindExQueue(){const S=state.stats;if(!S)return;
   document.querySelectorAll("[data-exok]").forEach(b=>b.onclick=()=>act(b.dataset.exok,true));
   document.querySelectorAll("[data-exno]").forEach(b=>armBtn(b,"Tap again",()=>act(b.dataset.exno,false)))}
 /* ---------- app design picker ---------- */
+const SKIN_SEASON={halloween:d=>{const m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=3)},thanks:d=>d.getMonth()+1===11,xmas:d=>d.getMonth()+1===12&&d.getDate()<=30,newyear:d=>{const m=d.getMonth()+1;return m===1||(m===12&&d.getDate()===31)}};
 const SKINS=[
- {id:"",name:"Classic",bg:"#0F1114",panel:"#191C20",line:"#2C3138",fg:"#ECEEF0",acc:"#E5484D",font:"'Barlow Condensed'"},
- {id:"halloween",name:"Halloween",tag:"Limited",bg:"linear-gradient(160deg,#3B1D52,#120B18 60%)",panel:"#1C1326",line:"#4A3360",fg:"#FFB46B",acc:"#FF7A1A",font:"Creepster",f:"Creepster",season:()=>{const d=nowD(),m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=10)}},
- {id:"neon",name:"Neon",bg:"#05060F",panel:"#0A0F24",line:"#2EC5FF",fg:"#9FE7FF",acc:"#FF2E88",font:"Orbitron",f:"Orbitron:wght@700;800"},
- {id:"iron",name:"Iron Gym",bg:"#141414",panel:"#262626",line:"#F5C518",fg:"#F5C518",acc:"#E03A2F",font:"'Black Ops One'",f:"Black+Ops+One"},
- {id:"notebook",name:"Notebook",bg:"#F6F1E6",panel:"#FFFDF7",line:"#CFC4AC",fg:"#26313D",acc:"#D1495B",font:"'Permanent Marker'",f:"Permanent+Marker"}];
+ {id:"",name:"Classic",bg:"#0F1114",panel:"#191C20",line:"#2C3138",fg:"#ECEEF0",acc:"#E5484D",font:"'Barlow Condensed'",word:"WORKOUT"},
+ {id:"halloween",name:"Halloween",tag:"October",bg:"linear-gradient(160deg,#3B1D52,#120B18 60%)",panel:"#1C1326",line:"#4A3360",fg:"#FFB46B",acc:"#FF7A1A",font:"Creepster",f:"Creepster",word:"BOO! 🎃"},
+ {id:"thanks",name:"Thanksgiving",tag:"November",bg:"linear-gradient(160deg,#5A2E14,#1E130C 60%)",panel:"#2A1B11",line:"#5A3C26",fg:"#E9A33A",acc:"#E07A2E",font:"Lobster",f:"Lobster",word:"Gobble 🦃"},
+ {id:"xmas",name:"Christmas",tag:"December",bg:"linear-gradient(160deg,#1E4D38,#0B1F17 60%)",panel:"#12291F",line:"#E23D3D",fg:"#F2C14E",acc:"#E23D3D",font:"'Mountains of Christmas'",f:"Mountains+of+Christmas:wght@700",word:"Ho ho ho 🎄"},
+ {id:"newyear",name:"New Year",tag:"January",bg:"linear-gradient(160deg,#232850,#07080F 60%)",panel:"#11131F",line:"#E8B54A",fg:"#F2D27A",acc:"#E8B54A",font:"Cinzel",f:"Cinzel:wght@700",word:"CHEERS 🥂"},
+ {id:"neon",name:"Neon",bg:"#05060F",panel:"#0A0F24",line:"#2EC5FF",fg:"#9FE7FF",acc:"#FF2E88",font:"Orbitron",f:"Orbitron:wght@700;800",word:"PLAYER 1"},
+ {id:"iron",name:"Iron Gym",bg:"#141414",panel:"#262626",line:"#F5C518",fg:"#F5C518",acc:"#E03A2F",font:"'Black Ops One'",f:"Black+Ops+One",word:"LIFT HEAVY"},
+ {id:"pixel",name:"Pixel Arcade",bg:"#000",panel:"#0D0D1A",line:"#3C3CFF",fg:"#FCE03C",acc:"#FF3B3B",font:"'Press Start 2P'",f:"Press+Start+2P",word:"1UP",small:true},
+ {id:"sakura",name:"Sakura",bg:"linear-gradient(160deg,#FFD6E3,#FFF5F7 60%)",panel:"#FFFFFF",line:"#F2D3DE",fg:"#C9467A",acc:"#E25D8A",font:"'Yuji Syuku'",f:"Yuji+Syuku",word:"Leg day"}];
+SKINS.forEach(x=>{if(SKIN_SEASON[x.id])x.season=()=>SKIN_SEASON[x.id](nowD())});
 function curSkin(){return document.documentElement.getAttribute("data-skin")||""}
 function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
 function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");
   const bg=getComputedStyle(document.body).backgroundColor;document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{if(k)m.setAttribute("content",getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||bg)});render()}
-function skinPanel(){const cur=curSkin(),list=SKINS.filter(x=>!x.season||x.season()||cur===x.id);
-  SKINS.forEach(x=>{if(x.f&&x.id!==cur)loadSkinFont(x.id)});
-  return `<div class="panel" id="skinp"><h2>App design</h2><p class="savenote" style="margin-top:0">Changes the whole look of the app on this phone. Seasonal designs show up for a limited time.</p>
-   <div class="skins">${list.map(x=>`<button class="skopt ${cur===x.id?"on":""}" data-skin="${x.id}" aria-pressed="${cur===x.id}">
-    <div class="skprev" style="background:${x.bg}"><b style="font-family:${x.font},sans-serif;color:${x.fg}">${x.id==="halloween"?"BOO! 🎃":x.id==="neon"?"PLAYER 1":x.id==="iron"?"LIFT HEAVY":x.id==="notebook"?"Leg day":"WORKOUT"}</b>
-     <span style="background:${x.panel};border:1px solid ${x.line}"></span><span style="background:${x.acc}"></span></div>
-    <div class="skl">${esc(x.name)}${x.tag?`<span class="sktag">${x.tag}</span>`:cur===x.id?"<span>✓</span>":""}</div></button>`).join("")}</div></div>`}
+const SKIN_OPENS={halloween:"Oct 1",thanks:"Nov 1",xmas:"Dec 1",newyear:"Dec 31"};
+function skinPanel(){const cur=curSkin();
+  SKINS.forEach(x=>{if(x.f&&x.id!==cur&&(!x.season||x.season()))loadSkinFont(x.id)});
+  return `<div class="panel" id="skinp"><h2>App design</h2><p class="savenote" style="margin-top:0">Changes the whole look of the app on this phone. Holiday designs unlock during their month. Badges and ranks always look the same.</p>
+   <div class="skins">${SKINS.map(x=>{const open=!x.season||x.season();return `<button class="skopt ${cur===x.id?"on":""} ${open?"":"skoff"}" data-skin="${x.id}" aria-pressed="${cur===x.id}" ${open?"":"disabled"}>
+    <div class="skprev" style="background:${x.bg}"><b style="font-family:${x.font},sans-serif;color:${x.fg}${x.small?";font-size:14px":""}">${esc(x.word)}</b>
+     <span style="background:${x.panel};border:1px solid ${x.line}"></span><span style="background:${x.acc}"></span>${open?"":`<em class="sklock">🔒 Opens ${SKIN_OPENS[x.id]}</em>`}</div>
+    <div class="skl">${esc(x.name)}${cur===x.id?"<span>✓</span>":x.tag&&open?`<span class="sktag">${esc(x.tag)}</span>`:""}</div></button>`}).join("")}</div></div>`}
 function bindSkins(){document.querySelectorAll("#skinp [data-skin]").forEach(b=>b.onclick=()=>{const y=window.scrollY;setSkin(b.dataset.skin);window.scrollTo(0,y)})}
+/* ---------- holiday celebration: once per account per holiday, on the day (or the day after) ---------- */
+function thanksgivingDate(y){const d=new Date(y,10,1);const first=(4-d.getDay()+7)%7+1;return new Date(y,10,first+21)}
+function todaysHoliday(){const d=nowD(),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
+  if((m===12&&day===31)||(m===1&&day<=2))return {id:"newyear",key:"newyear-"+(m===12?y+1:y),title:"Happy New Year",emoji:["🎆","🎉","✨","🥂"],fx:"fireworks"};
+  if(m===10&&day===31||(m===11&&day===1))return {id:"halloween",key:"halloween-"+y,title:"Happy Halloween",emoji:["🎃","🦇","👻","🍬"],fx:"rain"};
+  const t=thanksgivingDate(y);if(m===11&&(day===t.getDate()||day===t.getDate()+1))return {id:"thanks",key:"thanks-"+y,title:"Happy Thanksgiving",emoji:["🦃","🍂","🥧","🍁"],fx:"rain"};
+  if(m===12&&(day===24||day===25||day===26))return {id:"xmas",key:"xmas-"+y,title:"Merry Christmas",emoji:["🎄","🎁","❄️","⭐"],fx:"rain"};
+  return null}
+function checkHoliday(force){const h=force||todaysHoliday();if(!h||!uid&&!force)return;plan.holidaySeen=plan.holidaySeen||{};if(!force&&plan.holidaySeen[h.key])return;
+  plan.holidaySeen[h.key]=Date.now();if(!force)savePlan();showHoliday(h)}
+function showHoliday(h){if($("#holi"))return;const name=((window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"").split(" ")[0];
+  const el=document.createElement("div");el.id="holi";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","holi-t");
+  const canSkin=SKINS.some(x=>x.id===h.id&&(!x.season||x.season()))&&curSkin()!==h.id;
+  el.innerHTML=`<canvas aria-hidden="true"></canvas><div class="holicard"><div class="holiem" aria-hidden="true">${h.emoji[0]}</div><h3 id="holi-t"><span>${esc(h.title)}</span>${name?`<span>, ${esc(name)}</span>`:""}!</h3>
+   <p>${h.id==="newyear"?"New year, new PRs. Let's make this one count.":h.id==="xmas"?"Enjoy the holidays. Your streak will be here when you're back.":h.id==="thanks"?"Thankful for every rep. Enjoy the feast.":"No tricks today, just treats and gains."}</p>
+   <div class="btns">${canSkin?`<button class="btn primary" id="holiskin" style="flex:1">Try the ${esc(SKINS.find(x=>x.id===h.id).name)} design</button>`:""}<button class="btn ${canSkin?"":"primary"}" id="holiok" style="flex:1">${canSkin?"Not now":"Let's go"}</button></div></div>`;
+  document.body.appendChild(el);const cv=el.querySelector("canvas"),g=cv.getContext("2d");let W,H,run=true,parts=[],t0=performance.now();
+  const size=()=>{W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio};size();addEventListener("resize",size);
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const burst=()=>{const x=W*(.15+Math.random()*.7),y=H*(.12+Math.random()*.35),hue=[45,0,200,280,130][Math.floor(Math.random()*5)];
+    for(let i=0;i<70;i++){const a=Math.random()*Math.PI*2,v=(2+Math.random()*4)*devicePixelRatio;parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,c:`hsl(${hue+Math.random()*30},95%,${60+Math.random()*20}%)`,r:2*devicePixelRatio})}};
+  const drop=()=>{for(let i=0;i<3;i++)parts.push({x:Math.random()*W,y:-30,vx:(Math.random()-.5)*1.2,vy:(1.5+Math.random()*2.5)*devicePixelRatio,life:1,e:h.emoji[Math.floor(Math.random()*h.emoji.length)],rot:Math.random()*6,vr:(Math.random()-.5)*.08,s:(22+Math.random()*18)*devicePixelRatio})};
+  let last=0;const tick=now=>{if(!run)return;const el2=now-t0;g.clearRect(0,0,W,H);
+    if(!reduce&&el2<7000){if(h.fx==="fireworks"&&now-last>450){burst();last=now}else if(h.fx!=="fireworks"&&now-last>120){drop();last=now}}
+    parts=parts.filter(p=>p.life>0&&p.y<H+60);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;
+      if(p.e){p.rot+=p.vr;g.save();g.translate(p.x,p.y);g.rotate(p.rot);g.font=`${p.s}px serif`;g.fillText(p.e,0,0);g.restore()}
+      else{p.vy+=.05*devicePixelRatio;p.vx*=.985;p.life-=.012;g.globalAlpha=Math.max(0,p.life);g.fillStyle=p.c;g.beginPath();g.arc(p.x,p.y,p.r,0,7);g.fill();g.globalAlpha=1}});
+    requestAnimationFrame(tick)};requestAnimationFrame(tick);
+  const close=()=>{run=false;removeEventListener("resize",size);el.remove()};
+  $("#holiok").onclick=close;const hs=$("#holiskin");if(hs)hs.onclick=()=>{close();setSkin(h.id)};$("#holiok").focus()}
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}
@@ -3497,7 +3596,7 @@ render();
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000);setTimeout(()=>{if(!$("#celeb")&&!state.needsStart)checkHoliday()},2600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account
