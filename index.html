@@ -6,7 +6,7 @@
 <title>LiftLog</title>
 <meta name="description" content="Workout log for lifters and their gym partners.">
 <script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700",valentine:"Dancing+Script:wght@700",tet:"Playfair+Display:wght@800"};
-var d=new Date(),m=d.getMonth()+1,day=d.getDate(),T={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"}[d.getFullYear()],td=T?new Date(d.getFullYear(),+T.slice(0,2)-1,+T.slice(3)):null,dd=td?(d-td)/864e5:99,S={halloween:m===10||(m===11&&day<=3),thanks:m===11,xmas:m===12&&day<=30,newyear:m===1||(m===12&&day===31),valentine:m===2,tet:dd>=-15&&dd<=15};
+var d=new Date(),m=d.getMonth()+1,day=d.getDate(),T={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"}[d.getFullYear()],td=T?new Date(d.getFullYear(),+T.slice(0,2)-1,+T.slice(3)):null,dd=td?(d-td)/864e5:99,TM=td?td.getMonth()+1:0,S={halloween:m===10,thanks:m===11,xmas:m===12,newyear:m===1,valentine:m===2,tet:!!td&&(m===TM||(dd>=0&&dd<=7))};
 if(k in S&&!S[k])k="";if(k&&!F[k])k="";
 if(k){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
 <meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
@@ -3455,7 +3455,7 @@ function bindExQueue(){const S=state.stats;if(!S)return;
 /* ---------- app design picker ---------- */
 const TET_DAYS={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"};
 function tetDate(y){const t=TET_DAYS[y];return t?new Date(y,+t.slice(0,2)-1,+t.slice(3)):null}
-const SKIN_SEASON={valentine:d=>d.getMonth()+1===2,tet:d=>{const t=tetDate(d.getFullYear());if(!t)return false;const x=(new Date(d.getFullYear(),d.getMonth(),d.getDate())-t)/864e5;return x>=-15&&x<=15},halloween:d=>{const m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=3)},thanks:d=>d.getMonth()+1===11,xmas:d=>d.getMonth()+1===12&&d.getDate()<=30,newyear:d=>{const m=d.getMonth()+1;return m===1||(m===12&&d.getDate()===31)}};
+const SKIN_SEASON={valentine:d=>d.getMonth()+1===2,tet:d=>{const t=tetDate(d.getFullYear());if(!t)return false;const x=(new Date(d.getFullYear(),d.getMonth(),d.getDate())-t)/864e5;return d.getMonth()===t.getMonth()||(x>=0&&x<=7)},halloween:d=>d.getMonth()+1===10,thanks:d=>d.getMonth()+1===11,xmas:d=>d.getMonth()+1===12,newyear:d=>d.getMonth()+1===1};
 const SKINS=[
  {id:"",name:"Classic",bg:"#0F1114",panel:"#191C20",line:"#2C3138",fg:"#ECEEF0",acc:"#E5484D",font:"'Barlow Condensed'",word:"WORKOUT"},
  {id:"halloween",name:"Halloween",tag:"October",bg:"linear-gradient(160deg,#3B1D52,#120B18 60%)",panel:"#1C1326",line:"#4A3360",fg:"#FFB46B",acc:"#FF7A1A",font:"Creepster",f:"Creepster",word:"BOO! 🎃"},
@@ -3487,7 +3487,8 @@ function curSkin(){return document.documentElement.getAttribute("data-skin")||""
 function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
 function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");skinFx();
   const bg=getComputedStyle(document.body).backgroundColor;document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{if(k)m.setAttribute("content",getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||bg)});render()}
-const SKIN_OPENS={halloween:"Oct 1",thanks:"Nov 1",xmas:"Dec 1",newyear:"Dec 31",valentine:"Feb 1",tet:"2 weeks before Tết"};
+const SKIN_OPENS=(()=>{const n=nowD(),y=n.getFullYear();let t=tetDate(y);if(!t||n>new Date(t.getFullYear(),t.getMonth()+1,8))t=tetDate(y+1);const M=n=>new Date(2024,n-1,1).toLocaleDateString(LOC,{month:"short",day:"numeric"});
+  return {halloween:M(10),thanks:M(11),xmas:M(12),newyear:M(1),valentine:M(2),tet:t?M(t.getMonth()+1):M(1)}})();
 function skinPanel(){const cur=curSkin();
   SKINS.forEach(x=>{if(x.f&&x.id!==cur&&(!x.season||x.season()))loadSkinFont(x.id)});
   return `<div class="panel" id="skinp"><h2>App design</h2><p class="savenote" style="margin-top:0">Changes the whole look of the app on this phone. Holiday designs unlock during their month. Badges and ranks always look the same.</p>
