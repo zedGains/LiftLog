@@ -262,7 +262,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
 .skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
 .med{width:60px;height:67px;margin:0 auto 4px;position:relative;flex:none}.med>svg{width:100%;height:100%;display:block;overflow:visible}
-.med .mnum{font-family:var(--display);paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.5px}.med.locked .mnum{stroke:none;opacity:.75}
+.med .mnum{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.5px}.med.locked .mnum{stroke:none;opacity:.75}
 .med.sm{width:44px;height:49px;margin:0}.med.big{width:124px;height:139px}
 .mshine{animation:mshine 3.6s ease-in-out infinite}@keyframes mshine{0%,55%{transform:translateX(0)}100%{transform:translateX(160px)}}
 .mspark{animation:mspark 1.8s ease-in-out infinite;transform-origin:50% 46%}@keyframes mspark{0%,100%{opacity:.2}50%{opacity:1}}
@@ -374,7 +374,7 @@ html:root[data-skin="notebook"] .tabs{background:#FFFDF7;border-top:1.5px dashed
 .lvl{display:flex;gap:14px;align-items:center}
 .lvring{--p:0;width:74px;height:74px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--surface-2) 0);display:grid;place-items:center;flex:none}
 .lvring>div{width:60px;height:60px;border-radius:50%;background:var(--surface);display:grid;place-items:center;align-content:center;text-align:center}
-.lvring b{font:800 26px/1 var(--display)}.lvring small{font:700 9px var(--display);letter-spacing:.1em;color:var(--muted);display:block}
+.lvring b{font:800 26px/1 "Barlow Condensed","Arial Narrow",Arial,sans-serif}.lvring small{font:700 9px var(--display);letter-spacing:.1em;color:var(--muted);display:block}
 .lt{flex:1;min-width:0}.lt>b{font:800 22px/1.1 var(--display);text-transform:uppercase}.lt p{margin:2px 0 6px;color:var(--muted);font-size:13.5px}
 .lvl .bar,.nextb .bar,.bpop .bar,.cpop .bar{display:block;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden}.lvl .bar i,.nextb .bar i,.bpop .bar i,.cpop .bar i{display:block;height:100%;background:var(--green);border-radius:99px}
 .recent{display:flex;gap:6px;margin-top:14px}
@@ -3087,7 +3087,7 @@ function rankFrame(r,o,cls){o=o||{};const id="rf"+(++rfN),i=r.i||0,P=RANKS[i]||R
   const gemTop=i>=2?`<path d="M${cx} ${cy-R-(i>=4?9+i*1.5:5+i)}l3.2 4-3.2 4-3.2-4z" fill="#fff" opacity=".9"/>`:"";
   const pips=r.div?["III","II","I"].indexOf(r.div)+1:0;
   const pipS=Array.from({length:pips},(_,k)=>`<path d="M${cx+(k-(pips-1)/2)*8} ${cy+R+3}l3 3.5-3 3.5-3-3.5z" fill="#fff" stroke="${c1}" stroke-width=".8"/>`).join("");
-  const inner=o.img?`<clipPath id="${id}c"><circle cx="${cx}" cy="${cy}" r="${R-4}"/></clipPath><image href="${esc(o.img)}" x="${cx-R+4}" y="${cy-R+4}" width="${2*R-8}" height="${2*R-8}" clip-path="url(#${id}c)" preserveAspectRatio="xMidYMid slice"/>`:o.ini!=null?`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="${o.ini.length>1?21:24}" font-weight="800" fill="#fff" style="font-family:var(--display)">${esc(o.ini)}</text>`
+  const inner=o.img?`<clipPath id="${id}c"><circle cx="${cx}" cy="${cy}" r="${R-4}"/></clipPath><image href="${esc(o.img)}" x="${cx-R+4}" y="${cy-R+4}" width="${2*R-8}" height="${2*R-8}" clip-path="url(#${id}c)" preserveAspectRatio="xMidYMid slice"/>`:o.ini!=null?`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><text x="${cx}" y="${cy+8}" text-anchor="middle" font-size="${o.ini.length>1?21:24}" font-weight="800" fill="#fff" style="font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif">${esc(o.ini)}</text>`
     :`<circle cx="${cx}" cy="${cy}" r="${R-5}" fill="url(#${id}d)"/><path d="M${cx} ${cy-14}L${cx+11} ${cy-2}L${cx} ${cy+15}L${cx-11} ${cy-2}z" fill="url(#${id}g)" stroke="#fff" stroke-opacity=".7" stroke-width="1.5"/><path d="M${cx-11} ${cy-2}H${cx+11}M${cx} ${cy-14}V${cy+15}" stroke="#fff" stroke-opacity=".35" stroke-width="1"/>`;
   return `<svg class="rframe ${cls||""}" viewBox="0 -8 120 124" role="img" aria-label="${esc(r.full||P[0])}"><defs>
    <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c2}"/><stop offset="1" stop-color="${c1}"/></linearGradient>
