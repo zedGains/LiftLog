@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LiftLog</title>
 <meta name="description" content="Workout log for lifters and their gym partners.">
+<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",notebook:"Permanent+Marker"};
+var d=new Date(),m=d.getMonth()+1,day=d.getDate();if(k==="halloween"&&!((m===10)||(m===11&&day<=10)))k="";
+if(k&&F[k]){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
 <meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F1114" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
@@ -290,6 +293,78 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .pchelm{position:relative;z-index:1;flex:none;opacity:.95}.pchelm .helm.md{width:58px;height:60px;margin:0}
 @media (max-width:360px){.pchelm{display:none}}
 .exq{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}.exq small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
+/* ---------- app designs ("skins"): whole-app looks, chosen in Settings ---------- */
+.skinfx{display:none}
+/* Halloween */
+html:root[data-skin="halloween"]{--bg:#120B18;--surface:#1C1326;--surface-2:#271A33;--fg:#F4EADB;--muted:#A994B8;--line:#3A2A4A;--map-base:#2A1D36;--map-muscle:#4A3360;
+  --red:#FF7A1A;--blue:#9B6BFF;--yellow:#FFB703;--green:#7BD94F;--purple:#B07CFF;--orange:#FF7A1A;--on-yellow:#2A1500;--ok:#7BD94F;--ok-soft:#1E2E17;--warn-soft:#3A2410;--accent-soft:#3A2010;
+  --display:"Creepster","Barlow Condensed",cursive;color-scheme:dark}
+html:root[data-skin="halloween"] body{background:radial-gradient(1200px 500px at 50% -10%,#3B1D52 0%,transparent 60%),radial-gradient(900px 400px at 50% 110%,#2B1406 0%,transparent 60%),var(--bg);background-attachment:fixed}
+html:root[data-skin="halloween"] .dayhead{background:linear-gradient(#120B18 70%,rgba(18,11,24,0))}
+html:root[data-skin="halloween"] .panel{position:relative;border-color:#4A3360;box-shadow:0 0 0 1px rgba(255,122,26,.06),0 10px 30px rgba(0,0,0,.35)}
+html:root[data-skin="halloween"] .panel::before{content:"";position:absolute;top:0;right:0;width:64px;height:64px;pointer-events:none;opacity:.32;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='none' stroke='%23d9c8ea' stroke-width='1'%3E%3Cpath d='M64 0L20 44M64 0L36 58M64 0L6 30M64 0L52 64M64 0L0 14'/%3E%3Cpath d='M56 0Q58 6 64 8M44 0Q48 14 64 20M30 0Q38 24 64 34M18 0Q28 34 64 48'/%3E%3C/svg%3E") no-repeat top right}
+html:root[data-skin="halloween"] h1,html:root[data-skin="halloween"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.04em}
+html:root[data-skin="halloween"] .panel h2{color:#FFB46B}
+html:root[data-skin="halloween"] .btn.primary{box-shadow:0 0 18px rgba(255,122,26,.35)}
+html:root[data-skin="halloween"] .tabs{background:#170E20;border-top-color:#3A2A4A}
+html:root[data-skin="halloween"] .tab[aria-selected="true"]::after{height:4px;background:linear-gradient(90deg,#FF7A1A,#FFB703);box-shadow:0 0 10px #FF7A1A}
+html:root[data-skin="halloween"] .dayhead h1::after{content:" 🎃";font-size:.55em;vertical-align:.35em}
+html:root[data-skin="halloween"] .skinfx{display:block;position:fixed;inset:0 0 auto 0;height:180px;pointer-events:none;z-index:4;overflow:hidden}
+.skinfx i{position:absolute;top:30px;left:-60px;width:34px;height:16px;opacity:.55;animation:bat 16s linear infinite;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 32'%3E%3Cpath fill='%23000' d='M34 10c-2-4-1-8 0-9 1 1 2 1 2 0 1 1 2 5 0 9 6-6 18-8 32-2-6 1-10 5-11 10-3-3-7-3-9 1-3-3-7-2-9 2-2-3-3-5-5-5s-3 2-5 5c-2-4-6-5-9-2-2-4-6-4-9-1C10 13 6 9 0 8c14-6 26-4 34 2z'/%3E%3C/svg%3E") center/contain no-repeat}
+.skinfx i:nth-child(2){top:80px;width:24px;height:12px;animation-duration:22s;animation-delay:-7s}
+.skinfx i:nth-child(3){top:120px;width:18px;height:9px;animation-duration:27s;animation-delay:-15s}
+@keyframes bat{0%{transform:translate(0,0) scaleY(1)}10%{transform:translate(12vw,-10px) scaleY(.6)}20%{transform:translate(24vw,8px) scaleY(1)}50%{transform:translate(60vw,-14px) scaleY(.6)}100%{transform:translate(125vw,6px) scaleY(1)}}
+/* Neon */
+html:root[data-skin="neon"]{--bg:#05060F;--surface:#0A0F24;--surface-2:#111836;--fg:#E8F4FF;--muted:#7D8BB5;--line:#1F2B5C;--map-base:#141C3D;--map-muscle:#26335F;
+  --red:#FF2E88;--blue:#2EC5FF;--yellow:#F5FF3B;--green:#2BFFA8;--purple:#B14BFF;--orange:#FF8A3D;--on-yellow:#1A1B00;--ok:#2BFFA8;--ok-soft:#08291E;--warn-soft:#2A2A08;--accent-soft:#2A0A1C;
+  --display:"Orbitron","Barlow Condensed",sans-serif;color-scheme:dark}
+html:root[data-skin="neon"] body{background:linear-gradient(rgba(46,197,255,.06) 1px,transparent 1px) 0 0/100% 32px,linear-gradient(90deg,rgba(46,197,255,.06) 1px,transparent 1px) 0 0/32px 100%,radial-gradient(800px 400px at 50% 0,#1A0B3A,transparent 70%),var(--bg);background-attachment:fixed}
+html:root[data-skin="neon"] .dayhead{background:rgba(5,6,15,.92);backdrop-filter:blur(6px)}
+html:root[data-skin="neon"] .panel{border:1px solid rgba(46,197,255,.45);box-shadow:0 0 0 1px rgba(46,197,255,.12),0 0 22px rgba(46,197,255,.12),inset 0 0 24px rgba(177,75,255,.06);border-radius:4px}
+html:root[data-skin="neon"] h1,html:root[data-skin="neon"] .panel h2{font-family:var(--display);font-weight:800;letter-spacing:.08em;text-shadow:0 0 12px var(--accent)}
+html:root[data-skin="neon"] .panel h2{color:#9FE7FF;text-shadow:0 0 10px rgba(46,197,255,.8);font-size:15px}
+html:root[data-skin="neon"] .btn{border-radius:3px}
+html:root[data-skin="neon"] .btn.primary{background:transparent;color:var(--accent);border:2px solid var(--accent);box-shadow:0 0 14px var(--accent),inset 0 0 10px var(--accent)}
+html:root[data-skin="neon"] .card{border-radius:4px;border-color:rgba(46,197,255,.3)}
+html:root[data-skin="neon"] .tabs{background:#060818;border-top:1px solid rgba(46,197,255,.5);box-shadow:0 -6px 24px rgba(46,197,255,.12)}
+html:root[data-skin="neon"] .tab[aria-selected="true"]::after{box-shadow:0 0 12px var(--tc)}
+/* Iron gym */
+html:root[data-skin="iron"]{--bg:#141414;--surface:#1F1F1F;--surface-2:#2A2A2A;--fg:#F1EFEA;--muted:#A3A09A;--line:#3A3A3A;--map-base:#2B2B2B;--map-muscle:#444;
+  --red:#E03A2F;--blue:#3B82C4;--yellow:#F5C518;--green:#58A55C;--purple:#8B6CC9;--orange:#E07B2F;--on-yellow:#1A1500;--ok:#58A55C;--ok-soft:#1C2A1D;--warn-soft:#3A3010;--accent-soft:#3A1A17;
+  --display:"Black Ops One","Barlow Condensed",sans-serif;color-scheme:dark}
+html:root[data-skin="iron"] body{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cg fill='%23ffffff' fill-opacity='.045'%3E%3Cpath d='M3 9l6-6 2 2-6 6zM17 23l6-6 2 2-6 6z'/%3E%3Cpath d='M17 5l6 6-2 2-6-6zM3 19l6 6-2 2-6-6z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(#181818,#101010);background-attachment:fixed}
+html:root[data-skin="iron"] .panel{border:2px solid #3A3A3A;border-radius:6px;background:linear-gradient(180deg,#262626,#1B1B1B);position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 6px 18px rgba(0,0,0,.4)}
+html:root[data-skin="iron"] .panel::after{content:"";position:absolute;inset:6px;pointer-events:none;
+  background:radial-gradient(circle,#5a5a5a 0 2px,#222 2.5px,transparent 3px) top left/12px 12px no-repeat,radial-gradient(circle,#5a5a5a 0 2px,#222 2.5px,transparent 3px) top right/12px 12px no-repeat,radial-gradient(circle,#5a5a5a 0 2px,#222 2.5px,transparent 3px) bottom left/12px 12px no-repeat,radial-gradient(circle,#5a5a5a 0 2px,#222 2.5px,transparent 3px) bottom right/12px 12px no-repeat}
+html:root[data-skin="iron"] h1,html:root[data-skin="iron"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.03em}
+html:root[data-skin="iron"] .panel h2{color:#F5C518}
+html:root[data-skin="iron"] .btn{border-radius:4px}
+html:root[data-skin="iron"] .btn.primary{background:repeating-linear-gradient(-45deg,var(--accent) 0 14px,color-mix(in srgb,var(--accent) 82%,#000) 14px 28px);text-shadow:0 1px 0 rgba(0,0,0,.4)}
+html:root[data-skin="iron"] .dayhead{background:#141414;border-bottom:3px solid transparent;border-image:repeating-linear-gradient(-45deg,#F5C518 0 10px,#141414 10px 20px) 3}
+html:root[data-skin="iron"] .tabs{background:linear-gradient(#262626,#1A1A1A);border-top:2px solid #3A3A3A}
+/* Notebook (light) */
+html:root[data-skin="notebook"]{--bg:#F6F1E6;--surface:#FFFDF7;--surface-2:#F2ECDD;--fg:#26313D;--muted:#6E7680;--line:#DCD3C0;--map-base:#E8E0CE;--map-muscle:#CFC4AC;
+  --red:#D1495B;--blue:#2F6CB3;--yellow:#E0A100;--green:#2E8B57;--purple:#7353BA;--orange:#D9731F;--on-yellow:#1A1400;--ok:#2E8B57;--ok-soft:#E1F1E6;--warn-soft:#FBEFC8;--accent-soft:#F8E0E3;
+  --display:"Permanent Marker","Barlow Condensed",cursive;color-scheme:light}
+html:root[data-skin="notebook"] body{background:linear-gradient(90deg,transparent 38px,rgba(209,73,91,.25) 38px 40px,transparent 40px),repeating-linear-gradient(transparent 0 27px,rgba(47,108,179,.13) 27px 28px),var(--bg);background-attachment:fixed}
+html:root[data-skin="notebook"] .dayhead{background:var(--bg)}
+html:root[data-skin="notebook"] .panel{border:1.5px solid #CFC4AC;border-radius:3px;box-shadow:3px 4px 0 rgba(38,49,61,.08);transform:rotate(-.15deg)}
+html:root[data-skin="notebook"] .panel:nth-child(even){transform:rotate(.15deg)}
+html:root[data-skin="notebook"] h1,html:root[data-skin="notebook"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.02em;text-transform:none}
+html:root[data-skin="notebook"] .btn.primary{box-shadow:2px 3px 0 rgba(38,49,61,.18)}
+html:root[data-skin="notebook"] .tabs{background:#FFFDF7;border-top:1.5px dashed #CFC4AC}
+@media (prefers-reduced-motion:reduce){.skinfx i{animation:none;display:none}}
+/* design picker */
+.skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
+.skopt{all:unset;box-sizing:border-box;cursor:pointer;border:2px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.skopt.on{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.skprev{height:74px;position:relative;padding:10px;display:flex;flex-direction:column;gap:6px}
+.skprev b{font-size:20px;line-height:1}.skprev span{display:block;height:14px;border-radius:4px}.skprev span+span{width:62%}
+.skopt>.skl{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:8px 10px;font-weight:700;font-size:13.5px;background:var(--surface)}
+.sktag{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:#FF7A1A;color:#2A1500}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -592,6 +667,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 
 <div class="app" id="app"></div>
 <button class="pill" id="pill" hidden></button>
+<div class="skinfx" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="tabs"><nav role="tablist" id="tabs"></nav></div>
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title"></section>
@@ -1598,6 +1674,7 @@ function settingsView(){
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
+   ${skinPanel()}
    ${langPanel()}
    ${avatarPanel()}
    ${trainerPanel()}
@@ -1658,7 +1735,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindSkins();const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -3293,6 +3370,25 @@ function bindExQueue(){const S=state.stats;if(!S)return;
     .then(()=>{S.exq=S.exq.filter(x=>String(x.id)!==String(id));if(ok)loadLibExtra();render();toast(ok?"Added to everyone's list":"Suggestion rejected")}).catch(()=>toast("Couldn't update. Try again."));
   document.querySelectorAll("[data-exok]").forEach(b=>b.onclick=()=>act(b.dataset.exok,true));
   document.querySelectorAll("[data-exno]").forEach(b=>armBtn(b,"Tap again",()=>act(b.dataset.exno,false)))}
+/* ---------- app design picker ---------- */
+const SKINS=[
+ {id:"",name:"Classic",bg:"#0F1114",panel:"#191C20",line:"#2C3138",fg:"#ECEEF0",acc:"#E5484D",font:"'Barlow Condensed'"},
+ {id:"halloween",name:"Halloween",tag:"Limited",bg:"linear-gradient(160deg,#3B1D52,#120B18 60%)",panel:"#1C1326",line:"#4A3360",fg:"#FFB46B",acc:"#FF7A1A",font:"Creepster",f:"Creepster",season:()=>{const d=nowD(),m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=10)}},
+ {id:"neon",name:"Neon",bg:"#05060F",panel:"#0A0F24",line:"#2EC5FF",fg:"#9FE7FF",acc:"#FF2E88",font:"Orbitron",f:"Orbitron:wght@700;800"},
+ {id:"iron",name:"Iron Gym",bg:"#141414",panel:"#262626",line:"#F5C518",fg:"#F5C518",acc:"#E03A2F",font:"'Black Ops One'",f:"Black+Ops+One"},
+ {id:"notebook",name:"Notebook",bg:"#F6F1E6",panel:"#FFFDF7",line:"#CFC4AC",fg:"#26313D",acc:"#D1495B",font:"'Permanent Marker'",f:"Permanent+Marker"}];
+function curSkin(){return document.documentElement.getAttribute("data-skin")||""}
+function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
+function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");
+  const bg=getComputedStyle(document.body).backgroundColor;document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{if(k)m.setAttribute("content",getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||bg)});render()}
+function skinPanel(){const cur=curSkin(),list=SKINS.filter(x=>!x.season||x.season()||cur===x.id);
+  SKINS.forEach(x=>{if(x.f&&x.id!==cur)loadSkinFont(x.id)});
+  return `<div class="panel" id="skinp"><h2>App design</h2><p class="savenote" style="margin-top:0">Changes the whole look of the app on this phone. Seasonal designs show up for a limited time.</p>
+   <div class="skins">${list.map(x=>`<button class="skopt ${cur===x.id?"on":""}" data-skin="${x.id}" aria-pressed="${cur===x.id}">
+    <div class="skprev" style="background:${x.bg}"><b style="font-family:${x.font},sans-serif;color:${x.fg}">${x.id==="halloween"?"BOO! 🎃":x.id==="neon"?"PLAYER 1":x.id==="iron"?"LIFT HEAVY":x.id==="notebook"?"Leg day":"WORKOUT"}</b>
+     <span style="background:${x.panel};border:1px solid ${x.line}"></span><span style="background:${x.acc}"></span></div>
+    <div class="skl">${esc(x.name)}${x.tag?`<span class="sktag">${x.tag}</span>`:cur===x.id?"<span>✓</span>":""}</div></button>`).join("")}</div></div>`}
+function bindSkins(){document.querySelectorAll("#skinp [data-skin]").forEach(b=>b.onclick=()=>{const y=window.scrollY;setSkin(b.dataset.skin);window.scrollTo(0,y)})}
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}
