@@ -20,6 +20,7 @@ Installable on a phone's home screen.
 | `supabase/referrals.sql` | Invite links: one code per person, friends count after their first full week |
 | `supabase/avatars.sql` | Profile pictures: initials, warrior helm, or own photo inside the rank border |
 | `supabase/friends.sql` | Friends: requests, friends-only board, programs shared with friends (paid programs never shared) |
+| `supabase/exercises.sql` | Custom exercises (you + friends), suggestions queue, owner-approved shared library |
 | `supabase/stats.sql` | Owner dashboard + creator stats functions (counts only) |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen install |
 | `privacy.html`, `terms.html` | Privacy Policy and Terms of Use |
