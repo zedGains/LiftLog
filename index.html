@@ -280,6 +280,15 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .cropbox{position:relative;width:min(260px,72vw);aspect-ratio:1;margin:8px auto 14px}.cropbox canvas{width:100%;height:100%;display:block;border-radius:50%;touch-action:none;cursor:grab;background:#000}.cropbox canvas:active{cursor:grabbing}.cropring{position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--accent);pointer-events:none;box-shadow:0 0 0 6px var(--surface-2)}.cropctl{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--muted)}.cropctl input{flex:1;accent-color:var(--accent)}
 .panel h2 .fradd,#frpanel h2 .fradd{margin-left:auto;font:700 13px var(--body);text-transform:none;letter-spacing:0;padding:6px 12px}.frrow .btn.primary{flex:none}#frpanel h2{display:flex;align-items:center}.frrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.frrow:last-child{border-bottom:0}.frmain{all:unset;box-sizing:border-box;cursor:pointer;flex:1;min-width:0;display:flex;align-items:center;gap:10px}.frmain>span:last-child{min-width:0}.frmain b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.frmain small{display:block;color:var(--muted);font-size:12.5px}
 .shareimg{display:block;width:100%;max-width:340px;margin:8px auto;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.35)}.hhead{display:flex;align-items:center;justify-content:space-between}.hhead .btn{font:700 13px var(--body);text-transform:none;letter-spacing:0}
+.pcwrap{margin:6px 0 4px}.pcwrap .linkbtn{display:block;margin:8px 0 0 auto;font-size:13.5px}.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.pcardb{position:relative;overflow:hidden;display:flex;align-items:center;gap:12px;padding:16px 14px;border-radius:16px;background:linear-gradient(120deg,color-mix(in srgb,var(--c1) 55%,#0b0e13) 0%,#12161d 70%);border:1px solid color-mix(in srgb,var(--c2) 45%,transparent);color:#fff;min-height:118px}
+.pcglow{position:absolute;inset:-40% 40% -40% -20%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c2) 45%,transparent),transparent);pointer-events:none}
+.pcardb::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 22px);pointer-events:none}
+.pcav{position:relative;z-index:1;flex:none}.pcav .rframe.av,.pcav .helm.av{width:92px;height:96px;margin:-8px -4px}
+.pctxt{position:relative;z-index:1;flex:1;min-width:0}.pcname{font:800 24px/1.05 var(--display);text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcrank{font:800 15px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--c2);margin-top:2px}
+.pcstats{display:flex;gap:14px;margin-top:8px}.pcstats span{font-size:11px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.05em}.pcstats b{display:block;font:800 19px var(--display);color:#fff;letter-spacing:0}
+.pchelm{position:relative;z-index:1;flex:none;opacity:.95}.pchelm .helm.md{width:58px;height:60px;margin:0}
+@media (max-width:360px){.pchelm{display:none}}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -3046,7 +3055,7 @@ function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine
     .sort((a,b)=>RPTS[b.tier]-RPTS[a.tier]);
   const L=mine?badgeState().L:null;
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="prclose">Close</button><span class="eyebrow">Profile</span></div>
-   <div class="tprof"><div class="thead">${c?(mine&&state.mode==="db"?`<button class="avedit" id="avedit" aria-label="Change profile picture">${avatarFor(uid,name,r,"av")}<span>✎</span></button>`:avatarFor(mine?uid:id,name,r,"av")):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`}<div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
+   <div class="tprof">${c?`<div class="pcwrap">${playerCard(mine?uid:id,name,r,{card:c})}${mine&&state.mode==="db"?`<button class="linkbtn" id="avedit">Change picture</button>`:""}</div><h3 id="sheet-title" class="vh">${esc(name)}</h3>`:`<div class="thead"><div class="tav" aria-hidden="true">${esc(ini)}</div><div><h3 id="sheet-title">${esc(name)}</h3></div></div>`}
    ${c?`<div class="rankbox">${helmEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
      <p>${r.pts} rank points</p>${mine?`<button class="btn small" id="rkshare" style="margin:-2px 0 10px">Share my rank</button>`:""}${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
     <div class="lbl">${list.length} badge${list.length===1?"":"s"}</div>
@@ -3125,10 +3134,17 @@ function openAvatarPick(){const sh=$("#sheet"),me=profCache[uid]||{},name=(windo
      window.LIFTLOG_RPC("set_avatar",{av:mode==="photo"?photo:(me.av||""),mode}).then(()=>{profCache[uid]={...(profCache[uid]||{}),av:mode==="photo"?photo:(me.av||""),am:mode};toast("Profile picture saved");render();if(state.settings)closeSheet();else openProfile(uid)})
       .catch(e=>{b.disabled=false;toast(/function|schema|not find/i.test(String(e&&e.message))?"Run liftlog-update-7 SQL in Supabase first.":"Couldn't save. Try again.")})}};
   state.open="__avatar";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;draw()}
-function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You",r=rankInfo(myCard().pts),am=(profCache[uid]||{}).am||"crest";
-  return `<div class="panel" id="avpanel"><h2>Profile picture</h2><div class="avrow">${avatarFor(uid,name,r,"md")}<span><b>${am==="photo"?"My photo":am==="helm"?"Warrior helm":"Initials"}</b>Upload your own photo or show your rank's warrior helm. Your rank border shows either way.</span></div>
-   <div class="btns"><button class="btn primary" id="avchange2" style="flex:1">Change picture</button></div></div>`}
-function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;needProfiles([uid])}
+function playerCard(id,name,r,o){o=o||{};const P=RANKS[r.i]||RANKS[0],c=o.card||{};
+  return `<div class="pcardb" style="--c1:${P[2]};--c2:${P[3]}"><div class="pcglow"></div>
+   <div class="pcav">${avatarFor(id,name,r,"av")}</div>
+   <div class="pctxt"><div class="pcname">${esc(name)}</div><div class="pcrank">${esc(r.full)}</div>
+    <div class="pcstats"><span><b>${c.lvl||1}</b>Level</span><span><b>${r.pts}</b>Points</span><span><b>${(c.b||[]).length}</b>Badges</span></div></div>
+   <div class="pchelm" aria-hidden="true">${helmEmblem(r,"md")}</div></div>`}
+function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"You",card=myCard(),r=rankInfo(card.pts);
+  return `<div class="panel" id="avpanel"><h2>Your player card</h2><p class="savenote" style="margin-top:0">This is how you show up on the leaderboard and to friends.</p>
+   ${playerCard(uid,name,r,{card})}
+   <div class="btns"><button class="btn" id="avchange2" style="flex:1">Change picture</button><button class="btn" id="avshare2" style="flex:1">Share my rank</button></div></div>`}
+function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;const sr=$("#avshare2");if(sr)sr.onclick=()=>shareCard("rank",{});needProfiles([uid])}
 /* ---------- friends ---------- */
 const fr={list:null,progs:[],at:0,busy:false,err:false};
 function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
