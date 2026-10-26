@@ -657,6 +657,8 @@ svg.map{width:100%;height:auto;display:block}
 .map .m{fill:var(--map-muscle)}
 .map .m.p{fill:var(--accent)}
 .map .m.s{fill:color-mix(in srgb,var(--accent) 45%,var(--map-muscle))}
+.map.skelmap .base{fill:#120B18;stroke:#3A2A4A;stroke-width:1}.map.skelmap .m:not(.p):not(.s){fill:transparent}.map.skelmap .m.p,.map.skelmap .m.s{opacity:.55}
+.map .eyeglow{fill:#FF7A1A;animation:eyeglow 3.2s ease-in-out infinite}@keyframes eyeglow{0%,100%{opacity:.25}50%{opacity:1}}
 .map text{fill:var(--muted);font:600 9px var(--display);letter-spacing:.12em}
 
 /* sheet */
@@ -760,6 +762,35 @@ const DAYS={}; let TPL=null; let BUILTIN=[];
 
 
 /* ---------- body map ---------- */
+/* ---------- seasonal costumes on the muscle map (holiday designs only) ---------- */
+function costumeKey(){const k=typeof curSkin==="function"?curSkin():"";const x=typeof SKINS!=="undefined"&&SKINS.find(s=>s.id===k);return x&&x.season&&x.season()?k:""}
+function costume(k,x,front){
+  const W="#F2EBDD",bone=`stroke="${W}" stroke-linecap="round" fill="none"`;
+  if(k==="halloween"){ // skeleton
+    const ribs=[40,46,52,58,64].map((y,i)=>`<path d="M${x-1} ${y}Q${x-14+i} ${y+1} ${x-16+i*.8} ${y+6}M${x+1} ${y}Q${x+14-i} ${y+1} ${x+16-i*.8} ${y+6}" ${bone} stroke-width="2.2"/>`).join("");
+    const limb=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1}L${x2} ${y2}" ${bone} stroke-width="3"/><circle cx="${x1}" cy="${y1}" r="2.6" fill="${W}"/><circle cx="${x2}" cy="${y2}" r="2.6" fill="${W}"/>`;
+    return {skel:`<g class="skel">
+      <circle cx="${x}" cy="15" r="9.5" fill="${W}"/><path d="M${x-5} 22h10v4h-10z" fill="${W}"/>
+      ${front?`<ellipse cx="${x-3.6}" cy="14" rx="2.8" ry="3.2" fill="#140c18"/><ellipse cx="${x+3.6}" cy="14" rx="2.8" ry="3.2" fill="#140c18"/><path d="M${x} 17l-1.4 2.6h2.8z" fill="#140c18"/><path d="M${x-4} 23v3M${x-1.3} 23v3M${x+1.3} 23v3M${x+4} 23v3" stroke="#140c18" stroke-width=".8"/>
+       <circle class="eyeglow" cx="${x-3.6}" cy="14" r="1.1"/><circle class="eyeglow" cx="${x+3.6}" cy="14" r="1.1"/>`:""}
+      <path d="M${x} 30V86" ${bone} stroke-width="3" stroke-dasharray="3 1.6"/>${ribs}
+      <path d="M${x-12} 84Q${x} 96 ${x+12} 84Q${x} 90 ${x-12} 84z" fill="${W}"/>
+      <path d="M${x-21} 35H${x+21}" ${bone} stroke-width="2.4"/>
+      ${limb(x-23,37,x-27,62)}${limb(x-27,64,x-30,87)}${limb(x+23,37,x+27,62)}${limb(x+27,64,x+30,87)}
+      ${limb(x-9,92,x-10,125)}${limb(x-10,128,x-9,157)}${limb(x+9,92,x+10,125)}${limb(x+10,128,x+9,157)}</g>`,mid:true,cls:"skelmap"}}
+  if(k==="thanks") return {under:front?"":[-78,-52,-26,0,26,52,78].map((a,i)=>`<ellipse cx="${x}" cy="${22}" rx="10" ry="40" transform="rotate(${a} ${x} 74)" fill="${["#7A3317","#C2412D","#E07A2E","#E9A33A","#E07A2E","#C2412D","#7A3317"][i]}" stroke="#3A1A0A" stroke-width=".8"/><ellipse cx="${x}" cy="${-8}" rx="4.5" ry="7" transform="rotate(${a} ${x} 74)" fill="#2A1A10" opacity=".6"/>`).join(""),
+    over:`<path d="M${x-11} 9h22l-2-11h-18z" fill="#1d1d1d"/><rect x="${x-15}" y="8" width="30" height="3.5" rx="1.5" fill="#1d1d1d"/><rect x="${x-4}" y="3" width="8" height="5" fill="none" stroke="#E9A33A" stroke-width="1.6"/>`};
+  if(k==="xmas") return {over:`<path d="M${x-11} 9Q${x-6} -8 ${x+14} 2L${x+11} 9z" fill="#D7261E"/><rect x="${x-12}" y="7.5" width="24" height="4.5" rx="2.2" fill="#fff"/><circle cx="${x+15}" cy="2" r="3.4" fill="#fff"/>
+    <path d="M${x-12} 28Q${x} 33 ${x+12} 28L${x+11} 33Q${x} 37 ${x-11} 33z" fill="#D7261E"/><path d="M${x+6} 32l2 14h5l-3-14z" fill="#D7261E"/><path d="M${x-9} 30.5h3M${x-2} 32.5h3M${x+5} 31.5h3" stroke="#fff" stroke-width="1.6"/>`};
+  if(k==="newyear") return {over:`<path d="M${x-8} 8L${x} -14L${x+8} 8z" fill="#E8B54A"/><path d="M${x-6} 2l11 -4M${x-3} -5l7 -3" stroke="#B48CFF" stroke-width="1.6"/><circle cx="${x}" cy="-15" r="2.6" fill="#FF2E88"/>
+    ${front?`<path d="M${x} 30l-7 -4v8zM${x} 30l7 -4v8z" fill="#111"/><circle cx="${x}" cy="30" r="1.6" fill="#E8B54A"/>`:""}
+    ${[[x-30,20,"#E8B54A"],[x+28,14,"#FF2E88"],[x-27,100,"#4FD1A5"],[x+30,120,"#B48CFF"],[x+24,96,"#E8B54A"]].map(([a,b,c])=>`<rect x="${a}" y="${b}" width="3" height="5" rx=".8" fill="${c}" transform="rotate(30 ${a} ${b})"/>`).join("")}`};
+  if(k==="valentine") return {under:front?"":`<path d="M${x-6} 44C${x-30} 20 ${x-46} 34 ${x-40} 52C${x-48} 56 ${x-42} 70 ${x-30} 64C${x-30} 74 ${x-18} 74 ${x-8} 60z" fill="#FFE3EC" opacity=".85"/><path d="M${x+6} 44C${x+30} 20 ${x+46} 34 ${x+40} 52C${x+48} 56 ${x+42} 70 ${x+30} 64C${x+30} 74 ${x+18} 74 ${x+8} 60z" fill="#FFE3EC" opacity=".85"/>`,
+    over:front?`<path d="M${x+20} 6c-2-3-7-2-7 2 0 4 7 8 7 8s7-4 7-8c0-4-5-5-7-2z" fill="#FF4D7E"/>`:`<ellipse cx="${x}" cy="1" rx="9" ry="2.4" fill="none" stroke="#FFD76A" stroke-width="1.6"/>`};
+  if(k==="tet") return {over:`<path d="M${x-20} 10L${x} -10L${x+20} 10Q${x} 13 ${x-20} 10z" fill="#E9D7A8" stroke="#B8935A" stroke-width=".8"/><path d="M${x-10} 0L${x+10} 0M${x-15} 5L${x+15} 5" stroke="#B8935A" stroke-width=".5"/>
+    ${front?`<g transform="translate(${x+33} 86)"><path d="M0-10v5" stroke="#E8B54A"/><ellipse cy="2" rx="6" ry="7" fill="#D7261E"/><path d="M-2 9v5M2 9v5" stroke="#E8B54A"/></g>`:""}`};
+  return {}}
+
 function bodyMap(primary,secondary,showLabels=true){
   const P=new Set(primary),S=new Set(secondary);
   const c=(g)=>"m"+(P.has(g)?" p":S.has(g)?" s":"");
@@ -767,9 +798,9 @@ function bodyMap(primary,secondary,showLabels=true){
    <path class="base" d="M${x-22} 34 Q${x} 28 ${x+22} 34 L${x+19} 86 Q${x} 92 ${x-19} 86Z"/>
    <path class="base" d="M${x-23} 34 L${x-33} 88 L${x-25} 90 L${x-17} 44Z"/><path class="base" d="M${x+23} 34 L${x+33} 88 L${x+25} 90 L${x+17} 44Z"/>
    <path class="base" d="M${x-18} 86 L${x-14} 160 L${x-4} 160 L${x-1} 92Z"/><path class="base" d="M${x+18} 86 L${x+14} 160 L${x+4} 160 L${x+1} 92Z"/>`;
-  const F=50,B=150;
-  return `<svg class="map" viewBox="0 0 200 178" role="img" aria-label="Muscles worked">
-  ${base(F)}${base(B)}
+  const F=50,B=150,ck=costumeKey(),cf=ck?costume(ck,F,true):{},cb=ck?costume(ck,B,false):{};
+  return `<svg class="map ${cf.cls||""}" viewBox="0 ${ck?-18:0} 200 ${ck?196:178}" role="img" aria-label="Muscles worked">
+  ${cf.under||""}${cb.under||""}${base(F)}${base(B)}${cf.skel||""}${cb.skel||""}
   <ellipse class="${c('shoulders')}" cx="${F-21}" cy="39" rx="7" ry="7"/><ellipse class="${c('shoulders')}" cx="${F+21}" cy="39" rx="7" ry="7"/>
   <ellipse class="${c('chest')}" cx="${F-8}" cy="44" rx="9" ry="7"/><ellipse class="${c('chest')}" cx="${F+8}" cy="44" rx="9" ry="7"/>
   <rect class="${c('abs')}" x="${F-6}" y="54" width="12" height="28" rx="3"/>
@@ -788,6 +819,7 @@ function bodyMap(primary,secondary,showLabels=true){
   <ellipse class="${c('glutes')}" cx="${B-8}" cy="89" rx="8" ry="7.5"/><ellipse class="${c('glutes')}" cx="${B+8}" cy="89" rx="8" ry="7.5"/>
   <ellipse class="${c('hamstrings')}" cx="${B-9}" cy="113" rx="6.5" ry="15"/><ellipse class="${c('hamstrings')}" cx="${B+9}" cy="113" rx="6.5" ry="15"/>
   <ellipse class="${c('calves')}" cx="${B-9}" cy="142" rx="5.5" ry="12"/><ellipse class="${c('calves')}" cx="${B+9}" cy="142" rx="5.5" ry="12"/>
+  ${cf.over||""}${cb.over||""}
   ${showLabels?`<text x="${F}" y="174" text-anchor="middle">FRONT</text><text x="${B}" y="174" text-anchor="middle">BACK</text>`:''}
   </svg>`;
 }
