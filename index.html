@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LiftLog</title>
 <meta name="description" content="Workout log for lifters and their gym partners.">
-<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700"};
-var d=new Date(),m=d.getMonth()+1,day=d.getDate(),S={halloween:m===10||(m===11&&day<=3),thanks:m===11,xmas:m===12&&day<=30,newyear:m===1||(m===12&&day===31)};
+<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700",valentine:"Dancing+Script:wght@700",tet:"Playfair+Display:wght@800"};
+var d=new Date(),m=d.getMonth()+1,day=d.getDate(),T={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"}[d.getFullYear()],td=T?new Date(d.getFullYear(),+T.slice(0,2)-1,+T.slice(3)):null,dd=td?(d-td)/864e5:99,S={halloween:m===10||(m===11&&day<=3),thanks:m===11,xmas:m===12&&day<=30,newyear:m===1||(m===12&&day===31),valentine:m===2,tet:dd>=-15&&dd<=15};
 if(k in S&&!S[k])k="";if(k&&!F[k])k="";
 if(k){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
 <meta name="theme-color" content="#ECEEF1" media="(prefers-color-scheme: light)">
@@ -295,7 +295,6 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 @media (max-width:360px){.pchelm{display:none}}
 .exq{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}.exq small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
 /* ---------- app designs ("skins"): whole-app looks, chosen in Settings ---------- */
-.skinfx{display:none}
 /* Halloween */
 html:root[data-skin="halloween"]{--bg:#120B18;--surface:#1C1326;--surface-2:#271A33;--fg:#F4EADB;--muted:#A994B8;--line:#3A2A4A;--map-base:#2A1D36;--map-muscle:#4A3360;
   --red:#FF7A1A;--blue:#9B6BFF;--yellow:#FFB703;--green:#7BD94F;--purple:#B07CFF;--orange:#FF7A1A;--on-yellow:#2A1500;--ok:#7BD94F;--ok-soft:#1E2E17;--warn-soft:#3A2410;--accent-soft:#3A2010;
@@ -310,14 +309,6 @@ html:root[data-skin="halloween"] .panel h2{color:#FFB46B}
 html:root[data-skin="halloween"] .btn.primary{box-shadow:0 0 18px rgba(255,122,26,.35)}
 html:root[data-skin="halloween"] .tabs{background:#170E20;border-top-color:#3A2A4A}
 html:root[data-skin="halloween"] .tab[aria-selected="true"]::after{height:4px;background:linear-gradient(90deg,#FF7A1A,#FFB703);box-shadow:0 0 10px #FF7A1A}
-html:root[data-skin="halloween"] .dayhead h1::after{content:" 🎃";font-size:.55em;vertical-align:.35em}
-html:root[data-skin="halloween"] .skinfx{display:block;position:fixed;inset:0 0 auto 0;height:180px;pointer-events:none;z-index:4;overflow:hidden}
-.skinfx i{position:absolute;top:30px;left:-60px;width:34px;height:16px;opacity:.55}
-html:root[data-skin="halloween"] .skinfx i{animation:bat 16s linear infinite;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 32'%3E%3Cpath fill='%23000' d='M34 10c-2-4-1-8 0-9 1 1 2 1 2 0 1 1 2 5 0 9 6-6 18-8 32-2-6 1-10 5-11 10-3-3-7-3-9 1-3-3-7-2-9 2-2-3-3-5-5-5s-3 2-5 5c-2-4-6-5-9-2-2-4-6-4-9-1C10 13 6 9 0 8c14-6 26-4 34 2z'/%3E%3C/svg%3E") center/contain no-repeat}
-.skinfx i:nth-child(2){top:80px;width:24px;height:12px;animation-duration:22s;animation-delay:-7s}
-.skinfx i:nth-child(3){top:120px;width:18px;height:9px;animation-duration:27s;animation-delay:-15s}
-@keyframes bat{0%{transform:translate(0,0) scaleY(1)}10%{transform:translate(12vw,-10px) scaleY(.6)}20%{transform:translate(24vw,8px) scaleY(1)}50%{transform:translate(60vw,-14px) scaleY(.6)}100%{transform:translate(125vw,6px) scaleY(1)}}
 /* Neon */
 html:root[data-skin="neon"]{--bg:#05060F;--surface:#0A0F24;--surface-2:#111836;--fg:#E8F4FF;--muted:#7D8BB5;--line:#1F2B5C;--map-base:#141C3D;--map-muscle:#26335F;
   --red:#FF2E88;--blue:#2EC5FF;--yellow:#F5FF3B;--green:#2BFFA8;--purple:#B14BFF;--orange:#FF8A3D;--on-yellow:#1A1B00;--ok:#2BFFA8;--ok-soft:#08291E;--warn-soft:#2A2A08;--accent-soft:#2A0A1C;
@@ -348,7 +339,7 @@ html:root[data-skin="iron"] .btn.primary{background:repeating-linear-gradient(-4
 html:root[data-skin="iron"] .dayhead{background:#141414;border-bottom:3px solid transparent;border-image:repeating-linear-gradient(-45deg,#F5C518 0 10px,#141414 10px 20px) 3}
 html:root[data-skin="iron"] .tabs{background:linear-gradient(#262626,#1A1A1A);border-top:2px solid #3A3A3A}
 /* Christmas (seasonal, December) */
-html:root[data-skin="xmas"]{--bg:#0B1F17;--surface:#12291F;--surface-2:#1A3428;--fg:#F7F3EA;--muted:#A9BFB2;--line:#2A4A3A;--map-base:#1D3A2D;--map-muscle:#2F5443;
+html:root[data-skin="xmas"]{--ok:#3FBF7F;--ok-soft:#173326;--warn-soft:#3A3015;--bg:#0B1F17;--surface:#12291F;--surface-2:#1A3428;--fg:#F7F3EA;--muted:#A9BFB2;--line:#2A4A3A;--map-base:#1D3A2D;--map-muscle:#2F5443;
   --red:#E23D3D;--blue:#3FA0D9;--yellow:#F2C14E;--green:#3FBF7F;--purple:#A97BE0;--orange:#E8833A;--on-yellow:#1A1200;--accent-soft:#3A1515;--display:"Mountains of Christmas","Barlow Condensed",cursive;color-scheme:dark}
 html:root[data-skin="xmas"] body{background:radial-gradient(900px 400px at 50% -5%,#1E4D38,transparent 65%),var(--bg);background-attachment:fixed}
 html:root[data-skin="xmas"] .dayhead{background:linear-gradient(#0B1F17 75%,rgba(11,31,23,0))}
@@ -358,11 +349,8 @@ html:root[data-skin="xmas"] h1,html:root[data-skin="xmas"] .panel h2{font-family
 html:root[data-skin="xmas"] .panel h2{color:#F2C14E;font-size:24px}
 html:root[data-skin="xmas"] .dayhead h1::after{content:" 🎄";font-size:.5em;vertical-align:.35em}
 html:root[data-skin="xmas"] .tabs{background:#0E2419;border-top:2px solid #F2C14E}
-html:root[data-skin="xmas"] .skinfx{display:block;position:fixed;inset:0;pointer-events:none;z-index:4;
-  background-image:radial-gradient(2px 2px at 20px 30px,#fff,transparent),radial-gradient(2px 2px at 140px 80px,#fff,transparent),radial-gradient(1.5px 1.5px at 260px 150px,#fff,transparent),radial-gradient(2px 2px at 330px 40px,#fff,transparent),radial-gradient(1.5px 1.5px at 90px 210px,#fff,transparent),radial-gradient(2px 2px at 200px 260px,#fff,transparent);background-size:380px 300px;opacity:.6}
-html:root[data-skin="xmas"] .skinfx i{display:none}
 /* Pixel Arcade (8-bit) */
-html:root[data-skin="pixel"]{--bg:#000000;--surface:#0D0D1A;--surface-2:#1A1A33;--fg:#F8F8F8;--muted:#9A9AC0;--line:#3C3CFF;--map-base:#1A1A33;--map-muscle:#2E2E5C;
+html:root[data-skin="pixel"]{--ok:#58F858;--ok-soft:#0E2A0E;--warn-soft:#2A2A08;--bg:#000000;--surface:#0D0D1A;--surface-2:#1A1A33;--fg:#F8F8F8;--muted:#9A9AC0;--line:#3C3CFF;--map-base:#1A1A33;--map-muscle:#2E2E5C;
   --red:#FF3B3B;--blue:#3CBCFC;--yellow:#FCE03C;--green:#58F858;--purple:#B880F8;--orange:#FC9838;--on-yellow:#000;--accent-soft:#330000;--display:"Press Start 2P",monospace;color-scheme:dark}
 html:root[data-skin="pixel"] body{background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 4px),#000;image-rendering:pixelated}
 html:root[data-skin="pixel"] .dayhead{background:#000}
@@ -372,7 +360,7 @@ html:root[data-skin="pixel"] h1{font-size:26px}html:root[data-skin="pixel"] .pan
 html:root[data-skin="pixel"] .btn{border-radius:0}html:root[data-skin="pixel"] .btn.primary{box-shadow:4px 4px 0 #3C3CFF}
 html:root[data-skin="pixel"] .tabs{background:#000;border-top:4px solid #3C3CFF}
 /* Sakura (light, calm) */
-html:root[data-skin="sakura"]{--bg:#FFF5F7;--surface:#FFFFFF;--surface-2:#FCEBF0;--fg:#3A2B33;--muted:#8E7280;--line:#F2D3DE;--map-base:#F6E1E8;--map-muscle:#E8C2D0;
+html:root[data-skin="sakura"]{--ok:#5DA87E;--ok-soft:#E3F2E9;--warn-soft:#FDF0D8;--bg:#FFF5F7;--surface:#FFFFFF;--surface-2:#FCEBF0;--fg:#3A2B33;--muted:#8E7280;--line:#F2D3DE;--map-base:#F6E1E8;--map-muscle:#E8C2D0;
   --red:#E25D8A;--blue:#6A8FD8;--yellow:#E8A33D;--green:#5DA87E;--purple:#9B7BD6;--orange:#E58B5B;--on-yellow:#2A1700;--accent-soft:#FBE0EA;--display:"Yuji Syuku","Barlow Condensed",serif;color-scheme:light}
 html:root[data-skin="sakura"] body{background:radial-gradient(700px 360px at 100% 0,#FFD6E3,transparent 60%),radial-gradient(600px 300px at 0 100%,#FFE3EC,transparent 60%),var(--bg);background-attachment:fixed}
 html:root[data-skin="sakura"] .dayhead{background:rgba(255,245,247,.95)}
@@ -381,12 +369,8 @@ html:root[data-skin="sakura"] h1,html:root[data-skin="sakura"] .panel h2{font-fa
 html:root[data-skin="sakura"] .panel h2{color:#C9467A}
 html:root[data-skin="sakura"] .btn{border-radius:999px}
 html:root[data-skin="sakura"] .tabs{background:rgba(255,255,255,.95);border-top:1px solid #F2D3DE}
-html:root[data-skin="sakura"] .skinfx{display:block;position:fixed;inset:0 0 auto 0;height:100%;pointer-events:none;z-index:4}
-html:root[data-skin="sakura"] .skinfx i{background:radial-gradient(ellipse at 30% 30%,#FFC2D4,#F58FB1);border-radius:80% 0 80% 0;width:12px;height:12px;opacity:.7;animation:petal 14s linear infinite;top:-20px}
-html:root[data-skin="sakura"] .skinfx i:nth-child(2){left:30%;animation-duration:18s;animation-delay:-6s}html:root[data-skin="sakura"] .skinfx i:nth-child(3){left:70%;animation-duration:22s;animation-delay:-11s}
-@keyframes petal{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(40vw,110vh) rotate(540deg)}}
 /* Thanksgiving (seasonal, November) */
-html:root[data-skin="thanks"]{--bg:#1E130C;--surface:#2A1B11;--surface-2:#352317;--fg:#FBEBD6;--muted:#C7A98A;--line:#4A3221;--map-base:#3A2618;--map-muscle:#5A3C26;
+html:root[data-skin="thanks"]{--ok:#7E9B3E;--ok-soft:#24301A;--warn-soft:#3D2A12;--bg:#1E130C;--surface:#2A1B11;--surface-2:#352317;--fg:#FBEBD6;--muted:#C7A98A;--line:#4A3221;--map-base:#3A2618;--map-muscle:#5A3C26;
   --red:#C2412D;--blue:#5B8BA8;--yellow:#E9A33A;--green:#7E9B3E;--purple:#9C5A7A;--orange:#E07A2E;--on-yellow:#2A1500;--accent-soft:#3D1F16;--display:"Lobster","Barlow Condensed",cursive;color-scheme:dark}
 html:root[data-skin="thanks"] body{background:radial-gradient(900px 420px at 50% -8%,#5A2E14,transparent 62%),radial-gradient(700px 300px at 50% 110%,#3A1D0C,transparent 60%),var(--bg);background-attachment:fixed}
 html:root[data-skin="thanks"] .dayhead{background:linear-gradient(#1E130C 75%,rgba(30,19,12,0))}
@@ -397,14 +381,8 @@ html:root[data-skin="thanks"] .panel h2{color:#E9A33A;font-size:24px}
 html:root[data-skin="thanks"] .dayhead h1::after{content:" 🦃";font-size:.5em;vertical-align:.35em}
 html:root[data-skin="thanks"] .btn.primary{box-shadow:0 0 16px rgba(224,122,46,.35)}
 html:root[data-skin="thanks"] .tabs{background:#24170E;border-top:2px solid #E07A2E}
-html:root[data-skin="thanks"] .skinfx{display:block;position:fixed;inset:0;height:100%;pointer-events:none;z-index:4}
-html:root[data-skin="thanks"] .skinfx i{top:-30px;width:20px;height:20px;opacity:.6;animation:leaf 16s linear infinite;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23E07A2E' d='M12 2l1.6 4.2 3.2-1.6-.8 3.6 3.8.2-2.6 2.8 3.4 1.8-3.8 1-.2 3.2-3-1.8L12 22l-1.6-6.6-3 1.8-.2-3.2-3.8-1 3.4-1.8-2.6-2.8 3.8-.2-.8-3.6 3.2 1.6z'/%3E%3C/svg%3E") center/contain no-repeat}
-html:root[data-skin="thanks"] .skinfx i:nth-child(2){left:35%;animation-duration:20s;animation-delay:-7s;filter:hue-rotate(-25deg)}
-html:root[data-skin="thanks"] .skinfx i:nth-child(3){left:75%;animation-duration:24s;animation-delay:-13s;filter:hue-rotate(20deg)}
-@keyframes leaf{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(-8vw,55vh) rotate(200deg)}100%{transform:translate(10vw,112vh) rotate(420deg)}}
 /* New Year (seasonal, January) */
-html:root[data-skin="newyear"]{--bg:#07080F;--surface:#11131F;--surface-2:#1A1D2D;--fg:#F5F1E6;--muted:#A4A6B8;--line:#2C2F45;--map-base:#1A1D2D;--map-muscle:#2C3048;
+html:root[data-skin="newyear"]{--ok:#4FD1A5;--ok-soft:#12302A;--warn-soft:#2E2610;--bg:#07080F;--surface:#11131F;--surface-2:#1A1D2D;--fg:#F5F1E6;--muted:#A4A6B8;--line:#2C2F45;--map-base:#1A1D2D;--map-muscle:#2C3048;
   --red:#E8B54A;--blue:#7C8CFF;--yellow:#F2D27A;--green:#4FD1A5;--purple:#B48CFF;--orange:#F0A34A;--on-yellow:#1A1400;--accent-soft:#2E2610;--display:"Cinzel","Barlow Condensed",serif;color-scheme:dark}
 html:root[data-skin="newyear"] body{background:radial-gradient(1.5px 1.5px at 30px 40px,rgba(242,210,122,.7),transparent),radial-gradient(1px 1px at 120px 90px,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 210px 20px,rgba(242,210,122,.6),transparent),radial-gradient(1px 1px at 300px 140px,rgba(255,255,255,.5),transparent) 0 0/340px 180px,radial-gradient(900px 420px at 50% -10%,#232850,transparent 65%),var(--bg);background-attachment:fixed}
 html:root[data-skin="newyear"] body[data-day]{--accent:#E8B54A;--accent-ink:#1A1400}
@@ -414,7 +392,49 @@ html:root[data-skin="newyear"] h1,html:root[data-skin="newyear"] .panel h2{font-
 html:root[data-skin="newyear"] .dayhead h1::after{content:" 🎆";background:none;-webkit-background-clip:border-box;background-clip:border-box;-webkit-text-fill-color:initial;color:initial;font-size:.5em;vertical-align:.35em}
 html:root[data-skin="newyear"] .btn.primary{background:linear-gradient(180deg,#F2D27A,#C8932C);color:#1A1400;border:none;box-shadow:0 0 16px rgba(232,181,74,.35)}
 html:root[data-skin="newyear"] .tabs{background:#0A0C16;border-top:1px solid rgba(232,181,74,.5)}
-@media (prefers-reduced-motion:reduce){.skinfx i{animation:none;display:none}}
+/* ---------- seasonal background animations (light: a few CSS-animated elements, off with one switch) ---------- */
+.skinfx{position:fixed;inset:0;pointer-events:none;z-index:4;overflow:hidden;contain:strict}
+.skinfx>i{position:absolute;display:block;will-change:transform}
+.fx-snow{top:-12px;border-radius:50%;background:#fff;opacity:.75;animation:fxfall linear infinite}
+.fx-leaf{top:-30px;animation:fxfallspin linear infinite;background:center/contain no-repeat}
+.fx-petal{top:-20px;background:radial-gradient(ellipse at 30% 30%,#FFC2D4,#F58FB1);border-radius:80% 0 80% 0;opacity:.7;animation:fxfallspin linear infinite}
+.fx-bloom{top:-24px;opacity:.85;animation:fxfallspin linear infinite;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='%23FFD23F' stroke='%23E8A100' stroke-width='.6'%3E%3Cellipse cx='12' cy='5.5' rx='3.6' ry='4.6'/%3E%3Cellipse cx='18.2' cy='10' rx='3.6' ry='4.6' transform='rotate(72 18.2 10)'/%3E%3Cellipse cx='15.8' cy='17.4' rx='3.6' ry='4.6' transform='rotate(144 15.8 17.4)'/%3E%3Cellipse cx='8.2' cy='17.4' rx='3.6' ry='4.6' transform='rotate(216 8.2 17.4)'/%3E%3Cellipse cx='5.8' cy='10' rx='3.6' ry='4.6' transform='rotate(288 5.8 10)'/%3E%3C/g%3E%3Ccircle cx='12' cy='12' r='2.6' fill='%23E86A00'/%3E%3C/svg%3E")}
+.fx-heart{bottom:-30px;opacity:.6;animation:fxrise ease-in infinite;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23FF4D7E' d='M12 21s-8-5.2-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.8-8 11-8 11z'/%3E%3C/svg%3E")}
+.fx-bat{top:40px;left:-60px;opacity:.55;animation:fxbat linear infinite;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 32'%3E%3Cpath fill='%23000' d='M34 10c-2-4-1-8 0-9 1 1 2 1 2 0 1 1 2 5 0 9 6-6 18-8 32-2-6 1-10 5-11 10-3-3-7-3-9 1-3-3-7-2-9 2-2-3-3-5-5-5s-3 2-5 5c-2-4-6-5-9-2-2-4-6-4-9-1C10 13 6 9 0 8c14-6 26-4 34 2z'/%3E%3C/svg%3E")}
+.fx-spark{border-radius:50%;background:radial-gradient(circle,#FFF6D5 0,#F2D27A 35%,rgba(242,210,122,0) 70%);animation:fxtwinkle ease-in-out infinite}
+.fx-lantern{top:-6px;width:38px;height:70px;transform-origin:50% 0;animation:fxsway 4.5s ease-in-out infinite;background:center top/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 38 70'%3E%3Cpath d='M19 0v14' stroke='%23E8B54A' stroke-width='1.5'/%3E%3Crect x='12' y='12' width='14' height='4' rx='1' fill='%23E8B54A'/%3E%3Cellipse cx='19' cy='34' rx='16' ry='19' fill='%23D7261E'/%3E%3Cpath d='M19 15c-6 5-6 33 0 38M19 15c6 5 6 33 0 38M9 20c-3 8-3 20 0 28M29 20c3 8 3 20 0 28' stroke='%23A3150F' stroke-width='1' fill='none'/%3E%3Cellipse cx='19' cy='34' rx='10' ry='14' fill='%23FFB03A' opacity='.25'/%3E%3Crect x='12' y='52' width='14' height='4' rx='1' fill='%23E8B54A'/%3E%3Cpath d='M15 56v12M19 56v14M23 56v12' stroke='%23E8B54A' stroke-width='1.4'/%3E%3C/svg%3E")}
+@keyframes fxfall{to{transform:translate3d(var(--dx,20px),112vh,0)}}
+@keyframes fxfallspin{to{transform:translate3d(var(--dx,40px),112vh,0) rotate(var(--rot,480deg))}}
+@keyframes fxrise{0%{transform:translate3d(0,0,0) scale(.8);opacity:0}15%{opacity:.6}100%{transform:translate3d(var(--dx,20px),-110vh,0) scale(1.1);opacity:0}}
+@keyframes fxbat{0%{transform:translate(0,0) scaleY(1)}10%{transform:translate(12vw,-10px) scaleY(.6)}20%{transform:translate(24vw,8px) scaleY(1)}50%{transform:translate(60vw,-14px) scaleY(.6)}100%{transform:translate(125vw,6px) scaleY(1)}}
+@keyframes fxtwinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:.9;transform:scale(1)}}
+@keyframes fxsway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.skinfx{display:none}}
+/* Halloween header pumpkin with glowing, "breathing" eyes (animation lives inside the SVG) */
+html:root[data-skin="halloween"] .dayhead h1::after{content:"";display:inline-block;width:.8em;height:.76em;margin-left:.2em;vertical-align:-.02em;
+  background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 60'%3E%3Cstyle%3E.g%7Banimation:b 3.2s ease-in-out infinite%7D@keyframes b%7B0%25,100%25%7Bopacity:.35%7D50%25%7Bopacity:1%7D%7D%3C/style%3E%3Cdefs%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23FFF3A0'/%3E%3Cstop offset='.6' stop-color='%23FFC21A'/%3E%3Cstop offset='1' stop-color='%23FF7A00'/%3E%3C/radialGradient%3E%3CradialGradient id='h'%3E%3Cstop offset='0' stop-color='%23FFD34D' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23FFD34D' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath d='M30 8c0-4 2-7 6-8l2 3c-3 1-4 3-4 5z' fill='%234E7A2B'/%3E%3Cellipse cx='32' cy='35' rx='29' ry='23' fill='%23E8650F'/%3E%3Cpath d='M32 12c-8 6-8 40 0 46M32 12c8 6 8 40 0 46M14 16c-8 10-8 30 0 39M50 16c8 10 8 30 0 39' stroke='%23B9470A' stroke-width='2' fill='none'/%3E%3Cg class='g'%3E%3Ccircle cx='21' cy='29' r='10' fill='url(%23h)'/%3E%3Ccircle cx='43' cy='29' r='10' fill='url(%23h)'/%3E%3Cpath d='M15 34l6-11 6 11z M37 34l6-11 6 11z' fill='url(%23l)'/%3E%3Cpath d='M16 42c6 4 10 3 13 1l3 3 3-3c3 2 7 3 13-1-4 8-10 10-16 10s-12-2-16-10z' fill='url(%23l)'/%3E%3C/g%3E%3C/svg%3E")}
+/* Valentine's (February) */
+html:root[data-skin="valentine"]{--ok-soft:#3A1526;--warn-soft:#3D1A22;--bg:#18070F;--surface:#250C18;--surface-2:#311221;--fg:#FFEFF4;--muted:#C49AAB;--line:#4A1E31;--map-base:#33152A;--map-muscle:#552443;
+  --red:#FF4D7E;--blue:#C77DFF;--yellow:#FFB3C7;--green:#FF8FAB;--purple:#C77DFF;--orange:#FF7A8A;--on-yellow:#3A0717;--ok:#FF8FAB;--accent-soft:#3D1225;--display:"Dancing Script","Barlow Condensed",cursive;color-scheme:dark}
+html:root[data-skin="valentine"] body{background:radial-gradient(900px 420px at 50% -8%,#5C1834,transparent 65%),var(--bg);background-attachment:fixed}
+html:root[data-skin="valentine"] .dayhead{background:linear-gradient(#18070F 75%,rgba(24,7,15,0))}
+html:root[data-skin="valentine"] .panel{border:1px solid #5C2440;border-radius:18px;box-shadow:0 10px 28px rgba(0,0,0,.35),0 0 0 1px rgba(255,77,126,.06)}
+html:root[data-skin="valentine"] h1,html:root[data-skin="valentine"] .panel h2{font-family:var(--display);font-weight:700;text-transform:none;letter-spacing:.01em}
+html:root[data-skin="valentine"] .panel h2{color:#FF8FAB;font-size:26px}
+html:root[data-skin="valentine"] .dayhead h1::after{content:" 💘";font-size:.5em;vertical-align:.35em}
+html:root[data-skin="valentine"] .btn{border-radius:999px}html:root[data-skin="valentine"] .btn.primary{box-shadow:0 0 16px rgba(255,77,126,.35)}
+html:root[data-skin="valentine"] .tabs{background:#1E0912;border-top:1px solid #5C2440}
+/* Lunar New Year / Tết */
+html:root[data-skin="tet"]{--ok-soft:#4A2208;--warn-soft:#4A260A;--bg:#2A0607;--surface:#3A0B0C;--surface-2:#4A1112;--fg:#FFF4E0;--muted:#E3B9A0;--line:#6A1F18;--map-base:#4A1414;--map-muscle:#6E2420;
+  --red:#FFC93C;--blue:#FFD76A;--yellow:#FFD23F;--green:#F5B82E;--purple:#F59E3B;--orange:#FFB03A;--on-yellow:#3A1000;--ok:#FFC93C;--accent-soft:#4A2208;--display:"Playfair Display","Barlow Condensed",serif;color-scheme:dark}
+html:root[data-skin="tet"] body[data-day]{--accent:#FFC93C;--accent-ink:#3A0A00}
+html:root[data-skin="tet"] body{background:radial-gradient(900px 420px at 50% -8%,#7A1414,transparent 65%),var(--bg);background-attachment:fixed}
+html:root[data-skin="tet"] .dayhead{background:linear-gradient(#2A0607 75%,rgba(42,6,7,0))}
+html:root[data-skin="tet"] .panel{border:1px solid rgba(255,201,60,.4);box-shadow:inset 0 0 0 4px rgba(255,201,60,.06),0 10px 28px rgba(0,0,0,.35)}
+html:root[data-skin="tet"] h1,html:root[data-skin="tet"] .panel h2{font-family:var(--display);font-weight:800;letter-spacing:.03em;color:#FFD23F}
+html:root[data-skin="tet"] .dayhead h1::after{content:" 🧧";font-size:.5em;vertical-align:.35em}
+html:root[data-skin="tet"] .btn.primary{box-shadow:0 0 16px rgba(255,201,60,.35)}
+html:root[data-skin="tet"] .tabs{background:#300708;border-top:2px solid #FFC93C}
 /* design picker */
 .skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
 .skopt{all:unset;box-sizing:border-box;cursor:pointer;border:2px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
@@ -729,7 +749,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 
 <div class="app" id="app"></div>
 <button class="pill" id="pill" hidden></button>
-<div class="skinfx" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="skinfx" aria-hidden="true"></div>
 <div class="tabs"><nav role="tablist" id="tabs"></nav></div>
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title"></section>
@@ -3433,37 +3453,58 @@ function bindExQueue(){const S=state.stats;if(!S)return;
   document.querySelectorAll("[data-exok]").forEach(b=>b.onclick=()=>act(b.dataset.exok,true));
   document.querySelectorAll("[data-exno]").forEach(b=>armBtn(b,"Tap again",()=>act(b.dataset.exno,false)))}
 /* ---------- app design picker ---------- */
-const SKIN_SEASON={halloween:d=>{const m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=3)},thanks:d=>d.getMonth()+1===11,xmas:d=>d.getMonth()+1===12&&d.getDate()<=30,newyear:d=>{const m=d.getMonth()+1;return m===1||(m===12&&d.getDate()===31)}};
+const TET_DAYS={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"};
+function tetDate(y){const t=TET_DAYS[y];return t?new Date(y,+t.slice(0,2)-1,+t.slice(3)):null}
+const SKIN_SEASON={valentine:d=>d.getMonth()+1===2,tet:d=>{const t=tetDate(d.getFullYear());if(!t)return false;const x=(new Date(d.getFullYear(),d.getMonth(),d.getDate())-t)/864e5;return x>=-15&&x<=15},halloween:d=>{const m=d.getMonth()+1;return m===10||(m===11&&d.getDate()<=3)},thanks:d=>d.getMonth()+1===11,xmas:d=>d.getMonth()+1===12&&d.getDate()<=30,newyear:d=>{const m=d.getMonth()+1;return m===1||(m===12&&d.getDate()===31)}};
 const SKINS=[
  {id:"",name:"Classic",bg:"#0F1114",panel:"#191C20",line:"#2C3138",fg:"#ECEEF0",acc:"#E5484D",font:"'Barlow Condensed'",word:"WORKOUT"},
  {id:"halloween",name:"Halloween",tag:"October",bg:"linear-gradient(160deg,#3B1D52,#120B18 60%)",panel:"#1C1326",line:"#4A3360",fg:"#FFB46B",acc:"#FF7A1A",font:"Creepster",f:"Creepster",word:"BOO! 🎃"},
  {id:"thanks",name:"Thanksgiving",tag:"November",bg:"linear-gradient(160deg,#5A2E14,#1E130C 60%)",panel:"#2A1B11",line:"#5A3C26",fg:"#E9A33A",acc:"#E07A2E",font:"Lobster",f:"Lobster",word:"Gobble 🦃"},
  {id:"xmas",name:"Christmas",tag:"December",bg:"linear-gradient(160deg,#1E4D38,#0B1F17 60%)",panel:"#12291F",line:"#E23D3D",fg:"#F2C14E",acc:"#E23D3D",font:"'Mountains of Christmas'",f:"Mountains+of+Christmas:wght@700",word:"Ho ho ho 🎄"},
  {id:"newyear",name:"New Year",tag:"January",bg:"linear-gradient(160deg,#232850,#07080F 60%)",panel:"#11131F",line:"#E8B54A",fg:"#F2D27A",acc:"#E8B54A",font:"Cinzel",f:"Cinzel:wght@700",word:"CHEERS 🥂"},
+ {id:"valentine",name:"Valentine's",tag:"February",bg:"linear-gradient(160deg,#5C1834,#18070F 60%)",panel:"#250C18",line:"#5C2440",fg:"#FF8FAB",acc:"#FF4D7E",font:"'Dancing Script'",f:"Dancing+Script:wght@700",word:"Be mine 💘"},
+ {id:"tet",name:"Lunar New Year",tag:"Tết",bg:"linear-gradient(160deg,#7A1414,#2A0607 60%)",panel:"#3A0B0C",line:"#FFC93C",fg:"#FFD23F",acc:"#FFC93C",font:"'Playfair Display'",f:"Playfair+Display:wght@800",word:"Chúc Mừng 🧧"},
  {id:"neon",name:"Neon",bg:"#05060F",panel:"#0A0F24",line:"#2EC5FF",fg:"#9FE7FF",acc:"#FF2E88",font:"Orbitron",f:"Orbitron:wght@700;800",word:"PLAYER 1"},
  {id:"iron",name:"Iron Gym",bg:"#141414",panel:"#262626",line:"#F5C518",fg:"#F5C518",acc:"#E03A2F",font:"'Black Ops One'",f:"Black+Ops+One",word:"LIFT HEAVY"},
  {id:"pixel",name:"Pixel Arcade",bg:"#000",panel:"#0D0D1A",line:"#3C3CFF",fg:"#FCE03C",acc:"#FF3B3B",font:"'Press Start 2P'",f:"Press+Start+2P",word:"1UP",small:true},
  {id:"sakura",name:"Sakura",bg:"linear-gradient(160deg,#FFD6E3,#FFF5F7 60%)",panel:"#FFFFFF",line:"#F2D3DE",fg:"#C9467A",acc:"#E25D8A",font:"'Yuji Syuku'",f:"Yuji+Syuku",word:"Leg day"}];
 SKINS.forEach(x=>{if(SKIN_SEASON[x.id])x.season=()=>SKIN_SEASON[x.id](nowD())});
+/* ---------- background animations for holiday designs ---------- */
+function animOn(){return ls.get("ll.anim",true)!==false}
+function skinFx(){const el=document.querySelector(".skinfx");if(!el)return;const k=curSkin();if(!animOn()){el.innerHTML="";return}
+  const R=(a,b)=>a+Math.random()*(b-a),P=(cls,n,f)=>Array.from({length:n},(_,i)=>`<i class="${cls}" style="${f(i)}"></i>`).join("");
+  const fall=(w0,w1,d0,d1)=>i=>{const w=R(w0,w1);return `left:${R(-5,100).toFixed(1)}%;width:${w.toFixed(1)}px;height:${w.toFixed(1)}px;animation-duration:${R(d0,d1).toFixed(1)}s;animation-delay:-${R(0,d1).toFixed(1)}s;--dx:${R(-60,60).toFixed(0)}px;--rot:${R(-540,540).toFixed(0)}deg`};
+  const leafSvg=c=>`background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='${c}' d='M12 2l1.6 4.2 3.2-1.6-.8 3.6 3.8.2-2.6 2.8 3.4 1.8-3.8 1-.2 3.2-3-1.8L12 22l-1.6-6.6-3 1.8-.2-3.2-3.8-1 3.4-1.8-2.6-2.8 3.8-.2-.8-3.6 3.2 1.6z'/%3E%3C/svg%3E")`;
+  const html={xmas:()=>P("fx-snow",22,i=>fall(3,7,9,18)(i)+`;opacity:${R(.4,.85).toFixed(2)}`),
+   thanks:()=>P("fx-leaf",8,i=>fall(14,24,11,20)(i)+";"+leafSvg(["%23E07A2E","%23C2412D","%23E9A33A","%23A0522D"][i%4])),
+   halloween:()=>P("fx-bat",3,i=>`top:${[30,90,140][i]}px;width:${[34,24,18][i]}px;height:${[16,12,9][i]}px;animation-duration:${[16,22,27][i]}s;animation-delay:-${[0,7,15][i]}s`),
+   sakura:()=>P("fx-petal",8,fall(9,13,12,22)),
+   valentine:()=>P("fx-heart",9,i=>{const w=R(12,22);return `left:${R(0,96).toFixed(1)}%;width:${w.toFixed(0)}px;height:${w.toFixed(0)}px;animation-duration:${R(12,20).toFixed(1)}s;animation-delay:-${R(0,20).toFixed(1)}s;--dx:${R(-40,40).toFixed(0)}px`}),
+   tet:()=>`<i class="fx-lantern" style="left:6px"></i><i class="fx-lantern" style="right:6px;animation-delay:-2.2s"></i>`+P("fx-bloom",8,fall(12,18,12,22)),
+   newyear:()=>P("fx-spark",10,i=>{const w=R(6,12);return `left:${R(2,96).toFixed(1)}%;top:${R(2,90).toFixed(1)}%;width:${w.toFixed(0)}px;height:${w.toFixed(0)}px;animation-duration:${R(2.5,5).toFixed(1)}s;animation-delay:-${R(0,5).toFixed(1)}s`})};
+  el.innerHTML=html[k]?html[k]():""}
 function curSkin(){return document.documentElement.getAttribute("data-skin")||""}
 function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
-function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");
+function setSkin(k){ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");skinFx();
   const bg=getComputedStyle(document.body).backgroundColor;document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{if(k)m.setAttribute("content",getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||bg)});render()}
-const SKIN_OPENS={halloween:"Oct 1",thanks:"Nov 1",xmas:"Dec 1",newyear:"Dec 31"};
+const SKIN_OPENS={halloween:"Oct 1",thanks:"Nov 1",xmas:"Dec 1",newyear:"Dec 31",valentine:"Feb 1",tet:"2 weeks before Tết"};
 function skinPanel(){const cur=curSkin();
   SKINS.forEach(x=>{if(x.f&&x.id!==cur&&(!x.season||x.season()))loadSkinFont(x.id)});
   return `<div class="panel" id="skinp"><h2>App design</h2><p class="savenote" style="margin-top:0">Changes the whole look of the app on this phone. Holiday designs unlock during their month. Badges and ranks always look the same.</p>
+   <label class="tick" style="margin:8px 0 2px"><input type="checkbox" id="animtog" ${animOn()?"checked":""}> Background animations (snow, leaves, hearts…)</label>
    <div class="skins">${SKINS.map(x=>{const open=!x.season||x.season();return `<button class="skopt ${cur===x.id?"on":""} ${open?"":"skoff"}" data-skin="${x.id}" aria-pressed="${cur===x.id}" ${open?"":"disabled"}>
     <div class="skprev" style="background:${x.bg}"><b style="font-family:${x.font},sans-serif;color:${x.fg}${x.small?";font-size:14px":""}">${esc(x.word)}</b>
      <span style="background:${x.panel};border:1px solid ${x.line}"></span><span style="background:${x.acc}"></span>${open?"":`<em class="sklock">🔒 Opens ${SKIN_OPENS[x.id]}</em>`}</div>
     <div class="skl">${esc(x.name)}${cur===x.id?"<span>✓</span>":x.tag&&open?`<span class="sktag">${esc(x.tag)}</span>`:""}</div></button>`}).join("")}</div></div>`}
-function bindSkins(){document.querySelectorAll("#skinp [data-skin]").forEach(b=>b.onclick=()=>{const y=window.scrollY;setSkin(b.dataset.skin);window.scrollTo(0,y)})}
+function bindSkins(){const at=$("#animtog");if(at)at.onchange=()=>{ls.set("ll.anim",at.checked);skinFx()};document.querySelectorAll("#skinp [data-skin]").forEach(b=>b.onclick=()=>{const y=window.scrollY;setSkin(b.dataset.skin);window.scrollTo(0,y)})}
 /* ---------- holiday celebration: once per account per holiday, on the day (or the day after) ---------- */
 function thanksgivingDate(y){const d=new Date(y,10,1);const first=(4-d.getDay()+7)%7+1;return new Date(y,10,first+21)}
 function todaysHoliday(){const d=nowD(),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
   if((m===12&&day===31)||(m===1&&day<=2))return {id:"newyear",key:"newyear-"+(m===12?y+1:y),title:"Happy New Year",emoji:["🎆","🎉","✨","🥂"],fx:"fireworks"};
   if(m===10&&day===31||(m===11&&day===1))return {id:"halloween",key:"halloween-"+y,title:"Happy Halloween",emoji:["🎃","🦇","👻","🍬"],fx:"rain"};
   const t=thanksgivingDate(y);if(m===11&&(day===t.getDate()||day===t.getDate()+1))return {id:"thanks",key:"thanks-"+y,title:"Happy Thanksgiving",emoji:["🦃","🍂","🥧","🍁"],fx:"rain"};
+  if(m===2&&(day===14||day===15))return {id:"valentine",key:"valentine-"+y,title:"Happy Valentine's Day",emoji:["💘","💖","🌹","💝"],fx:"rain"};
+  {const t=tetDate(y);if(t){const x=Math.round((new Date(y,m-1,day)-t)/864e5);if(x>=0&&x<=2)return {id:"tet",key:"tet-"+y,title:"Happy Lunar New Year",emoji:["🧧","🏮","🌼","🐉"],fx:"rain"}}}
   if(m===12&&(day===24||day===25||day===26))return {id:"xmas",key:"xmas-"+y,title:"Merry Christmas",emoji:["🎄","🎁","❄️","⭐"],fx:"rain"};
   return null}
 function checkHoliday(force){const h=force||todaysHoliday();if(!h||!uid&&!force)return;plan.holidaySeen=plan.holidaySeen||{};if(!force&&plan.holidaySeen[h.key])return;
@@ -3472,7 +3513,7 @@ function showHoliday(h){if($("#holi"))return;const name=((window.LIFTLOG_ACCOUNT
   const el=document.createElement("div");el.id="holi";el.setAttribute("role","dialog");el.setAttribute("aria-modal","true");el.setAttribute("aria-labelledby","holi-t");
   const canSkin=SKINS.some(x=>x.id===h.id&&(!x.season||x.season()))&&curSkin()!==h.id;
   el.innerHTML=`<canvas aria-hidden="true"></canvas><div class="holicard"><div class="holiem" aria-hidden="true">${h.emoji[0]}</div><h3 id="holi-t"><span>${esc(h.title)}</span>${name?`<span>, ${esc(name)}</span>`:""}!</h3>
-   <p>${h.id==="newyear"?"New year, new PRs. Let's make this one count.":h.id==="xmas"?"Enjoy the holidays. Your streak will be here when you're back.":h.id==="thanks"?"Thankful for every rep. Enjoy the feast.":"No tricks today, just treats and gains."}</p>
+   <p>${h.id==="tet"?"Chúc Mừng Năm Mới! Lucky envelopes, new goals, strong year.":h.id==="valentine"?"Show some love to your gains today. 💪":h.id==="newyear"?"New year, new PRs. Let's make this one count.":h.id==="xmas"?"Enjoy the holidays. Your streak will be here when you're back.":h.id==="thanks"?"Thankful for every rep. Enjoy the feast.":"No tricks today, just treats and gains."}</p>
    <div class="btns">${canSkin?`<button class="btn primary" id="holiskin" style="flex:1">Try the ${esc(SKINS.find(x=>x.id===h.id).name)} design</button>`:""}<button class="btn ${canSkin?"":"primary"}" id="holiok" style="flex:1">${canSkin?"Not now":"Let's go"}</button></div></div>`;
   document.body.appendChild(el);const cv=el.querySelector("canvas"),g=cv.getContext("2d");let W,H,run=true,parts=[],t0=performance.now();
   const size=()=>{W=cv.width=innerWidth*devicePixelRatio;H=cv.height=innerHeight*devicePixelRatio};size();addEventListener("resize",size);
@@ -3488,6 +3529,7 @@ function showHoliday(h){if($("#holi"))return;const name=((window.LIFTLOG_ACCOUNT
     requestAnimationFrame(tick)};requestAnimationFrame(tick);
   const close=()=>{run=false;removeEventListener("resize",size);el.remove()};
   $("#holiok").onclick=close;const hs=$("#holiskin");if(hs)hs.onclick=()=>{close();setSkin(h.id)};$("#holiok").focus()}
+setTimeout(skinFx,50);
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}

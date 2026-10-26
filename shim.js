@@ -26,7 +26,7 @@
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
   function clearAppStorage() {
     try {
-      Object.keys(localStorage).filter((k) => k.startsWith("ll.") && !["ll.lang", "ll.tz", "ll.ref", "ll.skin"].includes(k)).forEach((k) => localStorage.removeItem(k));
+      Object.keys(localStorage).filter((k) => k.startsWith("ll.") && !["ll.lang", "ll.tz", "ll.ref", "ll.skin", "ll.anim"].includes(k)).forEach((k) => localStorage.removeItem(k));
     } catch (e) {}
   }
   function err(code, message) { const e = new Error(message || code); e.code = code; return e; }
