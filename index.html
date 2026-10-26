@@ -278,6 +278,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .avadd{width:78px;height:82px;display:grid;place-items:center;font:300 40px var(--body);color:var(--muted)}.avedit{all:unset;cursor:pointer;position:relative;display:block}.avedit>span{position:absolute;right:2px;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:12px}
 .navrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin:0 0 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}.navrow:hover{background:var(--surface-2)}.navrow:active{transform:scale(.99)}.navrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.nvic{width:38px;height:38px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink)}.nvic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.nvt{flex:1;min-width:0}.nvt b{display:flex;align-items:center;gap:8px;font-size:15px}.nvt small{display:block;color:var(--muted);font-size:13px;margin-top:2px}.nvgo{color:var(--muted);font-size:20px}.ownertag{font-style:normal;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
 .cropbox{position:relative;width:min(260px,72vw);aspect-ratio:1;margin:8px auto 14px}.cropbox canvas{width:100%;height:100%;display:block;border-radius:50%;touch-action:none;cursor:grab;background:#000}.cropbox canvas:active{cursor:grabbing}.cropring{position:absolute;inset:-6px;border-radius:50%;border:3px solid var(--accent);pointer-events:none;box-shadow:0 0 0 6px var(--surface-2)}.cropctl{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--muted)}.cropctl input{flex:1;accent-color:var(--accent)}
+.panel h2 .fradd,#frpanel h2 .fradd{margin-left:auto;font:700 13px var(--body);text-transform:none;letter-spacing:0;padding:6px 12px}.frrow .btn.primary{flex:none}#frpanel h2{display:flex;align-items:center}.frrow{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}.frrow:last-child{border-bottom:0}.frmain{all:unset;box-sizing:border-box;cursor:pointer;flex:1;min-width:0;display:flex;align-items:center;gap:10px}.frmain>span:last-child{min-width:0}.frmain b{display:block;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.frmain small{display:block;color:var(--muted);font-size:12.5px}
+.shareimg{display:block;width:100%;max-width:340px;margin:8px auto;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.35)}.hhead{display:flex;align-items:center;justify-content:space-between}.hhead .btn{font:700 13px var(--body);text-transform:none;letter-spacing:0}
 .infob{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);background:none;font:italic 700 12px/1 Georgia,serif;margin-left:6px;vertical-align:middle;cursor:pointer;padding:0}
 #lbpanel h2{display:flex;align-items:center}.lbrows{list-style:none;margin:8px 0 6px;padding:0}.lbrows li{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--line)}.lbrows li:last-child{border-bottom:0}
 .lbrows .rk{width:26px;text-align:center;font-weight:700}.lbrows .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lbrows .wk{font-weight:700;color:var(--muted);font-size:14px}.lbrows li.me{background:var(--surface-2);border-radius:8px}.lbrows li.gap{justify-content:center;color:var(--muted);padding:2px}
@@ -1547,9 +1549,10 @@ function planView(){
    ${(plan.template==null&&!BUILTIN.length)?`<div class="banner"><b>Your private program isn't loaded yet.</b> It's stored in your account as <code>_template</code>. Until it's there, add days with <b>+ Add day</b> or start a shared program from <b>Plans</b>.</div>`:""}
    ${badgesPanel()}
    ${boardPanel()}
+   ${friendsPanel()}
    ${invitePanel()}
    ${weightPanel()}
-   <div class="panel"><h2>History</h2>
+   <div class="panel"><h2 class="hhead">History <button class="btn small" id="shareweek">Share my week</button></h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
       <summary><span class="sd" style="background:var(${DAYS[x.day]?DAYS[x.day].color:"--green"})"></span>
@@ -1644,7 +1647,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindLang();bindBadgesPanel();bindBoard();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
@@ -1732,7 +1735,7 @@ function progCard(p){const st=progStats(p);return `<button class="pcard" data-pv
   <span class="pct">${esc(p.title)}</span>
   ${p.featured?`<span class="fbadge">★ LiftLog classic</span>`:""}${p.summary?`<span class="psum">${esc(p.summary)}</span>`:""}
   <span class="pcm">by ${esc(nameOf(p.author))} · ${esc(p.goal||"General fitness")} · ${esc(p.level||"All levels")}</span>
-  <span class="pcs"><span>${st.weeks} wk</span><span>${st.dpw} days/wk</span><span>♥ ${p.likes||0}</span><span>${p.uses||0} using</span></span>
+  <span class="pcs"><span>${st.weeks} wk</span><span>${st.dpw} days/wk</span>${p.friendOnly?`<span>Friends only</span>`:`<span>♥ ${p.likes||0}</span><span>${p.uses||0} using</span>`}</span>
   ${miniCal(p.weeks[0])}</button>`}
 let creatorInfo=null,creatorAt=0;
 function loadCreator(force){if(!window.LIFTLOG_RPC||state.mode!=="db")return;if(!force&&Date.now()-creatorAt<60000)return;creatorAt=Date.now();
@@ -1775,6 +1778,7 @@ function builderView(){
     <label class="tick"><input type="checkbox" id="bp-allowcopy" ${p.allowCopy?"checked":""}> Let others copy and remix this program</label>
     <p class="savenote" style="margin-top:2px">Off: people can follow it, but not copy it into their own programs. Copies always credit you.</p>
     <div class="btns"><button class="btn primary" id="publish" style="flex:1">${p.published?"Update published version":"Publish to community"}</button></div>
+    ${p.from?"":`<label class="tick" style="margin-top:12px"><input type="checkbox" id="bp-friends" ${p.friends?"checked":""}> Share with friends</label><p class="savenote" style="margin-top:2px">Friends can see and use it, even if you don't publish it. Paid programs are never shared.</p>`}
     ${p.published?`<div class="btns"><button class="btn" id="unpublish" style="flex:1">Unpublish</button></div>`:""}`:`<p>Sign in to your Claude account to publish to the community.</p>`}
     <div class="btns"><button class="btn" id="useprog" style="flex:1">Use this program myself</button></div>
     <div class="btns"><button class="btn danger" id="delprog" style="flex:1">Delete program</button></div>
@@ -1801,7 +1805,7 @@ function bindPrograms(){
 }
 function bindBuilder(){
   const p=progById(state.builder.id);
-  const save=()=>{p.updatedAt=Date.now();savePlan()};
+  const save=()=>{p.updatedAt=Date.now();savePlan();if(p.friends)writeFriendProgs()};
   let tm; const deb=()=>{clearTimeout(tm);tm=setTimeout(save,500)};
   $("#bback").onclick=()=>{save();state.builder=null;pg.seg="mine";render();window.scrollTo(0,0)};
   $("#bp-title").oninput=e=>{p.title=e.target.value;deb();$("#bh1").textContent=p.title||"New program"};
@@ -1824,7 +1828,7 @@ function bindBuilder(){
   armBtn($("#delweek"),"Tap again to delete week",()=>{p.weeks.splice(wi,1);state.builder.week=Math.max(0,wi-1);save();render();toast("Week deleted")});
   const pb=$("#publish"); if(pb) pb.onclick=()=>publishProg(p);
   const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic().then(()=>loadCreator(true)).catch(()=>{});render();toast("Unpublished")};
-  const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};
+  const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};const bf=$("#bp-friends"); if(bf) bf.onchange=()=>{p.friends=bf.checked;save();writeFriendProgs();toast(p.friends?"Shared with friends":"No longer shared with friends")};
   $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks});
   armBtn($("#delprog"),"Tap again to delete program",()=>{plan.myPrograms=plan.myPrograms.filter(x=>x.id!==p.id);savePlan();if(p.published)writePublic();state.builder=null;pg.seg="mine";render();toast("Program deleted")});
 }
@@ -1937,7 +1941,7 @@ function openReport(p){const sh=$("#sheet");let reason="";
 function openProgView(key){
   const sh=$("#sheet"); let wi=0;
   const draw=()=>{
-    const p=pg.community.find(x=>x.key===key); if(!p){closeSheet();toast("That program was removed.");return}
+    const p=findProg(key); if(!p){closeSheet();toast("That program was removed.");return}
     const w=p.weeks[wi]||{days:{}}; const liked=pg.myLikes.has(key); const mine=p.author===uid;
     sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="pvclose">Close</button><span class="eyebrow">${esc(p.goal||"")} · ${esc(p.level||"")}</span></div>
      <h3 id="sheet-title">${esc(p.title)}</h3>
@@ -1945,15 +1949,15 @@ function openProgView(key){
      ${p.summary?`<p class="pvsum">${esc(p.summary)}</p>`:""}
      ${(p.targets||[]).length?`<div class="gchips pvtags">${p.targets.map(t=>`<span class="gchip on">${esc(t)}</span>`).join("")}</div>`:""}
      ${[["About this program",p.desc],["Who it's for",p.who],["How to progress",p.progress],["Equipment",p.equip]].filter(x=>(x[1]||"").trim()).map(([h,t])=>`<div class="lbl">${h}</div><p class="pvtext">${esc(t)}</p>`).join("")}
-     <div class="btns" style="align-items:center"><button class="btn small ${liked?"okd":""}" id="pvlike" aria-pressed="${liked}">♥ ${liked?"Liked":"Like"} · ${pg.social.likes[key]||0}</button><span class="savenote">${pg.social.uses[key]||0} following it</span></div>
+     ${p.friendOnly?`<p class="savenote">Shared with friends only.</p>`:""}<div class="btns" style="align-items:center${p.friendOnly?";display:none":""}"><button class="btn small ${liked?"okd":""}" id="pvlike" aria-pressed="${liked}">♥ ${liked?"Liked":"Like"} · ${pg.social.likes[key]||0}</button><span class="savenote">${pg.social.uses[key]||0} following it</span></div>
      ${p.weeks.length>1?`<div class="wtabs" style="margin-top:12px">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-pvw="${i}">Week ${i+1}</button>`).join("")}</div>`:""}
      <div class="cal small">${calCells(w,false)}</div>
      ${WEEK_ORDER.filter(i=>w.days[String(i)]).map(i=>{const d=w.days[String(i)];return `<div class="lbl">${WD_LONG[i]} · ${esc(d.title||"Workout")}</div>${d.note?`<p class="pvnote">${esc(d.note)}</p>`:""}<div class="history">${d.items.map(x=>`<div><span class="d">${esc(x.name)}</span><span class="v">${exText(x)}${x.drop?" · drop":""}</span></div>`).join("")||`<div><span class="d">No exercises</span></div>`}</div>`}).join("")}
      <div class="btns"><button class="btn primary" id="pvuse" style="flex:1">Use this program</button></div>
      ${mine||p.allowCopy?`<div class="btns"><button class="btn" id="pvcopy" style="flex:1">${mine?"Make a copy to edit":"Copy to my programs"}</button></div>`:`<p class="savenote">The creator hasn't allowed copies. You can still follow it with <b>Use this program</b>.</p>`}
      ${p.from?`<p class="savenote">Based on ${(()=>{const o=pg.community.find(x=>x.key===p.from);return o?`<b>${esc(o.title)}</b> by ${esc(nameOf(o.author))}`:"another creator's program"})()}.</p>`:""}
-     ${!mine&&!p.featured&&window.LIFTLOG_RPC?`<div class="btns"><button class="linkbtn reportl" id="pvreport">Report this program</button></div>`:""}
-     ${pg.isOwner&&!mine&&!p.featured?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
+     ${!mine&&!p.featured&&!p.friendOnly&&window.LIFTLOG_RPC?`<div class="btns"><button class="linkbtn reportl" id="pvreport">Report this program</button></div>`:""}
+     ${pg.isOwner&&!mine&&!p.featured&&!p.friendOnly?`<div class="btns"><button class="btn danger" id="pvmod" style="flex:1">Remove from community (admin)</button></div>`:""}`;
     $("#pvclose",sh).onclick=closeSheet;
     $("#pvlike",sh).onclick=()=>{toggleLike(key);draw()};
     sh.querySelectorAll("[data-pvw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.pvw;draw()});
@@ -1984,7 +1988,7 @@ function openUse(p){
     $("#ugo",sh).onclick=()=>{
       const prevKey=plan.activeProgram&&plan.activeProgram.key;
       applyProgram(p,wi);
-      if(state.mode==="db"&&!String(p.key).startsWith("mine:")){if(prevKey)pg.myUses.delete(prevKey);pg.myUses.add(p.key);if(!pg.myStarted[p.key])pg.myStarted[p.key]=Date.now();recount();writeSocial()}
+      if(state.mode==="db"&&!/^(mine|f):/.test(String(p.key))){if(prevKey)pg.myUses.delete(prevKey);pg.myUses.add(p.key);if(!pg.myStarted[p.key])pg.myStarted[p.key]=Date.now();recount();writeSocial()}
       else if(prevKey&&pg.myUses.has(prevKey)){pg.myUses.delete(prevKey);recount();writeSocial()}
       closeSheet(); const first=WEEK_ORDER.find(i=>(p.weeks[wi].days||{})[String(i)]);
       state.tab=first!=null?"pw"+first:"plan"; ls.set("ll.tab",state.tab); render(); window.scrollTo(0,0);
@@ -2915,17 +2919,17 @@ function openBadge(id){const {B}=badgeState();const b=B.find(x=>x.id===id);if(!b
   sh.innerHTML=`<div class="grab"></div><div class="bpop">${medal(b,"big",!b.ok)}<div class="ey">${b.ok?"Earned":b.lost?"Earn it back":"Locked"} · ${({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum",diamond:"Diamond"})[b.tier]}</div>
    <h3 id="sheet-title">${esc(b.name)}</h3><p>${esc(b.desc)}</p>${b.ok&&seen?`<p class="savenote">Earned ${fmtDate(seen)}</p>`:""}
    ${!b.ok&&b.cur!=null?`<div class="bar"><i style="width:${Math.round(b.cur/b.tgt*100)}%"></i></div><p class="savenote">${esc(fmtProg(b))}</p>`:""}
-   <div class="xp">+${TIERXP[b.tier]} XP</div><div class="btns"><button class="btn" id="bpclose" style="flex:1">Close</button></div></div>`;
-  state.open="__badge";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#bpclose",sh).onclick=closeSheet}
+   <div class="xp">+${TIERXP[b.tier]} XP</div><div class="btns"><button class="btn" id="bpclose" style="flex:1">Close</button>${b.ok?`<button class="btn primary" id="bpshare" style="flex:1">Share</button>`:""}</div></div>`;
+  state.open="__badge";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#bpclose",sh).onclick=closeSheet;const bs=$("#bpshare",sh);if(bs)bs.onclick=()=>shareCard("badge",{b})}
 /* ---------- leaderboard (consistency only) ---------- */
 const lb={data:null,status:null,at:0,busy:false,scope:"all",all:false,err:false};
-function lbProg(){const a=plan.activeProgram;return a&&a.key&&!String(a.key).startsWith("mine:")?a:null}
+function lbProg(){const a=plan.activeProgram;return a&&a.key&&!/^(mine|f):/.test(String(a.key))?a:null}
 function checkinToday(){if(state.mode!=="db"||!window.LIFTLOG_RPC)return;ls.set("ll.ciq",TODAY);
   window.LIFTLOG_RPC("checkin",{d:TODAY}).then(()=>{ls.set("ll.ciq",null);lb.at=0;if(state.tab==="plan"&&!state.settings)loadBoard()}).catch(()=>{})}
 function retryCheckin(){if(ls.get("ll.ciq",null)===TODAY||Object.values(state.logs).some(l=>(l.entries||[]).some(e=>e.date===TODAY&&e.done)))checkinToday()}
 function loadBoard(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||lb.busy)return;if(!force&&Date.now()-lb.at<60000)return;
   lb.busy=true;const p=lb.scope==="prog"&&lbProg();
-  Promise.all([window.LIFTLOG_RPC("my_board_status"),window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
+  Promise.all([window.LIFTLOG_RPC("my_board_status"),lb.scope==="friends"?window.LIFTLOG_RPC("friends_board").then(d=>({...(d||{}),friends:true})):window.LIFTLOG_RPC("leaderboard",{prog:p?p.key:null})])
    .then(([s,d])=>{lb.status=s||{};lb.data=d||{};lb.err=false;syncCard()}).catch(()=>{lb.err=true})
    .finally(()=>{lb.busy=false;lb.at=Date.now();const el=$("#lbpanel");if(el){el.outerHTML=boardPanel();bindBoard()}})}
 function lbRow(r){const c=r.id&&cardOf(r.id);return `<li class="${r.me?"me":""}" ${r.id?`data-prof="${esc(r.id)}" data-pn="${esc(r.name||"")}" role="button" tabindex="0"`:""}><span class="rk">${r.rank<=3?["🥇","🥈","🥉"][r.rank-1]:r.rank}</span>${c?avatarFor(r.id,r.name,rankInfo(c.pts),"xs"):`<span class="lbav">${esc(initialsOf(r.name))}</span>`}<span class="nm">${esc(r.name||"Lifter")}${r.me?" <small>(you)</small>":""}</span><span class="wk">${r.streak} wk</span></li>`}
@@ -2934,17 +2938,18 @@ function boardPanel(){
   const head=`<h2>Leaderboard <button class="infob" id="lbinfo" aria-label="How the leaderboard works" title="One workout per day counts, only when you save it that day. A full week is 3 workout days. Unlocks after 2 full weeks in a row.">i</button></h2>`;
   const s=lb.status, d=lb.data;
   if(!s) return `<div class="panel" id="lbpanel">${head}<p class="savenote">${lb.err?"Couldn't load the leaderboard. Check your connection.":"Loading…"}</p></div>`;
-  if(!s.unlocked){const n=Math.min(3,s.thisWeek||0),run=s.streak||0;
-    return `<div class="panel" id="lbpanel">${head}<div class="lblock"><ol class="lbrows blur" aria-hidden="true">${[["Alex",9],["Sam",7],["Jordan",6],["Riley",4]].map(([nm,w],i)=>`<li><span class="rk">${i+1}</span><span class="nm">${nm}</span><span class="wk">${w} wk</span></li>`).join("")}</ol>
+  const prog=lbProg();
+  const tabs=`<div class="dchips lbtabs"><button class="dchip ${lb.scope==="all"?"on":""}" data-lbs="all" aria-pressed="${lb.scope==="all"}">Everyone</button><button class="dchip ${lb.scope==="friends"?"on":""}" data-lbs="friends" aria-pressed="${lb.scope==="friends"}">Friends</button>${prog?`<button class="dchip ${lb.scope==="prog"?"on":""}" data-lbs="prog" aria-pressed="${lb.scope==="prog"}">${esc(prog.title||"My program")}</button>`:""}</div>`;
+  if(!s.unlocked&&lb.scope!=="friends"){const n=Math.min(3,s.thisWeek||0),run=s.streak||0;
+    return `<div class="panel" id="lbpanel">${head}${tabs}<div class="lblock"><ol class="lbrows blur" aria-hidden="true">${[["Alex",9],["Sam",7],["Jordan",6],["Riley",4]].map(([nm,w],i)=>`<li><span class="rk">${i+1}</span><span class="nm">${nm}</span><span class="wk">${w} wk</span></li>`).join("")}</ol>
      <div class="lbover"><b>🔒 Unlocks after 2 full weeks</b><span>This week: ${n} of 3 workouts${run?` · ${run} of 2 full weeks done`:""}</span><span class="bar"><i style="width:${Math.round(n/3*100)}%"></i></span></div></div></div>`}
-  const rows=(d&&d.rows)||[], prog=lbProg();
-  const tabs=prog?`<div class="dchips lbtabs"><button class="dchip ${lb.scope==="all"?"on":""}" data-lbs="all" aria-pressed="${lb.scope==="all"}">Everyone</button><button class="dchip ${lb.scope==="prog"?"on":""}" data-lbs="prog" aria-pressed="${lb.scope==="prog"}">${esc(prog.title||"My program")}</button></div>`:"";
+  const rows=(d&&d.rows)||[], fb=!!(d&&d.friends);
   const meRow=rows.find(r=>r.me), shown=lb.all?rows:rows.slice(0,5);
   const extra=!lb.all&&!shown.some(r=>r.me)&&meRow?`<li class="gap">…</li>${lbRow(meRow)}`:"";
   return `<div class="panel" id="lbpanel">${head}${tabs}
-   <div class="lbme"><b>${s.streak||0}</b><span>full week${(s.streak||0)===1?"":"s"} in a row${d&&d.pct!=null&&s.board?` · more consistent than ${d.pct}% of lifters`:""}</span></div>
-   ${!s.board?`<div class="lbjoin"><span>You've unlocked the board. Show your name on it?</span><button class="btn small primary" id="lbjoin">Join</button></div>`:""}
-   ${rows.length?`<ol class="lbrows">${shown.map(lbRow).join("")}${extra}</ol>${rows.length>5?`<button class="linkbtn" id="lball">${lb.all?"Show less":`See top ${rows.length} ›`}</button>`:""}`:`<p class="savenote">No one's on this board yet.${s.board?"":" Be the first."}</p>`}
+   <div class="lbme"><b>${s.streak||0}</b><span>full week${(s.streak||0)===1?"":"s"} in a row${!fb&&d&&d.pct!=null&&s.board?` · more consistent than ${d.pct}% of lifters`:""}</span></div>
+   ${!s.board&&!fb&&s.unlocked?`<div class="lbjoin"><span>You've unlocked the board. Show your name on it?</span><button class="btn small primary" id="lbjoin">Join</button></div>`:""}
+   ${rows.length?`<ol class="lbrows">${shown.map(lbRow).join("")}${extra}</ol>${rows.length>5?`<button class="linkbtn" id="lball">${lb.all?"Show less":`See top ${rows.length} ›`}</button>`:""}`:`<p class="savenote">${fb?"Add friends to compare streaks.":`No one's on this board yet.${s.board?"":" Be the first."}`}</p>`}
   </div>`}
 function bindBoard(){const i=$("#lbinfo");if(i)i.onclick=openBoardInfo;
   const j=$("#lbjoin");if(j)j.onclick=()=>setBoard(true);
@@ -3043,13 +3048,13 @@ function openProfile(id,nm){const sh=$("#sheet"),mine=id==="me"||id===uid,c=mine
   sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="prclose">Close</button><span class="eyebrow">Profile</span></div>
    <div class="tprof"><div class="thead">${c?(mine&&state.mode==="db"?`<button class="avedit" id="avedit" aria-label="Change profile picture">${avatarFor(uid,name,r,"av")}<span>✎</span></button>`:avatarFor(mine?uid:id,name,r,"av")):`<div class="tav" aria-hidden="true">${esc(ini)}</div>`}<div><h3 id="sheet-title">${esc(name)}</h3><div class="tsub">${c?`Level ${c.lvl}${L?` · ${esc(L.title)}`:""}`:""}</div></div></div>
    ${c?`<div class="rankbox">${helmEmblem(r,"big")}<div class="rkt"><div class="rkn">${esc(r.full)} <button class="infob" id="rkinfo" aria-label="How ranks work" title="Every badge gives rank points: bronze 1, silver 2, gold 4, platinum 8, diamond 12.">i</button></div>
-     <p>${r.pts} rank points</p>${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
+     <p>${r.pts} rank points</p>${mine?`<button class="btn small" id="rkshare" style="margin:-2px 0 10px">Share my rank</button>`:""}${r.nextName?`<span class="bar"><i style="width:${Math.round(r.into/r.need*100)}%"></i></span><small>${r.toNext} more points to ${esc(r.nextName)}</small>`:`<small>Top rank</small>`}</div></div>
     <div class="lbl">${list.length} badge${list.length===1?"":"s"}</div>
     ${list.length?`<div class="bgrid pgrid">${list.map(b=>`<div class="bcell">${medal(b,"sm")}<b>${esc(b.name)}</b></div>`).join("")}</div>`:`<p class="savenote">No badges yet.</p>`}
-    ${mine?`<p class="savenote">${state.mode!=="db"?"":lb.status&&lb.status.board?"Others see this when they tap your name on the leaderboard.":"Only you can see this. Join the leaderboard to show it to others."} Body-weight badges always stay private.</p>`:""}`
-   :`<p class="savenote">This lifter's profile isn't available yet.</p>`}</div>`;
+    ${!mine?profileFriendBits(id):""}${mine?`<p class="savenote">${state.mode!=="db"?"":lb.status&&lb.status.board?"Others see this when they tap your name on the leaderboard.":"Only you can see this. Join the leaderboard to show it to others."} Body-weight badges always stay private.</p>`:""}`
+   :`<p class="savenote">This lifter's profile isn't available yet.</p>${profileFriendBits(id)}`}</div>`;
   state.open="__profile";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#prclose",sh).onclick=closeSheet;
-  const ri=$("#rkinfo",sh);if(ri)ri.onclick=()=>openRankInfo(id,nm);const ae=$("#avedit",sh);if(ae)ae.onclick=openAvatarPick;
+  const ri=$("#rkinfo",sh);if(ri)ri.onclick=()=>openRankInfo(id,nm);const ae=$("#avedit",sh);if(ae)ae.onclick=openAvatarPick;const rs=$("#rkshare",sh);if(rs)rs.onclick=()=>shareCard("rank",{});if(!mine)bindProfileFriend(sh,id,nm);
   needProfiles([mine?uid:id].filter(x=>x&&x!=="me"))}
 function openRankInfo(back,nm){const sh=$("#sheet");
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How ranks work</h3>
@@ -3124,6 +3129,124 @@ function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.L
   return `<div class="panel" id="avpanel"><h2>Profile picture</h2><div class="avrow">${avatarFor(uid,name,r,"md")}<span><b>${am==="photo"?"My photo":am==="helm"?"Warrior helm":"Initials"}</b>Upload your own photo or show your rank's warrior helm. Your rank border shows either way.</span></div>
    <div class="btns"><button class="btn primary" id="avchange2" style="flex:1">Change picture</button></div></div>`}
 function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;needProfiles([uid])}
+/* ---------- friends ---------- */
+const fr={list:null,progs:[],at:0,busy:false,err:false};
+function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
+let frT=null;
+function writeFriendProgs(){if(state.mode!=="db"||!window.LIFTLOG_RPC)return;clearTimeout(frT);frT=setTimeout(()=>window.LIFTLOG_RPC("set_friend_programs",{progs:friendPayload()}).catch(()=>{}),800)}
+function friendOf(id){return (fr.list||[]).find(f=>f.id===id)}
+function findProg(key){if(String(key).startsWith("f:"))return fr.progs.find(x=>x.key===key);return pg.community.find(x=>x.key===key)}
+function loadFriends(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||fr.busy)return;if(!force&&Date.now()-fr.at<60000)return;fr.busy=true;
+  Promise.all([window.LIFTLOG_RPC("my_friends"),window.LIFTLOG_RPC("friend_programs").catch(()=>[])]).then(([l,ps])=>{fr.list=l||[];fr.err=false;
+    fr.progs=[];(ps||[]).forEach(o=>(o.programs||[]).forEach(p=>{if(p&&p.id&&Array.isArray(p.weeks)&&p.weeks.length&&!(Number(p.price)>0))fr.progs.push({...p,author:o.owner,key:"f:"+o.owner+":"+p.id,friendOnly:true})}));
+    fr.list.forEach(f=>{if(f.name)pg.names[f.id]=f.name})}).catch(()=>{fr.err=true;fr.list=fr.list||[]})
+   .finally(()=>{fr.busy=false;fr.at=Date.now();const el=$("#frpanel");if(el){el.outerHTML=friendsPanel();bindFriends()}})}
+function frRow(f){const c=cardOf(f.id),r=rankInfo(c?c.pts:0);
+  const sub=f.state==="incoming"?"Wants to be friends":f.state==="outgoing"?"Request sent":
+    `<span>${f.thisWeek||0} workout${f.thisWeek===1?"":"s"} this week</span>${f.streak?` · <span>🔥 ${f.streak} wk</span>`:""}`;
+  return `<div class="frrow"><button class="frmain" data-fprof="${esc(f.id)}" data-pn="${esc(f.name||"")}">${c?avatarFor(f.id,f.name,r,"xs"):`<span class="lbav">${esc(initialsOf(f.name))}</span>`}<span><b>${esc(f.name||"Lifter")}</b><small>${sub}</small></span></button>
+   ${f.state==="incoming"?`<button class="btn small primary" data-facc="${esc(f.id)}">Accept</button><button class="btn small" data-fdec="${esc(f.id)}" aria-label="Decline">✕</button>`:""}</div>`}
+function friendsPanel(){if(state.mode!=="db")return "";const l=fr.list;
+  const head=`<h2>Friends <button class="infob" id="frinfo" aria-label="How friends work" title="Friends see each other's week and streak, never weights. Share programs you made with friends only. Paid programs are never shared.">i</button><button class="btn small fradd" id="fradd">+ Add friend</button></h2>`;
+  if(!l)return `<div class="panel" id="frpanel">${head}<p class="savenote">${fr.err?"Couldn't load friends. Check your connection.":"Loading…"}</p></div>`;
+  const inc=l.filter(f=>f.state==="incoming"),fri=l.filter(f=>f.state==="friend").sort((a,b)=>(b.thisWeek||0)-(a.thisWeek||0)),out=l.filter(f=>f.state==="outgoing");
+  return `<div class="panel" id="frpanel">${head}
+   ${inc.length?`<div class="lbl" style="margin-top:0">Requests</div>${inc.map(frRow).join("")}`:""}
+   ${fri.length?fri.map(frRow).join(""):`<p class="savenote">Add friends to see each other's week, compare streaks and share programs you made.</p>`}
+   ${out.length?`<div class="lbl">Sent</div>${out.map(frRow).join("")}`:""}</div>`}
+function bindFriends(){const a=$("#fradd");if(a)a.onclick=openAddFriend;const i=$("#frinfo");if(i)i.onclick=openFriendInfo;
+  document.querySelectorAll("#frpanel [data-fprof]").forEach(b=>b.onclick=()=>openProfile(b.dataset.fprof,b.dataset.pn));
+  document.querySelectorAll("#frpanel [data-facc]").forEach(b=>b.onclick=()=>friendAct("friend_respond",{other:b.dataset.facc,accept:true},"You're friends now"));
+  document.querySelectorAll("#frpanel [data-fdec]").forEach(b=>b.onclick=()=>friendAct("friend_respond",{other:b.dataset.fdec,accept:false},"Request declined"));
+  needProfiles((fr.list||[]).map(f=>f.id));loadFriends()}
+function friendAct(fn,args,msg){return window.LIFTLOG_RPC(fn,args).then(r=>{const t={sent:"Friend request sent",accepted:"You're friends now",already:"You're already friends",pending:"Request already sent",self:"That's your own code",unknown:"No one has that code",limit:"Too many requests waiting. Try again later."}[r]||msg;
+  if(t)toast(t);loadFriends(true);lb.at=0;return r}).catch(()=>{toast("Couldn't update. Check your connection and try again.")})}
+function openAddFriend(){const sh=$("#sheet");const code=refs.data&&refs.data.code;
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Add a friend</h3>
+   <p class="savenote" style="margin-top:0">Type your friend's code. They'll find it in Log → Add friend, or at the end of their invite link.</p>
+   <div class="cform"><label>Friend's code<span class="field"><input id="frcode" maxlength="12" autocapitalize="characters" autocomplete="off" placeholder="e.g. HRV3GQ"></span></label></div>
+   <div class="btns"><button class="btn" id="frcancel">Cancel</button><button class="btn primary" id="frsend" style="flex:1">Send request</button></div>
+   <div class="lbl">Your code</div><div class="reflink"><code id="frmy">${code?esc(code):"…"}</code><button class="btn small primary" id="frshare">Share</button></div>
+   <p class="savenote">You can also add someone from their profile on the leaderboard.</p>`;
+  state.open="__addfriend";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;
+  if(!code&&window.LIFTLOG_RPC)window.LIFTLOG_RPC("my_ref_code").then(c=>{refs.data={...(refs.data||{}),code:c};const e=$("#frmy",sh);if(e)e.textContent=c}).catch(()=>{});
+  $("#frcancel",sh).onclick=closeSheet;$("#frshare",sh).onclick=shareInvite;
+  $("#frsend",sh).onclick=()=>{const v=$("#frcode",sh).value.replace(/[^A-Za-z0-9]/g,"");if(!v){toast("Type a code first");return}friendAct("friend_request",{code:v,target:null}).then(r=>{if(r==="sent"||r==="accepted")closeSheet()})}}
+function openFriendInfo(){const sh=$("#sheet");
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">How friends work</h3>
+   <ul class="lbrules"><li>Add a friend with their code or from their profile. They accept, then you're friends.</li>
+    <li>Friends see each other's week (days trained) and streak. Never weights.</li>
+    <li>Turn on <b>Share with friends</b> on a program you made to let friends see and use it.</li>
+    <li>Only programs you made yourself can be shared. Paid programs are never shared.</li>
+    <li>The Friends tab on the leaderboard ranks you and your friends.</li></ul>
+   <div class="btns"><button class="btn primary" id="frok" style="flex:1">Got it</button></div>`;
+  state.open="__frinfo";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#frok",sh).onclick=closeSheet}
+function profileFriendBits(id){if(state.mode!=="db"||!id||id===uid||id==="me")return "";const f=friendOf(id);
+  const btn=!f?`<button class="btn primary" id="pfadd" style="flex:1">+ Add friend</button>`:f.state==="incoming"?`<button class="btn primary" id="pfacc" style="flex:1">Accept friend request</button>`:
+    f.state==="outgoing"?`<button class="btn" id="pfcancel" style="flex:1">Request sent · Cancel</button>`:`<button class="btn" id="pfrm" style="flex:1">✓ Friends</button>`;
+  const progs=f&&f.state==="friend"?[...fr.progs.filter(p=>p.author===id),...pg.community.filter(p=>p.author===id&&!p.featured&&!(Number(p.price)>0))]:[];
+  return `<div class="btns">${btn}</div>${f&&f.state==="friend"?`<div class="lbl">Their week</div><p class="savenote" style="margin-top:0"><span>${f.thisWeek||0} workout${f.thisWeek===1?"":"s"} this week</span>${f.lastDay?` · <span>Last trained ${fmtDate(f.lastDay)}</span>`:""}${f.streak?` · <span>🔥 ${f.streak} full week${f.streak===1?"":"s"} in a row</span>`:""}</p>
+   <div class="lbl">Programs they made</div>${progs.length?progs.map(progCard).join(""):`<p class="savenote">Nothing shared yet.</p>`}`:""}`}
+function bindProfileFriend(sh,id,nm){const g=(s,f)=>{const e=$(s,sh);if(e)f(e)};
+  g("#pfadd",e=>e.onclick=()=>friendAct("friend_request",{code:null,target:id}).then(()=>setTimeout(()=>openProfile(id,nm),300)));
+  g("#pfacc",e=>e.onclick=()=>friendAct("friend_respond",{other:id,accept:true},"You're friends now").then(()=>setTimeout(()=>openProfile(id,nm),300)));
+  g("#pfcancel",e=>armBtn(e,"Tap again to cancel",()=>friendAct("friend_remove",{other:id},"Request canceled").then(()=>setTimeout(()=>openProfile(id,nm),300))));
+  g("#pfrm",e=>armBtn(e,"Tap again to unfriend",()=>friendAct("friend_remove",{other:id},"Removed from friends").then(()=>setTimeout(()=>openProfile(id,nm),300))));
+  sh.querySelectorAll("[data-pview]").forEach(b=>b.onclick=()=>openProgView(b.dataset.pview))}
+/* ---------- shareable cards (1080×1350 image for Stories / posts) ---------- */
+function svgImg(svg,w,h){return new Promise(res=>{let x=svg.replace(/<svg /,`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${w}" height="${h}" `)
+    .replace(/(<svg[^>]*>)/,"$1<style>.mnum{font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-weight:800;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.5px}</style>").replace(/var\(--display\)/g,"'Barlow Condensed','Arial Narrow',Arial,sans-serif").replace(/var\(--line\)/g,"#3a3f48").replace(/var\(--surface-2\)/g,"#22262d").replace(/var\(--muted\)/g,"#9aa3ae");
+  const img=new Image();img.onload=()=>res(img);img.onerror=()=>res(null);img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(x)})}
+function weekRecap(){const ws=wkStartOf(TODAY),ss=sessions().filter(s=>s.date>=ws&&s.date<=TODAY);let vol=0,prs=0;
+  const days=[0,1,2,3,4,5,6].map(i=>ss.some(s=>s.date===addDays(ws,i)));
+  ss.forEach(s=>s.items.forEach(({it,e})=>{(e.sets||[]).forEach(st=>{const w=Number(st.w)||0,r=Number(st.r)||0;if(it&&it.type!=="cardio"&&it.type!=="bw")vol+=w*r});
+    const top=Math.max(0,...(e.sets||[]).map(st=>Number(st.w)||0));if(top>0){const before=entriesOf(it.id).filter(x=>x.date<e.date).reduce((m,x)=>Math.max(m,...(x.sets||[]).map(st=>Number(st.w)||0)),0);if(before>0&&top>before)prs++}}));
+  const S=badgeStats();return {n:ss.length,vol,prs,days,streak:S.streak||0,ws}}
+function fitText(g,t,max,size,weight,fam){let s=size;do{g.font=`${weight} ${s}px ${fam}`;s-=2}while(g.measureText(t).width>max&&s>18);return s+2}
+function wrapText(g,t,x,y,max,lh,lines){const words=String(t).split(/\s+/);let line="",n=0;for(const w of words){const test=line?line+" "+w:w;if(g.measureText(test).width>max&&line){g.fillText(line,x,y+n*lh);n++;line=w;if(n>=lines-1){const rest=words.slice(words.indexOf(w)).join(" ");let r=rest;while(g.measureText(r+"…").width>max&&r.length)r=r.slice(0,-1);if(r!==rest)r+="…";g.fillText(r,x,y+n*lh);return n+1}}else line=test}if(line){g.fillText(line,x,y+n*lh);n++}return n}
+const trx=x=>window.LIFTLOG_I18N&&window.LIFTLOG_I18N.t?window.LIFTLOG_I18N.t(x):x;
+async function makeCard(kind,o){try{await document.fonts.ready}catch(e){}
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
+  const D="'Barlow Condensed','Arial Narrow',Arial,sans-serif",B="Barlow,system-ui,sans-serif";
+  const r=rankInfo(myCard().pts),P=RANKS[r.i],glow=kind==="badge"?(TPAL[o.b.tier]||TPAL.gold)[1]:kind==="rank"?P[3]:"#3ECF8E";
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,"#0b0e13");bg.addColorStop(1,"#151a22");g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const rg=g.createRadialGradient(W/2,560,40,W/2,560,620);rg.addColorStop(0,glow+"55");rg.addColorStop(1,glow+"00");g.fillStyle=rg;g.fillRect(0,0,W,H);
+  g.strokeStyle="rgba(255,255,255,.06)";g.lineWidth=2;for(let i=-H;i<W;i+=60){g.beginPath();g.moveTo(i,0);g.lineTo(i+H,H);g.stroke()}
+  g.fillStyle="#fff";g.font=`800 46px ${D}`;g.textAlign="left";g.fillText("LIFTLOG",72,110);g.fillStyle=glow;g.fillRect(72,128,90,6);
+  g.textAlign="center";const ey=(t)=>{t=trx(t);g.fillStyle=glow;g.font=`800 40px ${D}`;g.fillText(t.toUpperCase(),W/2,280)};
+  const title=(t,y)=>{t=trx(t);g.fillStyle="#fff";fitText(g,t.toUpperCase(),W-140,104,800,D);g.fillText(t.toUpperCase(),W/2,y)};
+  const sub=(t,y,lines)=>{t=trx(t);g.fillStyle="#c5ccd6";g.font=`500 38px ${B}`;return wrapText(g,t,W/2,y,W-200,50,lines||3)};
+  if(kind==="badge"){ey("New badge · "+({bronze:"Bronze",silver:"Silver",gold:"Gold",plat:"Platinum",diamond:"Diamond"})[o.b.tier]);
+    const im=await svgImg(medal(o.b,"big").replace(/^<div[^>]*>/,"").replace(/<\/div>$/,""),420,470);if(im)g.drawImage(im,W/2-210,320,420,470);
+    title(o.b.name,890);sub(o.b.desc,960,3)}
+  else if(kind==="rank"){ey("My rank");const im=await svgImg(helmEmblem(r,""),440,460);if(im)g.drawImage(im,W/2-220,320,440,460);
+    title(r.full,890);sub(`${r.pts} rank points · ${myCard().b.length} badges`,960,2)}
+  else if(kind==="level"){ey("Level up");g.fillStyle="#fff";g.font=`800 300px ${D}`;g.fillText(String(o.L.lvl),W/2,700);title(o.L.title,890);sub("Stacking workouts, one day at a time.",960,2)}
+  else if(kind==="week"){const w=o;ey("My week");
+    const box=(x,y,val,lab)=>{g.fillStyle="rgba(255,255,255,.06)";g.beginPath();g.roundRect(x,y,440,220,28);g.fill();g.fillStyle="#fff";g.font=`800 104px ${D}`;g.fillText(val,x+220,y+130);g.fillStyle="#9aa3ae";g.font=`600 32px ${B}`;g.fillText(trx(lab),x+220,y+185)};
+    box(80,330,String(w.n),w.n===1?"workout":"workouts");box(560,330,w.vol>=10000?Math.round(toDisp(w.vol)/1000)+"K":String(Math.round(toDisp(w.vol))),wU()+" lifted");
+    box(80,580,String(w.prs),w.prs===1?"new PR":"new PRs");box(560,580,String(w.streak),"weeks in a row");
+    const L=[0,1,2,3,4,5,6].map(i=>{try{return new Date(2024,0,1+i).toLocaleDateString(LOC,{weekday:"narrow"})}catch(e){return "MTWTFSS"[i]}});for(let i=0;i<7;i++){const x=W/2+(i-3)*118,y=930;g.beginPath();g.arc(x,y,44,0,Math.PI*2);g.fillStyle=w.days[i]?"#3ECF8E":"rgba(255,255,255,.08)";g.fill();g.fillStyle=w.days[i]?"#06281a":"#9aa3ae";g.font=`800 38px ${D}`;g.fillText(L[i],x,y+13)}}
+  // footer: who + invite
+  const name=(window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.name)||"";const av=await svgImg(avatarFor(uid,name||"You",r,""),150,158);
+  g.fillStyle="rgba(255,255,255,.07)";g.beginPath();g.roundRect(72,1090,W-144,190,32);g.fill();
+  if(av)g.drawImage(av,90,1106,150,158);g.textAlign="left";g.fillStyle="#fff";g.font=`800 50px ${D}`;g.fillText((name||trx("LiftLog lifter")).toUpperCase().slice(0,22),256,1166);
+  g.fillStyle="#9aa3ae";g.font=`600 32px ${B}`;g.fillText(`${trx(r.full)} · ${trx("train with me on LiftLog")}`,256,1214);
+  const code=refs.data&&refs.data.code;if(code){g.fillStyle=glow;g.font=`700 30px ${B}`;g.fillText(trx(`Code ${code}`),256,1256)}
+  return c}
+async function shareCard(kind,o){const sh=$("#sheet");
+  if(state.mode==="db"&&window.LIFTLOG_RPC&&!(refs.data&&refs.data.code))await window.LIFTLOG_RPC("my_ref_code").then(cd=>{refs.data={...(refs.data||{}),code:cd}}).catch(()=>{});
+  const c=await makeCard(kind,o);const url=c.toDataURL("image/png");const link=refs.data&&refs.data.code?refLink(refs.data.code):location.origin+location.pathname;
+  sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Share</h3><img class="shareimg" src="${url}" alt="Share card preview">
+   <div class="btns"><button class="btn" id="shclose">Close</button><button class="btn" id="shsave">Save image</button><button class="btn primary" id="shgo" style="flex:1">Share</button></div>
+   <p class="savenote">Your invite link goes with it, so friends who join count toward your referral badges.</p>`;
+  state.open="__share";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#shclose",sh).onclick=closeSheet;
+  const save=()=>{const a=document.createElement("a");a.href=url;a.download=`liftlog-${kind}.png`;document.body.appendChild(a);a.click();a.remove()};
+  $("#shsave",sh).onclick=save;
+  $("#shgo",sh).onclick=()=>c.toBlob(bl=>{const f=new File([bl],`liftlog-${kind}.png`,{type:"image/png"}),text=trx(`Training on LiftLog. Join me: ${link}`);
+    if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text}).catch(()=>{});
+    else if(navigator.share)navigator.share({title:"LiftLog",text,url:link}).catch(()=>{});
+    else{save();if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>toast("Image saved. Invite link copied.")).catch(()=>{})}},"image/png")}
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
 function refLink(code){return location.origin+location.pathname+"?ref="+code}
@@ -3170,10 +3293,10 @@ function showCeleb(){const c=celebQ.shift();if(!c)return;const L=c.L||c.lvl;cons
    <h3 id="celeb-t">${c.multi?`${c.multi.length} badges unlocked`:c.b?esc(c.b.name):`Level ${L.lvl}!`}</h3><p>${c.multi?esc(c.multi.map(x=>x.name).join(", ")):c.b?esc(c.b.desc):`You're a ${esc(L.title)}. Keep stacking workouts.`}</p>
    ${c.multi?`<div class="xp">+${c.multi.reduce((a,x)=>a+TIERXP[x.tier],0)} XP</div>`:c.b?`<div class="xp">+${TIERXP[c.b.tier]} XP</div>`:""}
    <div class="bar"><i style="width:${pct}%"></i></div><div class="xpn">Level ${L.lvl} · ${L.into.toLocaleString(LOC)} / ${L.need.toLocaleString(LOC)} XP</div>
-   <button class="btn primary" id="cnice" style="width:100%;margin-top:12px">Nice!</button><button class="btn" id="call" style="width:100%;margin-top:8px">See all badges</button></div>`;
+   <div class="btns" style="margin-top:12px"><button class="btn primary" id="cnice" style="flex:1">Nice!</button>${!c.multi?`<button class="btn" id="cshare">Share</button>`:""}</div><button class="btn" id="call" style="width:100%;margin-top:8px">See all badges</button></div>`;
   document.body.appendChild(el);
   const close=()=>{el.remove();if(celebQ.length)setTimeout(showCeleb,250)};
-  $("#cnice").onclick=close; el.querySelector(".cscrim").onclick=close;
+  $("#cnice").onclick=close; el.querySelector(".cscrim").onclick=close;const cs=$("#cshare");if(cs)cs.onclick=()=>{close();c.b?shareCard("badge",{b:c.b}):shareCard("level",{L})};
   $("#call").onclick=()=>{celebQ=[];el.remove();closeSheet();state.tab="plan";state.settings=false;state.badges={cat:"all"};render();window.scrollTo(0,0)};
   $("#cnice").focus()}
 
