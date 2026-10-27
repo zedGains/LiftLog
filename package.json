@@ -1,0 +1,9 @@
+{
+  "name": "liftlog",
+  "private": true,
+  "description": "LiftLog web app. The site itself is static files; this only lists what the /api link-preview functions need.",
+  "type": "module",
+  "dependencies": {
+    "@vercel/og": "0.6.8"
+  }
+}

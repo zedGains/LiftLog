@@ -27,6 +27,7 @@ if(k){document.documentElement.setAttribute("data-skin",k);var l=document.create
 #auth{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;display:grid;place-items:start center;padding:calc(24px + env(safe-area-inset-top,0px)) 16px 32px}
 #auth[hidden]{display:none}
 .authcard{width:100%;max-width:420px;display:grid;gap:14px}
+.authinvite{display:flex;gap:12px;align-items:center;padding:12px;margin:2px 0 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--line)}.authinvite>div{min-width:0}.authinvite b{display:block;font-size:16px}.authinvite span{font-size:13px;color:var(--muted)}.authinvite small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}.authinvite .rframe,.authinvite .helm{flex:none}
 .authbrand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .authbrand .plate{background:var(--red)}
 #auth .cform{gap:12px}
@@ -3446,7 +3447,7 @@ async function makeCard(kind,o){try{await document.fonts.ready}catch(e){}
   g.fillStyle="#9aa3ae";g.font=`600 32px ${B}`;g.fillText(`${trx(r.full)} · ${trx("train with me on LiftLog")}`,256,1214);
   const code=refs.data&&refs.data.code;if(code){g.fillStyle=glow;g.font=`700 30px ${B}`;g.fillText(trx(`Code ${code}`),256,1256)}
   return c}
-async function shareCard(kind,o){const sh=$("#sheet");
+async function shareCard(kind,o){const sh=$("#sheet");saveInviteCard();
   if(state.mode==="db"&&window.LIFTLOG_RPC&&!(refs.data&&refs.data.code))await window.LIFTLOG_RPC("my_ref_code").then(cd=>{refs.data={...(refs.data||{}),code:cd}}).catch(()=>{});
   const c=await makeCard(kind,o);const url=c.toDataURL("image/png");const link=refs.data&&refs.data.code?refLink(refs.data.code):location.origin+location.pathname;
   const canFiles=(()=>{try{return !!(navigator.canShare&&navigator.canShare({files:[new File([""],"x.png",{type:"image/png"})]}))}catch(e){return false}})();
@@ -3569,7 +3570,9 @@ function showHoliday(h){if($("#holi"))return;const name=((window.LIFTLOG_ACCOUNT
 setTimeout(skinFx,50);
 /* ---------- invites ---------- */
 const refs={data:null,at:0,busy:false};
-function refLink(code){return location.origin+location.pathname+"?ref="+code}
+function refLink(code){return location.origin+"/i/"+code}
+let invT=0;function saveInviteCard(){if(state.mode!=="db"||!window.LIFTLOG_RPC||Date.now()-invT<60000)return;invT=Date.now();
+  const c=myCard(),S=badgeStats();window.LIFTLOG_RPC("set_invite_card",{card:{pts:c.pts,lvl:c.lvl,badges:c.b.length,streak:(lb.status&&lb.status.streak)||S.streak||0,helm:(profCache[uid]||{}).am==="helm"}}).catch(()=>{})}
 function loadRefs(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||refs.busy)return;if(!force&&Date.now()-refs.at<120000)return;refs.busy=true;
   window.LIFTLOG_RPC("my_ref_code").then(()=>window.LIFTLOG_RPC("my_referrals")).then(d=>{refs.data=d||{};
     const a=+(refs.data.active||0);if(a!==(plan.refActive||0)){plan.refActive=a;savePlan();setTimeout(checkBadges,300)}})
@@ -3581,7 +3584,7 @@ function invitePanel(){if(state.mode!=="db")return "";const d=refs.data;
    ${!d?`<p class="savenote">Loading…</p>`:d.err||!d.code?`<p class="savenote">Couldn't load your invite link. Check your connection.</p>`:
    `<div class="reflink"><code>${esc(refLink(d.code).replace(/^https?:\/\//,""))}</code><button class="btn small primary" id="refshare">Share</button></div>
     <p class="savenote">${d.joined||0} joined · ${d.active||0} finished week 1</p>${(()=>{const nx=badgeState().B.find(b=>b.cat==="friends"&&!b.ok);return nx?`<button class="nextb" data-badge="${nx.id}">${medal(nx,"sm",true)}<span><b>Next up: ${esc(nx.name)}</b>${nx.cur} of ${nx.tgt} friends<span class="bar"><i style="width:${Math.round(nx.cur/nx.tgt*100)}%"></i></span></span></button>`:""})()}`}</div>`}
-function bindInvite(){const i=$("#refinfo");if(i)i.onclick=openRefInfo;const s=$("#refshare");
+function bindInvite(){if($("#refpanel"))saveInviteCard();const i=$("#refinfo");if(i)i.onclick=openRefInfo;const s=$("#refshare");
   if(s)s.onclick=shareInvite;document.querySelectorAll("#refpanel [data-badge]").forEach(b=>b.onclick=()=>openBadge(b.dataset.badge));
   loadRefs()}
 function openRefInfo(){const sh=$("#sheet");

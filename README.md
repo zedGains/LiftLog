@@ -21,6 +21,8 @@ Installable on a phone's home screen.
 | `supabase/avatars.sql` | Profile pictures: initials, warrior helm, or own photo inside the rank border |
 | `supabase/friends.sql` | Friends: requests, friends-only board, programs shared with friends (paid programs never shared) |
 | `supabase/exercises.sql` | Custom exercises (you + friends), suggestions queue, owner-approved shared library |
+| `supabase/invites.sql` | Public invite card so /i/CODE links show a preview picture and "X invited you" |
+| `api/` | Vercel functions for invite link previews (`/i/CODE` page + `/api/og` picture). `tools/build_emblem.py` copies the rank emblems into them |
 | `supabase/stats.sql` | Owner dashboard + creator stats functions (counts only) |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen install |
 | `privacy.html`, `terms.html` | Privacy Policy and Terms of Use |

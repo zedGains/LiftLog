@@ -129,7 +129,7 @@
     resolveReady(user);
   }
   sb.auth.getSession().then(({ data }) => {
-    if (data && data.session) signedIn(data.session.user); else showAuth("signin");
+    if (data && data.session) signedIn(data.session.user); else showAuth(pendingRef ? "signup" : "signin");
   });
   sb.auth.onAuthStateChange((event, session) => {
     // Defer: calling Supabase from inside this callback can stall its auth lock.
@@ -316,7 +316,22 @@
   });
 
   /* ---------- sign-in screen ---------- */
-  let authMode = "signin";
+  const pendingRef = (() => { try { return JSON.parse(localStorage.getItem("ll.ref") || "null"); } catch (e) { return null; } })();
+  let authMode = pendingRef ? "signup" : "signin";
+  let inviteInfo = null, inviteAsked = false;
+  function inviteHtml() {
+    if (!inviteInfo) return "";
+    const c = inviteInfo.card || null, nm = inviteInfo.name || "A friend";
+    const r = c && window.rankInfo ? window.rankInfo(c.pts || 0) : null;
+    const pic = r && window.helmEmblem && window.rankFrame ? (c.helm ? window.helmEmblem(r, "md") : window.rankFrame(r, { ini: nm.split(/\s+/).map((w) => w[0] || "").join("").slice(0, 2).toUpperCase() }, "md")) : "";
+    const bits = [r ? r.full : "", c && c.streak ? `🔥 ${c.streak} week streak` : "", c && c.badges ? `${c.badges} badges` : ""].filter(Boolean);
+    return `<div class="authinvite">${pic}<div><b>${esc(nm)} invited you</b>${bits.length ? `<span>${bits.map((b) => `<span>${esc(b)}</span>`).join(" · ")}</span>` : ""}<small>Create an account to train with them.</small></div></div>`;
+  }
+  function esc(t) { return String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+  function loadInvite() {
+    if (!pendingRef || inviteAsked || !configured) return; inviteAsked = true;
+    sb.rpc("invite_card", { code: pendingRef }).then(({ data }) => { if (data && data.name) { inviteInfo = data; const el = document.getElementById("auth"); if (el && !el.hidden) showAuth(); } }).catch(() => {});
+  }
   function authEl() {
     let el = document.getElementById("auth");
     if (!el) { el = document.createElement("div"); el.id = "auth"; el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-labelledby", "auth-title"); document.body.appendChild(el); }
@@ -325,10 +340,11 @@
   function hideAuth() { const el = document.getElementById("auth"); if (el) el.hidden = true; }
   function showAuth(mode) {
     if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", () => showAuth(mode)); return; }
-    authMode = mode || authMode; const el = authEl(); el.hidden = false;
+    authMode = mode || authMode; const el = authEl(); el.hidden = false; loadInvite();
     const up = authMode === "signup", np = authMode === "newpass", fp = authMode === "forgot";
     el.innerHTML = `<div class="authcard">
       <div class="authbrand"><div class="plate" aria-hidden="true"><span></span></div><div><div class="eyebrow">LiftLog</div><h1 id="auth-title">${np ? "New password" : fp ? "Reset password" : up ? "Create account" : "Sign in"}</h1></div></div>
+      ${np || fp ? "" : inviteHtml()}
       ${np || fp ? "" : `<div class="seg" role="tablist"><button class="segb ${up ? "" : "on"}" data-am="signin" role="tab" aria-selected="${!up}">Sign in</button><button class="segb ${up ? "on" : ""}" data-am="signup" role="tab" aria-selected="${up}">Create account</button></div>`}
       <form id="authform" class="cform" novalidate>
         ${up ? `<label>Your name<span class="field"><input id="a-name" autocomplete="name" placeholder="Shown on programs you share" required></span></label>` : ""}
