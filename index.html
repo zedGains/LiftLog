@@ -901,7 +901,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -1067,7 +1067,8 @@ function persist(id){
 function entriesOf(id){return (state.logs[id]&&state.logs[id].entries)||[]}
 function todayEntry(id){return entriesOf(id).find(e=>e.date===TODAY)}
 // After you save a day, its exercises start fresh again (the saved log stays in History).
-function freshSet(){return new Set(ls.get("ll.fresh."+TODAY,[]))}
+function freshSet(){const f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];return new Set([...ls.get("ll.fresh."+TODAY,[]),...f])}
+function setFresh(fr,dayKey,at){const ids=[...fr];ls.set("ll.fresh."+TODAY,ids);const sa=plan.fresh&&plan.fresh.d===TODAY?{...(plan.fresh.at||{})}:{};if(dayKey&&at)sa[dayKey]=at;plan.fresh={d:TODAY,ids,at:sa};savePlan()}
 function shownToday(id){return freshSet().has(id)?null:todayEntry(id)}
 function lastEntry(id){const fr=freshSet().has(id);const es=entriesOf(id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done);return es[es.length-1]}
 
@@ -1127,7 +1128,7 @@ function saveDay(dayKey){
     render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} workout${items.length===1?"":"s"} logged`); setTimeout(checkBadges,900); return}
   const n=all.filter(it=>todayEntry(it.id)).length;
   ls.set("ll.savedAt."+dayKey+"."+TODAY,Date.now());
-  const fr=freshSet(); items.forEach(it=>{fr.add(it.id);delete state.drafts[it.id]}); ls.set("ll.fresh."+TODAY,[...fr]); saveDrafts();
+  const fr=freshSet(); items.forEach(it=>{fr.add(it.id);delete state.drafts[it.id]}); setFresh(fr,dayKey,Date.now()); saveDrafts();
   state.justSaved={day:dayKey,n}; checkinToday(); render(); window.scrollTo(0,0); toast(`${DAYS[dayKey].label} saved: ${n} workout${n===1?"":"s"} logged. Nice work!`); setTimeout(checkBadges,900);
 }
 
@@ -1266,7 +1267,7 @@ function render(){
   const pending=items.filter(it=>isPending(it.id)).length;
   const savedN=items.filter(it=>shownToday(it.id)).length;
   const frIds=freshSet(); const savedFresh=items.filter(it=>frIds.has(it.id)&&todayEntry(it.id)).length;
-  const savedAt=ls.get("ll.savedAt."+tab+"."+TODAY,null);
+  const savedAt=ls.get("ll.savedAt."+tab+"."+TODAY,null)||(plan.fresh&&plan.fresh.d===TODAY&&plan.fresh.at&&plan.fresh.at[tab])||null;
   const prim=new Set(),sec=new Set(); items.forEach(it=>{it.p.forEach(x=>prim.add(x));it.s.forEach(x=>sec.add(x))});
   const restDay=weekdayTab()===null;
   const ldPast=logDate()!==TODAY;
@@ -1314,7 +1315,7 @@ function render(){
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openSheet(b.dataset.open));
   const sk1=$("#skipday"); if(sk1) armBtn(sk1,"Tap again: rest today, this workout comes back next week",skipToday);
   const us1=$("#unskip"); if(us1) us1.onclick=unskipToday;
-  const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});ls.set("ll.fresh."+TODAY,[...fr]);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
+  const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   app.querySelectorAll("[data-reorder]").forEach(b=>b.onclick=()=>{state.reorder=state.reorder===b.dataset.reorder?null:b.dataset.reorder;render()});
   app.querySelectorAll(".section.reordering").forEach(el=>bindReorder(el,tab));
   app.querySelectorAll("[data-check]").forEach(b=>b.onclick=()=>toggleMark(ALL[b.dataset.check]));
@@ -3448,16 +3449,19 @@ async function makeCard(kind,o){try{await document.fonts.ready}catch(e){}
 async function shareCard(kind,o){const sh=$("#sheet");
   if(state.mode==="db"&&window.LIFTLOG_RPC&&!(refs.data&&refs.data.code))await window.LIFTLOG_RPC("my_ref_code").then(cd=>{refs.data={...(refs.data||{}),code:cd}}).catch(()=>{});
   const c=await makeCard(kind,o);const url=c.toDataURL("image/png");const link=refs.data&&refs.data.code?refLink(refs.data.code):location.origin+location.pathname;
+  const canFiles=(()=>{try{return !!(navigator.canShare&&navigator.canShare({files:[new File([""],"x.png",{type:"image/png"})]}))}catch(e){return false}})();
   sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Share</h3><img class="shareimg" src="${url}" alt="Share card preview">
-   <div class="btns"><button class="btn" id="shclose">Close</button><button class="btn" id="shsave">Save image</button><button class="btn primary" id="shgo" style="flex:1">Share</button></div>
-   <p class="savenote">Your invite link goes with it, so friends who join count toward your referral badges.</p>`;
+   <div class="lbl">Your invite link</div><div class="reflink"><code id="shlink">${esc(link.replace(/^https?:\/\//,""))}</code><button class="btn small" id="shcopy">Copy link</button></div>
+   <div class="btns"><button class="btn" id="shclose">Close</button><button class="btn" id="shsave">Save image</button>${canFiles||navigator.share?`<button class="btn primary" id="shgo" style="flex:1">Share</button>`:""}</div>
+   <p class="savenote">Post the image, and paste your link with it. Friends who join with your link count toward your referral badges.</p>`;
   state.open="__share";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#shclose",sh).onclick=closeSheet;
-  const save=()=>{const a=document.createElement("a");a.href=url;a.download=`liftlog-${kind}.png`;document.body.appendChild(a);a.click();a.remove()};
-  $("#shsave",sh).onclick=save;
-  $("#shgo",sh).onclick=()=>c.toBlob(bl=>{const f=new File([bl],`liftlog-${kind}.png`,{type:"image/png"}),text=trx(`Training on LiftLog. Join me: ${link}`);
-    if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text}).catch(()=>{});
-    else if(navigator.share)navigator.share({title:"LiftLog",text,url:link}).catch(()=>{});
-    else{save();if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>toast("Image saved. Invite link copied.")).catch(()=>{})}},"image/png")}
+  const save=()=>{const a=document.createElement("a");a.href=url;a.download=`liftlog-${kind}.png`;document.body.appendChild(a);a.click();a.remove();toast("Image saved")};
+  const copy=()=>{const ok=()=>{toast("Link copied");const b=$("#shcopy",sh);if(b){b.textContent="✓ Copied";setTimeout(()=>{if(b.isConnected)b.textContent="Copy link"},2000)}};
+    const old=()=>{const t=document.createElement("textarea");t.value=link;t.style.cssText="position:fixed;opacity:0";document.body.appendChild(t);t.select();let r=false;try{r=document.execCommand("copy")}catch(e){}t.remove();r?ok():toast(link)};
+    if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(link).then(ok,old);else old()};
+  $("#shsave",sh).onclick=save;$("#shcopy",sh).onclick=copy;
+  const go=$("#shgo",sh);if(go)go.onclick=()=>c.toBlob(bl=>{const f=new File([bl],`liftlog-${kind}.png`,{type:"image/png"}),text=trx(`Training on LiftLog. Join me: ${link}`);
+    if(canFiles)navigator.share({files:[f],text}).catch(()=>{});else navigator.share({title:"LiftLog",text,url:link}).catch(()=>{})},"image/png")}
 /* ---------- custom exercises: friends can use them; suggestions go to the owner for review ---------- */
 function addLibExtra(list){(list||[]).forEach(x=>{if(!x||!x.id||!x.name)return;if(LIB.some(y=>y.id===x.id||y.name.toLowerCase()===String(x.name).toLowerCase()))return;
   const g=GROUPS.includes(x.g)?x.g:"Full Body";LIB.push({id:x.id,name:x.name,g,eq:x.eq||"Community",type:x.type||"lift",p:G2M[g]||[],s:[],community:true})})}
@@ -3671,7 +3675,7 @@ render();
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000);setTimeout(()=>{if(!$("#celeb")&&!state.needsStart)checkHoliday()},2600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
+      if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000);setTimeout(()=>{const l=ls.get("ll.fresh."+TODAY,[]),f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];if(l.some(x=>!f.includes(x)))setFresh(freshSet())},2200);setTimeout(()=>{if(!$("#celeb")&&!state.needsStart)checkHoliday()},2600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
         // move anything logged on this phone before sign-in into the account
