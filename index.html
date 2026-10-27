@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LiftLog</title>
 <meta name="description" content="Workout log for lifters and their gym partners.">
-<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700",valentine:"Dancing+Script:wght@700",tet:"Playfair+Display:wght@800"};
+<script>(function(){try{var k=JSON.parse(localStorage.getItem("ll.skin")||'""');var F={halloween:"Creepster",neon:"Orbitron:wght@700;800",iron:"Black+Ops+One",pixel:"Press+Start+2P",sakura:"Yuji+Syuku",xmas:"Mountains+of+Christmas:wght@700",thanks:"Lobster",newyear:"Cinzel:wght@700",valentine:"Dancing+Script:wght@700",tet:"Playfair+Display:wght@800",noir:"Oxanium:wght@700;800",machine:"Share+Tech+Mono",army:"Stardos+Stencil:wght@700"};
 var d=new Date(),m=d.getMonth()+1,day=d.getDate(),T={2027:"02-06",2028:"01-26",2029:"02-13",2030:"02-03",2031:"01-23",2032:"02-11",2033:"01-31",2034:"02-19",2035:"02-08",2036:"01-28"}[d.getFullYear()],td=T?new Date(d.getFullYear(),+T.slice(0,2)-1,+T.slice(3)):null,dd=td?(d-td)/864e5:99,TM=td?td.getMonth()+1:0,S={halloween:m===10,thanks:m===11,xmas:m===12,newyear:m===1,valentine:m===2,tet:!!td&&(m===TM||(dd>=0&&dd<=7))};
 if(k in S&&!S[k])k="";if(k&&!F[k])k="";
 if(k){document.documentElement.setAttribute("data-skin",k);var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family="+F[k]+"&display=swap";document.head.appendChild(l)}}catch(e){}})();</script>
@@ -436,6 +436,49 @@ html:root[data-skin="tet"] h1,html:root[data-skin="tet"] .panel h2{font-family:v
 html:root[data-skin="tet"] .dayhead h1::after{content:" 🧧";font-size:.5em;vertical-align:.35em}
 html:root[data-skin="tet"] .btn.primary{box-shadow:0 0 16px rgba(255,201,60,.35)}
 html:root[data-skin="tet"] .tabs{background:#300708;border-top:2px solid #FFC93C}
+/* Neon Noir: rainy future city */
+html:root[data-skin="noir"]{--bg:#070A12;--surface:rgba(16,20,34,.86);--surface-2:#1A2036;--fg:#E6F1FF;--muted:#8C9BB8;--line:#253050;--map-base:#141A2E;--map-muscle:#26304E;
+  --red:#FF6A2B;--blue:#26D7E8;--yellow:#FFB14A;--green:#26D7E8;--purple:#C455FF;--orange:#FF6A2B;--on-yellow:#1A0E00;--ok:#26D7E8;--ok-soft:#0E2A30;--warn-soft:#3A2410;--accent-soft:#2E1408;--display:"Oxanium","Barlow Condensed",sans-serif;color-scheme:dark}
+html:root[data-skin="noir"] body{background:linear-gradient(180deg,rgba(7,10,18,0) 40%,#070A12 100%),radial-gradient(700px 380px at 85% 10%,rgba(255,106,43,.28),transparent 60%),radial-gradient(800px 420px at 10% 30%,rgba(38,215,232,.18),transparent 60%),
+  repeating-linear-gradient(90deg,transparent 0 46px,rgba(38,215,232,.05) 46px 48px,transparent 48px 90px,rgba(255,106,43,.05) 90px 92px),#070A12;background-attachment:fixed}
+html:root[data-skin="noir"] .dayhead{background:linear-gradient(#070A12 75%,rgba(7,10,18,0))}
+html:root[data-skin="noir"] .panel{backdrop-filter:blur(6px);border:1px solid rgba(38,215,232,.28);box-shadow:0 0 24px rgba(38,215,232,.08),inset 0 1px 0 rgba(255,255,255,.04);border-radius:6px}
+html:root[data-skin="noir"] h1,html:root[data-skin="noir"] .panel h2{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-shadow:0 0 14px rgba(255,106,43,.55)}
+html:root[data-skin="noir"] .panel h2{color:#FFB14A}
+html:root[data-skin="noir"] .btn{border-radius:4px}html:root[data-skin="noir"] .btn.primary{background:linear-gradient(90deg,#FF6A2B,#FF3D6E);color:#fff;border:none;box-shadow:0 0 18px rgba(255,106,43,.45)}
+html:root[data-skin="noir"] .tabs{background:rgba(7,10,18,.95);border-top:1px solid rgba(38,215,232,.4)}
+.fx-rain{top:-80px;width:1px;height:70px;background:linear-gradient(transparent,rgba(170,220,255,.55));animation:fxrain linear infinite}
+@keyframes fxrain{to{transform:translate3d(-40px,115vh,0)}}
+/* Machine: red robot HUD */
+html:root[data-skin="machine"]{--bg:#050506;--surface:#0E0E10;--surface-2:#17171A;--fg:#E8E8EA;--muted:#8A8F98;--line:#2A2C31;--map-base:#16171A;--map-muscle:#2A2C31;
+  --red:#FF2A2A;--blue:#FF2A2A;--yellow:#FF4D3A;--green:#FF2A2A;--purple:#FF2A2A;--orange:#FF4D3A;--on-yellow:#fff;--ok:#FF4D3A;--ok-soft:#2A0A0A;--warn-soft:#2A1208;--accent-soft:#2A0808;--display:"Share Tech Mono","Barlow Condensed",monospace;color-scheme:dark}
+html:root[data-skin="machine"] body{background:radial-gradient(600px 300px at 50% -5%,rgba(255,42,42,.18),transparent 70%),repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(160deg,#101114,#050506);background-attachment:fixed}
+html:root[data-skin="machine"] .dayhead{background:#050506;border-bottom:1px solid rgba(255,42,42,.35)}
+html:root[data-skin="machine"] .panel{position:relative;border-radius:2px;border:1px solid #2A2C31;background:linear-gradient(180deg,#121316,#0B0B0D);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+html:root[data-skin="machine"] .panel::before{content:"";position:absolute;inset:-1px;pointer-events:none;
+  background:linear-gradient(#FF2A2A,#FF2A2A) top left/14px 2px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) top left/2px 14px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) top right/14px 2px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) top right/2px 14px no-repeat,
+  linear-gradient(#FF2A2A,#FF2A2A) bottom left/14px 2px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) bottom left/2px 14px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) bottom right/14px 2px no-repeat,linear-gradient(#FF2A2A,#FF2A2A) bottom right/2px 14px no-repeat}
+html:root[data-skin="machine"] h1,html:root[data-skin="machine"] .panel h2{font-family:var(--display);font-weight:400;letter-spacing:.12em;color:#FF4D3A;text-shadow:0 0 10px rgba(255,42,42,.6)}
+html:root[data-skin="machine"] .panel h2::before{content:"> ";opacity:.7}
+html:root[data-skin="machine"] .btn{border-radius:2px;font-family:"Share Tech Mono",monospace;letter-spacing:.06em}
+html:root[data-skin="machine"] .btn.primary{background:transparent;color:#FF4D3A;border:1px solid #FF2A2A;box-shadow:inset 0 0 12px rgba(255,42,42,.35),0 0 12px rgba(255,42,42,.25)}
+html:root[data-skin="machine"] .tabs{background:#050506;border-top:1px solid rgba(255,42,42,.5)}
+.fx-scan{left:0;right:0;top:-8%;height:90px;background:linear-gradient(180deg,transparent,rgba(255,42,42,.10) 70%,rgba(255,60,60,.45) 98%,transparent);animation:fxscan 7s linear infinite}
+@keyframes fxscan{to{transform:translate3d(0,112vh,0)}}
+/* Boot Camp: army */
+html:root[data-skin="army"]{--bg:#1E2416;--surface:#2A321F;--surface-2:#343D27;--fg:#ECE6D2;--muted:#B3AC8E;--line:#4A5436;--map-base:#353E28;--map-muscle:#4D5838;
+  --red:#C9A227;--blue:#8FA35A;--yellow:#D9B44A;--green:#8FA35A;--purple:#A68A64;--orange:#C9772F;--on-yellow:#1E1A08;--ok:#9DB866;--ok-soft:#2E3A1E;--warn-soft:#3D3416;--accent-soft:#3A3416;--display:"Stardos Stencil","Black Ops One","Barlow Condensed",sans-serif;color-scheme:dark}
+html:root[data-skin="army"] body{background:
+  radial-gradient(ellipse 60px 34px at 20% 30%,#3B4529 98%,transparent),radial-gradient(ellipse 80px 40px at 70% 20%,#2C3420 98%,transparent),radial-gradient(ellipse 50px 60px at 45% 75%,#4A4030 98%,transparent),radial-gradient(ellipse 70px 30px at 85% 70%,#3B4529 98%,transparent),radial-gradient(ellipse 40px 50px at 10% 85%,#2C3420 98%,transparent),#1E2416;background-size:220px 200px;background-attachment:fixed}
+html:root[data-skin="army"] .dayhead{background:#1E2416;border-bottom:3px solid #C9A227}
+html:root[data-skin="army"] .panel{border:2px solid #4A5436;border-radius:4px;background:linear-gradient(180deg,#2E3722,#262D1B);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+html:root[data-skin="army"] h1,html:root[data-skin="army"] .panel h2{font-family:var(--display);font-weight:700;letter-spacing:.08em;color:#ECE6D2}
+html:root[data-skin="army"] .panel h2{color:#D9B44A}
+html:root[data-skin="army"] .dayhead h1::after{content:" ★";color:#D9B44A;font-size:.6em;vertical-align:.25em}
+html:root[data-skin="army"] .btn{border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
+html:root[data-skin="army"] .btn.primary{background:#C9A227;color:#1E1A08;border:2px solid #8C7116}
+html:root[data-skin="army"] .tabs{background:#20271A;border-top:3px solid #4A5436}
 /* design picker */
 .skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
 .skopt{all:unset;box-sizing:border-box;cursor:pointer;border:2px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
@@ -3504,6 +3547,9 @@ const SKINS=[
  {id:"neon",name:"Neon",bg:"#05060F",panel:"#0A0F24",line:"#2EC5FF",fg:"#9FE7FF",acc:"#FF2E88",font:"Orbitron",f:"Orbitron:wght@700;800",word:"PLAYER 1"},
  {id:"iron",name:"Iron Gym",bg:"#141414",panel:"#262626",line:"#F5C518",fg:"#F5C518",acc:"#E03A2F",font:"'Black Ops One'",f:"Black+Ops+One",word:"LIFT HEAVY"},
  {id:"pixel",name:"Pixel Arcade",bg:"#000",panel:"#0D0D1A",line:"#3C3CFF",fg:"#FCE03C",acc:"#FF3B3B",font:"'Press Start 2P'",f:"Press+Start+2P",word:"1UP",small:true},
+ {id:"noir",name:"Neon Noir",bg:"linear-gradient(160deg,#3A1A10,#070A12 55%,#0E2A30)",panel:"#101422",line:"#26D7E8",fg:"#FFB14A",acc:"#FF6A2B",font:"Oxanium",f:"Oxanium:wght@700;800",word:"NIGHT SHIFT"},
+ {id:"machine",name:"Machine",bg:"linear-gradient(160deg,#2A0808,#050506 60%)",panel:"#0E0E10",line:"#FF2A2A",fg:"#FF4D3A",acc:"#FF2A2A",font:"'Share Tech Mono'",f:"Share+Tech+Mono",word:"> ONLINE"},
+ {id:"army",name:"Boot Camp",bg:"radial-gradient(ellipse 40px 22px at 30% 40%,#3B4529 98%,transparent),radial-gradient(ellipse 50px 26px at 75% 30%,#2C3420 98%,transparent),#1E2416",panel:"#2A321F",line:"#4A5436",fg:"#D9B44A",acc:"#C9A227",font:"'Stardos Stencil'",f:"Stardos+Stencil:wght@700",word:"FALL IN ★"},
  {id:"sakura",name:"Sakura",bg:"linear-gradient(160deg,#FFD6E3,#FFF5F7 60%)",panel:"#FFFFFF",line:"#F2D3DE",fg:"#C9467A",acc:"#E25D8A",font:"'Yuji Syuku'",f:"Yuji+Syuku",word:"Leg day"}];
 SKINS.forEach(x=>{if(SKIN_SEASON[x.id])x.season=()=>SKIN_SEASON[x.id](nowD())});
 /* ---------- background animations for holiday designs ---------- */
@@ -3518,6 +3564,8 @@ function skinFx(){const el=document.querySelector(".skinfx");if(!el)return;const
    sakura:()=>P("fx-petal",8,fall(9,13,12,22)),
    valentine:()=>P("fx-heart",9,i=>{const w=R(12,22);return `left:${R(0,96).toFixed(1)}%;width:${w.toFixed(0)}px;height:${w.toFixed(0)}px;animation-duration:${R(12,20).toFixed(1)}s;animation-delay:-${R(0,20).toFixed(1)}s;--dx:${R(-40,40).toFixed(0)}px`}),
    tet:()=>`<i class="fx-lantern" style="left:6px"></i><i class="fx-lantern" style="right:6px;animation-delay:-2.2s"></i>`+P("fx-bloom",8,fall(12,18,12,22)),
+   noir:()=>P("fx-rain",26,i=>`left:${R(-2,105).toFixed(1)}%;animation-duration:${R(.7,1.3).toFixed(2)}s;animation-delay:-${R(0,1.3).toFixed(2)}s;opacity:${R(.3,.8).toFixed(2)}`),
+   machine:()=>`<i class="fx-scan"></i>`,
    newyear:()=>P("fx-spark",10,i=>{const w=R(6,12);return `left:${R(2,96).toFixed(1)}%;top:${R(2,90).toFixed(1)}%;width:${w.toFixed(0)}px;height:${w.toFixed(0)}px;animation-duration:${R(2.5,5).toFixed(1)}s;animation-delay:-${R(0,5).toFixed(1)}s`})};
   el.innerHTML=html[k]?html[k]():""}
 function curSkin(){return document.documentElement.getAttribute("data-skin")||""}
