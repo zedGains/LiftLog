@@ -3578,7 +3578,22 @@ function loadRefs(force){if(state.mode!=="db"||!window.LIFTLOG_RPC||refs.busy)re
     const a=+(refs.data.active||0);if(a!==(plan.refActive||0)){plan.refActive=a;savePlan();setTimeout(checkBadges,300)}})
    .catch(()=>{refs.data=refs.data||{err:true}}).finally(()=>{refs.busy=false;refs.at=Date.now();const el=$("#refpanel");if(el){el.outerHTML=invitePanel();bindInvite()}})}
 function claimRef(){const code=ls.get("ll.ref",null);if(!code||state.mode!=="db"||!window.LIFTLOG_RPC)return;
-  window.LIFTLOG_RPC("claim_referral",{code}).then(r=>{try{localStorage.removeItem("ll.ref")}catch(e){}if(r==="ok")toast("Invite accepted. Your friend gets credit once you finish your first week.")}).catch(()=>{})}
+  window.LIFTLOG_RPC("claim_referral",{code}).then(r=>{try{localStorage.removeItem("ll.ref")}catch(e){}
+    window.LIFTLOG_RPC("invite_card",{code}).then(info=>{if(info&&info.name)openInviteCard(code,info,r);else if(r==="ok")toast("Invite accepted. Your friend gets credit once you finish your first week.")})
+      .catch(()=>{if(r==="ok")toast("Invite accepted. Your friend gets credit once you finish your first week.")})}).catch(()=>{})}
+function openInviteCard(code,info,res){if($("#celeb")||$("#holi")){setTimeout(()=>openInviteCard(code,info,res),1500);return}
+  const sh=$("#sheet"),c=info.card||{},nm=info.name||"A friend",r=rankInfo(c.pts||0),own=res==="own";
+  const pic=c.helm?helmEmblem(r,"av"):rankFrame(r,{ini:initialsOf(nm)},"av");const P=RANKS[r.i]||RANKS[0];
+  sh.innerHTML=`<div class="grab"></div><div class="pkhead"><button class="btn small" id="icclose">Close</button><span class="eyebrow">${own?"Your invite link":"Invite"}</span></div>
+   <h3 id="sheet-title">${own?"This is your invite link":`${esc(nm)} invited you`}</h3>
+   <div class="pcardb" style="--c1:${P[2]};--c2:${P[3]};margin-top:8px"><div class="pcglow"></div><div class="pcav">${pic}</div>
+    <div class="pctxt"><div class="pcname">${esc(nm)}</div><div class="pcrank">${esc(r.full)}</div>
+     <div class="pcstats"><span><b>${c.lvl||1}</b>Level</span><span><b>${c.badges||0}</b>Badges</span><span><b>${c.streak||0}</b>Week streak</span></div></div></div>
+   <p class="savenote">${own?"This is what friends see when they open your link. When they sign up with it, they count toward your referral badges.":res==="ok"?"Invite accepted. They get credit once you finish your first week.":"Train together: add each other as friends to compare streaks and share programs."}</p>
+   <div class="btns">${own?`<button class="btn primary" id="icshare" style="flex:1">Share my link</button>`:`<button class="btn primary" id="icadd" style="flex:1">+ Add ${esc(nm.split(" ")[0])} as a friend</button>`}</div>`;
+  state.open="__invite";sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;$("#icclose",sh).onclick=closeSheet;
+  const a=$("#icadd",sh);if(a)a.onclick=()=>friendAct("friend_request",{code,target:null}).then(x=>{if(x==="sent"||x==="accepted"||x==="already"||x==="pending")closeSheet()});
+  const sb2=$("#icshare",sh);if(sb2)sb2.onclick=()=>shareCard("rank",{})}
 function invitePanel(){if(state.mode!=="db")return "";const d=refs.data;
   return `<div class="panel" id="refpanel"><h2>Invite friends <button class="infob" id="refinfo" aria-label="How invites work" title="A friend counts once they finish their first week (3 workouts). Referral badges count double toward your rank.">i</button></h2>
    ${!d?`<p class="savenote">Loading…</p>`:d.err||!d.code?`<p class="savenote">Couldn't load your invite link. Check your connection.</p>`:
