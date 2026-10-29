@@ -262,6 +262,7 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .werow.today{border-color:var(--fg)}.wedot{width:12px;height:12px;border-radius:50%;background:var(--line)}.wen{font-size:15px}.wen small{font-weight:600;color:var(--muted);font-size:11px;margin-left:4px}
 .wesel{max-width:none}.wesel select{width:100%;font:inherit;font-weight:600;background:transparent;border:0;color:var(--fg);padding:8px 0}
 .skiplink{display:block;margin:0 16px 10px;font-size:13.5px;color:var(--muted)}
+.leftban{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:10px 12px;border-radius:14px;background:var(--warn-soft);border:1px solid color-mix(in srgb,var(--warn,#c80) 35%,transparent);font-size:13.5px}.leftban>div:first-child{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 200px}.leftban span{color:var(--muted)}.leftban .lbbtns{display:flex;gap:8px}
 .skipban{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 12px 10px;padding:7px 12px;border-radius:999px;background:var(--warn-soft);font-size:13.5px}.skipban .linkbtn{font-size:13.5px;font-weight:700;white-space:nowrap}
 .med{width:60px;height:67px;margin:0 auto 4px;position:relative;flex:none}.med>svg{width:100%;height:100%;display:block;overflow:visible}
 .med .mnum{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.5px}.med.locked .mnum{stroke:none;opacity:.75}
@@ -1134,7 +1135,42 @@ function planSets(it,n){const o=ORIG[String(it.slot).split(":")[1]];
   savePlan();rebuildAll()}
 function nSets(it,d){return it.type==="cardio"?1:(d&&d.n!=null?d.n:it.sets)}
 function dSets(it,d){return d.sets.slice(0,nSets(it,d))}
-function saveDrafts(){ls.set("ll.drafts."+TODAY,state.drafts)}
+/* unsaved marks: kept on the phone and in the account, so closing the app, midnight or another device never loses them */
+let draftAt=ls.get("ll.draftsAt."+TODAY,0),draftT=null,draftPending=0;
+try{collectLeft()}catch(e){console.warn(e)}
+function saveDrafts(){ls.set("ll.drafts."+TODAY,state.drafts);draftAt=Date.now();ls.set("ll.draftsAt."+TODAY,draftAt);queueDrafts()}
+function queueDrafts(){if(state.mode!=="db"||!col)return;clearTimeout(draftT);draftT=setTimeout(pushDrafts,1200)}
+function pushDrafts(){draftT=null;if(state.mode!=="db"||!col)return;draftPending++;
+  const payload=JSON.parse(JSON.stringify({d:TODAY,at:draftAt,drafts:state.drafts,left:ls.get("ll.left",{}),gone:ls.get("ll.leftGone",[])}));
+  col.doc("_drafts").set(payload).catch(e=>console.warn(e)).finally(()=>{draftPending--})}
+function markedOnly(dr){const o={};Object.keys(dr||{}).forEach(id=>{if(dr[id]&&dr[id].marked)o[id]=dr[id]});return o}
+function keepLeft(L){const gone=ls.get("ll.leftGone",[]),min=ymd(tzD(Date.now()-14*864e5));
+  Object.keys(L).forEach(d=>{if(d>=TODAY||d<min||gone.includes(d)||!Object.keys(L[d]||{}).length)delete L[d]});ls.set("ll.left",L);return L}
+function collectLeft(){const L=ls.get("ll.left",{});
+  Object.keys(localStorage).forEach(k=>{const m=k.match(/^ll\.drafts\.(\d{4}-\d\d-\d\d)$/);if(!m||m[1]===TODAY)return;
+    const mk=markedOnly(ls.get(k,{}));if(m[1]<TODAY&&Object.keys(mk).length)L[m[1]]=Object.assign({},mk,L[m[1]]||{});
+    localStorage.removeItem(k);localStorage.removeItem("ll.draftsAt."+m[1])});
+  return keepLeft(L)}
+function mergeRemoteDrafts(v){if(!v)return false;let changed=false;
+  const gone=[...new Set([...ls.get("ll.leftGone",[]),...(Array.isArray(v.gone)?v.gone:[])])].sort().slice(-40);ls.set("ll.leftGone",gone);
+  const L=ls.get("ll.left",{}),before=JSON.stringify(L);
+  Object.keys(v.left||{}).forEach(d=>{L[d]=Object.assign({},v.left[d],L[d]||{})});
+  if(v.d&&v.d<TODAY){const mk=markedOnly(v.drafts);if(Object.keys(mk).length)L[v.d]=Object.assign({},mk,L[v.d]||{})}
+  keepLeft(L);if(JSON.stringify(L)!==before)changed=true;
+  if(v.d===TODAY&&(v.at||0)>draftAt&&!draftPending&&!draftT&&!state.open&&JSON.stringify(v.drafts||{})!==JSON.stringify(state.drafts)){
+    state.drafts=v.drafts||{};draftAt=v.at;ls.set("ll.drafts."+TODAY,state.drafts);ls.set("ll.draftsAt."+TODAY,draftAt);changed=true}
+  return changed}
+function leftItems(d){const dr=(ls.get("ll.left",{})[d])||{};
+  return Object.keys(dr).filter(id=>dr[id]&&dr[id].marked&&ALL[id]&&!((state.logs[id]&&state.logs[id].entries)||[]).some(e=>e.date===d))}
+function leftNow(){const L=ls.get("ll.left",{});return Object.keys(L).sort().reverse().find(d=>leftItems(d).length)||null}
+function dropLeft(d){const L=ls.get("ll.left",{});delete L[d];ls.set("ll.left",L);
+  const g=ls.get("ll.leftGone",[]);if(!g.includes(d)){g.push(d);ls.set("ll.leftGone",g.sort().slice(-40))}queueDrafts()}
+function saveLeft(d){const dr=(ls.get("ll.left",{})[d])||{},ids=leftItems(d);let n=0;
+  ids.forEach(id=>{const it=ALL[id],x=dr[id];const k=x.day&&DAYS[x.day]&&dayHas(x.day,id)?x.day:dayOf(it);if(!k)return;
+    const dd=JSON.parse(JSON.stringify(x));while(dd.sets.length<nSets(it,dd))dd.sets.push({w:"",r:""});logItem(it,dd,d,k);n++});
+  dropLeft(d);
+  if(n&&d===ymd(tzD(Date.now()-864e5))&&state.mode==="db"&&window.LIFTLOG_RPC)window.LIFTLOG_RPC("checkin",{d}).then(()=>{lb.at=0}).catch(()=>{});
+  render();toast(`Saved ${n} workout${n===1?"":"s"} for ${fmtDate(d)}`);setTimeout(checkBadges,900)}
 
 function cleanSets(sets){return sets.map(s=>({w:s.w===""?null:Number(s.w),r:s.r===""?null:Number(s.r)})).filter(s=>s.w!==null||s.r!==null)}
 function isMarked(id){const d=state.drafts[id];return d?!!d.marked:!!shownToday(id)}
@@ -1145,19 +1181,13 @@ function isPending(id){
   const it0=ALL[id]||{sets:d.sets.length};return JSON.stringify(cleanSets(dSets(it0,d)))!==JSON.stringify(t.sets||[])||(d.alt||null)!==(t.alt||null)||JSON.stringify(cleanP(d.partners))!==JSON.stringify(t.partners||{});
 }
 function toggleMark(it,on){
-  const d=draftFor(it); d.marked=on===undefined?!d.marked:on; saveDrafts();
+  const d=draftFor(it); d.marked=on===undefined?!d.marked:on; if(d.marked){const k=dayOf(it);if(k)d.day=k} saveDrafts();
   render(); if(state.open===it.id) openSheet(it.id,true);
 }
 function dayHas(k,id){return daySections(k).some(s=>s.items.some(x=>x.id===id))}
 function dayOf(it){const cur=pickTab();if(DAYS[cur]&&dayHas(cur,it.id))return cur;return Object.keys(DAYS).find(k=>dayHas(k,it.id))}
 function logDate(){const v=state.logDate;return v&&v<TODAY?v:TODAY}
-function saveDay(dayKey){
-  const DATE=logDate(), past=DATE!==TODAY;
-  const all=daySections(dayKey).flatMap(s=>s.items);
-  const items=past?all.filter(it=>isMarked(it.id)&&state.drafts[it.id]):all.filter(it=>isPending(it.id));
-  if(!items.length) return;
-  items.forEach(it=>{
-    const d=draftFor(it);
+function logItem(it,d,DATE,dayKey){
     if(!state.logs[it.id]) state.logs[it.id]={entries:[]};
     const prev=state.logs[it.id].entries.find(e=>e.date===DATE);
     const es=state.logs[it.id].entries.filter(e=>e.date!==DATE);
@@ -1167,7 +1197,13 @@ function saveDay(dayKey){
     es.sort((a,b)=>a.date<b.date?-1:1);
     state.logs[it.id]={entries:es};
     persist(it.id);
-  });
+}
+function saveDay(dayKey){
+  const DATE=logDate(), past=DATE!==TODAY;
+  const all=daySections(dayKey).flatMap(s=>s.items);
+  const items=past?all.filter(it=>isMarked(it.id)&&state.drafts[it.id]):all.filter(it=>isPending(it.id));
+  if(!items.length) return;
+  items.forEach(it=>logItem(it,draftFor(it),DATE,dayKey));
   if(past){items.forEach(it=>{delete state.drafts[it.id]});saveDrafts();state.logDate=null;
     render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} workout${items.length===1?"":"s"} logged`); setTimeout(checkBadges,900); return}
   const n=all.filter(it=>todayEntry(it.id)).length;
@@ -1324,6 +1360,8 @@ function render(){
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
+  ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
+    return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)}</b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
     if(done||items.some(it=>todayEntry(it.id))) return "";
@@ -1359,6 +1397,9 @@ function render(){
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openSheet(b.dataset.open));
   const sk1=$("#skipday"); if(sk1) armBtn(sk1,"Tap again: rest today, this workout comes back next week",skipToday);
   const us1=$("#unskip"); if(us1) us1.onclick=unskipToday;
+  const lsv=$("#leftsave"); if(lsv) lsv.onclick=()=>saveLeft(lsv.dataset.lday);
+  const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
+    showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})};
   const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   app.querySelectorAll("[data-reorder]").forEach(b=>b.onclick=()=>{state.reorder=state.reorder===b.dataset.reorder?null:b.dataset.reorder;render()});
   app.querySelectorAll(".section.reordering").forEach(el=>bindReorder(el,tab));
@@ -3732,15 +3773,19 @@ render();
     const localLogs=ls.get(LOCAL_KEY,{});
     let first=true;
     col.onSnapshot(snap=>{
-      let tplDoc=null;
+      let tplDoc=null,draftsDoc=null;
       const next={};snap.docs.forEach(doc=>{const v=thaw(doc.data());
         if(doc.id==="_template"){tplDoc=v;return}
+        if(doc.id==="_drafts"){draftsDoc=v;return}
         if(doc.id==="_plan"&&v){ if(planPending>0) return; if(plan.rev&&(v.rev||0)<plan.rev) return;
           plan=normPlan(v); plan.rev=v.rev||0; ls.set("ll.plan",plan); syncDays(); return}
         if(v&&Array.isArray(v.entries))next[doc.id]={entries:v.entries}});
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
       state.logs=next;state.mode="db";
       if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
+      try{mergeRemoteDrafts(draftsDoc)}catch(e){console.warn(e)}
+      if(first){const had=draftsDoc&&draftsDoc.d===TODAY&&(draftsDoc.at||0)>=draftAt&&JSON.stringify(draftsDoc.drafts||{})===JSON.stringify(state.drafts);
+        if(!had&&(Object.keys(state.drafts).length||Object.keys(ls.get("ll.left",{})).length||(draftsDoc&&draftsDoc.d!==TODAY)))setTimeout(pushDrafts,1500)}
       if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000);setTimeout(()=>{const l=ls.get("ll.fresh."+TODAY,[]),f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];if(l.some(x=>!f.includes(x)))setFresh(freshSet())},2200);setTimeout(()=>{if(!$("#celeb")&&!state.needsStart)checkHoliday()},2600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
       refreshTemplate();
       if(first){first=false;
