@@ -225,7 +225,10 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .mynote{all:unset;box-sizing:border-box;cursor:pointer;width:100%;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;background:var(--surface-2);display:grid;gap:4px;margin:6px 0 4px}
 div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynote .u{text-decoration:underline}.mynote .nt{white-space:pre-wrap;font-size:15px}
 .mynote textarea{all:unset;width:100%;font-size:15px;line-height:1.4;white-space:pre-wrap;padding:6px 0;border-bottom:1px solid var(--line)}
-.addnote{display:block;margin:4px 0 6px;font-size:13.5px;color:var(--muted)}
+.rowbtn{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:9px 12px;margin:8px 0 6px}
+.rowbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.rbic{width:30px;height:30px;border-radius:9px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.rbic svg{width:16px;height:16px;fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.rbt{flex:1;display:flex;flex-direction:column;min-width:0}.rbt b{font-size:15px}.rbt small{font:12.5px var(--mono);color:var(--muted)}
+.rbplus{font:700 22px/1 var(--body);color:var(--muted)}.rbchev{width:16px;height:16px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4}
 .ssgroup{border-left:4px solid var(--accent);padding-left:8px;display:grid;gap:8px}
 .sslbl{font-family:var(--display);font-weight:700;letter-spacing:.08em;font-size:12px;text-transform:uppercase;color:var(--accent);display:flex;justify-content:space-between;align-items:center}
 .sslbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;color:var(--accent)}
@@ -643,7 +646,7 @@ textarea{all:unset;width:100%;padding:10px 0;font-size:15px;line-height:1.4;whit
 .acc>.acchd:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}.acc>.acchd .aic{width:30px;height:30px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
 .acc>.acchd .aic svg{width:17px;height:17px;fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .acc>.acchd h2{margin:0!important;flex:1;min-width:0;font-size:18px}.acc>.acchd .asum{color:var(--muted);font-size:13px;white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis}
-.acc>.acchd .chev{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4;transition:transform .2s}.acc.open>.acchd .chev{transform:rotate(180deg)}
+.acc>.acchd .chev{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4;transition:transform .2s}.acc.open>.acchd .chev{transform:rotate(180deg)}.acchd.golink .chev{transform:rotate(-90deg)}
 .acc>.accbody{display:none;padding:12px 16px 16px;border-top:1px solid var(--line)}.acc.open>.accbody{display:block}
 .sgrp{font:700 12.5px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:10px 4px -4px}
 .swt{all:unset;box-sizing:border-box;flex:none;width:46px;height:26px;border-radius:13px;background:var(--line);position:relative;cursor:pointer;transition:background .15s}.swt::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s}.swt.on{background:var(--green)}.swt.on::after{left:23px}.swt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -1324,7 +1327,7 @@ function poFill(it,d,pl){const n=nSets(it,d);while(d.sets.length<n)d.sets.push({
 function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&&i<ss.length;i++){if(ss[i].w)d.sets[i].w=String(ss[i].w)}d.autoIdx=[];d.po={k:pl.kind,on:false,tg:null}}
 // prescribed numbers for a fresh draft (Automatic fills them in; Suggest waits for a tap)
 function poStart(it,d){const pl=poPlan(it);if(!pl)return;if(poCfg().mode==="auto")poFill(it,d,pl);else d.po={k:pl.kind,on:false,tg:null}}
-function poRow(it){if(it.type!=="lift"||poCfg().mode==="off")return "";const on=poExOn(it);
+function poRow(it){if(it.type!=="lift")return "";if(poCfg().mode==="off")return `<button class="rowbtn" id="pogo" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg></span><span class="rbt"><b>Progressive overload</b><small>Off · tap to set up</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;const on=poExOn(it);
   return `<div class="poex"><span><b>Progressive overload</b><small>${on?"On for this exercise":"Off for this exercise"}</small></span><button class="swt ${on?"on":""}" id="poex" role="switch" aria-checked="${on}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>`}
 function poBox(it,d){
   if(!poOn(it)||shownToday(it.id))return poRow(it);
@@ -1649,6 +1652,7 @@ function openSheet(id,keepScroll){
   const ks=$("#keepsets",sh); if(ks) ks.onclick=()=>{const n=nSets(it,d);d.n=null;planSets(it,n);openSheet(id,true);render();toast(`${it.name}: ${n} sets every week`)};
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
+  const pgo=$("#pogo",sh); if(pgo) pgo.onclick=goPO;
   const pex=$("#poex",sh); if(pex) pex.onclick=()=>{const k=poKey(it),v=!poExOn(it);poSet({ex:{...poBase().ex,[k]:v}});
     if(v&&!todayEntry(it.id)&&!(d.sets||[]).some(x=>x.w!==""))poStart(it,d);saveDrafts();openSheet(id,true);render()};
   const pfl=$("#pofill",sh); if(pfl) pfl.onclick=()=>{const pl=poPlan(it);if(pl){poFill(it,d,pl);saveDrafts()}openSheet(id,true);render()};
@@ -1967,16 +1971,17 @@ function planView(){
    ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
 /* ---------- settings as dropdowns: one section open at a time ---------- */
-const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
+const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["Training",["popref"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
 const SET_IC={about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',acctp:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',avpanel:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>',tprofp:'<path d="M6 4v16M18 4v16M3 8v8M21 8v8M6 12h12"/>',
  skinp:'<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.3"/><circle cx="12" cy="7.5" r="1.3"/><circle cx="16" cy="10" r="1.3"/><path d="M12 21a3 3 0 0 1 0-6h2"/>',langtz:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',notifs:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
- fbpanel:'<path d="M4 5h16v11H9l-5 4z"/>',tutorial:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>',dropp:'<path d="M4 6h16M7 12h10M10 18h4"/>',platep:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',aboutp:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
+ fbpanel:'<path d="M4 5h16v11H9l-5 4z"/>',popref:'<path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/>',tutorial:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>',dropp:'<path d="M4 6h16M7 12h10M10 18h4"/>',platep:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',aboutp:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 function setSummary(id){try{
   if(id==="about")return (isKg()?"kg":"lb")+(plan.bw?` · ${toDisp(plan.bw)} ${wU()}`:"");
   if(id==="acctp")return (window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.email)||"";
   if(id==="skinp"){const k=SKINS.find(x=>x.id===curSkin());return k?k.name:""}
   if(id==="langtz"){const I=window.LIFTLOG_I18N;const l=I&&I.langs.find(x=>x[0]===I.lang);return l?l[1]:""}
   if(id==="dropp")return dropPct+"%";
+  if(id==="popref")return poModeName(poCfg().mode);
   if(id==="platep")return `${plateBar()} ${isKg()?"kg":"lb"} bar`;
   }catch(e){}return ""}
 function settingsAccordion(){const root=document.querySelector("#app .plan");if(!root)return;
@@ -1990,6 +1995,7 @@ function settingsAccordion(){const root=document.querySelector("#app .plan");if(
       hd.innerHTML=`<span class="aic" aria-hidden="true"><svg viewBox="0 0 24 24">${SET_IC[pn.id]}</svg></span>`;hd.appendChild(h2);
       const sm=setSummary(pn.id);hd.insertAdjacentHTML("beforeend",`${sm?`<span class="asum">${esc(sm)}</span>`:""}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`);
       pn.classList.add("acc");if(state.setOpen===pn.id)pn.classList.add("open");pn.prepend(hd);pn.appendChild(body);root.appendChild(pn);
+      if(pn.dataset.go==="po"){hd.classList.add("golink");hd.removeAttribute("aria-expanded");hd.onclick=goPO;return}
       hd.onclick=()=>{const was=pn.classList.contains("open");root.querySelectorAll(".acc.open").forEach(x=>{x.classList.remove("open");x.querySelector(".acchd").setAttribute("aria-expanded","false")});
         if(!was){pn.classList.add("open");hd.setAttribute("aria-expanded","true");state.setOpen=pn.id;const r=pn.getBoundingClientRect();if(r.top<70)window.scrollBy({top:r.top-70})}else state.setOpen=null}})});
   rest.filter(x=>x.classList.contains("panel")&&x.parentNode===root&&!x.classList.contains("acc")).forEach(x=>root.appendChild(x))}
@@ -2011,6 +2017,7 @@ function settingsView(){
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
+   <div class="panel" id="popref" data-go="po"><h2>Progressive overload</h2></div>
    ${skinPanel()}
    ${langPanel()}
    ${avatarPanel()}
@@ -2139,6 +2146,7 @@ function programsView(){
     <div class="btns">${ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
   return head+banner+`<div class="plan">${poPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
 }
+function goPO(){closeSheet();state.settings=false;state.builder=null;state.poOpen=true;state.tab="programs";ls.set("ll.tab","programs");render();setTimeout(()=>{const e=$("#popanel");if(e)e.scrollIntoView({block:"start"});window.scrollBy(0,-70)},30)}
 function poExList(){const ks=[...new Set([0,1,2,3,4,5,6].map(schedOf).filter(Boolean))];const keys=ks.length?ks:Object.keys(DAYS);const m=new Map();
   keys.forEach(k=>daySections(k).forEach(sc=>sc.items.forEach(it=>{if(it.type==="lift"&&!m.has(poKey(it)))m.set(poKey(it),it)})));
   return [...m.values()].sort((a,b)=>(poExOn(b)-poExOn(a))||(!!big5(b)-!!big5(a)))}
@@ -2908,11 +2916,11 @@ function showUndo(label,onUndo){
 const noteKey=(it)=>String(it.name||"").toLowerCase();
 function noteBox(it){
   const n=(plan.exNotes||{})[noteKey(it)]||"";
-  if(state.noteEdit===it.id) return `<div class="mynote"><small>📝 My notes · only you see these</small>
+  if(state.noteEdit===it.id) return `<div class="mynote"><small>My notes · only you see these</small>
     <textarea id="ntxt" rows="3" maxlength="400" placeholder="e.g. Seat height 4, grip on the rings, use the left cable stack">${esc(n)}</textarea>
     <div class="btns" style="margin-top:4px"><button class="btn small primary" id="nsave">Save note</button><button class="btn small" id="ncancel">Cancel</button></div></div>`;
-  return n?`<button class="mynote" id="nedit" type="button"><small>📝 My notes · only you see these</small><span class="nt">${esc(n)}</span><small class="u">Edit</small></button>`
-          :`<button class="linkbtn addnote" id="nedit" type="button">📝 Add a note (seat height, grip, cues…)</button>`;
+  return n?`<button class="mynote" id="nedit" type="button"><small>My notes · only you see these</small><span class="nt">${esc(n)}</span><small class="u">Edit</small></button>`
+          :`<button class="rowbtn" id="nedit" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg></span><span class="rbt"><b>Add a note</b><small>Seat height, grip, cues</small></span><span class="rbplus" aria-hidden="true">+</span></button>`;
 }
 function bindNote(sh,it){
   const e=$("#nedit",sh); if(e) e.onclick=()=>{state.noteEdit=it.id;openSheet(it.id,true);const t=$("#ntxt");if(t){t.focus();t.setSelectionRange(t.value.length,t.value.length)}};
