@@ -1033,7 +1033,19 @@ function installTemplate(t){
 let TPL_SIG="";
 function refreshTemplate(){const t=templateFor(plan);const sig=JSON.stringify([plan.template,t&&t.name,t&&Object.keys(t.days||{}),ls.get("ll.tpl",null)&&plan.template!=="starter"&&plan.template!=="blank"?JSON.stringify(ls.get("ll.tpl",null)).length:0]);
   if(sig!==TPL_SIG){TPL_SIG=sig;installTemplate(t)}}
-function tplNote(k){return TPL&&TPL.notes&&TPL.notes[k]}
+function tplNote(k){if(plan&&plan.activeProgram)return null;return TPL&&TPL.notes&&TPL.notes[k]}
+/* program notes come from whoever wrote the program you're on: the trainer's write-up and day notes, or your own plan's notes */
+const PNOTE_F=[["desc","About this program"],["who","Who it's for"],["progress","How to progress"],["equip","Equipment"]];
+function progNoteFields(p){const o={};PNOTE_F.forEach(([k])=>{const v=((p&&p[k])||"").trim();if(v)o[k]=v.slice(0,2000)});return o}
+function programNotes(){const ap=plan.activeProgram;
+  if(!ap){const ps=(TPL&&TPL.notes&&TPL.notes.panels)||[];return ps.length?{sub:"Rest days, warm-up and tips from your plan",items:ps.map(x=>({h:x.h,b:x.b,t:x.t}))}:null}
+  const live=typeof findProg==="function"&&ap.key?findProg(ap.key):null;
+  const n=live?progNoteFields(live):(ap.notes||{});
+  const items=PNOTE_F.filter(([k])=>n[k]).map(([k,h])=>({h,t:n[k]}));
+  const w=(ap.snapshot||[])[ap.week]; if(w&&w.days) WEEK_ORDER.forEach(i=>{const d=w.days[String(i)];if(d&&(d.note||"").trim())items.push({h:`${WD_SHORT[i]} · ${d.title||"Workout"}`,t:d.note.trim()})});
+  if(!items.length) return null;
+  const an=ap.author==="liftlog"?"LiftLog":(ap.author&&pg.names[ap.author])||ap.an;const by=ap.author===uid?"your":an?`${an}'s`:"the";
+  return {sub:`From ${by} program, ${ap.title||"this program"}`,items}}
 
 const HAD_LOCAL_PLAN=!!ls.get("ll.plan",null);
 refreshTemplate();
@@ -1855,7 +1867,7 @@ function planView(){
     <div class="btns"><button class="btn small" id="weekedit2">⇅ Rearrange my week</button></div></div>
 
    ${partnerPanel()}
-   ${((TPL&&TPL.notes&&TPL.notes.panels)||[]).length?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>Rest days, warm-up and tips from your plan</span></summary>${TPL.notes.panels.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""}
+   ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
 function settingsView(){
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Log</div><h1>Settings</h1></div><button class="btn small" id="closesettings">‹ Back</button></div></header>
@@ -2088,8 +2100,8 @@ function bindPrograms(){
   const np=$("#newprog"); if(np) np.onclick=()=>{const p={id:newId(),title:"",goal:"General fitness",level:"Beginner",desc:"",weeks:[emptyWeek()],published:false,createdAt:Date.now(),updatedAt:Date.now()};
     plan.myPrograms.unshift(p);savePlan();state.builder={id:p.id,week:0};render();window.scrollTo(0,0);setTimeout(()=>{const t=$("#bp-title");if(t)t.focus()},50)};
   const ap=plan.activeProgram;
-  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
-  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
+  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
+  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
   armBtn($("#apstop"),"Tap again to stop",stopProgram);
 }
 function bindBuilder(){
@@ -2118,7 +2130,7 @@ function bindBuilder(){
   const pb=$("#publish"); if(pb) pb.onclick=()=>publishProg(p);
   const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic().then(()=>loadCreator(true)).catch(()=>{});render();toast("Unpublished")};
   const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};const bf=$("#bp-friends"); if(bf) bf.onchange=()=>{p.friends=bf.checked;save();writeFriendProgs();toast(p.friends?"Shared with friends":"No longer shared with friends")};
-  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks});
+  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks,...progNoteFields(p)});
   armBtn($("#delprog"),"Tap again to delete program",()=>{plan.myPrograms=plan.myPrograms.filter(x=>x.id!==p.id);savePlan();if(p.published)writePublic();state.builder=null;pg.seg="mine";render();toast("Program deleted")});
 }
 function weekFromPlan(){const w=emptyWeek();[0,1,2,3,4,5,6].forEach(i=>{const k=schedOf(i);if(!k)return;
@@ -2306,7 +2318,8 @@ function applyProgram(p,wi){
     plan.days.push({key,label:WD_SHORT[i],title:d.title||"Workout",color:colors[ci++%colors.length],prog:true,note:(d.note||"").trim()||undefined});
     plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop,...(Array.isArray(x.alts)?{alts:x.alts.slice(0,8)}:{})}));
     plan.schedule[String(i)]=key});
-  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks))};
+  const prevN=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram.notes:null;
+  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
   savePlan(); syncDays();
 }
 function stopProgram(){
