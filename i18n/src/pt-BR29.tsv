@@ -1,8 +1,10 @@
 1331	Treino não salvo de {x}
-1332	Você marcou {0} exercícios naquele dia, mas não tocou em Salvar.
-1333	Você marcou {0} exercício naquele dia, mas não tocou em Salvar.
+1332	Você marcou {0} exercícios naquele dia, mas não tocou em Salvar. Salve até domingo à noite.
+1333	Você marcou {0} exercício naquele dia, mas não tocou em Salvar. Salve até domingo à noite.
 1334	Salvar em {x}
 1335	{x} exercícios salvos para {x2}
 1336	{x} exercício salvo para {x2}
 1337	Marcações não salvas de {x} descartadas
 1338	Descartar
+1339	Essa semana acabou, então essas marcações expiraram
+1340	Você pode salvar um dia perdido a qualquer momento antes do fim da semana. Na segunda à meia-noite, as marcações não salvas expiram.

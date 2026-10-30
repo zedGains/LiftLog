@@ -1,8 +1,10 @@
 1331	Séance non enregistrée du {x}
-1332	Vous avez coché {0} exercices ce jour-là sans appuyer sur Enregistrer.
-1333	Vous avez coché {0} exercice ce jour-là sans appuyer sur Enregistrer.
+1332	Vous avez coché {0} exercices ce jour-là sans appuyer sur Enregistrer. Enregistrez avant dimanche soir.
+1333	Vous avez coché {0} exercice ce jour-là sans appuyer sur Enregistrer. Enregistrez avant dimanche soir.
 1334	Enregistrer au {x}
 1335	{x} exercices enregistrés pour {x2}
 1336	{x} exercice enregistré pour {x2}
 1337	Coches non enregistrées du {x} supprimées
 1338	Supprimer
+1339	Cette semaine est terminée, ces coches ont expiré
+1340	Vous pouvez enregistrer un jour manqué à tout moment avant la fin de la semaine. Le lundi à 0 h, les coches non enregistrées expirent.

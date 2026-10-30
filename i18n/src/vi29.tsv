@@ -1,8 +1,10 @@
 1331	Buổi tập chưa lưu ngày {x}
-1332	Bạn đã đánh dấu {0} bài tập hôm đó nhưng chưa bấm Lưu.
-1333	Bạn đã đánh dấu {0} bài tập hôm đó nhưng chưa bấm Lưu.
+1332	Bạn đã đánh dấu {0} bài tập hôm đó nhưng chưa bấm Lưu. Hãy lưu trước tối Chủ nhật.
+1333	Bạn đã đánh dấu {0} bài tập hôm đó nhưng chưa bấm Lưu. Hãy lưu trước tối Chủ nhật.
 1334	Lưu vào {x}
 1335	Đã lưu {x} bài tập cho {x2}
 1336	Đã lưu {x} bài tập cho {x2}
 1337	Đã bỏ các đánh dấu chưa lưu ngày {x}
 1338	Bỏ
+1339	Tuần đó đã kết thúc nên các đánh dấu đã hết hạn
+1340	Bạn có thể lưu ngày bị lỡ bất cứ lúc nào trước khi hết tuần. Đúng 0 giờ thứ Hai, các đánh dấu chưa lưu sẽ hết hạn.

@@ -1144,7 +1144,7 @@ function pushDrafts(){draftT=null;if(state.mode!=="db"||!col)return;draftPending
   const payload=JSON.parse(JSON.stringify({d:TODAY,at:draftAt,drafts:state.drafts,left:ls.get("ll.left",{}),gone:ls.get("ll.leftGone",[])}));
   col.doc("_drafts").set(payload).catch(e=>console.warn(e)).finally(()=>{draftPending--})}
 function markedOnly(dr){const o={};Object.keys(dr||{}).forEach(id=>{if(dr[id]&&dr[id].marked)o[id]=dr[id]});return o}
-function keepLeft(L){const gone=ls.get("ll.leftGone",[]),min=ymd(tzD(Date.now()-14*864e5));
+function keepLeft(L){const gone=ls.get("ll.leftGone",[]),min=wkStartOf(TODAY); // unsaved marks expire when a new week starts (Monday 12:00 AM)
   Object.keys(L).forEach(d=>{if(d>=TODAY||d<min||gone.includes(d)||!Object.keys(L[d]||{}).length)delete L[d]});ls.set("ll.left",L);return L}
 function collectLeft(){const L=ls.get("ll.left",{});
   Object.keys(localStorage).forEach(k=>{const m=k.match(/^ll\.drafts\.(\d{4}-\d\d-\d\d)$/);if(!m||m[1]===TODAY)return;
@@ -1165,7 +1165,7 @@ function leftItems(d){const dr=(ls.get("ll.left",{})[d])||{};
 function leftNow(){const L=ls.get("ll.left",{});return Object.keys(L).sort().reverse().find(d=>leftItems(d).length)||null}
 function dropLeft(d){const L=ls.get("ll.left",{});delete L[d];ls.set("ll.left",L);
   const g=ls.get("ll.leftGone",[]);if(!g.includes(d)){g.push(d);ls.set("ll.leftGone",g.sort().slice(-40))}queueDrafts()}
-function saveLeft(d){const dr=(ls.get("ll.left",{})[d])||{},ids=leftItems(d);let n=0;
+function saveLeft(d){if(d<wkStartOf(ymd())){dayRolled();keepLeft(ls.get("ll.left",{}));render();toast("That week is over, so those marks expired");return}const dr=(ls.get("ll.left",{})[d])||{},ids=leftItems(d);let n=0;
   ids.forEach(id=>{const it=ALL[id],x=dr[id];const k=x.day&&DAYS[x.day]&&dayHas(x.day,id)?x.day:dayOf(it);if(!k)return;
     const dd=JSON.parse(JSON.stringify(x));while(dd.sets.length<nSets(it,dd))dd.sets.push({w:"",r:""});logItem(it,dd,d,k);n++});
   dropLeft(d);
@@ -1361,7 +1361,7 @@ function render(){
   </header>
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
-    return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)}</b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
+    return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)} <button class="infob" id="leftinfo" aria-label="How unsaved workouts work" title="You can save a missed day any time before the week ends. At 12:00 AM Monday, unsaved marks expire.">i</button></b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save. Save by Sunday night.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
     if(done||items.some(it=>todayEntry(it.id))) return "";
@@ -1398,6 +1398,7 @@ function render(){
   const sk1=$("#skipday"); if(sk1) armBtn(sk1,"Tap again: rest today, this workout comes back next week",skipToday);
   const us1=$("#unskip"); if(us1) us1.onclick=unskipToday;
   const lsv=$("#leftsave"); if(lsv) lsv.onclick=()=>saveLeft(lsv.dataset.lday);
+  const lin=$("#leftinfo"); if(lin) lin.onclick=()=>toast(lin.title);
   const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
     showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})};
   const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
@@ -3757,6 +3758,10 @@ let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement
 /* ---------- tabs ---------- */
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.badges=null;state.dayMenu=false;state.settings=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)tick()});
+/* new day while the app is open: reload so marks move to the right day (and expire once a new week starts) */
+function dayRolled(){if(ymd()===TODAY)return;if(window.__rolling)return;window.__rolling=true;try{ls.set("ll.drafts."+TODAY,state.drafts)}catch(e){}
+  const go=()=>{if(draftT||draftPending)return setTimeout(go,400);location.reload()};go()}
+setInterval(dayRolled,30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)dayRolled()});
 
 render();
 

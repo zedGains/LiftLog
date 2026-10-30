@@ -1,8 +1,10 @@
 1331	Entrenamiento sin guardar del {x}
-1332	Marcaste {0} ejercicios ese día, pero no tocaste Guardar.
-1333	Marcaste {0} ejercicio ese día, pero no tocaste Guardar.
+1332	Marcaste {0} ejercicios ese día, pero no tocaste Guardar. Guárdalo antes del domingo por la noche.
+1333	Marcaste {0} ejercicio ese día, pero no tocaste Guardar. Guárdalo antes del domingo por la noche.
 1334	Guardar en {x}
 1335	Se guardaron {x} ejercicios para {x2}
 1336	Se guardó {x} ejercicio para {x2}
 1337	Marcas sin guardar del {x} descartadas
 1338	Descartar
+1339	Esa semana ya terminó, así que esas marcas caducaron
+1340	Puedes guardar un día perdido en cualquier momento antes de que termine la semana. El lunes a las 12:00 a. m., las marcas sin guardar caducan.
