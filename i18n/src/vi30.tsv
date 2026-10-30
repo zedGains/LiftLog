@@ -1,0 +1,72 @@
+1342	Tăng tải dần
+1343	Chế độ
+1344	Tắt
+1345	Gợi ý
+1346	Tự động
+1347	<b>Tự động</b> điền sẵn mức tạ lần sau cho bạn.
+1348	<b>Gợi ý</b> hiển thị mức tạ lần sau. Bạn bấm để dùng.
+1349	<b>Tắt:</b> như trước. Số lần trước hiện ra và bạn tự nhập lần này.
+1350	Vượt lần trước từng chút một. Ứng dụng tính mức tạ lần sau từ những gì bạn đã ghi.
+1351	Tăng tạ khi bạn đủ mọi rep
+1352	Thân trên
+1353	Thân dưới
+1354	Nếu thiếu rep
+1355	Giữ nguyên mức tạ
+1356	Thiếu {0} lần liên tiếp: giảm {1}%
+1357	Bài tập đang dùng <small>· {0}/{1}</small>
+1358	Chọn tất cả
+1359	Bỏ tất cả
+1360	Thu gọn
+1361	Xem cả {0} bài tập
+1362	Tắt đi không bao giờ thay đổi nhật ký cũ của bạn.
+1363	Về cài đặt của chương trình
+1364	Bạn đã đổi cho riêng mình.
+1365	Đổi bên dưới cho riêng bạn.
+1366	Cách hoạt động
+1367	Mặc định
+1368	Người dùng chương trình của bạn bắt đầu như vậy và có thể tự đổi.
+1369	Bật cho bài này
+1370	Tắt cho bài này
+1371	Giữ mức tạ. Vượt số rep.
+1372	Dùng mức tạ tuần trước
+1373	Ghi tạ và rep, lần sau số sẽ tự điền từ đó.
+1374	Đã về cài đặt của chương trình
+1375	Đã bật tăng tải dần cho mọi bài
+1376	Đã tắt tăng tải dần cho mọi bài
+1377	Tự động điền mức tạ lần sau. Gợi ý hiển thị và bạn bấm để dùng. Cùng mức tạ mỗi hiệp: đạt mức rep cao nhất ở mọi hiệp thì tăng tạ. Tăng dần (như {0}, {1}, {2}): đủ mọi rep thì mỗi hiệp đều tăng. Thiếu rep thì giữ nguyên. Thiếu {3} lần liên tiếp thì giảm {4}% để lên lại.
+1378	Bạn
+1379	Ứng dụng
+1380	Trợ giúp & công cụ
+1381	↑ Bạn đủ mọi rep. +{x} tuần này.
+1382	Sẵn sàng tăng: thử {x}
+1383	Kẹt {0} lần liên tiếp: giảm {1}% tuần này
+1384	Điền từ lần trước. Làm lại {x} là lại tăng tiếp.
+1385	Điền từ lần trước. Bắt đầu {0} rep và lên {1} ở mọi hiệp, rồi lại tăng.
+1386	Điền từ lần trước. Bắt đầu {0} rep và lên {1} ở hiệp đầu, rồi lại tăng.
+1387	Bấm bên dưới để điền {x}.
+1388	Bạn đã làm {0} rep mọi hiệp. Quay lại {1} và lên {2} lần nữa.
+1389	Lần trước bạn đủ mọi rep. Giữ số rep, +{x} mỗi hiệp.
+1390	{x}. Lên lại từ đây. Thường vài tuần là bạn vượt số cũ.
+1391	Bạn làm {x}. Đạt {x2} ở mọi hiệp là tăng tạ.
+1392	Bạn làm {0}/{1} ở hiệp đầu. Đủ {2} là tăng tạ.
+1393	Bạn làm {0}/{1} ở hiệp {2}. Đủ {3} là tăng tạ.
+1394	Dùng {x} lb
+1395	Dùng {x} kg
+1396	Điền {x} lb
+1397	Điền {x} kg
+1398	Giữ {x} lb
+1399	Giữ {x} kg
+1400	{x} · {x2} bài · +{x3} thân trên, +{x4} thân dưới
+1401	{x} · {x2} bài · +{x3} thân trên, +{x4} thân dưới
+1402	{x} · {x2} bài · +{x3} thân trên, +{x4} thân dưới · theo chương trình
+1403	{x} · bấm để cài
+1404	{x} · bấm để cài · theo chương trình
+1405	↑ Tuần này: {x}
+1406	↑ Lần sau: {x}
+1407	= Tuần này: {x}
+1408	= Lần sau: {x}
+1409	↓ Tuần này: {x}
+1410	↓ Lần sau: {x}
+1411	Theo <b>{x}</b>
+1412	{x}: +{x2} thân trên, +{x3} thân dưới khi đủ mọi rep. Bạn có thể tự đổi.
+1413	Lần trước ({x}): {x2}

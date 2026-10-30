@@ -639,6 +639,25 @@ textarea{all:unset;width:100%;padding:10px 0;font-size:15px;line-height:1.4;whit
 .dchips{display:flex;flex-wrap:wrap;gap:6px}
 .dchip{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 10px;font-family:var(--mono);font-weight:700;font-size:13px;cursor:pointer}
 .dchip.on{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.plan>.panel.acc{padding:0;overflow:hidden}.acc>.acchd{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;width:100%;padding:11px 14px;cursor:pointer}
+.acc>.acchd:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}.acc>.acchd .aic{width:30px;height:30px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;flex:none}
+.acc>.acchd .aic svg{width:17px;height:17px;fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.acc>.acchd h2{margin:0!important;flex:1;min-width:0;font-size:18px}.acc>.acchd .asum{color:var(--muted);font-size:13px;white-space:nowrap;max-width:42%;overflow:hidden;text-overflow:ellipsis}
+.acc>.acchd .chev{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4;transition:transform .2s}.acc.open>.acchd .chev{transform:rotate(180deg)}
+.acc>.accbody{display:none;padding:12px 16px 16px;border-top:1px solid var(--line)}.acc.open>.accbody{display:block}
+.sgrp{font:700 12.5px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:10px 4px -4px}
+.swt{all:unset;box-sizing:border-box;flex:none;width:46px;height:26px;border-radius:13px;background:var(--line);position:relative;cursor:pointer;transition:background .15s}.swt::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .15s}.swt.on{background:var(--green)}.swt.on::after{left:23px}.swt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.porow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14.5px}.lbl+.porow,.porow:first-child{border-top:0}
+.pomodes{display:grid;grid-template-columns:repeat(3,1fr)}.pomodes .dchip{text-align:center;font-family:var(--body);font-size:14px;padding:9px 4px}
+.pohd{display:flex;justify-content:space-between;align-items:center;gap:8px}.pohd small{font-weight:400;letter-spacing:0;text-transform:none}.pobtns{display:flex;gap:6px;flex-wrap:wrap}.pohd .btn{letter-spacing:0;text-transform:none}
+.popill{font:700 12px var(--body);border-radius:999px;padding:3px 9px;background:color-mix(in srgb,var(--green) 14%,transparent);color:var(--green);border:1px solid color-mix(in srgb,var(--green) 35%,transparent);white-space:nowrap}.popill.off{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.poex{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:9px 12px;margin:10px 0 8px}.poex span{display:flex;flex-direction:column}.poex small{font:12.5px var(--mono);color:var(--muted)}
+.pobox{display:flex;flex-direction:column;gap:3px;border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:14px;border:1px solid var(--line);background:var(--surface-2)}.pobox>b{font-size:15px}
+.pobox.up{background:color-mix(in srgb,var(--green) 12%,var(--surface));border-color:color-mix(in srgb,var(--green) 35%,transparent)}.pobox.same{background:var(--warn-soft,#FFF3D6);border-color:color-mix(in srgb,var(--yellow) 45%,transparent)}
+.pobox .polast{font:12.5px var(--mono);color:var(--muted);margin-top:3px}.pobox .pobtns{margin-top:8px}.pobox .linkbtn{align-self:flex-start;margin-top:6px}
+.pohint{font-size:13px;color:var(--muted);margin:-2px 0 8px}
+.field.pofill{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}.field{position:relative}.poplus{position:absolute;top:50%;transform:translateY(-50%);right:34px;background:var(--green);color:#fff;font:700 10.5px var(--body);border-radius:6px;padding:1px 5px;z-index:1}.poplus.down{background:var(--slate)}.field .poplus{color:#fff!important;font:700 11px var(--body)!important;letter-spacing:0;text-transform:none;line-height:1.4}
+.poline{display:block;font:13px var(--mono);margin-top:4px;color:var(--green)}.poline.same{color:var(--muted)}.poline.down{color:var(--slate)}
 .drow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .dcustom{width:96px}.dcustom input{font-size:14px;padding:6px 0}
 .swapnote{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-size:13.5px}
@@ -946,7 +965,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{}}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -1133,6 +1152,7 @@ function draftFor(it){
   if(!state.drafts[it.id]){
     const t=shownToday(it.id);
     state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??""})),alt:t.alt||null,marked:true,partners:JSON.parse(JSON.stringify(t.partners||{}))}:{sets:Array.from({length:it.sets},()=>({w:"",r:""})),alt:null,marked:false};
+    if(!t&&it.type==="lift"){try{poStart(it,state.drafts[it.id])}catch(e){console.warn(e)}}
   }
   const d=state.drafts[it.id];
   if(d.n==null&&d.sets.length>it.sets) d.n=d.sets.length;
@@ -1157,7 +1177,7 @@ function pushDrafts(){draftT=null;if(state.mode!=="db"||!col)return;draftPending
   col.doc("_drafts").set(payload).catch(e=>console.warn(e)).finally(()=>{draftPending--})}
 function markedOnly(dr){const o={};Object.keys(dr||{}).forEach(id=>{if(dr[id]&&dr[id].marked)o[id]=dr[id]});return o}
 function keepLeft(L){const gone=ls.get("ll.leftGone",[]),min=wkStartOf(TODAY); // unsaved marks expire when a new week starts (Monday 12:00 AM)
-  Object.keys(L).forEach(d=>{if(d>=TODAY||d<min||gone.includes(d)||!Object.keys(L[d]||{}).length)delete L[d]});ls.set("ll.left",L);return L}
+  Object.keys(L).forEach(d=>{if(d>=TODAY||d<min||gone.includes(d)||!Object.keys(L[d]||{}).length)delete L[d]});if(Object.keys(L).length)ls.set("ll.left",L);else try{localStorage.removeItem("ll.left")}catch(e){}return L}
 function collectLeft(){const L=ls.get("ll.left",{});
   Object.keys(localStorage).forEach(k=>{const m=k.match(/^ll\.drafts\.(\d{4}-\d\d-\d\d)$/);if(!m||m[1]===TODAY)return;
     const mk=markedOnly(ls.get(k,{}));if(m[1]<TODAY&&Object.keys(mk).length)L[m[1]]=Object.assign({},mk,L[m[1]]||{});
@@ -1206,6 +1226,7 @@ function logItem(it,d,DATE,dayKey){
     const now=Date.now();
     const kc=exKcal(it,cleanSets(dSets(it,d)));
     if(d.marked) es.push({date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||null,sets:cleanSets(dSets(it,d)),...(Object.keys(cleanP(d.partners)).length?{partners:cleanP(d.partners)}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
+    if(d.marked&&d.po&&d.po.on&&Array.isArray(d.po.tg)&&!d.alt){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.tg=d.po.tg}
     es.sort((a,b)=>a.date<b.date?-1:1);
     state.logs[it.id]={entries:es};
     persist(it.id);
@@ -1252,6 +1273,75 @@ function hintFor(it){
   }
   return "";
 }
+/* ---------- progressive overload ---------- */
+// Beat last time a little at a time. Same weight every set: hit the top of the rep range on every set, then add weight.
+// Working up (135/145/155): hit last week's reps on every set, then add the same amount to each set.
+// Drop sets: the first (main) set decides. Miss: same weights. Missed 3 times in a row: down 10% to build back up.
+const LOWER_MUSC=["quads","hamstrings","glutes","calves"],LOWER_RE=/squat|deadlift|leg press|lunge|calf|hip thrust|leg curl|hamstring|leg extension|step.?up|glute/i;
+const PO_UP=()=>isKg()?[1.25,2.5,5]:[2.5,5,10], PO_LOW=()=>isKg()?[2.5,5,7.5]:[5,10,15];
+function poBase(){const p=plan.po||{};return {mode:p.mode||"off",up:p.up||(isKg()?2.5*LB_PER_KG:5),low:p.low||(isKg()?5*LB_PER_KG:10),keep:p.keep!==false,deload:p.deload!==false,ex:p.ex||{}}}
+function poProg(){const ap=plan.activeProgram;return ap&&ap.po&&ap.po.mode?ap.po:null}
+function poCfg(){const b=poBase(),pp=poProg();return pp&&!plan.poOwn?{...b,mode:pp.mode,up:pp.up||b.up,low:pp.low||b.low,fromProg:true}:b}
+function poSet(ch){if(poProg()&&!plan.poOwn){const c=poCfg();plan.po={...(plan.po||{}),mode:c.mode,up:c.up,low:c.low};plan.poOwn=true}plan.po={...(plan.po||{}),...ch};savePlan()}
+function poKey(it){return String(it.name||"").trim().toLowerCase()}
+function poExOn(it){if(!it||it.type!=="lift")return false;const v=poBase().ex[poKey(it)];return v!=null?!!v:!!big5(it)}
+function poOn(it){return poCfg().mode!=="off"&&poExOn(it)}
+function poLower(it){return (it.p||[]).some(x=>LOWER_MUSC.includes(x))||LOWER_RE.test(it.name)}
+function poInc(it){const c=poCfg();return poLower(it)?c.low:c.up}
+function poSets(e){return ((e&&e.sets)||[]).map(s=>({w:Number(s&&s.w)||0,r:Number(s&&s.r)||0}))}
+function poShape(it,ss){const ws=ss.filter(s=>s.w>0).map(s=>s.w);if(ws.length<2||ws.every(w=>Math.abs(w-ws[0])<0.01))return "straight";return it.drop&&ws[ws.length-1]<ws[0]?"drop":"pyramid"}
+// true = hit every rep, false = missed, null = nothing to go on
+function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0);if(!done.length)return null;const hi=it.reps[1];const sh=poShape(it,ss);
+  if(sh==="straight")return done.length>=ss.filter(s=>s.w>0).length&&done.every(s=>s.r>=hi);
+  if(sh==="drop")return ss[0].r>=hi;
+  const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
+  return ss.every((s,i)=>tg[i]==null||!s.w||s.r>=tg[i])}
+function poHist(it){const fr=freshSet().has(it.id);return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&poSets(e).some(s=>s.w>0&&s.r>0))}
+function poPlan(it){
+  if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];if(!last)return null;
+  const res=poResult(it,last);if(res==null)return null;
+  const c=poCfg(),ss=poSets(last),lo=it.reps[0],hi=it.reps[1],sh=poShape(it,ss),inc=poInc(it);
+  let miss=0;for(let i=h.length-1;i>=0&&poResult(it,h[i])===false;i--)miss++;
+  const goal=sh==="pyramid"?(Array.isArray(last.tg)?last.tg.slice(0,ss.length):ss.map(s=>s.r)):null;
+  let kind,w;
+  if(res){kind="up";w=ss.map(s=>s.w?s.w+inc:0)}
+  else if(c.deload&&miss>=3){kind="down";w=ss.map(s=>s.w?Math.max(minPlate(),rPlate(s.w*0.9)):0)}
+  else if(c.keep){kind="same";w=ss.map(s=>s.w)}
+  else return null;
+  const reps=sh==="pyramid"?goal:sh==="drop"?ss.map((s,i)=>i?(s.r||null):(kind==="same"?hi:lo)):ss.map(s=>kind==="same"?Math.min(hi,Math.max(lo,s.r+1)):lo);
+  let why="";
+  if(kind==="same"){
+    if(sh==="straight")why=`You got ${ss.filter(s=>s.w).map(s=>s.r).join("-")}. Hit ${hi} on every set and the weight goes up.`;
+    else if(sh==="drop")why=`You got ${ss[0].r} of ${hi} on your first set. Get all ${hi} and the weight goes up.`;
+    else{const i=ss.findIndex((s,j)=>goal[j]!=null&&s.w&&s.r<goal[j]);why=i>=0?`You got ${ss[i].r} of ${goal[i]} on set ${i+1}. Get all ${goal[i]} and the weight goes up.`:""}
+  }
+  return {kind,w,reps,tg:sh==="pyramid"?goal:null,last,inc,miss,shape:sh,why}}
+function poW(pl){const ws=pl.w.filter(Boolean);if(!ws.length)return "";return (ws.every(w=>Math.abs(w-ws[0])<0.01)?toDisp(ws[0]):ws.map(w=>toDisp(w)).join(" · "))+" "+wU()}
+function poIncTxt(v){return `${Math.round(toDisp(v)*100)/100} ${wU()}`}
+function poFill(it,d,pl){const n=nSets(it,d);while(d.sets.length<n)d.sets.push({w:"",r:""});
+  for(let i=0;i<n&&i<pl.w.length;i++){if(pl.w[i])d.sets[i].w=String(Math.round(pl.w[i]*10000)/10000)}
+  d.autoIdx=[];d.po={k:pl.kind,on:true,tg:pl.tg}}
+function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&&i<ss.length;i++){if(ss[i].w)d.sets[i].w=String(ss[i].w)}d.autoIdx=[];d.po={k:pl.kind,on:false,tg:null}}
+// prescribed numbers for a fresh draft (Automatic fills them in; Suggest waits for a tap)
+function poStart(it,d){const pl=poPlan(it);if(!pl)return;if(poCfg().mode==="auto")poFill(it,d,pl);else d.po={k:pl.kind,on:false,tg:null}}
+function poRow(it){if(it.type!=="lift"||poCfg().mode==="off")return "";const on=poExOn(it);
+  return `<div class="poex"><span><b>Progressive overload</b><small>${on?"On for this exercise":"Off for this exercise"}</small></span><button class="swt ${on?"on":""}" id="poex" role="switch" aria-checked="${on}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>`}
+function poBox(it,d){
+  if(!poOn(it)||shownToday(it.id))return poRow(it);
+  const pl=poPlan(it);if(!pl)return poRow(it)+`<p class="pohint">Log your weights and reps and next time's numbers fill in from them.</p>`;
+  const c=poCfg(),auto=c.mode==="auto",on=d.po&&d.po.on,wt=poW(pl);
+  const head=pl.kind==="up"?(auto?`↑ You hit every rep. +${poIncTxt(pl.inc)} this week.`:`Ready to go up: try ${wt}`)
+    :pl.kind==="down"?`Stuck ${pl.miss} times in a row: down 10% this week`:`Same weights. Beat your reps.`;
+  const body=pl.kind==="up"?(auto?(on?(pl.shape==="pyramid"?`Filled in from last time. Hit ${pl.reps.filter(Boolean).join("-")} again and it goes up again.`:`Filled in from last time. Start at ${it.reps[0]} reps and climb to ${it.reps[1]}${pl.shape==="drop"?" on your first set":" on every set"}, then it goes up again.`):`Tap below to fill in ${wt}.`)
+      :pl.shape==="straight"?`You did ${it.reps[1]} reps on every set. Start back at ${it.reps[0]} and climb to ${it.reps[1]} again.`:`You hit every rep last time. Same reps, +${poIncTxt(pl.inc)} on each set.`)
+    :pl.kind==="down"?`${wt}. Build back up from here. You'll usually pass your old numbers in a few weeks.`:pl.why;
+  const btns=on?(pl.kind==="same"?"":`<button class="linkbtn" id="pounfill">Use last week's weights instead</button>`)
+    :`<div class="pobtns"><button class="btn primary small" id="pofill">${pl.kind==="same"?`Fill in ${wt}`:`Use ${wt}`}</button>${!auto&&pl.kind!=="same"?`<button class="btn small" id="postay">Stay at ${poW({w:poSets(pl.last).map(s=>s.w)})}</button>`:""}</div>`;
+  return poRow(it)+`<div class="pobox ${pl.kind}"><b>${esc(head)}</b><span>${esc(body)}</span><span class="polast">Last (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${d.po&&d.po.stay?"":btns}</div>`}
+function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";const pl=poPlan(it);if(!pl)return "";
+  const auto=poCfg().mode==="auto",r=pl.reps.filter(Boolean);
+  const rt=r.length&&r.every(x=>x===r[0])?` × ${r[0]}`:r.length?` × ${r.join("-")}`:"";
+  return `<span class="poline ${pl.kind}">${pl.kind==="up"?"↑ ":pl.kind==="down"?"↓ ":"= "}${auto?"This week":"Next"}: ${esc(poW(pl))}${rt}</span>`}
 
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -1346,7 +1436,7 @@ function render(){
   if(state.stats){app.innerHTML=statsView(); bindStats(); return}
   if(state.badges&&tab==="plan"){app.innerHTML=badgesView(); bindBadges(); return}
   if(tab==="timer"){app.innerHTML=timerView(); bindTimerView(); updateTimer(); return}
-  if(tab==="plan"&&state.settings){app.innerHTML=settingsView(); bindPlan(); return}
+  if(tab==="plan"&&state.settings){app.innerHTML=settingsView(); try{settingsAccordion()}catch(e){console.warn(e)} bindPlan(); return}
   if(tab==="plan"){app.innerHTML=planView(); bindPlan(); return}
   if(tab==="programs"){app.innerHTML=programsView(); bindPrograms(); return}
   if(!DAYS[tab]){app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow">Workout</div><h1>No workout days yet</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
@@ -1454,7 +1544,7 @@ function card(it){
      ${cur.length?`<span class="last today">Today: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
      <span class="last">${lastTxt}</span>
      ${vsLine(it)}
-     ${h&&!m?`<span class="hint">${esc(h)}</span>`:""}
+     ${poOn(it)?poLine(it):h&&!m?`<span class="hint">${esc(h)}</span>`:""}
    </button>
    <button class="check" data-check="${it.id}" aria-label="${m?"Unmark":"Mark done"}: ${esc(it.name)}" aria-pressed="${m}">
      <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>
@@ -1489,11 +1579,12 @@ function openSheet(id,keepScroll){
   const last=lastEntry(id);
   const isCardio=it.type==="cardio";
   const N=nSets(it,d);
+  const poPl=poOn(it)?poPlan(it):null;
   const rows=d.sets.slice(0,N).map((s,i)=>{
-    const ph=last&&last.sets&&last.sets[i]?last.sets[i]:null;
+    const ph=last&&last.sets&&last.sets[i]?{...last.sets[i]}:null; if(ph&&poPl&&d.po&&d.po.on&&poPl.reps[i]) ph.r=poPl.reps[i];
     const w=Number(s.w)||(ph&&ph.w)||0;
     return `<div class="setrow"><span class="n">${isCardio?"TIME":"SET "+(i+1)}</span>
-      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""}"><input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" placeholder="${ph&&ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):isCardio?"10":"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
+      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""} ${poPl&&d.po&&d.po.on&&poPl.kind!=="same"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?"pofill":""}">${poPl&&d.po&&d.po.on&&poPl.kind==="up"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus">+${Math.round(toDisp(poPl.inc)*100)/100}</span>`:poPl&&d.po&&d.po.on&&poPl.kind==="down"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus down">−10%</span>`:""}<input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" placeholder="${ph&&ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):isCardio?"10":"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
       ${isCardio?"<span></span>":`<label class="field"><input id="r-${id}-${i}" inputmode="numeric" data-i="${i}" data-f="r" value="${esc(s.r)}" placeholder="${ph&&ph.r!=null?ph.r:it.reps[1]}" aria-label="Set ${i+1} reps"><span>reps</span></label>`}
       ${it.drop&&!dropAuto?`<span class="drops" data-drops="${i}" data-w="${w||""}">${dropsTxt(w)}</span>`:""}
       ${it.drop&&dropAuto&&i===0&&N>1?`<span class="drops">Sets 2–${N} fill in at ${dropPct}% drops from this weight</span>`:""}
@@ -1508,6 +1599,7 @@ function openSheet(id,keepScroll){
        <label class="tick small"><input type="checkbox" id="dropauto" ${dropAuto?"checked":""}> Auto-fill drop weights</label></div>`:""}
      <a class="form" href="${yt(d.alt||it.name)}" target="_blank" rel="noopener">▶ Watch form on YouTube</a></div></div>`
    :`<p class="coach" style="margin-block:8px 4px">${esc(it.note)}</p>`}
+  ${poBox(it,d)}
   <div class="lbl">${isCardio?"Log time":"Log your sets"}${last?` · last ${fmtDate(last.date)}: ${esc(setsText(last.sets,it.type))}`:""}</div>
   <div class="sets">${rows}</div>
   ${isCardio?"":`<div class="setctl"><button class="btn small" id="rmset" ${N<=1?"disabled":""} aria-label="Remove set ${N}">− Remove set</button><span class="setcount">${N} set${N===1?"":"s"}</span><button class="btn small" id="addset" ${N>=12?"disabled":""}>+ Add set</button></div>
@@ -1557,6 +1649,11 @@ function openSheet(id,keepScroll){
   const ks=$("#keepsets",sh); if(ks) ks.onclick=()=>{const n=nSets(it,d);d.n=null;planSets(it,n);openSheet(id,true);render();toast(`${it.name}: ${n} sets every week`)};
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
+  const pex=$("#poex",sh); if(pex) pex.onclick=()=>{const k=poKey(it),v=!poExOn(it);poSet({ex:{...poBase().ex,[k]:v}});
+    if(v&&!todayEntry(it.id)&&!(d.sets||[]).some(x=>x.w!==""))poStart(it,d);saveDrafts();openSheet(id,true);render()};
+  const pfl=$("#pofill",sh); if(pfl) pfl.onclick=()=>{const pl=poPlan(it);if(pl){poFill(it,d,pl);saveDrafts()}openSheet(id,true);render()};
+  const pun=$("#pounfill",sh); if(pun) pun.onclick=()=>{const pl=poPlan(it);if(pl){poUnfill(it,d,pl);saveDrafts()}openSheet(id,true);render()};
+  const pst=$("#postay",sh); if(pst) pst.onclick=()=>{const pl=poPlan(it);if(pl){poUnfill(it,d,pl);d.po.stay=true;saveDrafts()}openSheet(id,true);render()};
   $("#startrest",sh).onclick=()=>{startTimer();toast(`Rest timer started: ${fmtT(timer.preset)}`)};
   $("#markbtn",sh).onclick=()=>{toggleMark(it,true);closeSheet();toast("Marked. Save the day at the bottom when you finish.")};
   const un=$("#unmark",sh); if(un) un.onclick=()=>toggleMark(it,false);
@@ -1712,7 +1809,7 @@ function openResetDay(k){
     new Set([...before,...after]).forEach(id=>{delete state.drafts[id]});
     saveDrafts(); savePlan(); closeSheet(); render();});
 }
-function goAbout(){closeSheet();state.settings=true;state.tab="plan";ls.set("ll.tab","plan");render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});window.scrollTo(0,0)}
+function goAbout(){closeSheet();state.setOpen="about";state.settings=true;state.tab="plan";ls.set("ll.tab","plan");render();const a=$("#about");if(a)a.scrollIntoView({block:"start"});window.scrollTo(0,0)}
 function nextDayLabel(){return "Day "+(trainKeys().length+1);const nums=Object.values(DAYS).map(d=>parseInt(String(d.label).replace(/\D/g,""),10)).filter(n=>!isNaN(n));return "Day "+((nums.length?Math.max(...nums):0)+1)}
 function dayForm(title,color,heading,btn){return `<div class="grab"></div>
   <div class="pkhead"><button class="btn small" id="dfclose">Close</button><span class="eyebrow">${heading}</span></div>
@@ -1869,6 +1966,33 @@ function planView(){
    ${partnerPanel()}
    ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
+/* ---------- settings as dropdowns: one section open at a time ---------- */
+const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
+const SET_IC={about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',acctp:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',avpanel:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>',tprofp:'<path d="M6 4v16M18 4v16M3 8v8M21 8v8M6 12h12"/>',
+ skinp:'<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.3"/><circle cx="12" cy="7.5" r="1.3"/><circle cx="16" cy="10" r="1.3"/><path d="M12 21a3 3 0 0 1 0-6h2"/>',langtz:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',notifs:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
+ fbpanel:'<path d="M4 5h16v11H9l-5 4z"/>',tutorial:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>',dropp:'<path d="M4 6h16M7 12h10M10 18h4"/>',platep:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',aboutp:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
+function setSummary(id){try{
+  if(id==="about")return (isKg()?"kg":"lb")+(plan.bw?` · ${toDisp(plan.bw)} ${wU()}`:"");
+  if(id==="acctp")return (window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.email)||"";
+  if(id==="skinp"){const k=SKINS.find(x=>x.id===curSkin());return k?k.name:""}
+  if(id==="langtz"){const I=window.LIFTLOG_I18N;const l=I&&I.langs.find(x=>x[0]===I.lang);return l?l[1]:""}
+  if(id==="dropp")return dropPct+"%";
+  if(id==="platep")return `${plateBar()} ${isKg()?"kg":"lb"} bar`;
+  }catch(e){}return ""}
+function settingsAccordion(){const root=document.querySelector("#app .plan");if(!root)return;
+  const rest=[...root.children].filter(x=>!x.id||!SET_IC[x.id]);
+  SET_GROUPS.forEach(([g,ids])=>{const els=ids.map(id=>root.querySelector(":scope>#"+id)).filter(Boolean);if(!els.length)return;
+    const h=document.createElement("div");h.className="sgrp";h.textContent=g;root.appendChild(h);
+    els.forEach(pn=>{if(pn.id==="aboutp")rest.filter(x=>!x.classList.contains("panel")).forEach(x=>root.appendChild(x));
+      const h2=pn.querySelector(":scope>h2");if(!h2){root.appendChild(pn);return}
+      const body=document.createElement("div");body.className="accbody";while(h2.nextSibling)body.appendChild(h2.nextSibling);
+      const hd=document.createElement("button");hd.type="button";hd.className="acchd";hd.setAttribute("aria-expanded",state.setOpen===pn.id);
+      hd.innerHTML=`<span class="aic" aria-hidden="true"><svg viewBox="0 0 24 24">${SET_IC[pn.id]}</svg></span>`;hd.appendChild(h2);
+      const sm=setSummary(pn.id);hd.insertAdjacentHTML("beforeend",`${sm?`<span class="asum">${esc(sm)}</span>`:""}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`);
+      pn.classList.add("acc");if(state.setOpen===pn.id)pn.classList.add("open");pn.prepend(hd);pn.appendChild(body);root.appendChild(pn);
+      hd.onclick=()=>{const was=pn.classList.contains("open");root.querySelectorAll(".acc.open").forEach(x=>{x.classList.remove("open");x.querySelector(".acchd").setAttribute("aria-expanded","false")});
+        if(!was){pn.classList.add("open");hd.setAttribute("aria-expanded","true");state.setOpen=pn.id;const r=pn.getBoundingClientRect();if(r.top<70)window.scrollBy({top:r.top-70})}else state.setOpen=null}})});
+  rest.filter(x=>x.classList.contains("panel")&&x.parentNode===root&&!x.classList.contains("acc")).forEach(x=>root.appendChild(x))}
 function settingsView(){
   return `<header class="dayhead"><div class="row"><div><div class="eyebrow">Log</div><h1>Settings</h1></div><button class="btn small" id="closesettings">‹ Back</button></div></header>
   <div class="plan">
@@ -1883,7 +2007,7 @@ function settingsView(){
     <p class="savenote" id="pf-err" role="alert"></p>
     <div class="btns"><button class="btn primary" id="pf-save" style="flex:1">Save</button></div>
     <p class="savenote">Your weight drives the calorie estimate. Update it as it changes. ${plan.profile.updated?`Last updated ${fmtStamp(plan.profile.updated)}.`:""}</p></div>
-   ${window.LIFTLOG_ACCOUNT?`<div class="panel"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button></div>
+   ${window.LIFTLOG_ACCOUNT?`<div class="panel" id="acctp"><h2>Account</h2><p>Signed in as <b>${esc(window.LIFTLOG_ACCOUNT.name||window.LIFTLOG_ACCOUNT.email)}</b>${window.LIFTLOG_ACCOUNT.name?` · ${esc(window.LIFTLOG_ACCOUNT.email)}`:""}</p><div class="btns"><button class="btn small" id="signout">Sign out</button><button class="btn small" id="exportme">Download my data</button></div>
     <details class="danger-zone"><summary>Delete my account</summary><p>This permanently deletes your account, your plan, every workout you logged, your partners' numbers and any programs you published. It can't be undone. Download your data first if you want a copy.</p>
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
@@ -1909,7 +2033,7 @@ function settingsView(){
     <p class="savenote">Rounded to the nearest ${isKg()?"2.5 kg":"5 lb"}.</p></div>
    ${platePanel()}
    ${pg.isOwner&&window.LIFTLOG_RPC?`<button class="navrow" id="ownerstats"><span class="nvic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span class="nvt"><b>App stats <i class="ownertag">Owner</i></b><small>Sign-ups, active people, workouts, top exercises</small></span><span class="nvgo" aria-hidden="true">›</span></button>`:""}
-   <div class="panel"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
+   <div class="panel" id="aboutp"><h2>About LiftLog</h2><p><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a></p><p class="savenote">LiftLog isn't medical advice. Check with a doctor before starting a new program.</p></div>
   </div>`}
 function fmtStamp(ms){if(!ms)return "—";const d=tzD(ms);return d.toLocaleDateString(LOC,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"})}
 function isoLocal(ms){if(!ms)return "";const d=tzD(ms);return `${ymd(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`}
@@ -2013,8 +2137,44 @@ function programsView(){
    <div class="seg" role="tablist"><button class="segb ${pg.seg==="community"?"on":""}" role="tab" aria-selected="${pg.seg==="community"}" data-seg="community">Community</button><button class="segb ${pg.seg==="mine"?"on":""}" role="tab" aria-selected="${pg.seg==="mine"}" data-seg="mine">My programs</button></div></header>`;
   const banner=ap?`<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>Week ${ap.week+1} of ${ap.weeks}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
     <div class="btns">${ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
-  return head+banner+(pg.seg==="community"?communityView():mineView());
+  return head+banner+`<div class="plan">${poPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
 }
+function poExList(){const ks=[...new Set([0,1,2,3,4,5,6].map(schedOf).filter(Boolean))];const keys=ks.length?ks:Object.keys(DAYS);const m=new Map();
+  keys.forEach(k=>daySections(k).forEach(sc=>sc.items.forEach(it=>{if(it.type==="lift"&&!m.has(poKey(it)))m.set(poKey(it),it)})));
+  return [...m.values()].sort((a,b)=>(poExOn(b)-poExOn(a))||(!!big5(b)-!!big5(a)))}
+function poModeChips(cur,attr){return `<div class="dchips pomodes" role="group" aria-label="Progressive overload mode">${[["off","Off"],["suggest","Suggest"],["auto","Automatic"]].map(([v,l])=>`<button class="dchip wide ${cur===v?"on":""}" data-${attr}="${v}" aria-pressed="${cur===v}">${l}</button>`).join("")}</div>`}
+function poIncChips(cur,list,attr){return `<span class="dchips">${list.map(v=>{const lb=isKg()?v*LB_PER_KG:v;const on=Math.abs(toDisp(cur)-v)<0.05;return `<button class="dchip ${on?"on":""}" data-${attr}="${lb}" aria-pressed="${on}">${v}</button>`}).join("")}</span>`}
+const PO_INFO="Automatic fills in next time's weights. Suggest shows them and you tap to use them. Same weight every set: hit the top of the rep range on every set, then the weight goes up. Working up (like 135, 145, 155): hit every rep, then each set goes up. Miss reps and the weights stay. Miss 3 times in a row and it drops 10% to build back up.";
+function poModeName(m){return m==="auto"?"Automatic":m==="suggest"?"Suggest":"Off"}
+function poPanel(){const c=poCfg(),pp=poProg(),ap=plan.activeProgram,list=poExList(),onN=list.filter(poExOn).length,show=state.poAll?list:list.slice(0,6);
+  return `<details class="panel pnotes" id="popanel" ${state.poOpen?"open":""}><summary><h2>Progressive overload</h2><span>${poModeName(c.mode)}${c.mode!=="off"?` · ${onN} exercise${onN===1?"":"s"} · +${poIncTxt(c.up)} upper, +${poIncTxt(c.low)} lower`:" · tap to set up"}${pp&&!plan.poOwn?" · set by your program":""}</span></summary>
+   <p class="savenote" style="margin-top:8px">How it works <button class="infob" id="poinfo" aria-label="How progressive overload works" title="${esc(PO_INFO)}">i</button></p>
+   ${pp?`<div class="porow"><span>Set by <b>${esc(ap.title)}</b></span><span class="popill ${pp.mode==="off"?"off":""}">${poModeName(pp.mode)}${pp.mode!=="off"?` · +${poIncTxt(pp.up||c.up).replace(" "+wU(),"")} / +${poIncTxt(pp.low||c.low)}`:""}</span></div>
+     <p class="savenote" style="margin-top:2px">${plan.poOwn?"You changed it for yourself.":"Change it below just for you."}</p>`:`<p class="savenote" style="margin-top:0">Beat last time a little at a time. The app works out next time's weights from what you logged.</p>`}
+   <div class="lbl">Mode</div>${poModeChips(c.mode,"pomode")}
+   <p class="savenote">${c.mode==="auto"?"<b>Automatic</b> fills in next time's weights for you.":c.mode==="suggest"?"<b>Suggest</b> shows next time's weights. You tap to use them.":"<b>Off:</b> works like before. Last time's numbers show and you type this time's."}</p>
+   ${pp&&plan.poOwn?`<button class="linkbtn" id="poreset">Reset to the program's setting</button>`:""}
+   ${c.mode!=="off"?`<div class="lbl">Add weight when you hit every rep</div>
+   <div class="porow"><span>Upper body</span>${poIncChips(c.up,PO_UP(),"poup")}</div>
+   <div class="porow"><span>Lower body</span>${poIncChips(c.low,PO_LOW(),"polow")}</div>
+   <div class="lbl">If you miss reps</div>
+   <label class="porow"><span>Keep the same weights</span><button class="swt ${c.keep?"on":""}" data-potog="keep" role="switch" aria-checked="${c.keep}" aria-label="Keep the same weights"></button></label>
+   <label class="porow"><span>Missed 3 times in a row: drop 10%</span><button class="swt ${c.deload?"on":""}" data-potog="deload" role="switch" aria-checked="${c.deload}" aria-label="Drop 10% after 3 misses"></button></label>`:""}
+   ${list.length?`<div class="lbl pohd"><span>Exercises using it <small>· ${onN} of ${list.length}</small></span><span class="pobtns"><button class="btn small" id="poall">Select all</button><button class="btn small" id="ponone">Clear all</button></span></div>
+   ${show.map(it=>`<div class="porow"><span>${esc(it.name)}</span><button class="swt ${poExOn(it)?"on":""}" data-poexk="${esc(poKey(it))}" role="switch" aria-checked="${poExOn(it)}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>`).join("")}
+   ${list.length>6?`<button class="linkbtn" id="pomore">${state.poAll?"Show fewer":`Show all ${list.length} exercises`}</button>`:""}`:""}
+   <p class="savenote">Turning it off never changes your past logs.</p></details>`}
+function bindPoPanel(){const r=()=>{render()};const dp=$("#popanel");if(dp)dp.ontoggle=()=>{state.poOpen=dp.open};
+  document.querySelectorAll("[data-pomode]").forEach(b=>b.onclick=()=>{poSet({mode:b.dataset.pomode});r()});
+  document.querySelectorAll("[data-poup]").forEach(b=>b.onclick=()=>{poSet({up:+b.dataset.poup});r()});
+  document.querySelectorAll("[data-polow]").forEach(b=>b.onclick=()=>{poSet({low:+b.dataset.polow});r()});
+  document.querySelectorAll("[data-potog]").forEach(b=>b.onclick=e=>{e.preventDefault();const k=b.dataset.potog;poSet({[k]:!poCfg()[k]});r()});
+  document.querySelectorAll("[data-poexk]").forEach(b=>b.onclick=()=>{const k=b.dataset.poexk,cur=poExList().find(x=>poKey(x)===k);poSet({ex:{...poBase().ex,[k]:!poExOn(cur)}});r()});
+  const all=(v)=>{const ex={...poBase().ex};poExList().forEach(it=>ex[poKey(it)]=v);poSet({ex});r();toast(v?"Progressive overload on for every exercise":"Progressive overload off for every exercise")};
+  const pa=$("#poall"); if(pa) pa.onclick=()=>all(true); const pn=$("#ponone"); if(pn) pn.onclick=()=>all(false);
+  const pm=$("#pomore"); if(pm) pm.onclick=()=>{state.poAll=!state.poAll;r()};
+  const pr=$("#poreset"); if(pr) pr.onclick=()=>{plan.poOwn=false;savePlan();r();toast("Back to the program's setting")};
+  const pi=$("#poinfo"); if(pi) pi.onclick=()=>toast(PO_INFO,9000);}
 function communityList(){
   const q=pg.q.trim().toLowerCase();
   return pg.community.filter(p=>(!pg.goal||p.goal===pg.goal)&&(!pg.target||(p.targets||[]).includes(pg.target))&&(!q||[p.title,p.summary,p.desc,p.who,(p.targets||[]).join(" ")].join(" ").toLowerCase().includes(q)))
@@ -2064,6 +2224,10 @@ function builderView(){
      <label>How to progress<span class="field"><textarea id="bp-prog" rows="3" maxlength="600" placeholder="e.g. Add 5 lb when you hit the top of the rep range. Rest 60–90 seconds.">${esc(p.progress||"")}</textarea></span></label>
      <label>Equipment<span class="field"><input id="bp-eq" value="${esc(p.equip||"")}" maxlength="120" placeholder="e.g. Full gym, or dumbbells only" autocomplete="off"></span></label>
    </div></div>
+   <div class="panel" id="bpo"><h2>Progressive overload <button class="infob" id="bpoinfo" aria-label="How progressive overload works" title="${esc(PO_INFO)}">i</button></h2>
+    <div class="lbl" style="margin-top:4px">Starts as</div>${poModeChips((p.po&&p.po.mode)||"off","bpomode")}
+    ${p.po&&p.po.mode&&p.po.mode!=="off"?`<div class="porow"><span>Upper body</span>${poIncChips(p.po.up||(isKg()?2.5*LB_PER_KG:5),PO_UP(),"bpoup")}</div><div class="porow"><span>Lower body</span>${poIncChips(p.po.low||(isKg()?5*LB_PER_KG:10),PO_LOW(),"bpolow")}</div>`:""}
+    <p class="savenote">People using your program start this way and can change it for themselves.</p></div>
    <div class="panel"><h2>Calendar</h2>
     <div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-week="${i}" aria-pressed="${i===wi}">Week ${i+1}</button>`).join("")}<button class="gchip ghost" id="addweek">+ Week</button></div>
     <div class="cal">${calCells(w,true)}</div>
@@ -2100,14 +2264,20 @@ function bindPrograms(){
   const np=$("#newprog"); if(np) np.onclick=()=>{const p={id:newId(),title:"",goal:"General fitness",level:"Beginner",desc:"",weeks:[emptyWeek()],published:false,createdAt:Date.now(),updatedAt:Date.now()};
     plan.myPrograms.unshift(p);savePlan();state.builder={id:p.id,week:0};render();window.scrollTo(0,0);setTimeout(()=>{const t=$("#bp-title");if(t)t.focus()},50)};
   const ap=plan.activeProgram;
-  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
-  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
+  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
+  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
   armBtn($("#apstop"),"Tap again to stop",stopProgram);
+  bindPoPanel();
 }
 function bindBuilder(){
   const p=progById(state.builder.id);
   const save=()=>{p.updatedAt=Date.now();savePlan();if(p.friends)writeFriendProgs()};
   let tm; const deb=()=>{clearTimeout(tm);tm=setTimeout(save,500)};
+  const bpo=(ch)=>{p.po={mode:"off",...(p.po||{}),...ch};save();render()};
+  document.querySelectorAll("[data-bpomode]").forEach(b=>b.onclick=()=>bpo({mode:b.dataset.bpomode}));
+  document.querySelectorAll("[data-bpoup]").forEach(b=>b.onclick=()=>bpo({up:+b.dataset.bpoup}));
+  document.querySelectorAll("[data-bpolow]").forEach(b=>b.onclick=()=>bpo({low:+b.dataset.bpolow}));
+  const bpi=$("#bpoinfo"); if(bpi) bpi.onclick=()=>toast(PO_INFO,9000);
   $("#bback").onclick=()=>{save();state.builder=null;pg.seg="mine";render();window.scrollTo(0,0)};
   $("#bp-title").oninput=e=>{p.title=e.target.value;deb();$("#bh1").textContent=p.title||"New program"};
   $("#bp-goal").onchange=e=>{p.goal=e.target.value;save()};
@@ -2130,7 +2300,7 @@ function bindBuilder(){
   const pb=$("#publish"); if(pb) pb.onclick=()=>publishProg(p);
   const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic().then(()=>loadCreator(true)).catch(()=>{});render();toast("Unpublished")};
   const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};const bf=$("#bp-friends"); if(bf) bf.onchange=()=>{p.friends=bf.checked;save();writeFriendProgs();toast(p.friends?"Shared with friends":"No longer shared with friends")};
-  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks,...progNoteFields(p)});
+  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks,po:p.po,...progNoteFields(p)});
   armBtn($("#delprog"),"Tap again to delete program",()=>{plan.myPrograms=plan.myPrograms.filter(x=>x.id!==p.id);savePlan();if(p.published)writePublic();state.builder=null;pg.seg="mine";render();toast("Program deleted")});
 }
 function weekFromPlan(){const w=emptyWeek();[0,1,2,3,4,5,6].forEach(i=>{const k=schedOf(i);if(!k)return;
@@ -2181,7 +2351,7 @@ function openDayEdit(p,wi,wd){
 }
 
 /* ----- community data ----- */
-function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.from?{from:p.from}:{}),weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
+function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.from?{from:p.from}:{}),...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
 let pubQ=Promise.resolve();
 function writePublic(){ if(state.mode!=="db"||!db||!uid) return Promise.resolve(); const payload=JSON.parse(JSON.stringify(pubPayload()));
   const run=()=>db.doc("programs/"+uid).set(payload);
@@ -2250,6 +2420,7 @@ function openProgView(key){
      ${p.summary?`<p class="pvsum">${esc(p.summary)}</p>`:""}
      ${(p.targets||[]).length?`<div class="gchips pvtags">${p.targets.map(t=>`<span class="gchip on">${esc(t)}</span>`).join("")}</div>`:""}
      ${[["About this program",p.desc],["Who it's for",p.who],["How to progress",p.progress],["Equipment",p.equip]].filter(x=>(x[1]||"").trim()).map(([h,t])=>`<div class="lbl">${h}</div><p class="pvtext">${esc(t)}</p>`).join("")}
+     ${p.po&&p.po.mode&&p.po.mode!=="off"?`<div class="lbl">Progressive overload</div><p class="pvtext">${poModeName(p.po.mode)}: +${poIncTxt(p.po.up||(isKg()?2.5*LB_PER_KG:5))} upper body, +${poIncTxt(p.po.low||(isKg()?5*LB_PER_KG:10))} lower body when you hit every rep. You can change it for yourself.</p>`:""}
      ${p.friendOnly?`<p class="savenote">Shared with friends only.</p>`:""}<div class="btns" style="align-items:center${p.friendOnly?";display:none":""}"><button class="btn small ${liked?"okd":""}" id="pvlike" aria-pressed="${liked}">♥ ${liked?"Liked":"Like"} · ${pg.social.likes[key]||0}</button><span class="savenote">${pg.social.uses[key]||0} following it</span></div>
      ${p.weeks.length>1?`<div class="wtabs" style="margin-top:12px">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-pvw="${i}">Week ${i+1}</button>`).join("")}</div>`:""}
      <div class="cal small">${calCells(w,false)}</div>
@@ -2265,7 +2436,7 @@ function openProgView(key){
     $("#pvuse",sh).onclick=()=>openUse(p);
     const rp=$("#pvreport",sh); if(rp) rp.onclick=()=>openReport(p);
     const pt=$("#pvtrainer",sh); if(pt) pt.onclick=()=>openTrainer(p.author);
-    const pc=$("#pvcopy",sh); if(pc) pc.onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
+    const pc=$("#pvcopy",sh); if(pc) pc.onclick=()=>{const c={id:newId(),title:mine?`${p.title} (copy)`:p.title,goal:p.goal,level:p.level,desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:[...(p.targets||[])],progress:p.progress||"",equip:p.equip||"",...(p.po?{po:{...p.po}}:{}),weeks:JSON.parse(JSON.stringify(p.weeks)),published:false,from:key,createdAt:Date.now(),updatedAt:Date.now()};
       plan.myPrograms.unshift(c);savePlan();closeSheet();pg.seg="mine";state.builder={id:c.id,week:0};render();window.scrollTo(0,0);toast("Copied to My programs. Edit away.")};
     armBtn($("#pvmod",sh),"Tap again to remove",()=>{const rest=pg.community.filter(x=>x.author===p.author&&x.id!==p.id).map(({key,author,likes,uses,...x})=>x);
       db.doc("programs/"+p.author).set({programs:rest,updatedAt:Date.now()}).then(()=>toast("Removed from the community")).catch(()=>toast("Couldn't remove it."));closeSheet()});
@@ -2319,12 +2490,13 @@ function applyProgram(p,wi){
     plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop,...(Array.isArray(x.alts)?{alts:x.alts.slice(0,8)}:{})}));
     plan.schedule[String(i)]=key});
   const prevN=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram.notes:null;
-  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
+  if(!plan.activeProgram||plan.activeProgram.key!==p.key) plan.poOwn=false;
+  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),po:p.po&&p.po.mode?{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}:null,an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
   savePlan(); syncDays();
 }
 function stopProgram(){
   const k=plan.activeProgram&&plan.activeProgram.key;
-  clearProgramDays(); plan.schedule={...((TPL&&TPL.schedule)||{})}; plan.activeProgram=null; savePlan(); syncDays();
+  clearProgramDays(); plan.schedule={...((TPL&&TPL.schedule)||{})}; plan.activeProgram=null; plan.poOwn=false; savePlan(); syncDays();
   if(k&&pg.myUses.has(k)){pg.myUses.delete(k);recount();writeSocial()}
   render(); toast("Stopped. Your week is back to Days 1–3.");
 }
@@ -3442,7 +3614,7 @@ function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.L
 function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;const sr=$("#avshare2");if(sr)sr.onclick=()=>shareCard("rank",{});needProfiles([uid])}
 /* ---------- friends ---------- */
 const fr={list:null,progs:[],at:0,busy:false,err:false};
-function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
+function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
 let frT=null;
 function writeFriendProgs(){if(state.mode!=="db"||!window.LIFTLOG_RPC)return;clearTimeout(frT);frT=setTimeout(()=>window.LIFTLOG_RPC("set_friend_programs",{progs:friendPayload()}).catch(()=>{}),800)}
 function friendOf(id){return (fr.list||[]).find(f=>f.id===id)}
@@ -3765,8 +3937,8 @@ function openFeedback(k){const sh=$("#sheet");let kind=typeof k==="string"?k:"";
   state.open="__fb";sh.hidden=false;$("#scrim").hidden=false;draw();sh.scrollTop=0}
 
 /* ---------- toast ---------- */
-let toastH;function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
- t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,2200)}
+let toastH;function toast(msg,ms){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + 16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:600;font-size:14px;max-width:90%;text-align:center";document.body.appendChild(t)}
+ t.textContent=msg;t.hidden=false;clearTimeout(toastH);toastH=setTimeout(()=>t.hidden=true,ms||2200)}
 
 /* ---------- tabs ---------- */
 $("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(!b)return;if(b.dataset.tab!=="programs")state.builder=null;state.reorder=null;state.stats=null;state.badges=null;state.dayMenu=false;state.settings=false;state.tab=b.dataset.tab==="workout"?(defaultDay()||"workout"):b.dataset.tab;ls.set("ll.tab",state.tab);closeSheet();render();window.scrollTo(0,0)});

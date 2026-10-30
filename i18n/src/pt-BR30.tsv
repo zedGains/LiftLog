@@ -1,0 +1,72 @@
+1342	Sobrecarga progressiva
+1343	Modo
+1344	Desligado
+1345	Sugerir
+1346	Automático
+1347	<b>Automático</b> preenche para você os pesos da próxima vez.
+1348	<b>Sugerir</b> mostra os pesos da próxima vez. Você toca para usar.
+1349	<b>Desligado:</b> funciona como antes. Os números da última vez aparecem e você digita os de agora.
+1350	Supere a última vez aos poucos. O app calcula os pesos da próxima vez com base no que você registrou.
+1351	Adicionar peso quando fizer todas as reps
+1352	Parte superior
+1353	Parte inferior
+1354	Se errar reps
+1355	Manter os mesmos pesos
+1356	Errou {0} vezes seguidas: baixar {1}%
+1357	Exercícios que usam <small>· {0} de {1}</small>
+1358	Selecionar tudo
+1359	Limpar tudo
+1360	Mostrar menos
+1361	Mostrar todos os {0} exercícios
+1362	Desligar nunca muda seus registros anteriores.
+1363	Voltar à configuração do programa
+1364	Você mudou só para você.
+1365	Mude abaixo só para você.
+1366	Como funciona
+1367	Começa como
+1368	Quem usar seu programa começa assim e pode mudar para si.
+1369	Ligada para este exercício
+1370	Desligada para este exercício
+1371	Mesmos pesos. Supere suas reps.
+1372	Usar os pesos da semana passada
+1373	Registre pesos e reps e os números da próxima vez serão preenchidos a partir deles.
+1374	De volta à configuração do programa
+1375	Sobrecarga progressiva ligada em todos os exercícios
+1376	Sobrecarga progressiva desligada em todos os exercícios
+1377	Automático preenche os pesos da próxima vez. Sugerir mostra e você toca para usar. Mesmo peso em toda série: chegue ao topo da faixa de reps em todas as séries e o peso sobe. Subindo (como {0}, {1}, {2}): faça todas as reps e cada série sobe. Errou reps, os pesos ficam. Errou {3} vezes seguidas, cai {4}% para voltar a subir.
+1378	Você
+1379	App
+1380	Ajuda e ferramentas
+1381	↑ Você fez todas as reps. +{x} nesta semana.
+1382	Pronto para subir: tente {x}
+1383	Travado {0} vezes seguidas: menos {1}% nesta semana
+1384	Preenchido da última vez. Faça {x} de novo e sobe outra vez.
+1385	Preenchido da última vez. Comece com {0} reps e suba até {1} em todas as séries; depois sobe de novo.
+1386	Preenchido da última vez. Comece com {0} reps e suba até {1} na primeira série; depois sobe de novo.
+1387	Toque abaixo para preencher {x}.
+1388	Você fez {0} reps em todas as séries. Volte para {1} e suba até {2} de novo.
+1389	Você fez todas as reps da última vez. Mesmas reps, +{x} em cada série.
+1390	{x}. Volte a subir daqui. Normalmente você passa seus números antigos em poucas semanas.
+1391	Você fez {x}. Faça {x2} em todas as séries e o peso sobe.
+1392	Você fez {0} de {1} na primeira série. Faça todas as {2} e o peso sobe.
+1393	Você fez {0} de {1} na série {2}. Faça todas as {3} e o peso sobe.
+1394	Usar {x} lb
+1395	Usar {x} kg
+1396	Preencher {x} lb
+1397	Preencher {x} kg
+1398	Ficar em {x} lb
+1399	Ficar em {x} kg
+1400	{x} · {x2} exercícios · +{x3} superior, +{x4} inferior
+1401	{x} · {x2} exercício · +{x3} superior, +{x4} inferior
+1402	{x} · {x2} exercícios · +{x3} superior, +{x4} inferior · definido pelo programa
+1403	{x} · toque para configurar
+1404	{x} · toque para configurar · definido pelo programa
+1405	↑ Esta semana: {x}
+1406	↑ Próxima: {x}
+1407	= Esta semana: {x}
+1408	= Próxima: {x}
+1409	↓ Esta semana: {x}
+1410	↓ Próxima: {x}
+1411	Definido por <b>{x}</b>
+1412	{x}: +{x2} parte superior, +{x3} parte inferior quando fizer todas as reps. Você pode mudar para você.
+1413	Última vez ({x}): {x2}

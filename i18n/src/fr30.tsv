@@ -1,0 +1,72 @@
+1342	Surcharge progressive
+1343	Mode
+1344	Désactivé
+1345	Suggérer
+1346	Automatique
+1347	<b>Automatique</b> remplit pour vous les charges de la prochaine fois.
+1348	<b>Suggérer</b> affiche les charges de la prochaine fois. Vous touchez pour les utiliser.
+1349	<b>Désactivé :</b> comme avant. Les chiffres de la dernière fois s'affichent et vous saisissez ceux d'aujourd'hui.
+1350	Faites un peu mieux que la dernière fois, petit à petit. L'appli calcule les charges suivantes à partir de ce que vous avez noté.
+1351	Ajouter du poids quand toutes les reps sont faites
+1352	Haut du corps
+1353	Bas du corps
+1354	Si vous ratez des reps
+1355	Garder les mêmes charges
+1356	Raté {0} fois de suite : baisser de {1} %
+1357	Exercices concernés <small>· {0} sur {1}</small>
+1358	Tout sélectionner
+1359	Tout effacer
+1360	Afficher moins
+1361	Afficher les {0} exercices
+1362	La désactiver ne change jamais vos séances passées.
+1363	Revenir au réglage du programme
+1364	Vous l'avez changé pour vous.
+1365	Changez-le ci-dessous juste pour vous.
+1366	Comment ça marche
+1367	Commence en
+1368	Les personnes qui suivent votre programme commencent ainsi et peuvent le changer pour elles.
+1369	Activée pour cet exercice
+1370	Désactivée pour cet exercice
+1371	Mêmes charges. Battez vos reps.
+1372	Utiliser les charges de la semaine dernière
+1373	Notez vos charges et reps : les chiffres de la prochaine fois se rempliront à partir d'elles.
+1374	Retour au réglage du programme
+1375	Surcharge progressive activée pour tous les exercices
+1376	Surcharge progressive désactivée pour tous les exercices
+1377	Automatique remplit les charges de la prochaine fois. Suggérer les affiche et vous touchez pour les utiliser. Même charge à chaque série : atteignez le haut de la fourchette de reps sur toutes les séries, puis la charge augmente. En montant (comme {0}, {1}, {2}) : faites toutes les reps, puis chaque série augmente. Reps ratées : les charges restent. Raté {3} fois de suite : baisse de {4} % pour remonter.
+1378	Vous
+1379	Appli
+1380	Aide et outils
+1381	↑ Toutes les reps faites. +{x} cette semaine.
+1382	Prêt à monter : essayez {x}
+1383	Bloqué {0} fois de suite : -{1} % cette semaine
+1384	Rempli d'après la dernière fois. Refaites {x} et ça remonte.
+1385	Rempli d'après la dernière fois. Commencez à {0} reps et montez à {1} sur toutes les séries, puis ça remonte.
+1386	Rempli d'après la dernière fois. Commencez à {0} reps et montez à {1} sur votre première série, puis ça remonte.
+1387	Touchez ci-dessous pour remplir {x}.
+1388	Vous avez fait {0} reps sur toutes les séries. Repartez à {1} et remontez à {2}.
+1389	Toutes les reps faites la dernière fois. Mêmes reps, +{x} sur chaque série.
+1390	{x}. Remontez à partir d'ici. Vous dépasserez souvent vos anciens chiffres en quelques semaines.
+1391	Vous avez fait {x}. Faites {x2} sur toutes les séries et la charge augmente.
+1392	Vous avez fait {0} sur {1} à votre première série. Faites les {2} et la charge augmente.
+1393	Vous avez fait {0} sur {1} à la série {2}. Faites les {3} et la charge augmente.
+1394	Utiliser {x} lb
+1395	Utiliser {x} kg
+1396	Remplir {x} lb
+1397	Remplir {x} kg
+1398	Rester à {x} lb
+1399	Rester à {x} kg
+1400	{x} · {x2} exercices · +{x3} haut, +{x4} bas
+1401	{x} · {x2} exercice · +{x3} haut, +{x4} bas
+1402	{x} · {x2} exercices · +{x3} haut, +{x4} bas · réglé par votre programme
+1403	{x} · touchez pour régler
+1404	{x} · touchez pour régler · réglé par votre programme
+1405	↑ Cette semaine : {x}
+1406	↑ Prochaine fois : {x}
+1407	= Cette semaine : {x}
+1408	= Prochaine fois : {x}
+1409	↓ Cette semaine : {x}
+1410	↓ Prochaine fois : {x}
+1411	Réglé par <b>{x}</b>
+1412	{x} : +{x2} haut du corps, +{x3} bas du corps quand toutes les reps sont faites. Vous pouvez le changer pour vous.
+1413	Dernière fois ({x}) : {x2}
