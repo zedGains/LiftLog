@@ -228,7 +228,14 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .rowbtn{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:9px 12px;margin:8px 0 6px}
 .rowbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.rbic{width:30px;height:30px;border-radius:9px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex:none}
 .rbic svg{width:16px;height:16px;fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.rbt{flex:1;display:flex;flex-direction:column;min-width:0}.rbt b{font-size:15px}.rbt small{font:12.5px var(--mono);color:var(--muted)}
-.rbplus{font:700 22px/1 var(--body);color:var(--muted)}.rbchev{width:16px;height:16px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4}
+.rbplus{font:700 22px/1 var(--body);color:var(--muted)}
+.pogoal{margin:0 0 10px;padding:8px 12px}.pogoal .rbt b{font:700 15px var(--mono)}.rbedit{font-weight:700;font-size:13.5px;text-decoration:underline}
+.goaled{border:1px solid var(--line);border-radius:12px;padding:10px;margin:0 0 10px;background:var(--surface-2)}
+.gopt{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:6px}.gopt.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.gpick{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:flex-start;width:100%;padding:10px 12px}.gpick b{display:block;font-size:14.5px}.gpick small{font:12.5px var(--mono);color:var(--muted)}
+.rad{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;margin-top:2px;box-sizing:border-box}.gopt.on .rad{border-color:var(--accent);background:radial-gradient(var(--accent) 42%,transparent 48%)}
+.repch{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 10px 40px}.repch .field{flex:0 0 58px;width:58px;padding:6px 8px}.repch input{text-align:center;font:700 16px var(--mono);width:100%}
+.cfrs small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}.rbchev{width:16px;height:16px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.4}
 .ssgroup{border-left:4px solid var(--accent);padding-left:8px;display:grid;gap:8px}
 .sslbl{font-family:var(--display);font-weight:700;letter-spacing:.08em;font-size:12px;text-transform:uppercase;color:var(--accent);display:flex;justify-content:space-between;align-items:center}
 .sslbl .linkbtn{font-family:var(--body);letter-spacing:0;text-transform:none;font-size:13px;color:var(--accent)}
@@ -909,6 +916,7 @@ const yt=(q)=>"https://www.youtube.com/results?search_query="+encodeURIComponent
 const rxText=(it)=>{
   if(it.rx) return it.rx;
   if(it.type==="cardio") return `${it.reps[0]} min`;
+  if(Array.isArray(it.rs)&&it.rs.length) return `${it.rs.length} sets · ${it.rs.join("-")}`;
   const r=it.reps[0]===it.reps[1]?`${it.reps[0]}`:`${it.reps[0]}–${it.reps[1]}`;
   return `${it.sets}×${r}${it.each?" each side":""}`;
 };
@@ -1090,11 +1098,11 @@ function effItem(dayKey,orig,sec){
     sec:sectionFor(L.g,dayKey),slot,dayKey,replaced:orig.name,lib:L.id,custom:!!L.custom};
 }
 function extraItem(dayKey,x){const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
-  return {id:(L.custom?"c_":"x_")+L.id,name:L.name,sets:x.sets,reps:x.reps,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
+  return {id:(L.custom?"c_":"x_")+L.id,name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
     note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name),
     sec:sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
-function applyPick(it,exId,sets,reps,drop){
-  if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
+function applyPick(it,exId,sets,reps,drop,rs){
+  if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,...(rs&&rs.length?{rs}:{}),drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
   if(it.addMode){const sid=Date.now().toString(36);(plan.extra[it.dayKey]=plan.extra[it.dayKey]||[]).push({sid,ex:exId,sets,reps,drop});
     const ps=state.pendingSuper; if(ps&&ps.day===it.dayKey){state.pendingSuper=null;setSuper(it.dayKey,ps.slot,it.dayKey+":+"+sid)}}
   else if(it.extra){const x=(plan.extra[it.dayKey]||[]).find(y=>y.sid===it.extra);if(x)Object.assign(x,{ex:exId,sets,reps,drop})}
@@ -1282,7 +1290,7 @@ function hintFor(it){
 // Drop sets: the first (main) set decides. Miss: same weights. Missed 3 times in a row: down 10% to build back up.
 const LOWER_MUSC=["quads","hamstrings","glutes","calves"],LOWER_RE=/squat|deadlift|leg press|lunge|calf|hip thrust|leg curl|hamstring|leg extension|step.?up|glute/i;
 const PO_UP=()=>isKg()?[1.25,2.5,5]:[2.5,5,10], PO_LOW=()=>isKg()?[2.5,5,7.5]:[5,10,15];
-function poBase(){const p=plan.po||{};return {mode:p.mode||"off",up:p.up||(isKg()?2.5*LB_PER_KG:5),low:p.low||(isKg()?5*LB_PER_KG:10),keep:p.keep!==false,deload:p.deload!==false,ex:p.ex||{}}}
+function poBase(){const p=plan.po||{};return {mode:p.mode||"off",up:p.up||(isKg()?2.5*LB_PER_KG:5),low:p.low||(isKg()?5*LB_PER_KG:10),keep:p.keep!==false,deload:p.deload!==false,ex:p.ex||{},goal:p.goal||{}}}
 function poProg(){const ap=plan.activeProgram;return ap&&ap.po&&ap.po.mode?ap.po:null}
 function poCfg(){const b=poBase(),pp=poProg();return pp&&!plan.poOwn?{...b,mode:pp.mode,up:pp.up||b.up,low:pp.low||b.low,fromProg:true}:b}
 function poSet(ch){if(poProg()&&!plan.poOwn){const c=poCfg();plan.po={...(plan.po||{}),mode:c.mode,up:c.up,low:c.low};plan.poOwn=true}plan.po={...(plan.po||{}),...ch};savePlan()}
@@ -1291,10 +1299,16 @@ function poExOn(it){if(!it||it.type!=="lift")return false;const v=poBase().ex[po
 function poOn(it){return poCfg().mode!=="off"&&poExOn(it)}
 function poLower(it){return (it.p||[]).some(x=>LOWER_MUSC.includes(x))||LOWER_RE.test(it.name)}
 function poInc(it){const c=poCfg();return poLower(it)?c.low:c.up}
+// rep goal for one exercise: an array (reps for each set), "top" (top of the range on every set) or null (worked out from how you log)
+function poGoalRaw(it){const g=(poBase().goal||{})[poKey(it)];return Array.isArray(g)&&g.length?g:g==="top"?"top":Array.isArray(it.rs)&&it.rs.length?it.rs:null}
+function poGoalAt(g,i){return g[i]!=null?g[i]:g[g.length-1]}
 function poSets(e){return ((e&&e.sets)||[]).map(s=>({w:Number(s&&s.w)||0,r:Number(s&&s.r)||0}))}
 function poShape(it,ss){const ws=ss.filter(s=>s.w>0).map(s=>s.w);if(ws.length<2||ws.every(w=>Math.abs(w-ws[0])<0.01))return "straight";return it.drop&&ws[ws.length-1]<ws[0]?"drop":"pyramid"}
 // true = hit every rep, false = missed, null = nothing to go on
 function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0);if(!done.length)return null;const hi=it.reps[1];const sh=poShape(it,ss);
+  const G=poGoalRaw(it);
+  if(Array.isArray(G))return ss.every((s,i)=>!s.w||s.r>=poGoalAt(G,i));
+  if(G==="top")return ss.filter(s=>s.w>0).every(s=>s.r>=hi);
   if(sh==="straight")return done.length>=ss.filter(s=>s.w>0).length&&done.every(s=>s.r>=hi);
   if(sh==="drop")return ss[0].r>=hi;
   const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
@@ -1305,20 +1319,21 @@ function poPlan(it){
   const res=poResult(it,last);if(res==null)return null;
   const c=poCfg(),ss=poSets(last),lo=it.reps[0],hi=it.reps[1],sh=poShape(it,ss),inc=poInc(it);
   let miss=0;for(let i=h.length-1;i>=0&&poResult(it,h[i])===false;i--)miss++;
-  const goal=sh==="pyramid"?(Array.isArray(last.tg)?last.tg.slice(0,ss.length):ss.map(s=>s.r)):null;
+  const G=poGoalRaw(it),mode=Array.isArray(G)?"set":G==="top"?"straight":sh==="pyramid"?"set":sh;
+  const goal=Array.isArray(G)?ss.map((s,i)=>poGoalAt(G,i)):sh==="pyramid"&&G!=="top"?(Array.isArray(last.tg)?last.tg.slice(0,ss.length):ss.map(s=>s.r)):null;
   let kind,w;
   if(res){kind="up";w=ss.map(s=>s.w?s.w+inc:0)}
   else if(c.deload&&miss>=3){kind="down";w=ss.map(s=>s.w?Math.max(minPlate(),rPlate(s.w*0.9)):0)}
   else if(c.keep){kind="same";w=ss.map(s=>s.w)}
   else return null;
-  const reps=sh==="pyramid"?goal:sh==="drop"?ss.map((s,i)=>i?(s.r||null):(kind==="same"?hi:lo)):ss.map(s=>kind==="same"?Math.min(hi,Math.max(lo,s.r+1)):lo);
+  const reps=mode==="set"?goal:mode==="drop"?ss.map((s,i)=>i?(s.r||null):(kind==="same"?hi:lo)):ss.map(s=>kind==="same"?Math.min(hi,Math.max(lo,s.r+1)):lo);
   let why="";
   if(kind==="same"){
-    if(sh==="straight")why=`You got ${ss.filter(s=>s.w).map(s=>s.r).join("-")}. Hit ${hi} on every set and the weight goes up.`;
-    else if(sh==="drop")why=`You got ${ss[0].r} of ${hi} on your first set. Get all ${hi} and the weight goes up.`;
+    if(mode==="straight")why=`You got ${ss.filter(s=>s.w).map(s=>s.r).join("-")}. Hit ${hi} on every set and the weight goes up.`;
+    else if(mode==="drop")why=`You got ${ss[0].r} of ${hi} on your first set. Get all ${hi} and the weight goes up.`;
     else{const i=ss.findIndex((s,j)=>goal[j]!=null&&s.w&&s.r<goal[j]);why=i>=0?`You got ${ss[i].r} of ${goal[i]} on set ${i+1}. Get all ${goal[i]} and the weight goes up.`:""}
   }
-  return {kind,w,reps,tg:sh==="pyramid"?goal:null,last,inc,miss,shape:sh,why}}
+  return {kind,w,reps,tg:mode==="set"&&!Array.isArray(G)?goal:null,last,inc,miss,shape:mode==="set"?"pyramid":mode,why}}
 function poW(pl){const ws=pl.w.filter(Boolean);if(!ws.length)return "";return (ws.every(w=>Math.abs(w-ws[0])<0.01)?toDisp(ws[0]):ws.map(w=>toDisp(w)).join(" · "))+" "+wU()}
 function poIncTxt(v){return `${Math.round(toDisp(v)*100)/100} ${wU()}`}
 function poFill(it,d,pl){const n=nSets(it,d);while(d.sets.length<n)d.sets.push({w:"",r:""});
@@ -1328,7 +1343,20 @@ function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&
 // prescribed numbers for a fresh draft (Automatic fills them in; Suggest waits for a tap)
 function poStart(it,d){const pl=poPlan(it);if(!pl)return;if(poCfg().mode==="auto")poFill(it,d,pl);else d.po={k:pl.kind,on:false,tg:null}}
 function poRow(it){if(it.type!=="lift")return "";if(poCfg().mode==="off")return `<button class="rowbtn" id="pogo" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg></span><span class="rbt"><b>Progressive overload</b><small>Off · tap to set up</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;const on=poExOn(it);
-  return `<div class="poex"><span><b>Progressive overload</b><small>${on?"On for this exercise":"Off for this exercise"}</small></span><button class="swt ${on?"on":""}" id="poex" role="switch" aria-checked="${on}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>`}
+  return `<div class="poex"><span><b>Progressive overload</b><small>${on?"On for this exercise":"Off for this exercise"}</small></span><button class="swt ${on?"on":""}" id="poex" role="switch" aria-checked="${on}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>${on?poGoalUI(it):""}`}
+function poGoalUI(it){const G=poGoalRaw(it),own=(poBase().goal||{})[poKey(it)],hi=it.reps[1],d=state.drafts[it.id],n=nSets(it,d);
+  const last=poHist(it).slice(-1)[0],lastR=last?poSets(last).map(s=>s.r).filter(Boolean):[];
+  const label=Array.isArray(G)?`${G.join("-")}${own?"":" · from the program"}`:G==="top"?`${hi} on every set`:"Automatic";
+  if(state.goalEdit!==it.id) return `<button class="rowbtn pogoal" id="pogoal" type="button"><span class="rbt"><small>Weight goes up when you hit</small><b>${esc(label)}</b></span><span class="rbedit">Change</span></button>`;
+  const vals=Array.isArray(G)?G:lastR.length?lastR:Array(n).fill(hi);const cnt=Math.max(n,1);
+  const opt=(k,on,title,sub,extra="")=>`<div class="gopt ${on?"on":""}"><button class="gpick" data-pgoal="${k}" aria-pressed="${on}"><span class="rad"></span><span><b>${title}</b><small>${sub}</small></span></button>${extra}</div>`;
+  return `<div class="goaled"><div class="lbl" style="margin:0 0 6px">Weight goes up when you hit</div>
+   ${opt("top",G==="top",`Top of the range on every set`,Array(cnt).fill(hi).join(" · "))}
+   ${opt("set",Array.isArray(G),`My own reps for each set`,`For drop sets and working up`,`<div class="repch">${Array.from({length:cnt},(_,i)=>`<label class="field"><input data-pgi="${i}" inputmode="numeric" value="${poGoalAt(vals,i)}" aria-label="Set ${i+1} reps"></label>`).join("")}</div>`)}
+   ${opt("auto",G==null,`Automatic`,`Same weight every set: top of the range. Working up or drop sets: last time's reps.`)}
+   <div class="btns" style="margin-top:8px"><button class="btn small" id="pogdone">Done</button></div>
+   <p class="savenote" style="margin-top:4px">Remembered for this exercise every week.</p></div>`}
+function poSetGoal(it,v){const g={...(poBase().goal||{})};if(v==null)delete g[poKey(it)];else g[poKey(it)]=v;poSet({goal:g})}
 function poBox(it,d){
   if(!poOn(it)||shownToday(it.id))return poRow(it);
   const pl=poPlan(it);if(!pl)return poRow(it)+`<p class="pohint">Log your weights and reps and next time's numbers fill in from them.</p>`;
@@ -1588,7 +1616,7 @@ function openSheet(id,keepScroll){
     const w=Number(s.w)||(ph&&ph.w)||0;
     return `<div class="setrow"><span class="n">${isCardio?"TIME":"SET "+(i+1)}</span>
       <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""} ${poPl&&d.po&&d.po.on&&poPl.kind!=="same"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?"pofill":""}">${poPl&&d.po&&d.po.on&&poPl.kind==="up"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus">+${Math.round(toDisp(poPl.inc)*100)/100}</span>`:poPl&&d.po&&d.po.on&&poPl.kind==="down"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus down">−10%</span>`:""}<input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" placeholder="${ph&&ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):isCardio?"10":"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
-      ${isCardio?"<span></span>":`<label class="field"><input id="r-${id}-${i}" inputmode="numeric" data-i="${i}" data-f="r" value="${esc(s.r)}" placeholder="${ph&&ph.r!=null?ph.r:it.reps[1]}" aria-label="Set ${i+1} reps"><span>reps</span></label>`}
+      ${isCardio?"<span></span>":`<label class="field"><input id="r-${id}-${i}" inputmode="numeric" data-i="${i}" data-f="r" value="${esc(s.r)}" placeholder="${ph&&ph.r!=null?ph.r:(()=>{const G=it.type==="lift"&&poOn(it)?poGoalRaw(it):Array.isArray(it.rs)?it.rs:null;return Array.isArray(G)?poGoalAt(G,i):it.reps[1]})()}" aria-label="Set ${i+1} reps"><span>reps</span></label>`}
       ${it.drop&&!dropAuto?`<span class="drops" data-drops="${i}" data-w="${w||""}">${dropsTxt(w)}</span>`:""}
       ${it.drop&&dropAuto&&i===0&&N>1?`<span class="drops">Sets 2–${N} fill in at ${dropPct}% drops from this weight</span>`:""}
     </div>`}).join("");
@@ -1653,6 +1681,12 @@ function openSheet(id,keepScroll){
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
   const pgo=$("#pogo",sh); if(pgo) pgo.onclick=goPO;
+  const pgl=$("#pogoal",sh); if(pgl) pgl.onclick=()=>{state.goalEdit=it.id;openSheet(id,true)};
+  const pgd=$("#pogdone",sh); if(pgd) pgd.onclick=()=>{state.goalEdit=null;openSheet(id,true);render()};
+  const readG=()=>[...sh.querySelectorAll("[data-pgi]")].map(x=>Math.max(1,Math.min(100,parseInt(x.value,10)||0))).filter(Boolean);
+  const regoal=()=>{if(!todayEntry(it.id)&&d.po&&d.po.on&&!d.marked){const pl=poPlan(it);if(pl)poFill(it,d,pl);saveDrafts()}};
+  sh.querySelectorAll("[data-pgoal]").forEach(b=>b.onclick=()=>{const k=b.dataset.pgoal;poSetGoal(it,k==="top"?"top":k==="set"?readG():null);regoal();openSheet(id,true);render()});
+  sh.querySelectorAll("[data-pgi]").forEach(x=>x.oninput=()=>{clearTimeout(window.__pgi);window.__pgi=setTimeout(()=>{const g=readG();if(g.length){poSetGoal(it,g);regoal();render()}},500)});
   const pex=$("#poex",sh); if(pex) pex.onclick=()=>{const k=poKey(it),v=!poExOn(it);poSet({ex:{...poBase().ex,[k]:v}});
     if(v&&!todayEntry(it.id)&&!(d.sets||[]).some(x=>x.w!==""))poStart(it,d);saveDrafts();openSheet(id,true);render()};
   const pfl=$("#pofill",sh); if(pfl) pfl.onclick=()=>{const pl=poPlan(it);if(pl){poFill(it,d,pl);saveDrafts()}openSheet(id,true);render()};
@@ -1716,6 +1750,7 @@ function renderPicker(top){
   sh.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{let id=b.dataset.pick;if(id.startsWith("fx:")){id=adoptFriendEx(id);if(!id)return}pk.pick=id;renderPicker(true)});
 }
 const DEF_RX={sets:3,reps:[8,10]};
+function parseRS(v){const a=String(v||"").split(/[^0-9]+/).filter(Boolean).map(Number).filter(n=>n>=1&&n<=100).slice(0,12);return a.length>=1?a:null}
 function renderConfirm(){
   const it=pk.it, L=libById(pk.pick), sh=$("#sheet");
   const isC=L.type==="cardio";
@@ -1732,6 +1767,7 @@ function renderConfirm(){
    `<div class="cfg"><label>Sets<span class="field"><input id="cf-sets" inputmode="numeric" value="${sets}"></span></label>
      <label>Reps from<span class="field"><input id="cf-r0" inputmode="numeric" value="${r0}"></span></label>
      <label>to<span class="field"><input id="cf-r1" inputmode="numeric" value="${r1}"></span></label></div>
+    ${it.progMode?`<label class="cfrs">Or reps for each set <small>e.g. 10-8-6-6. Sets it to that many sets.</small><span class="field"><input id="cf-rs" inputmode="text" placeholder="10-8-6-6" autocomplete="off"></span></label>`:""}
     <label class="tick"><input type="checkbox" id="cf-drop" ${it.drop&&!isC?"checked":""}> Drop sets</label>`}
    <div class="btns"><button class="btn primary" id="cf-plan">${it.addMode?`Add to ${esc(dlab(it))}`:"Replace in my plan"}</button></div>
    ${it.addMode?`<p class="savenote">${it.progMode?"Adds it to this day of your program.":`Stays in ${esc(dlab(it))} every week. Remove it anytime from the exercise screen.`}</p>`:
@@ -1742,7 +1778,8 @@ function renderConfirm(){
   $("#cf-plan",sh).onclick=()=>{
     const n=(id,d)=>{const el=$(id,sh);const v=el?parseInt(el.value,10):NaN;return isNaN(v)||v<1?d:Math.min(v,isC?600:12)};
     const sN=isC?1:n("#cf-sets",sets), a=n("#cf-r0",r0), b=isC?a:Math.max(a,parseInt(($("#cf-r1",sh)||{}).value,10)||r1);
-    applyPick(it,L.id,sN,[a,b],!isC&&!!($("#cf-drop",sh)||{}).checked);
+    const rsv=parseRS(($("#cf-rs",sh)||{}).value);
+    applyPick(it,L.id,rsv?rsv.length:sN,rsv?[Math.min(...rsv),Math.max(...rsv)]:[a,b],!isC&&!!($("#cf-drop",sh)||{}).checked,rsv);
     closeSheet(); render(); toast(`${L.name} is now in ${dlab(it)}${it.addMode||sec!==it.sec?` under ${sec}`:""}`);
   };
   const ctd=$("#cf-today",sh); if(ctd) ctd.onclick=()=>{const d=draftFor(it);d.alt=L.name;saveDrafts();openSheet(it.id);render();toast(`Doing ${L.name} today`)};
@@ -2122,7 +2159,7 @@ function emptyWeek(){return {days:{}}}
 function progStats(p){const w0=(p.weeks&&p.weeks[0])||{days:{}};const dpw=Object.keys(w0.days).length;
   const ex=(p.weeks||[]).reduce((a,w)=>a+Object.values(w.days).reduce((b,d)=>b+d.items.length,0),0);return {weeks:(p.weeks||[]).length,dpw,ex}}
 function exFromItem(it){const mine=(plan.altsMine||{})[String(it.name||"").toLowerCase()];return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,p:it.p||[],s:it.s||[],eq:it.eq||"",...(Array.isArray(mine)?{alts:mine.slice()}:{})}}
-function exText(x){return x.type==="cardio"?`${x.reps[0]} min`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`}
+function exText(x){return x.type==="cardio"?`${x.reps[0]} min`:Array.isArray(x.rs)&&x.rs.length?`${x.rs.length} sets · ${x.rs.join("-")}`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`}
 function nameOf(id){if(!id)return "Someone";if(id==="liftlog")return "LiftLog";if(id===uid)return "you";return pg.names[id]||"Someone"}
 function armBtn(b,txt,fn){if(!b)return;let armed=false;const orig=b.textContent;b.onclick=()=>{if(!armed){armed=true;b.textContent=txt;setTimeout(()=>{armed=false;if(b.isConnected)b.textContent=orig},4000);return}fn()}}
 function miniCal(w){return `<span class="minical" aria-hidden="true">${WEEK_ORDER.map(i=>{const d=w&&w.days[String(i)];return `<span class="mc ${d?"on":""}">${WD_SHORT[i][0]}</span>`}).join("")}</span>`}
@@ -2495,7 +2532,7 @@ function applyProgram(p,wi){
   const w=p.weeks[wi]; const colors=["--green","--purple","--orange","--slate","--blue","--red","--yellow"]; let ci=0;
   WEEK_ORDER.forEach(i=>{const d=w.days[String(i)];if(!d)return;const key="pw"+i;
     plan.days.push({key,label:WD_SHORT[i],title:d.title||"Workout",color:colors[ci++%colors.length],prog:true,note:(d.note||"").trim()||undefined});
-    plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop,...(Array.isArray(x.alts)?{alts:x.alts.slice(0,8)}:{})}));
+    plan.extra[key]=d.items.map(x=>({sid:newId(),ex:exToLibId(x),sets:x.sets||3,reps:x.reps||[8,12],drop:!!x.drop,...(Array.isArray(x.rs)&&x.rs.length?{rs:x.rs.slice(0,12).map(n=>Math.max(1,Math.min(100,+n||1)))}:{}),...(Array.isArray(x.alts)?{alts:x.alts.slice(0,8)}:{})}));
     plan.schedule[String(i)]=key});
   const prevN=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram.notes:null;
   if(!plan.activeProgram||plan.activeProgram.key!==p.key) plan.poOwn=false;
