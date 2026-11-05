@@ -248,6 +248,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .smfoot .btn,.smbtns{width:100%;max-width:528px}.smnext{padding:13px}.smbtns{display:flex;gap:8px}.smbtns .btn{flex:1;padding:13px}.smskip{color:var(--muted)}
 .smrec{display:inline-block;font:700 11px var(--body);background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px;letter-spacing:0;text-transform:none}.smchoice{border-color:var(--accent)!important}
 .smentry{margin:0 0 12px}
+.abban{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:14px}.abban small{color:var(--muted);font-size:12.5px;flex:1}
+.abban.B{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
 .rowbtn{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:9px 12px;margin:8px 0 6px}
 .rowbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.rbic{width:30px;height:30px;border-radius:9px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex:none}
 .rbic svg{width:16px;height:16px;fill:none;stroke:var(--fg);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.rbt{flex:1;display:flex;flex-direction:column;min-width:0}.rbt b{font-size:15px}.rbt small{font:12.5px var(--mono);color:var(--muted)}
@@ -1002,7 +1004,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null,ab:v.ab||null}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -1136,6 +1138,31 @@ function applyPick(it,exId,sets,reps,drop,rs){
   if(!it.addMode&&it.slot) delete plan.sets[it.slot];
   savePlan();
 }
+/* ---------- alternating weeks: A = hypertrophy (your plan as it is), B = strength (same exercises, heavier, fewer reps) ---------- */
+function abOn(){return !!(plan.ab&&plan.ab.on)}
+function abWeek(date){if(!abOn())return null;const a=plan.ab.anchor||wkStartOf(TODAY),w=wkStartOf(date||TODAY);const n=Math.round((Date.parse(w)-Date.parse(a))/(7*864e5));return ((n%2)+2)%2===0?"A":"B"}
+const AB_CORE=/crunch|leg raise|sway|plank|sit-up|twist|woodchop|pallof|side bend|ab wheel|hollow|dead bug|mountain climb|flutter|v-up|toes-to-bar/i;
+// [test, sets, reps, tier]; tier decides order (heaviest lifts first)
+const AB_RULES=[
+ [/leg extension/i,3,[8,10],4],[/lateral raise|rear|face pull|reverse pec/i,3,[10,12],5],[/fl(y|ies)|crossover|pec deck/i,2,[8,10],5],
+ [/seated calf/i,3,[10,12],5],[/calf|calve/i,3,[8,10],4],[/reverse.?grip|reverse curl/i,2,[10,12],5],[/pull ?downs?\b.*rope|rope pull ?down|pushdown|kickback/i,2,[10,12],5],
+ [/preacher/i,3,[8,10],4],[/curl/i,3,[6,8],3],[/skull|dip|close-grip|triceps? extension|overhead.*extension/i,3,[6,8],3],
+ [/straight.?leg|stiff|romanian|good morning/i,3,[5,7],2],[/leg press|shrug/i,4,[5,7],1],
+ [/hack squat|back squat|front squat|barbell squat|deadlift|bench press|incline.*press|chest press|military|shoulder press|overhead press|barbell row|underhand.*row|pendlay|t-bar/i,4,[4,6],0],
+ [/row|pulldown|pull down|pull-up|chin-up|sumo|lunge|split squat|squat|thrust|press/i,3,[6,8],2]];
+function abStrength(x){if(x.type!=="lift"||AB_CORE.test(x.name)||/^(Abs|Obliques|Cardio)$/.test(x.sec||""))return {...x,abT:9};
+  const r=AB_RULES.find(([re])=>re.test(x.name));const [,sets,reps,t]=r||[0,Math.min(3,x.sets||3),[8,12],4];
+  return {...x,sets,reps,drop:false,rs:null,abT:t,abB:true}}
+const AB_INFO="Week A is your plan as you have it: hypertrophy. Week B uses the same exercises for strength: about 10–15% more weight, 4–8 reps on the big lifts, no drop sets, 2–3 minutes rest, 1–2 reps left in the tank. Small muscles stay at 8–12 reps. The weeks switch every Monday, and progressive overload compares each week with the last time you did that same week.";
+function abBanner(){const w=abWeek();if(!w)return "";return `<div class="abban ${w}"><span><b>Week ${w}</b> · ${w==="A"?"Hypertrophy":"Strength"}</span><small>${w==="A"?"Next week: strength":"Heavier, fewer reps, no drop sets"}</small><button class="infob" data-abinfo aria-label="How alternating weeks work" title="${esc(AB_INFO)}">i</button></div>`}
+function abPanel(){const on=abOn(),w=abWeek();
+  return `<details class="panel pnotes" id="abpanel" ${state.abOpen?"open":""}><summary><h2>Alternate weeks</h2><span>${on?`This week: ${w==="A"?"A · Hypertrophy":"B · Strength"}`:"Off · hypertrophy one week, strength the next"}</span></summary>
+   <div class="porow" style="margin-top:8px"><span><b>Hypertrophy / strength weeks</b><br><small class="mini">Same exercises. Week B is heavier with fewer reps.</small></span><button class="swt ${on?"on":""}" id="abtog" role="switch" aria-checked="${on}" aria-label="Alternate hypertrophy and strength weeks"></button></div>
+   ${on?`<div class="porow"><span>This week</span><span class="dchips"><button class="dchip ${w==="A"?"on":""}" data-abset="A">A · Hypertrophy</button><button class="dchip ${w==="B"?"on":""}" data-abset="B">B · Strength</button></span></div>`:""}
+   <p class="savenote">${esc(AB_INFO)}</p></details>`}
+function bindAbPanel(){const dp=$("#abpanel");if(dp)dp.ontoggle=()=>{state.abOpen=dp.open};
+  const t=$("#abtog");if(t)t.onclick=()=>{const on=!abOn();plan.ab={...(plan.ab||{}),on,anchor:on?wkStartOf(TODAY):(plan.ab||{}).anchor};savePlan();syncDays();render();toast(on?"Alternating weeks on. This week is A, hypertrophy":"Alternating weeks off")};
+  document.querySelectorAll("[data-abset]").forEach(b=>b.onclick=()=>{const want=b.dataset.abset;if(abWeek()!==want){const a=Date.parse(wkStartOf(TODAY))+(want==="A"?0:-7*864e5);plan.ab={...plan.ab,anchor:ymd(new Date(a+12*3600e3))}}savePlan();syncDays();render()})}
 function daySections(dayKey){
   const d=DAYS[dayKey]; const order=d.sections.map(x=>x.sec); const map={};
   d.sections.forEach(sc=>sc.items.forEach(orig=>{if(plan.hidden[dayKey+":"+orig.id])return;const e=effItem(dayKey,orig,sc.sec);(map[e.sec]=map[e.sec]||[]).push(e)}));
@@ -1146,6 +1173,7 @@ function daySections(dayKey){
   const ord=(plan.order&&plan.order[dayKey])||{};
   Object.keys(map).forEach(k=>{const o=ord[k];if(!o||!o.length)return;const pos=x=>{const i=o.indexOf(x.slot);return i<0?1e6:i};
     map[k]=map[k].map((x,i)=>[x,i]).sort((a,b)=>(pos(a[0])-pos(b[0]))||(a[1]-b[1])).map(a=>a[0])});
+  if(abWeek()==="B") Object.keys(map).forEach(k=>{map[k]=map[k].map(abStrength).map((x,i)=>[x,i]).sort((a,b)=>(a[0].abT-b[0].abT)||(a[1]-b[1])).map(a=>a[0])});
   return applySupers(dayKey,order.filter(k=>map[k]&&map[k].length).map(k=>({sec:k,items:map[k]})));
 }
 function setOrder(dayKey,sec,slots){(plan.order[dayKey]=plan.order[dayKey]||{})[sec]=slots;savePlan()}
@@ -1264,6 +1292,7 @@ function logItem(it,d,DATE,dayKey){
     const kc=exKcal(it,cleanSets(dSets(it,d)));
     if(d.marked) es.push({date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||null,sets:cleanSets(dSets(it,d)),...(Object.keys(cleanP(d.partners)).length?{partners:cleanP(d.partners)}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
     if(d.marked&&d.po&&d.po.on&&Array.isArray(d.po.tg)&&!d.alt){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.tg=d.po.tg}
+    if(d.marked&&abOn()){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.wk=abWeek(DATE)}
     es.sort((a,b)=>a.date<b.date?-1:1);
     state.logs[it.id]={entries:es};
     persist(it.id);
@@ -1326,7 +1355,8 @@ function poOn(it){return poCfg().mode!=="off"&&poExOn(it)}
 function poLower(it){return (it.p||[]).some(x=>LOWER_MUSC.includes(x))||LOWER_RE.test(it.name)}
 function poInc(it){const c=poCfg();return poLower(it)?c.low:c.up}
 // rep goal for one exercise: an array (reps for each set), "top" (top of the range on every set) or null (worked out from how you log)
-function poGoalRaw(it){const g=(poBase().goal||{})[poKey(it)];return Array.isArray(g)&&g.length?g:g==="top"?"top":Array.isArray(it.rs)&&it.rs.length?it.rs:null}
+function poGoalKey(it){return poKey(it)+(abWeek()==="B"?"#B":"")}
+function poGoalRaw(it){const g=(poBase().goal||{})[poGoalKey(it)];if(abWeek()==="B")return Array.isArray(g)&&g.length?g:g==="top"?"top":null;return Array.isArray(g)&&g.length?g:g==="top"?"top":Array.isArray(it.rs)&&it.rs.length?it.rs:null}
 function poGoalAt(g,i){return g[i]!=null?g[i]:g[g.length-1]}
 function poSets(e){return ((e&&e.sets)||[]).map(s=>({w:Number(s&&s.w)||0,r:Number(s&&s.r)||0}))}
 function poShape(it,ss){const ws=ss.filter(s=>s.w>0).map(s=>s.w);if(ws.length<2||ws.every(w=>Math.abs(w-ws[0])<0.01))return "straight";return it.drop&&ws[ws.length-1]<ws[0]?"drop":"pyramid"}
@@ -1339,9 +1369,13 @@ function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0)
   if(sh==="drop")return ss[0].r>=hi;
   const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
   return ss.every((s,i)=>tg[i]==null||!s.w||s.r>=tg[i])}
-function poHist(it){const fr=freshSet().has(it.id);return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&poSets(e).some(s=>s.w>0&&s.r>0))}
+function poHist(it){const fr=freshSet().has(it.id),wk=abWeek();return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&(!wk||(e.wk||"A")===wk)&&poSets(e).some(s=>s.w>0&&s.r>0))}
 function poPlan(it){
-  if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];if(!last)return null;
+  if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];
+  if(!last&&abWeek()==="B"&&it.abB){const prev=entriesOf(it.id).filter(e=>e.done&&!e.alt&&(e.wk||"A")==="A"&&poSets(e).some(s=>s.w>0)).slice(-1)[0];if(!prev)return null;
+    const top=Math.max(...poSets(prev).map(s=>s.w)),mul=it.abT<=2?1.12:it.abT<=3?1.08:1.03,w0=Math.max(minPlate(),rPlate(top*mul));
+    return {kind:"first",w:Array(it.sets).fill(w0),reps:Array(it.sets).fill(it.reps[0]),tg:null,last:prev,inc:0,miss:0,shape:"straight",why:""}}
+  if(!last)return null;
   const res=poResult(it,last);if(res==null)return null;
   const c=poCfg(),ss=poSets(last),lo=it.reps[0],hi=it.reps[1],sh=poShape(it,ss),inc=poInc(it);
   let miss=0;for(let i=h.length-1;i>=0&&poResult(it,h[i])===false;i--)miss++;
@@ -1370,7 +1404,7 @@ function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&
 function poStart(it,d){const pl=poPlan(it);if(!pl)return;if(poCfg().mode==="auto")poFill(it,d,pl);else d.po={k:pl.kind,on:false,tg:null}}
 function poRow(it){if(it.type!=="lift")return "";if(poCfg().mode==="off")return `<button class="rowbtn" id="pogo" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg></span><span class="rbt"><b>Progressive overload</b><small>Off · tap to set up</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;const on=poExOn(it);
   return `<div class="poex"><span><b>Progressive overload</b><small>${on?"On for this exercise":"Off for this exercise"}</small></span><button class="swt ${on?"on":""}" id="poex" role="switch" aria-checked="${on}" aria-label="Progressive overload for ${esc(it.name)}"></button></div>${on?poGoalUI(it):""}`}
-function poGoalUI(it){const G=poGoalRaw(it),own=(poBase().goal||{})[poKey(it)],hi=it.reps[1],d=state.drafts[it.id],n=nSets(it,d);
+function poGoalUI(it){const G=poGoalRaw(it),own=(poBase().goal||{})[poGoalKey(it)],hi=it.reps[1],d=state.drafts[it.id],n=nSets(it,d);
   const last=poHist(it).slice(-1)[0],lastR=last?poSets(last).map(s=>s.r).filter(Boolean):[];
   const label=Array.isArray(G)?`${G.join("-")}${own?"":" · from the program"}`:G==="top"?`${hi} on every set`:"Automatic";
   if(state.goalEdit!==it.id) return `<button class="rowbtn pogoal" id="pogoal" type="button"><span class="rbt"><small>Weight goes up when you hit</small><b>${esc(label)}</b></span><span class="rbedit">Change</span></button>`;
@@ -1382,11 +1416,13 @@ function poGoalUI(it){const G=poGoalRaw(it),own=(poBase().goal||{})[poKey(it)],h
    ${opt("auto",G==null,`Automatic`,`Same weight every set: top of the range. Working up or drop sets: last time's reps.`)}
    <div class="btns" style="margin-top:8px"><button class="btn small" id="pogdone">Done</button></div>
    <p class="savenote" style="margin-top:4px">Remembered for this exercise every week.</p></div>`}
-function poSetGoal(it,v){const g={...(poBase().goal||{})};if(v==null)delete g[poKey(it)];else g[poKey(it)]=v;poSet({goal:g})}
+function poSetGoal(it,v){const g={...(poBase().goal||{})};if(v==null)delete g[poGoalKey(it)];else g[poGoalKey(it)]=v;poSet({goal:g})}
 function poBox(it,d){
   if(!poOn(it)||shownToday(it.id))return poRow(it);
   const pl=poPlan(it);if(!pl)return poRow(it)+`<p class="pohint">Log your weights and reps and next time's numbers fill in from them.</p>`;
   const c=poCfg(),auto=c.mode==="auto",on=d.po&&d.po.on,wt=poW(pl);
+  if(pl.kind==="first"){const btn=on?`<button class="linkbtn" id="pounfill">Use my hypertrophy weights instead</button>`:`<div class="pobtns"><button class="btn primary small" id="pofill">Use ${wt}</button></div>`;
+    return poRow(it)+`<div class="pobox up"><b>${esc(`First strength week: try ${wt}`)}</b><span>${esc(`A bit heavier than your hypertrophy weight. Aim for ${it.reps[0]}–${it.reps[1]} reps with 1–2 left in the tank.`)}</span><span class="polast">Hypertrophy week (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${btn}</div>`}
   const head=pl.kind==="up"?(auto?`↑ You hit every rep. +${poIncTxt(pl.inc)} this week.`:`Ready to go up: try ${wt}`)
     :pl.kind==="down"?`Stuck ${pl.miss} times in a row: down 10% this week`:`Same weights. Beat your reps.`;
   const body=pl.kind==="up"?(auto?(on?(pl.shape==="pyramid"?`Filled in from last time. Hit ${pl.reps.filter(Boolean).join("-")} again and it goes up again.`:`Filled in from last time. Start at ${it.reps[0]} reps and climb to ${it.reps[1]}${pl.shape==="drop"?" on your first set":" on every set"}, then it goes up again.`):`Tap below to fill in ${wt}.`)
@@ -1398,7 +1434,7 @@ function poBox(it,d){
 function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";const pl=poPlan(it);if(!pl)return "";
   const auto=poCfg().mode==="auto",r=pl.reps.filter(Boolean);
   const rt=r.length&&r.every(x=>x===r[0])?` × ${r[0]}`:r.length?` × ${r.join("-")}`:"";
-  return `<span class="poline ${pl.kind}">${pl.kind==="up"?"↑ ":pl.kind==="down"?"↓ ":"= "}${auto?"This week":"Next"}: ${esc(poW(pl))}${rt}</span>`}
+  return `<span class="poline ${pl.kind==="first"?"up":pl.kind}">${pl.kind==="up"||pl.kind==="first"?"↑ ":pl.kind==="down"?"↓ ":"= "}${auto?"This week":"Next"}: ${esc(poW(pl))}${rt}</span>`}
 
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -1760,6 +1796,7 @@ function render(){
   <header class="dayhead">
     <div class="row"><div><button class="daypick" id="daypick" aria-haspopup="listbox" aria-expanded="${!!state.dayMenu}"><span class="eyebrow">${esc(d.label)} · ${schedNames(tab)}${weekdayTab()===tab?" · Today":""}</span><span class="dph1"><h1>${esc(d.title)}</h1><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>${d.autoTitle?`<div class="autonote">Renamed from ${esc(d.baseTitle)} to match your exercises</div>`:""}</div>${d.custom?`<button class="btn small" id="editday">Edit day</button>`:`<div class="plate" aria-hidden="true"><span></span></div>`}</div>
     <div class="chips">${secs.map(s=>`<span class="chip">${s.sec}</span>`).join("")}</div>
+    ${abBanner()}
     <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
@@ -1801,6 +1838,7 @@ function render(){
   app.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openSheet(b.dataset.open));
   const sk1=$("#skipday"); if(sk1) armBtn(sk1,"Tap again: rest today, this workout comes back next week",skipToday);
   const us1=$("#unskip"); if(us1) us1.onclick=unskipToday;
+  document.querySelectorAll("[data-abinfo]").forEach(b=>b.onclick=()=>toast(b.title,10000));
   const lsv=$("#leftsave"); if(lsv) lsv.onclick=()=>saveLeft(lsv.dataset.lday);
   const lin=$("#leftinfo"); if(lin) lin.onclick=()=>toast(lin.title);
   const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
@@ -2465,7 +2503,7 @@ function programsView(){
   const banner=ap?`<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>Week ${ap.week+1} of ${ap.weeks}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
     <div class="btns">${ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
   const smrow=`<button class="rowbtn smentry" id="smopen" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span><span class="rbt"><b>${plan.setup?"Rebuild my plan":"Build a plan for me"}</b><small>Goal, focus and schedule → a plan made for you</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;
-  return head+banner+`<div class="plan">${smrow}${poPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
+  return head+banner+`<div class="plan">${smrow}${poPanel()}${abPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
 }
 function goPO(){closeSheet();state.settings=false;state.builder=null;state.poOpen=true;state.tab="programs";ls.set("ll.tab","programs");render();setTimeout(()=>{const e=$("#popanel");if(e)e.scrollIntoView({block:"start"});window.scrollBy(0,-70)},30)}
 function poExList(){const ks=[...new Set([0,1,2,3,4,5,6].map(schedOf).filter(Boolean))];const keys=ks.length?ks:Object.keys(DAYS);const m=new Map();
@@ -2597,7 +2635,7 @@ function bindPrograms(){
   const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
   armBtn($("#apstop"),"Tap again to stop",stopProgram);
   const smo=$("#smopen"); if(smo) smo.onclick=openSmart;
-  bindPoPanel();
+  bindPoPanel(); bindAbPanel();
 }
 function bindBuilder(){
   const p=progById(state.builder.id);
