@@ -150,3 +150,57 @@
 1580	Nặng hơn mức tạ tăng cơ một chút. Nhắm {0}–{1} rep, còn {2}–{3} rep.
 1581	Tuần tăng cơ ({x}): {x2}
 1582	Dùng mức tạ tăng cơ của tôi
+1583	Kiểu tuần
+1584	Tuyến tính · cùng kế hoạch mỗi tuần
+1585	<b>Tuyến tính</b><small>Cùng kế hoạch mỗi tuần.</small>
+1586	Tuyến tính
+1587	Cùng kế hoạch mỗi tuần.
+1588	<b>Xen kẽ · tuần lẻ và tuần chẵn</b><small>Tuần lẻ ({0}, {1}, {2}…) kế hoạch như hiện tại. Tuần chẵn ({3}, {4}, {5}…) bản sức mạnh: nặng hơn, ít rep hơn.</small>
+1589	Xen kẽ · tuần lẻ và tuần chẵn
+1590	Tuần lẻ ({0}, {1}, {2}…) kế hoạch như hiện tại. Tuần chẵn ({3}, {4}, {5}…) bản sức mạnh: nặng hơn, ít rep hơn.
+1591	Xen kẽ · tuần {x}: {x2}
+1592	T{x}<small>{x2}</small>
+1593	Cơ
+1594	Lực
+1595	Bạn đang ở <b>tuần {x} ({x2})</b>. Tuần 1 bắt đầu {x3}. Mỗi thứ Hai bắt đầu tuần mới.
+1596	lẻ
+1597	chẵn
+1598	Mỗi tuần là gì
+1599	Lẻ
+1600	Chẵn
+1601	Sai tuần?
+1602	Đây là tuần {0}
+1603	Đổi thành tuần {0}
+1604	Đã bật tuần xen kẽ. Đây là tuần {x}, {x2}
+1605	Giờ là tuần {x}: {x2}
+790	Tuần {x} · {x2}
+1606	Tuyến tính: cùng kế hoạch mỗi tuần
+1607	Về kiểu tuần
+1608	Tuyến tính: tuần nào cũng như nhau, hoặc tự đặt từng tuần. Xen kẽ: tạo một tuần lẻ và một tuần chẵn; chúng lặp lại suốt thời gian theo chương trình, đổi mỗi thứ Hai.
+1609	<b>Tuyến tính</b><small>Tuần nào cũng như nhau, hoặc tự đặt từng tuần.</small>
+1610	Tuần nào cũng như nhau, hoặc tự đặt từng tuần.
+1611	<b>Xen kẽ · lẻ / chẵn</b><small>Tạo hai tuần. Chúng lặp lại suốt thời gian theo chương trình.</small>
+1612	Xen kẽ · lẻ / chẵn
+1613	Tạo hai tuần. Chúng lặp lại suốt thời gian theo chương trình.
+1614	Tên mỗi tuần
+1615	Lẻ · {x}
+1616	Chẵn · {x}
+1617	Xen kẽ: tuần chẵn bắt đầu là bản sức mạnh của tuần lẻ. Đổi gì cũng được.
+1618	Xen kẽ: giữ tuần {0} và {1} làm tuần lẻ và chẵn
+1619	Theo chương trình
+1620	Kế hoạch như hiện tại
+1621	Nặng hơn · {0}–{1} rep
+1622	Theo <b>{x}</b>: tuần lẻ là {x2}, tuần chẵn là {x3}.
+1623	Mỗi loại tuần được lưu và chỉ so sánh với cùng loại.
+1624	Tuần sau: {x}
+1625	Chương trình này xen kẽ: huấn luyện viên đặt tuần lẻ và chẵn khác nhau. Mỗi loại tuần được lưu và chỉ so sánh với cùng loại.
+1626	Tuần {x} gần nhất ({x2}): <b>{x3}</b>{x4}
+1627	Tuần {x} gần nhất ({x2}): {x3}
+1628	Chưa có tuần {x}
+71	Tất cả
+1629	Chưa có nhật ký cho loại tuần này.
+1630	Ghi nhầm tuần? Bấm nhãn để đổi.
+1631	Nhầm tuần? Bấm để đổi.
+1632	Đã đổi thành {x}
+1633	tăng cơ
+1634	sức mạnh

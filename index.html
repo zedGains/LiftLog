@@ -249,6 +249,11 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .smrec{display:inline-block;font:700 11px var(--body);background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px;letter-spacing:0;text-transform:none}.smchoice{border-color:var(--accent)!important}
 .smentry{margin:0 0 12px}
 .abban{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:14px}.abban small{color:var(--muted);font-size:12.5px;flex:1}
+.gopt2{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:flex-start;width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 12px;margin-top:8px}.gopt2.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.gopt2 b{display:block;font-size:14.5px}.gopt2 small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}.gopt2.on .rad{border-color:var(--accent);background:radial-gradient(var(--accent) 42%,transparent 48%)}
+.wks{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:12px 0 4px}.wks span{text-align:center;border-radius:8px;padding:6px 0;font:700 11.5px var(--body);border:1px solid var(--line);background:var(--surface-2)}.wks span.B{background:color-mix(in srgb,var(--accent) 12%,var(--surface));border-color:color-mix(in srgb,var(--accent) 40%,var(--line));color:var(--accent)}.wks span.now{outline:2px solid var(--fg);outline-offset:1px}.wks small{display:block;font:600 10px var(--body);color:var(--muted)}
+.wtag{all:unset;display:inline-block;font:700 10.5px var(--display);letter-spacing:.08em;text-transform:uppercase;border-radius:5px;padding:2px 6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap}.wtag.B{background:var(--accent);border-color:var(--accent);color:var(--accent-ink,#fff)}button.wtag{cursor:pointer}
+.abwk{font-weight:700;font-size:13.5px}.abseg{display:flex;flex-wrap:wrap;gap:6px}.hhd{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.hhd .dchips{letter-spacing:0;text-transform:none}
+.history>div{align-items:center;gap:8px}.lwk{display:block;border-left:3px solid var(--line);padding-left:8px;margin:2px 0}.lwk.B{border-color:var(--accent)}.cform.bpnames label{display:flex!important;flex-direction:row!important;align-items:center;gap:8px}.bpnames .wtag{flex:none;width:44px;text-align:center}.bpnames .field{flex:1}
 .abban.B{border-color:color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 9%,var(--surface))}
 .rowbtn{all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:9px 12px;margin:8px 0 6px}
 .rowbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.rbic{width:30px;height:30px;border-radius:9px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;flex:none}
@@ -1139,8 +1144,21 @@ function applyPick(it,exId,sets,reps,drop,rs){
   savePlan();
 }
 /* ---------- alternating weeks: A = hypertrophy (your plan as it is), B = strength (same exercises, heavier, fewer reps) ---------- */
-function abOn(){return !!(plan.ab&&plan.ab.on)}
-function abWeek(date){if(!abOn())return null;const a=plan.ab.anchor||wkStartOf(TODAY),w=wkStartOf(date||TODAY);const n=Math.round((Date.parse(w)-Date.parse(a))/(7*864e5));return ((n%2)+2)%2===0?"A":"B"}
+// Week pattern: linear (same every week) or alternating (odd weeks = A, even weeks = B).
+// Your own plan: A is your plan as it is (hypertrophy), B is a strength version of it.
+// A trainer's alternating program: A is its odd week, B its even week, with the trainer's names.
+function altProg(){const ap=plan.activeProgram;return ap&&ap.pattern==="alt"&&ap.start?ap:null}
+function abOn(){return !altProg()&&!!(plan.ab&&plan.ab.on)}
+function wkIdx(anchor,date){const w=wkStartOf(date||TODAY);return Math.round((Date.parse(w)-Date.parse(anchor||w))/(7*864e5))}
+function abWeek(date){if(!abOn())return null;const n=wkIdx(plan.ab.anchor,date);return ((n%2)+2)%2===0?"A":"B"}
+function wkType(date){const ap=altProg();if(ap){const n=wkIdx(ap.start,date);return ((n%2)+2)%2===0?"A":"B"}return abWeek(date)}
+function wkNum(date){const ap=altProg();const a=ap?ap.start:abOn()?plan.ab.anchor:null;return a?Math.max(1,wkIdx(a,date)+1):null}
+function wkName(t){const ap=altProg();const n=ap&&Array.isArray(ap.wkNames)?ap.wkNames:null;return t==="B"?(n&&n[1])||"Strength":(n&&n[0])||"Hypertrophy"}
+function wkShort(t){const n=wkName(t);return n==="Hypertrophy"?"Hyp":n==="Strength"?"Str":n.length<=7?n:n.slice(0,6)+"…"}
+// a trainer's alternating program switches its days on its own each Monday
+let altSyncing=false;
+function altSync(){const ap=altProg();if(!ap||altSyncing)return;const want=wkType()==="A"?0:1;if(ap.week===want||!ap.snapshot||!ap.snapshot[want])return;
+  altSyncing=true;try{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:"alt",wkNames:ap.wkNames,start:ap.start},want)}finally{altSyncing=false}}
 const AB_CORE=/crunch|leg raise|sway|plank|sit-up|twist|woodchop|pallof|side bend|ab wheel|hollow|dead bug|mountain climb|flutter|v-up|toes-to-bar/i;
 // [test, sets, reps, tier]; tier decides order (heaviest lifts first)
 const AB_RULES=[
@@ -1150,19 +1168,30 @@ const AB_RULES=[
  [/straight.?leg|stiff|romanian|good morning/i,3,[5,7],2],[/leg press|shrug/i,4,[5,7],1],
  [/hack squat|back squat|front squat|barbell squat|deadlift|bench press|incline.*press|chest press|military|shoulder press|overhead press|barbell row|underhand.*row|pendlay|t-bar/i,4,[4,6],0],
  [/row|pulldown|pull down|pull-up|chin-up|sumo|lunge|split squat|squat|thrust|press/i,3,[6,8],2]];
+function abStrengthWeek(w){const c=JSON.parse(JSON.stringify(w||{days:{}}));Object.values(c.days||{}).forEach(d=>{d.items=(d.items||[]).map(x=>{const y=abStrength({...x,sec:x.g||""});const out={...x,sets:y.sets,reps:y.reps,drop:y.abB?false:x.drop,_t:y.abT};delete out.rs;return out}).sort((a,b)=>(a._t-b._t)).map(({_t,...x})=>x)});return c}
 function abStrength(x){if(x.type!=="lift"||AB_CORE.test(x.name)||/^(Abs|Obliques|Cardio)$/.test(x.sec||""))return {...x,abT:9};
   const r=AB_RULES.find(([re])=>re.test(x.name));const [,sets,reps,t]=r||[0,Math.min(3,x.sets||3),[8,12],4];
   return {...x,sets,reps,drop:false,rs:null,abT:t,abB:true}}
 const AB_INFO="Week A is your plan as you have it: hypertrophy. Week B uses the same exercises for strength: about 10–15% more weight, 4–8 reps on the big lifts, no drop sets, 2–3 minutes rest, 1–2 reps left in the tank. Small muscles stay at 8–12 reps. The weeks switch every Monday, and progressive overload compares each week with the last time you did that same week.";
-function abBanner(){const w=abWeek();if(!w)return "";return `<div class="abban ${w}"><span><b>Week ${w}</b> · ${w==="A"?"Hypertrophy":"Strength"}</span><small>${w==="A"?"Next week: strength":"Heavier, fewer reps, no drop sets"}</small><button class="infob" data-abinfo aria-label="How alternating weeks work" title="${esc(AB_INFO)}">i</button></div>`}
-function abPanel(){const on=abOn(),w=abWeek();
-  return `<details class="panel pnotes" id="abpanel" ${state.abOpen?"open":""}><summary><h2>Alternate weeks</h2><span>${on?`This week: ${w==="A"?"A · Hypertrophy":"B · Strength"}`:"Off · hypertrophy one week, strength the next"}</span></summary>
-   <div class="porow" style="margin-top:8px"><span><b>Hypertrophy / strength weeks</b><br><small class="mini">Same exercises. Week B is heavier with fewer reps.</small></span><button class="swt ${on?"on":""}" id="abtog" role="switch" aria-checked="${on}" aria-label="Alternate hypertrophy and strength weeks"></button></div>
-   ${on?`<div class="porow"><span>This week</span><span class="dchips"><button class="dchip ${w==="A"?"on":""}" data-abset="A">A · Hypertrophy</button><button class="dchip ${w==="B"?"on":""}" data-abset="B">B · Strength</button></span></div>`:""}
-   <p class="savenote">${esc(AB_INFO)}</p></details>`}
+function abBanner(){const w=wkType();if(!w)return "";const n=wkNum();const pa=altProg();
+  return `<div class="abban ${w}"><span class="wtag ${w}">${esc(wkName(w))}</span><span class="abwk">Week ${n} · ${n%2?"odd":"even"}</span><small>${pa?`Next week: ${esc(wkName(w==="A"?"B":"A"))}`:w==="A"?"Next week: strength":"Heavier, fewer reps, no drop sets"}</small><button class="infob" data-abinfo aria-label="How alternating weeks work" title="${esc(pa?"This program alternates: odd weeks and even weeks are set up differently by the trainer. Each week type is saved and compared only with the same type.":AB_INFO)}">i</button></div>`}
+function abPanel(){const pa=altProg(),on=!!pa||abOn(),w=wkType(),n=wkNum();
+  const tiles=on?(()=>{const st=Math.max(1,n<=4?1:n-2);return `<div class="wks">${Array.from({length:6},(_,i)=>{const k=st+i,t=k%2?"A":"B";return `<span class="${t} ${k===n?"now":""}">Wk ${k}<small>${esc(wkShort(t))}</small></span>`}).join("")}</div>
+    <p class="savenote">You're in <b>week ${n} (${n%2?"odd":"even"})</b>. Week 1 started ${fmtDate(pa?pa.start:plan.ab.anchor)}. A new week starts every Monday.</p>`})():"";
+  return `<details class="panel pnotes" id="abpanel" ${state.abOpen?"open":""}><summary><h2>Week pattern</h2><span>${on?`Alternating · week ${n}: ${esc(wkName(w))}`:"Linear · the same plan every week"}</span></summary>
+   ${pa?`<p class="savenote" style="margin-top:8px">Set by <b>${esc(pa.title)}</b>: odd weeks are ${esc(wkName("A"))}, even weeks are ${esc(wkName("B"))}.</p>`:`
+   <button class="gopt2 ${on?"":"on"}" data-abmode="lin" aria-pressed="${!on}"><span class="rad"></span><span><b>Linear</b><small>The same plan every week.</small></span></button>
+   <button class="gopt2 ${on?"on":""}" data-abmode="alt" aria-pressed="${on}"><span class="rad"></span><span><b>Alternating · odd and even weeks</b><small>Odd weeks (1, 3, 5…) your plan as it is. Even weeks (2, 4, 6…) a strength version: heavier, fewer reps.</small></span></button>`}
+   ${on?`${tiles}<div class="lbl">What each week is</div>
+    <div class="porow"><span><span class="wtag A">Odd</span> ${esc(wkName("A"))}</span><small class="mini">${pa?"From the program":"Your plan as it is"}</small></div>
+    <div class="porow"><span><span class="wtag B">Even</span> ${esc(wkName("B"))}</span><small class="mini">${pa?"From the program":"Heavier · 4–8 reps"}</small></div>
+    <div class="lbl">Wrong week?</div><div class="dchips abseg"><button class="dchip wide on" data-abshift="0" aria-pressed="true">This is week ${n}</button>${n>1?`<button class="dchip wide" data-abshift="-1">Make it week ${n-1}</button>`:""}<button class="dchip wide" data-abshift="1">Make it week ${n+1}</button></div>
+    <p class="savenote">${pa?"Each week type is saved and compared only with the same type.":esc(AB_INFO)}</p>`:""}</details>`}
 function bindAbPanel(){const dp=$("#abpanel");if(dp)dp.ontoggle=()=>{state.abOpen=dp.open};
-  const t=$("#abtog");if(t)t.onclick=()=>{const on=!abOn();plan.ab={...(plan.ab||{}),on,anchor:on?wkStartOf(TODAY):(plan.ab||{}).anchor};savePlan();syncDays();render();toast(on?"Alternating weeks on. This week is A, hypertrophy":"Alternating weeks off")};
-  document.querySelectorAll("[data-abset]").forEach(b=>b.onclick=()=>{const want=b.dataset.abset;if(abWeek()!==want){const a=Date.parse(wkStartOf(TODAY))+(want==="A"?0:-7*864e5);plan.ab={...plan.ab,anchor:ymd(new Date(a+12*3600e3))}}savePlan();syncDays();render()})}
+  document.querySelectorAll("[data-abmode]").forEach(b=>b.onclick=()=>{const on=b.dataset.abmode==="alt";if(on===abOn())return;plan.ab={...(plan.ab||{}),on};
+    if(on&&!plan.ab.anchor)plan.ab.anchor=wkStartOf(TODAY);savePlan();syncDays();render();toast(on?`Alternating weeks on. This is week ${wkNum()}, ${wkName(wkType()).toLowerCase()}`:"Linear: the same plan every week")});
+  document.querySelectorAll("[data-abshift]").forEach(b=>b.onclick=()=>{const d=+b.dataset.abshift;if(!d)return;const pa=altProg();const a=pa?pa.start:plan.ab.anchor;
+    const na=ymd(new Date(Date.parse(a)-d*7*864e5+12*3600e3));if(pa){pa.start=na;savePlan();altSync()}else{plan.ab={...plan.ab,anchor:na};savePlan()}syncDays();render();toast(`This is now week ${wkNum()}: ${wkName(wkType())}`)})}
 function daySections(dayKey){
   const d=DAYS[dayKey]; const order=d.sections.map(x=>x.sec); const map={};
   d.sections.forEach(sc=>sc.items.forEach(orig=>{if(plan.hidden[dayKey+":"+orig.id])return;const e=effItem(dayKey,orig,sc.sec);(map[e.sec]=map[e.sec]||[]).push(e)}));
@@ -1211,7 +1240,8 @@ function todayEntry(id){return entriesOf(id).find(e=>e.date===TODAY)}
 function freshSet(){const f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];return new Set([...ls.get("ll.fresh."+TODAY,[]),...f])}
 function setFresh(fr,dayKey,at){const ids=[...fr];ls.set("ll.fresh."+TODAY,ids);const sa=plan.fresh&&plan.fresh.d===TODAY?{...(plan.fresh.at||{})}:{};if(dayKey&&at)sa[dayKey]=at;plan.fresh={d:TODAY,ids,at:sa};savePlan()}
 function shownToday(id){return freshSet().has(id)?null:todayEntry(id)}
-function lastEntry(id){const fr=freshSet().has(id);const es=entriesOf(id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done);return es[es.length-1]}
+function lastEntry(id,type){const fr=freshSet().has(id);const es=entriesOf(id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done);
+  const t=type||wkType();if(t){const same=es.filter(e=>(e.wk||"A")===t);if(same.length||type)return same[same.length-1]}return es[es.length-1]}
 
 function draftFor(it){
   if(!state.drafts[it.id]){
@@ -1292,7 +1322,7 @@ function logItem(it,d,DATE,dayKey){
     const kc=exKcal(it,cleanSets(dSets(it,d)));
     if(d.marked) es.push({date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||null,sets:cleanSets(dSets(it,d)),...(Object.keys(cleanP(d.partners)).length?{partners:cleanP(d.partners)}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
     if(d.marked&&d.po&&d.po.on&&Array.isArray(d.po.tg)&&!d.alt){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.tg=d.po.tg}
-    if(d.marked&&abOn()){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.wk=abWeek(DATE)}
+    if(d.marked&&wkType(DATE)){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.wk=wkType(DATE)}
     es.sort((a,b)=>a.date<b.date?-1:1);
     state.logs[it.id]={entries:es};
     persist(it.id);
@@ -1355,8 +1385,8 @@ function poOn(it){return poCfg().mode!=="off"&&poExOn(it)}
 function poLower(it){return (it.p||[]).some(x=>LOWER_MUSC.includes(x))||LOWER_RE.test(it.name)}
 function poInc(it){const c=poCfg();return poLower(it)?c.low:c.up}
 // rep goal for one exercise: an array (reps for each set), "top" (top of the range on every set) or null (worked out from how you log)
-function poGoalKey(it){return poKey(it)+(abWeek()==="B"?"#B":"")}
-function poGoalRaw(it){const g=(poBase().goal||{})[poGoalKey(it)];if(abWeek()==="B")return Array.isArray(g)&&g.length?g:g==="top"?"top":null;return Array.isArray(g)&&g.length?g:g==="top"?"top":Array.isArray(it.rs)&&it.rs.length?it.rs:null}
+function poGoalKey(it){return poKey(it)+(wkType()==="B"?"#B":"")}
+function poGoalRaw(it){const g=(poBase().goal||{})[poGoalKey(it)];if(wkType()==="B"&&!altProg())return Array.isArray(g)&&g.length?g:g==="top"?"top":null;return Array.isArray(g)&&g.length?g:g==="top"?"top":Array.isArray(it.rs)&&it.rs.length?it.rs:null}
 function poGoalAt(g,i){return g[i]!=null?g[i]:g[g.length-1]}
 function poSets(e){return ((e&&e.sets)||[]).map(s=>({w:Number(s&&s.w)||0,r:Number(s&&s.r)||0}))}
 function poShape(it,ss){const ws=ss.filter(s=>s.w>0).map(s=>s.w);if(ws.length<2||ws.every(w=>Math.abs(w-ws[0])<0.01))return "straight";return it.drop&&ws[ws.length-1]<ws[0]?"drop":"pyramid"}
@@ -1369,7 +1399,7 @@ function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0)
   if(sh==="drop")return ss[0].r>=hi;
   const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
   return ss.every((s,i)=>tg[i]==null||!s.w||s.r>=tg[i])}
-function poHist(it){const fr=freshSet().has(it.id),wk=abWeek();return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&(!wk||(e.wk||"A")===wk)&&poSets(e).some(s=>s.w>0&&s.r>0))}
+function poHist(it){const fr=freshSet().has(it.id),wk=wkType();return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&(!wk||(e.wk||"A")===wk)&&poSets(e).some(s=>s.w>0&&s.r>0))}
 function poPlan(it){
   if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];
   if(!last&&abWeek()==="B"&&it.abB){const prev=entriesOf(it.id).filter(e=>e.done&&!e.alt&&(e.wk||"A")==="A"&&poSets(e).some(s=>s.w>0)).slice(-1)[0];if(!prev)return null;
@@ -1430,7 +1460,7 @@ function poBox(it,d){
     :pl.kind==="down"?`${wt}. Build back up from here. You'll usually pass your old numbers in a few weeks.`:pl.why;
   const btns=on?(pl.kind==="same"?"":`<button class="linkbtn" id="pounfill">Use last week's weights instead</button>`)
     :`<div class="pobtns"><button class="btn primary small" id="pofill">${pl.kind==="same"?`Fill in ${wt}`:`Use ${wt}`}</button>${!auto&&pl.kind!=="same"?`<button class="btn small" id="postay">Stay at ${poW({w:poSets(pl.last).map(s=>s.w)})}</button>`:""}</div>`;
-  return poRow(it)+`<div class="pobox ${pl.kind}"><b>${esc(head)}</b><span>${esc(body)}</span><span class="polast">Last (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${d.po&&d.po.stay?"":btns}</div>`}
+  return poRow(it)+`<div class="pobox ${pl.kind}"><b>${esc(head)}</b><span>${esc(body)}</span><span class="polast">${wkType()?`Last ${esc(wkName(wkType()).toLowerCase())} week`:"Last"} (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${d.po&&d.po.stay?"":btns}</div>`}
 function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";const pl=poPlan(it);if(!pl)return "";
   const auto=poCfg().mode==="auto",r=pl.reps.filter(Boolean);
   const rt=r.length&&r.every(x=>x===r[0])?` × ${r[0]}`:r.length?` × ${r.join("-")}`:"";
@@ -1763,6 +1793,7 @@ function welcomeView(){
   </div>`;
 }
 function render(){
+  try{altSync()}catch(e){console.warn(e)}
   if(state.loading){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=`<p class="boot">Loading your plan…</p>`;return}
   if(state.onb){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=smView();bindSmart();return}
   if(state.needsStart){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=welcomeView();
@@ -1874,7 +1905,11 @@ function card(it){
   const cur=dr?cleanSets(dSets(it,dr)):(t?t.sets:[]);
   const alt=dr?dr.alt:(t&&t.alt);
   const lb=(sets)=>sets.some(x=>x.w)&&it.type!=="cardio"?" "+wU():"";
-  const lastTxt=last?`Last (${fmtDate(last.date)}): <b>${esc(setsText(last.sets,it.type))||"done"}</b>${lb(last.sets||[])}${last.alt?` · did ${esc(last.alt)}`:""}`:"No log yet";
+  const wt=wkType();
+  const line=(e,lab)=>`${lab} (${fmtDate(e.date)}): <b>${esc(setsText(e.sets,it.type))||"done"}</b>${lb(e.sets||[])}${e.alt?` · did ${esc(e.alt)}`:""}`;
+  let lastTxt=last?line(last,"Last"):"No log yet";
+  if(wt&&it.type!=="cardio"){const a=lastEntry(it.id,wt),o=lastEntry(it.id,wt==="A"?"B":"A");
+    lastTxt=a||o?`${a?`<span class="lwk ${wt}">${line(a,`Last ${wkName(wt).toLowerCase()} week`)}</span>`:`<span class="lwk ${wt}">No ${esc(wkName(wt).toLowerCase())} week yet</span>`}${o?`<span class="lwk ${wt==="A"?"B":"A"}">${line(o,`Last ${wkName(wt==="A"?"B":"A").toLowerCase()} week`)}</span>`:""}`:"No log yet"}
   const kc=m?exKcal(it,cur):null;
   const status=(kc?`<span class="st kc">~${Math.round(kc)} kcal</span>`:"")+(m?(pend?'<span class="st pend">Not saved</span>':'<span class="st ok">Saved</span>'):(pend?'<span class="st pend">Unmarked, not saved</span>':""));
   return `<div class="card ${m?"done":""}">
@@ -1915,7 +1950,7 @@ function dropChips(prefix){return `<div class="dchips" role="group" aria-label="
 function openSheet(id,keepScroll){
   const it=ALL[id]; if(state.open!==id) state.noteEdit=null; state.open=id; const d=draftFor(it); const m=!!d.marked;
   const sh=$("#sheet"); const st=keepScroll?sh.scrollTop:0;
-  const hist=entriesOf(id).filter(e=>e.done).slice(-6).reverse();
+  const hist=entriesOf(id).filter(e=>e.done).slice(-10).reverse();
   const last=lastEntry(id);
   const isCardio=it.type==="cardio";
   const N=nSets(it,d);
@@ -1967,7 +2002,10 @@ function openSheet(id,keepScroll){
   <button class="btn danger rmbtn" id="removeex">Remove from ${esc(DAYS[it.dayKey].label)}</button>
   <p class="savenote">${it.extra?"Takes it off this day.":`Takes it off this day. <b>Reset to original</b> brings it back.`} Your saved logs stay.</p>
   <button class="browse" id="browse"><span><b>Browse all exercises</b><br><small>Swap in anything, any body part, or add your own</small></span><span aria-hidden="true">›</span></button>
-  ${hist.length?`<div class="lbl">History</div><div class="history">${hist.map(e=>`<div><span class="d">${fmtDate(e.date)}${e.alt?` · ${esc(e.alt)}`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span></div>`).join("")}</div>`:""}
+  ${hist.length?(()=>{const tagged=!!wkType()||hist.some(e=>e.wk);const f=state.histF||"all";const rows=hist.filter(e=>f==="all"||(e.wk||"A")===f);
+    return `<div class="lbl hhd"><span>History</span>${tagged?`<span class="dchips">${[["all","All"],["A",wkName("A")],["B",wkName("B")]].map(([k,l])=>`<button class="dchip ${f===k?"on":""}" data-histf="${k}" aria-pressed="${f===k}">${esc(l)}</button>`).join("")}</span>`:""}</div>
+    <div class="history">${rows.map(e=>`<div><span class="d">${fmtDate(e.date)}${e.alt?` · ${esc(e.alt)}`:""}</span>${tagged?`<button class="wtag ${e.wk||"A"}" data-retag="${e.date}" title="Logged in the wrong week? Tap to change it." aria-label="${esc(wkName(e.wk||"A"))}. Tap to change to ${esc(wkName((e.wk||"A")==="A"?"B":"A"))}">${esc(wkShort(e.wk||"A"))}</button>`:""}<span class="v">${esc(setsText(e.sets,it.type))||"done"}</span></div>`).join("")||`<div><span class="d">Nothing logged in this week type yet.</span></div>`}</div>
+    ${tagged?`<p class="savenote">Logged it in the wrong week? Tap its tag to switch it.</p>`:""}`})():""}
   <div class="btns"><button class="btn" id="closesheet" style="flex:1">Close</button></div>`;
   sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=st;
   sh.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
@@ -1990,6 +2028,9 @@ function openSheet(id,keepScroll){
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
   const pgo=$("#pogo",sh); if(pgo) pgo.onclick=goPO;
+  sh.querySelectorAll("[data-histf]").forEach(b=>b.onclick=()=>{state.histF=b.dataset.histf;openSheet(id,true)});
+  sh.querySelectorAll("[data-retag]").forEach(b=>b.onclick=()=>{const e=entriesOf(id).find(x=>x.date===b.dataset.retag);if(!e)return;const was=e.wk||"A";e.wk=was==="A"?"B":"A";persist(id);openSheet(id,true);render();
+    showUndo(`Changed to ${wkName(e.wk)}`,()=>{e.wk=was;persist(id);openSheet(id,true);render()})});
   const pgl=$("#pogoal",sh); if(pgl) pgl.onclick=()=>{state.goalEdit=it.id;openSheet(id,true)};
   const pgd=$("#pogdone",sh); if(pgd) pgd.onclick=()=>{state.goalEdit=null;openSheet(id,true);render()};
   const readG=()=>[...sh.querySelectorAll("[data-pgi]")].map(x=>Math.max(1,Math.min(100,parseInt(x.value,10)||0))).filter(Boolean);
@@ -2315,7 +2356,7 @@ function planView(){
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
       <summary><span class="sd" style="background:var(${DAYS[x.day]?DAYS[x.day].color:"--green"})"></span>
-        <span class="sm"><b>${fmtDate(x.date)}</b> · ${esc(DAYS[x.day]?DAYS[x.day].label+" "+DAYS[x.day].title:(x.items[0]&&x.items[0].e.dl?x.items[0].e.dl+" "+(x.items[0].e.dt||""):"Workout"))}<br><small>${x.items.length} exercise${x.items.length===1?"":"s"}${x.kcal?` · ~${x.kcal} kcal`:""} · logged ${fmtStamp(x.loggedAt)}${x.updatedAt-x.loggedAt>60000?` · edited ${fmtStamp(x.updatedAt)}`:""}</small></span></summary>
+        <span class="sm"><b>${fmtDate(x.date)}</b>${(()=>{const t=(x.items.find(({e})=>e.wk)||{}).e;return t&&t.wk?` <span class="wtag ${t.wk}">${esc(wkShort(t.wk))}</span>`:""})()} · ${esc(DAYS[x.day]?DAYS[x.day].label+" "+DAYS[x.day].title:(x.items[0]&&x.items[0].e.dl?x.items[0].e.dl+" "+(x.items[0].e.dt||""):"Workout"))}<br><small>${x.items.length} exercise${x.items.length===1?"":"s"}${x.kcal?` · ~${x.kcal} kcal`:""} · logged ${fmtStamp(x.loggedAt)}${x.updatedAt-x.loggedAt>60000?` · edited ${fmtStamp(x.updatedAt)}`:""}</small></span></summary>
       <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span></div>`).join("")}</div>
     </details>`).join("")}</div>`:`<p>No saved workouts yet. Finish a day and tap <b>Save</b> at the bottom, and it shows up here with the date and time you logged it.</p>`}
     <div class="btns"><button class="btn primary" id="exportcsv" ${ss.length?"":"disabled"}>Download all logs (CSV)</button></div>
@@ -2500,8 +2541,8 @@ function programsView(){
   const ap=plan.activeProgram;
   const head=`<header class="dayhead"><div class="row"><div><div class="eyebrow">Plans to follow or share</div><h1>Programs</h1></div><div class="plate" aria-hidden="true"><span></span></div></div>
    <div class="seg" role="tablist"><button class="segb ${pg.seg==="community"?"on":""}" role="tab" aria-selected="${pg.seg==="community"}" data-seg="community">Community</button><button class="segb ${pg.seg==="mine"?"on":""}" role="tab" aria-selected="${pg.seg==="mine"}" data-seg="mine">My programs</button></div></header>`;
-  const banner=ap?`<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>Week ${ap.week+1} of ${ap.weeks}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
-    <div class="btns">${ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
+  const banner=ap?`<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>${ap.pattern==="alt"?`Week ${wkNum()} · ${esc(wkName(wkType()))}. Odd and even weeks switch on their own every Monday`:`Week ${ap.week+1} of ${ap.weeks}`}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
+    <div class="btns">${ap.pattern!=="alt"&&ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.pattern!=="alt"&&ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
   const smrow=`<button class="rowbtn smentry" id="smopen" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span><span class="rbt"><b>${plan.setup?"Rebuild my plan":"Build a plan for me"}</b><small>Goal, focus and schedule → a plan made for you</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;
   return head+banner+`<div class="plan">${smrow}${poPanel()}${abPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
 }
@@ -2595,8 +2636,12 @@ function builderView(){
     <div class="lbl" style="margin-top:4px">Starts as</div>${poModeChips((p.po&&p.po.mode)||"off","bpomode")}
     ${p.po&&p.po.mode&&p.po.mode!=="off"?`<div class="porow"><span>Upper body</span>${poIncChips(p.po.up||(isKg()?2.5*LB_PER_KG:5),PO_UP(),"bpoup")}</div><div class="porow"><span>Lower body</span>${poIncChips(p.po.low||(isKg()?5*LB_PER_KG:10),PO_LOW(),"bpolow")}</div>`:""}
     <p class="savenote">People using your program start this way and can change it for themselves.</p></div>
+   <div class="panel" id="bpat"><h2>Week pattern <button class="infob" id="bpatinfo" aria-label="About week patterns" title="Linear: every week the same, or each week set by hand. Alternating: build an odd week and an even week; they repeat for as long as people follow it, switching every Monday.">i</button></h2>
+    <button class="gopt2 ${p.pattern==="alt"?"":"on"}" data-bpat="lin" aria-pressed="${p.pattern!=="alt"}"><span class="rad"></span><span><b>Linear</b><small>Every week the same, or each week set by hand.</small></span></button>
+    <button class="gopt2 ${p.pattern==="alt"?"on":""}" data-bpat="alt" aria-pressed="${p.pattern==="alt"}"><span class="rad"></span><span><b>Alternating · odd / even</b><small>Build two weeks. They repeat for as long as people follow it.</small></span></button>
+    ${p.pattern==="alt"?`<div class="lbl">Names for each week</div><div class="cform bpnames"><label><span class="wtag A">Odd</span><span class="field"><input id="bp-wka" maxlength="18" value="${esc((p.wkNames||[])[0]||"Hypertrophy")}"></span></label><label><span class="wtag B">Even</span><span class="field"><input id="bp-wkb" maxlength="18" value="${esc((p.wkNames||[])[1]||"Strength")}"></span></label></div>`:""}</div>
    <div class="panel"><h2>Calendar</h2>
-    <div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-week="${i}" aria-pressed="${i===wi}">Week ${i+1}</button>`).join("")}<button class="gchip ghost" id="addweek">+ Week</button></div>
+    <div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-week="${i}" aria-pressed="${i===wi}">${p.pattern==="alt"?(i===0?`Odd · ${esc((p.wkNames||[])[0]||"Hypertrophy")}`:`Even · ${esc((p.wkNames||[])[1]||"Strength")}`):`Week ${i+1}`}</button>`).join("")}${p.pattern==="alt"?"":`<button class="gchip ghost" id="addweek">+ Week</button>`}</div>
     <div class="cal">${calCells(w,true)}</div>
     <p class="savenote">Tap a day to add or edit its workout. Tap ⇄ on an exercise to set backups for when a machine is taken. Changes save as you go.</p>
     <div class="btns">${wi>0?`<button class="btn small" id="copyprev">Copy week ${wi} into week ${wi+1}</button>`:""}
@@ -2631,8 +2676,8 @@ function bindPrograms(){
   const np=$("#newprog"); if(np) np.onclick=()=>{const p={id:newId(),title:"",goal:"General fitness",level:"Beginner",desc:"",weeks:[emptyWeek()],published:false,createdAt:Date.now(),updatedAt:Date.now()};
     plan.myPrograms.unshift(p);savePlan();state.builder={id:p.id,week:0};render();window.scrollTo(0,0);setTimeout(()=>{const t=$("#bp-title");if(t)t.focus()},50)};
   const ap=plan.activeProgram;
-  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
-  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
+  const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:ap.pattern,wkNames:ap.wkNames,start:ap.start},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
+  const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:ap.pattern,wkNames:ap.wkNames,start:ap.start},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
   armBtn($("#apstop"),"Tap again to stop",stopProgram);
   const smo=$("#smopen"); if(smo) smo.onclick=openSmart;
   bindPoPanel(); bindAbPanel();
@@ -2657,7 +2702,13 @@ function bindBuilder(){
   $("#bp-eq").oninput=e=>{p.equip=e.target.value;deb()};
   document.querySelectorAll("[data-tgt]").forEach(b=>b.onclick=()=>{const t=b.dataset.tgt;const a=p.targets||[];p.targets=a.includes(t)?a.filter(x=>x!==t):[...a,t];b.classList.toggle("on");b.setAttribute("aria-pressed",String(p.targets.includes(t)));save()});
   document.querySelectorAll("[data-week]").forEach(b=>b.onclick=()=>{state.builder.week=+b.dataset.week;render()});
-  $("#addweek").onclick=()=>{p.weeks.push(emptyWeek());state.builder.week=p.weeks.length-1;save();render();toast(`Week ${p.weeks.length} added. Tap Copy to fill it from the week before.`)};
+  document.querySelectorAll("[data-bpat]").forEach(b=>b.onclick=()=>{const alt=b.dataset.bpat==="alt";if(alt===(p.pattern==="alt"))return;
+    if(alt){const extra=p.weeks.length>2;if(p.weeks.length<2)p.weeks.push(abStrengthWeek(p.weeks[0]));else if(extra)p.weeks=p.weeks.slice(0,2);p.pattern="alt";p.wkNames=p.wkNames||["Hypertrophy","Strength"];state.builder.week=1;save();render();
+      toast(extra?"Alternating: kept weeks 1 and 2 as the odd and even weeks":"Alternating: the even week starts as a strength copy of the odd week. Change anything.",6000)}
+    else{p.pattern="lin";save();render()}});
+  const bpti=$("#bpatinfo"); if(bpti) bpti.onclick=()=>toast(bpti.title,9000);
+  ["#bp-wka","#bp-wkb"].forEach((sel,ix)=>{const el=$(sel);if(el)el.oninput=()=>{p.wkNames=[...(p.wkNames||["Hypertrophy","Strength"])];p.wkNames[ix]=el.value.trim().slice(0,18)||(ix?"Strength":"Hypertrophy");deb()}});
+  const aw=$("#addweek"); if(aw) aw.onclick=()=>{p.weeks.push(emptyWeek());state.builder.week=p.weeks.length-1;save();render();toast(`Week ${p.weeks.length} added. Tap Copy to fill it from the week before.`)};
   document.querySelectorAll("[data-cday]").forEach(b=>b.onclick=()=>openDayEdit(p,state.builder.week,b.dataset.cday));
   const wi=state.builder.week;
   const cp=$("#copyprev"); if(cp) cp.onclick=()=>{const has=Object.keys(p.weeks[wi].days).length;const go=()=>{p.weeks[wi]=JSON.parse(JSON.stringify(p.weeks[wi-1]));save();render();toast(`Week ${wi} copied into week ${wi+1}`)};
@@ -2668,7 +2719,7 @@ function bindBuilder(){
   const pb=$("#publish"); if(pb) pb.onclick=()=>publishProg(p);
   const up=$("#unpublish"); if(up) up.onclick=()=>{p.published=false;save();writePublic().then(()=>loadCreator(true)).catch(()=>{});render();toast("Unpublished")};
   const ac=$("#bp-allowcopy"); if(ac) ac.onchange=()=>{p.allowCopy=ac.checked;save()};const bf=$("#bp-friends"); if(bf) bf.onchange=()=>{p.friends=bf.checked;save();writeFriendProgs();toast(p.friends?"Shared with friends":"No longer shared with friends")};
-  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks,po:p.po,...progNoteFields(p)});
+  $("#useprog").onclick=()=>openUse({key:"mine:"+p.id,title:p.title||"My program",author:uid,weeks:p.weeks,po:p.po,pattern:p.pattern,wkNames:p.wkNames,...progNoteFields(p)});
   armBtn($("#delprog"),"Tap again to delete program",()=>{plan.myPrograms=plan.myPrograms.filter(x=>x.id!==p.id);savePlan();if(p.published)writePublic();state.builder=null;pg.seg="mine";render();toast("Program deleted")});
 }
 function weekFromPlan(){const w=emptyWeek();[0,1,2,3,4,5,6].forEach(i=>{const k=schedOf(i);if(!k)return;
@@ -2719,7 +2770,7 @@ function openDayEdit(p,wi,wd){
 }
 
 /* ----- community data ----- */
-function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.from?{from:p.from}:{}),...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
+function pubPayload(){return {programs:plan.myPrograms.filter(p=>p.published).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.from?{from:p.from}:{}),...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),...(p.pattern==="alt"?{pattern:"alt",wkNames:p.wkNames||null}:{}),weeks:p.weeks,updatedAt:p.pubAt||p.updatedAt||Date.now()})),updatedAt:Date.now()}}
 let pubQ=Promise.resolve();
 function writePublic(){ if(state.mode!=="db"||!db||!uid) return Promise.resolve(); const payload=JSON.parse(JSON.stringify(pubPayload()));
   const run=()=>db.doc("programs/"+uid).set(payload);
@@ -2859,7 +2910,9 @@ function applyProgram(p,wi){
     plan.schedule[String(i)]=key});
   const prevN=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram.notes:null;
   if(!plan.activeProgram||plan.activeProgram.key!==p.key) plan.poOwn=false;
-  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),po:p.po&&p.po.mode?{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}:null,an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
+  const prevAp=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram:null;
+  const alt=p.pattern==="alt"&&p.weeks.length>=2;
+  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,...(alt?{pattern:"alt",wkNames:Array.isArray(p.wkNames)?p.wkNames.slice(0,2):null,start:p.start||(prevAp&&prevAp.start)||ymd(new Date(Date.parse(wkStartOf(TODAY))-wi*7*864e5+12*3600e3))}:{}),author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),po:p.po&&p.po.mode?{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}:null,an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
   savePlan(); syncDays();
 }
 function stopProgram(){
@@ -3982,7 +4035,7 @@ function avatarPanel(){if(state.mode!=="db"||!uid)return "";const name=(window.L
 function bindAvatarPanel(){const b=$("#avchange2");if(!b)return;b.onclick=openAvatarPick;const sr=$("#avshare2");if(sr)sr.onclick=()=>shareCard("rank",{});needProfiles([uid])}
 /* ---------- friends ---------- */
 const fr={list:null,progs:[],at:0,busy:false,err:false};
-function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
+function friendPayload(){return plan.myPrograms.filter(p=>p.friends&&!p.from&&!(Number(p.price)>0)).map(p=>({id:p.id,title:p.title||"Untitled program",goal:p.goal||"General fitness",level:p.level||"Beginner",desc:p.desc||"",summary:p.summary||"",who:p.who||"",targets:p.targets||[],progress:p.progress||"",equip:p.equip||"",allowCopy:!!p.allowCopy,...(p.po&&p.po.mode?{po:{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}}:{}),...(p.pattern==="alt"?{pattern:"alt",wkNames:p.wkNames||null}:{}),weeks:p.weeks,updatedAt:p.updatedAt||Date.now()}))}
 let frT=null;
 function writeFriendProgs(){if(state.mode!=="db"||!window.LIFTLOG_RPC)return;clearTimeout(frT);frT=setTimeout(()=>window.LIFTLOG_RPC("set_friend_programs",{progs:friendPayload()}).catch(()=>{}),800)}
 function friendOf(id){return (fr.list||[]).find(f=>f.id===id)}

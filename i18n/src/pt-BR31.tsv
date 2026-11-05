@@ -150,3 +150,57 @@
 1580	Um pouco mais pesado que seu peso de hipertrofia. Mire em {0}–{1} reps com {2}–{3} sobrando.
 1581	Semana de hipertrofia ({x}): {x2}
 1582	Usar meus pesos de hipertrofia
+1583	Padrão de semanas
+1584	Linear · o mesmo plano toda semana
+1585	<b>Linear</b><small>O mesmo plano toda semana.</small>
+1586	Linear
+1587	O mesmo plano toda semana.
+1588	<b>Alternado · semanas ímpares e pares</b><small>Semanas ímpares ({0}, {1}, {2}…) seu plano como está. Semanas pares ({3}, {4}, {5}…) uma versão de força: mais peso, menos reps.</small>
+1589	Alternado · semanas ímpares e pares
+1590	Semanas ímpares ({0}, {1}, {2}…) seu plano como está. Semanas pares ({3}, {4}, {5}…) uma versão de força: mais peso, menos reps.
+1591	Alternado · semana {x}: {x2}
+1592	Sem {x}<small>{x2}</small>
+1593	Hip
+1594	For
+1595	Você está na <b>semana {x} ({x2})</b>. A semana 1 começou em {x3}. Toda segunda começa uma semana nova.
+1596	ímpar
+1597	par
+1598	O que é cada semana
+1599	Ímpar
+1600	Par
+1601	Semana errada?
+1602	Esta é a semana {0}
+1603	Mudar para semana {0}
+1604	Semanas alternadas ligadas. Esta é a semana {x}, {x2}
+1605	Agora é a semana {x}: {x2}
+790	Semana {x} · {x2}
+1606	Linear: o mesmo plano toda semana
+1607	Sobre padrões de semanas
+1608	Linear: toda semana igual, ou cada semana feita à mão. Alternado: monte uma semana ímpar e uma par; elas se repetem enquanto as pessoas seguem e trocam toda segunda.
+1609	<b>Linear</b><small>Toda semana igual, ou cada semana feita à mão.</small>
+1610	Toda semana igual, ou cada semana feita à mão.
+1611	<b>Alternado · ímpar / par</b><small>Monte duas semanas. Elas se repetem enquanto as pessoas seguem.</small>
+1612	Alternado · ímpar / par
+1613	Monte duas semanas. Elas se repetem enquanto as pessoas seguem.
+1614	Nomes de cada semana
+1615	Ímpar · {x}
+1616	Par · {x}
+1617	Alternado: a semana par começa como cópia de força da ímpar. Mude o que quiser.
+1618	Alternado: semanas {0} e {1} mantidas como ímpar e par
+1619	Do programa
+1620	Seu plano como está
+1621	Mais peso · {0}–{1} reps
+1622	Definido por <b>{x}</b>: semanas ímpares são {x2}, pares são {x3}.
+1623	Cada tipo de semana é salvo e comparado só com o mesmo tipo.
+1624	Próxima semana: {x}
+1625	Este programa alterna: o treinador montou semanas ímpares e pares diferentes. Cada tipo é salvo e comparado só com o mesmo tipo.
+1626	Última semana de {x} ({x2}): <b>{x3}</b>{x4}
+1627	Última semana de {x} ({x2}): {x3}
+1628	Ainda sem semana de {x}
+71	Tudo
+1629	Nada registrado neste tipo de semana ainda.
+1630	Registrou na semana errada? Toque na etiqueta para trocar.
+1631	Semana errada? Toque para trocar.
+1632	Mudado para {x}
+1633	hipertrofia
+1634	força

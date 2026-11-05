@@ -150,3 +150,57 @@
 1580	Un peu plus lourd que votre charge d'hypertrophie. Visez {0}–{1} reps en gardant {2}–{3} en réserve.
 1581	Semaine d'hypertrophie ({x}) : {x2}
 1582	Utiliser mes charges d'hypertrophie
+1583	Rythme des semaines
+1584	Linéaire · le même programme chaque semaine
+1585	<b>Linéaire</b><small>Le même programme chaque semaine.</small>
+1586	Linéaire
+1587	Le même programme chaque semaine.
+1588	<b>Alterné · semaines impaires et paires</b><small>Semaines impaires ({0}, {1}, {2}…) votre programme tel quel. Semaines paires ({3}, {4}, {5}…) une version force : plus lourd, moins de reps.</small>
+1589	Alterné · semaines impaires et paires
+1590	Semaines impaires ({0}, {1}, {2}…) votre programme tel quel. Semaines paires ({3}, {4}, {5}…) une version force : plus lourd, moins de reps.
+1591	Alterné · semaine {x} : {x2}
+1592	Sem {x}<small>{x2}</small>
+1593	Hyp
+1594	For
+1595	Vous êtes en <b>semaine {x} ({x2})</b>. La semaine 1 a commencé le {x3}. Une nouvelle semaine commence chaque lundi.
+1596	impaire
+1597	paire
+1598	Ce qu'est chaque semaine
+1599	Impaire
+1600	Paire
+1601	Mauvaise semaine ?
+1602	C'est la semaine {0}
+1603	Passer en semaine {0}
+1604	Semaines alternées activées. C'est la semaine {x}, {x2}
+1605	C'est maintenant la semaine {x} : {x2}
+790	Semaine {x} · {x2}
+1606	Linéaire : le même programme chaque semaine
+1607	À propos des rythmes de semaines
+1608	Linéaire : chaque semaine pareille, ou chaque semaine réglée à la main. Alterné : créez une semaine impaire et une paire ; elles se répètent tant qu'on suit le programme et changent chaque lundi.
+1609	<b>Linéaire</b><small>Chaque semaine pareille, ou réglée à la main.</small>
+1610	Chaque semaine pareille, ou réglée à la main.
+1611	<b>Alterné · impaire / paire</b><small>Créez deux semaines. Elles se répètent tant qu'on suit le programme.</small>
+1612	Alterné · impaire / paire
+1613	Créez deux semaines. Elles se répètent tant qu'on suit le programme.
+1614	Nom de chaque semaine
+1615	Impaire · {x}
+1616	Paire · {x}
+1617	Alterné : la semaine paire commence comme copie force de l'impaire. Modifiez ce que vous voulez.
+1618	Alterné : semaines {0} et {1} gardées comme impaire et paire
+1619	Du programme
+1620	Votre programme tel quel
+1621	Plus lourd · {0}–{1} reps
+1622	Réglé par <b>{x}</b> : semaines impaires {x2}, semaines paires {x3}.
+1623	Chaque type de semaine est enregistré et comparé uniquement au même type.
+1624	Semaine prochaine : {x}
+1625	Ce programme alterne : le coach a réglé différemment les semaines impaires et paires. Chaque type est enregistré et comparé uniquement au même type.
+1626	Dernière semaine {x} ({x2}) : <b>{x3}</b>{x4}
+1627	Dernière semaine {x} ({x2}) : {x3}
+1628	Pas encore de semaine {x}
+71	Tout
+1629	Rien d'enregistré pour ce type de semaine.
+1630	Enregistré dans la mauvaise semaine ? Touchez son étiquette pour la changer.
+1631	Mauvaise semaine ? Touchez pour changer.
+1632	Changé en {x}
+1633	hypertrophie
+1634	force
