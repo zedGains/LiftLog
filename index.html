@@ -2370,10 +2370,10 @@ function planView(){
    ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
 /* ---------- settings as dropdowns: one section open at a time ---------- */
-const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["Training",["popref"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
+const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["Training",["popref","wpref"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
 const SET_IC={about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',acctp:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',avpanel:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>',tprofp:'<path d="M6 4v16M18 4v16M3 8v8M21 8v8M6 12h12"/>',
  skinp:'<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.3"/><circle cx="12" cy="7.5" r="1.3"/><circle cx="16" cy="10" r="1.3"/><path d="M12 21a3 3 0 0 1 0-6h2"/>',langtz:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',notifs:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 20a2 2 0 0 0 4 0"/>',
- fbpanel:'<path d="M4 5h16v11H9l-5 4z"/>',popref:'<path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/>',tutorial:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>',dropp:'<path d="M4 6h16M7 12h10M10 18h4"/>',platep:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',aboutp:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
+ fbpanel:'<path d="M4 5h16v11H9l-5 4z"/>',popref:'<path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/>',wpref:'<rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',tutorial:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>',dropp:'<path d="M4 6h16M7 12h10M10 18h4"/>',platep:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>',aboutp:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>'};
 function setSummary(id){try{
   if(id==="about")return (isKg()?"kg":"lb")+(plan.bw?` · ${toDisp(plan.bw)} ${wU()}`:"");
   if(id==="acctp")return (window.LIFTLOG_ACCOUNT&&window.LIFTLOG_ACCOUNT.email)||"";
@@ -2381,6 +2381,7 @@ function setSummary(id){try{
   if(id==="langtz"){const I=window.LIFTLOG_I18N;const l=I&&I.langs.find(x=>x[0]===I.lang);return l?l[1]:""}
   if(id==="dropp")return dropPct+"%";
   if(id==="popref")return poModeName(poCfg().mode);
+  if(id==="wpref")return wkType()?`Alternating · week ${wkNum()}`:"Linear";
   if(id==="platep")return `${plateBar()} ${isKg()?"kg":"lb"} bar`;
   }catch(e){}return ""}
 function settingsAccordion(){const root=document.querySelector("#app .plan");if(!root)return;
@@ -2394,7 +2395,7 @@ function settingsAccordion(){const root=document.querySelector("#app .plan");if(
       hd.innerHTML=`<span class="aic" aria-hidden="true"><svg viewBox="0 0 24 24">${SET_IC[pn.id]}</svg></span>`;hd.appendChild(h2);
       const sm=setSummary(pn.id);hd.insertAdjacentHTML("beforeend",`${sm?`<span class="asum">${esc(sm)}</span>`:""}<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`);
       pn.classList.add("acc");if(state.setOpen===pn.id)pn.classList.add("open");pn.prepend(hd);pn.appendChild(body);root.appendChild(pn);
-      if(pn.dataset.go==="po"){hd.classList.add("golink");hd.removeAttribute("aria-expanded");hd.onclick=goPO;return}
+      if(pn.dataset.go){hd.classList.add("golink");hd.removeAttribute("aria-expanded");hd.onclick=pn.dataset.go==="wp"?goWP:goPO;return}
       hd.onclick=()=>{const was=pn.classList.contains("open");root.querySelectorAll(".acc.open").forEach(x=>{x.classList.remove("open");x.querySelector(".acchd").setAttribute("aria-expanded","false")});
         if(!was){pn.classList.add("open");hd.setAttribute("aria-expanded","true");state.setOpen=pn.id;const r=pn.getBoundingClientRect();if(r.top<70)window.scrollBy({top:r.top-70})}else state.setOpen=null}})});
   rest.filter(x=>x.classList.contains("panel")&&x.parentNode===root&&!x.classList.contains("acc")).forEach(x=>root.appendChild(x))}
@@ -2417,6 +2418,7 @@ function settingsView(){
      <label class="field"><input id="delconfirm" placeholder="Type DELETE to confirm" autocomplete="off" autocapitalize="characters" aria-label="Type DELETE to confirm"></label>
      <div class="btns"><button class="btn danger" id="delacct" disabled style="flex:1">Delete my account forever</button></div></details></div>`:""}
    <div class="panel" id="popref" data-go="po"><h2>Progressive overload</h2></div>
+   <div class="panel" id="wpref" data-go="wp"><h2>Week pattern</h2></div>
    ${skinPanel()}
    ${langPanel()}
    ${avatarPanel()}
@@ -2546,6 +2548,7 @@ function programsView(){
   const smrow=`<button class="rowbtn smentry" id="smopen" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span><span class="rbt"><b>${plan.setup?"Rebuild my plan":"Build a plan for me"}</b><small>Goal, focus and schedule → a plan made for you</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;
   return head+banner+`<div class="plan">${smrow}${poPanel()}${abPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
 }
+function goWP(){closeSheet();state.settings=false;state.builder=null;state.abOpen=true;state.tab="programs";ls.set("ll.tab","programs");render();setTimeout(()=>{const e=$("#abpanel");if(e)e.scrollIntoView({block:"start"});window.scrollBy(0,-70)},30)}
 function goPO(){closeSheet();state.settings=false;state.builder=null;state.poOpen=true;state.tab="programs";ls.set("ll.tab","programs");render();setTimeout(()=>{const e=$("#popanel");if(e)e.scrollIntoView({block:"start"});window.scrollBy(0,-70)},30)}
 function poExList(){const ks=[...new Set([0,1,2,3,4,5,6].map(schedOf).filter(Boolean))];const keys=ks.length?ks:Object.keys(DAYS);const m=new Map();
   keys.forEach(k=>daySections(k).forEach(sc=>sc.items.forEach(it=>{if(it.type==="lift"&&!m.has(poKey(it)))m.set(poKey(it),it)})));
