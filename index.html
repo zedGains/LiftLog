@@ -246,6 +246,8 @@ div.mynote{cursor:default}.mynote small{color:var(--muted);font-size:12px}.mynot
 .smex{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:4px 0;border-top:1px solid var(--surface-2)}.smex span:last-child{font:12.5px var(--mono);color:var(--muted);white-space:nowrap}.smex .pri{color:var(--accent);font-weight:700}
 .smfoot{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,var(--bg) 30%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:5}
 .smfoot .btn,.smbtns{width:100%;max-width:528px}.smnext{padding:13px}.smbtns{display:flex;gap:8px}.smbtns .btn{flex:1;padding:13px}.smskip{color:var(--muted)}
+.smadv h4{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.smadv h4 small{font:600 12.5px var(--body);color:var(--muted);text-transform:none;letter-spacing:0;text-align:right}.smadv .gchips{margin-bottom:8px}.smfill .dchip{font-size:13px}
+.smwarn{border:1px solid color-mix(in srgb,var(--orange) 45%,var(--line));background:color-mix(in srgb,var(--orange) 9%,var(--surface));border-radius:14px;padding:9px 12px;margin:0 0 10px;font-size:14px}.smwarn b{display:block;font:800 13px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:3px}
 .smrec{display:inline-block;font:700 11px var(--body);background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:2px;letter-spacing:0;text-transform:none}.smchoice{border-color:var(--accent)!important}
 .smentry{margin:0 0 12px}
 .abban{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 2px;padding:7px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:14px}.abban small{color:var(--muted);font-size:12.5px;flex:1}
@@ -1164,7 +1166,14 @@ function wkName(t){const ap=altProg();const n=ap&&Array.isArray(ap.wkNames)?ap.w
 function wkShort(t){const n=wkName(t);return n==="Hypertrophy"?"Hyp":n==="Strength"?"Str":n.length<=7?n:n.slice(0,6)+"…"}
 // a trainer's alternating program switches its days on its own each Monday
 let altSyncing=false;
+// keep your edits to this week's days before switching to the other week
+function altCapture(ap){const w=ap.snapshot&&ap.snapshot[ap.week];if(!w)return;w.days=w.days||{};
+  Object.keys(plan.schedule).forEach(wd=>{const k="pw"+wd;if(plan.schedule[wd]!==k||!DAYS[k])return;const D=plan.days.find(d=>d.key===k);
+    let items;try{items=daySections(k).flatMap(sc=>sc.items)}catch(e){return}
+    w.days[wd]={...(w.days[wd]||{}),title:D?(D.title||"Workout"):"Workout",items:items.map(it=>({name:it.name,g:it.g||it.target||"",type:it.type||"lift",sets:it.sets,reps:it.reps,drop:!!it.drop,...(it.rs?{rs:it.rs}:{}),...(Array.isArray(it.alts)&&it.alts.length?{alts:it.alts.slice(0,8)}:{})}))}});
+  Object.keys(w.days).forEach(wd=>{if(plan.schedule[wd]!=="pw"+wd&&!plan.schedule[wd]&&!plan.days.some(d=>d.key==="pw"+wd))delete w.days[wd]})}
 function altSync(){const ap=altProg();if(!ap||altSyncing)return;const want=wkType()==="A"?0:1;if(ap.week===want||!ap.snapshot||!ap.snapshot[want])return;
+  try{altCapture(ap)}catch(e){console.warn(e)}
   altSyncing=true;try{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:"alt",wkNames:ap.wkNames,start:ap.start},want)}finally{altSyncing=false}}
 const AB_CORE=/crunch|leg raise|sway|plank|sit-up|twist|woodchop|pallof|side bend|ab wheel|hollow|dead bug|mountain climb|flutter|v-up|toes-to-bar/i;
 // [test, sets, reps, tier]; tier decides order (heaviest lifts first)
@@ -1627,9 +1636,19 @@ function smSplit(n,exp){
 }
 function smSplitName(n){return n<=3?"Full body":n===4?"Upper / Lower":n===5?"Upper / Lower / Push / Pull / Legs":"Push / Pull / Legs"}
 function smDefaults(){const p=plan.profile||{};return {goal:"muscle",exp:"mid",units:isKg()?"metric":"imperial",w:plan.bw||null,ft:p.ft??null,inch:p.inch??null,age:p.age??null,goalW:null,focus:[],even:false,days:[1,3,5],mins:60,where:"gym",limits:[]}}
+// Advanced: what each day trains, by body part
+const SM_PARTS=["Chest","Back","Shoulders","Biceps","Triceps","Legs","Glutes","Core"];
+const SM_PART_SLOTS={Chest:[["midchest",1],["upperchest",1],["midchest",0]],Back:[["lats",1],["upperback",1],["lats",0]],Shoulders:[["frontdelt",1],["sidedelt",0],["reardelt",0]],
+ Biceps:[["biceps",0],["biceps",0]],Triceps:[["triceps",0],["triceps",0]],Legs:[["quads",1],["hams",1],["quads",0],["hams",0],["calves",0]],Glutes:[["glutes",1],["glutes",0]],Core:[["abs",0],["obliques",0]]};
+const SM_PART_UNITS={Chest:["upperchest","midchest","lowchest"],Back:["lats","upperback","traps","lowback"],Shoulders:["frontdelt","sidedelt","reardelt"],Biceps:["biceps","forearms"],Triceps:["triceps"],Legs:["quads","hams","adductors","calves"],Glutes:["glutes"],Core:["abs","obliques"]};
+const SM_KIND_PARTS={fullA:["Chest","Back","Legs","Shoulders","Biceps","Triceps","Core"],fullB:["Chest","Back","Legs","Shoulders","Triceps","Core"],fullC:["Chest","Back","Legs","Glutes","Shoulders","Biceps"],upperA:["Chest","Back","Shoulders","Biceps","Triceps"],upperB:["Chest","Back","Shoulders","Biceps","Triceps"],lowerA:["Legs","Glutes","Core"],lowerB:["Legs","Glutes","Core"],push:["Chest","Shoulders","Triceps"],pull:["Back","Biceps"],legs:["Legs","Glutes","Core"]};
+function smAdvDefaults(a){const days=[...a.days].sort((x,y)=>((x+6)%7)-((y+6)%7));const kinds=smSplit(Math.min(days.length,6),a.exp);const o={};
+  days.forEach((wd,i)=>{const prev=(a.adv||{})[wd];o[wd]=prev?{parts:[...(prev.parts||[])],fill:prev.fill!==false}:{parts:[...(SM_KIND_PARTS[kinds[i]]||["Chest","Back","Legs"])],fill:true}});return o}
+function smPartsTitle(parts){return parts.length?parts.join(" + "):"Workout"}
 function smBuild(a){
-  const days=[...a.days].sort((x,y)=>((x+6)%7)-((y+6)%7)); const n=Math.min(days.length,6);
-  const kinds=smSplit(n,a.exp); const focus=new Set(a.even?[]:a.focus); const lim=new Set(a.limits);
+  const days=[...a.days].sort((x,y)=>((x+6)%7)-((y+6)%7)); const adv=a.mode==="adv";
+  const n=adv?days.length:Math.min(days.length,6);
+  const kinds=adv?days.map(()=>"custom"):smSplit(n,a.exp); const focus=new Set(a.even?[]:a.focus); const lim=new Set(a.limits);
   const eq=a.where==="gym"?"g":a.where==="db"?"d":"h";
   const ok=(e)=>e[3].includes(eq)&&!(lim.has("back")&&e[4].includes("b"))&&!(lim.has("knees")&&e[4].includes("k"))&&!(lim.has("shoulders")&&e[4].includes("s"))&&LIB.some(x=>x.name===e[0]);
   const used={}; const pick=(unit,big,k)=>{const c=SM_EX.filter(e=>e[1]===unit&&ok(e));const pref=c.filter(e=>!!e[2]===!!big);const pool=pref.length?pref:c;if(!pool.length)return null;
@@ -1638,9 +1657,13 @@ function smBuild(a){
   const cardio=a.goal==="lose"?(a.mins<=30?10:15):a.goal==="fit"?(a.mins<=30?0:10):0;
   const budget=Math.max(6,Math.round(({30:10,45:15,60:21,75:27}[a.mins]||21)*(a.exp==="new"?0.9:1)-cardio/2.6));
   const sessions=kinds.map((k,si)=>{
-    let slots=SM_SESS[k].map(([u,b])=>({u,b,focus:focus.has(u)}));
+    const ad=adv?(a.adv||{})[days[si]]||{parts:[],fill:true}:null;
+    if(ad&&(!ad.fill||!ad.parts.length)) return {kind:k,title:smPartsTitle(ad.parts),wd:days[si],items:[],empty:true,parts:ad.parts};
+    const units=ad?new Set(ad.parts.flatMap(x=>SM_PART_UNITS[x])):null;
+    let slots=(ad?ad.parts.flatMap(x=>SM_PART_SLOTS[x]||[]):SM_SESS[k]).map(([u,b])=>({u,b,focus:focus.has(u)}));
+    if(ad)slots=slots.map((x,i)=>[x,i]).sort((p,q)=>((q[0].b?1:0)-(p[0].b?1:0))||(p[1]-q[1])).map(p=>p[0]);
     // focus spots: make sure they show up in a matching session, then go first
-    focus.forEach(f=>{const fits=SM_UPPER.has(f)?/full|upper|push|pull/.test(k)&&(k!=="push"||!["lats","upperback","traps","biceps","reardelt"].includes(f))&&(k!=="pull"||!["upperchest","midchest","lowchest","frontdelt","triceps"].includes(f))
+    focus.forEach(f=>{const fits=units?units.has(f):SM_UPPER.has(f)?/full|upper|push|pull/.test(k)&&(k!=="push"||!["lats","upperback","traps","biceps","reardelt"].includes(f))&&(k!=="pull"||!["upperchest","midchest","lowchest","frontdelt","triceps"].includes(f))
         :SM_LOWER.has(f)?/full|lower|legs/.test(k):true;
       if(fits&&!slots.some(s=>s.u===f)) slots.push({u:f,b:["upperchest","midchest","lats","upperback","quads","hams","glutes"].includes(f)?1:0,focus:true})});
     slots.sort((x,y)=>(y.focus&&y.b)-(x.focus&&x.b)||0);
@@ -1654,7 +1677,7 @@ function smBuild(a){
       if(timed) reps=[30,45];
       if(a.goal==="strength"&&big&&i===0&&a.exp!=="new") sets=Math.min(5,sets+1);
       return {name:e[0],unit:s.u,big,focus:s.focus,sets,reps}}).filter(Boolean);
-    return {kind:k,title:SM_TITLE[k],wd:days[si],items}});
+    return {kind:k,title:ad?smPartsTitle(ad.parts):SM_TITLE[k],wd:days[si],items,parts:ad?ad.parts:null}});
   // fit the time: first drop small moves that are already trained on another day, then trim sets, then drop more
   const seen=(u)=>sessions.reduce((t,se)=>t+se.items.filter(x=>x.unit===u).length,0);
   const MINOR=["adductors","obliques","lowchest","traps","frontdelt","lowback","forearms","abs","calves","reardelt"];
@@ -1679,10 +1702,15 @@ function smBuild(a){
     se.mins=Math.round(6+items.reduce((t,x)=>t+(x.cardio?x.reps[0]:x.sets*(x.big?(a.goal==="strength"?3.6:2.8):2.2)),0))});
   // sets per muscle per week (cardio and timed holds left out)
   const vol={};sessions.forEach(s=>s.items.forEach(x=>{if(!x.cardio)vol[x.unit]=(vol[x.unit]||0)+x.sets}));
-  return {sessions,vol,split:smSplitName(n),extraDays:days.length>6?days.slice(6):[]};
+  // heads-up for custom days: muscles trained once a week or not at all
+  const warn=[];if(adv){const per={};sessions.forEach(se=>{const u=new Set(se.items.filter(x=>!x.cardio).map(x=>x.unit));u.forEach(x=>per[x]=(per[x]||0)+1)});
+    [["Chest",["upperchest","midchest","lowchest"]],["Back",["lats","upperback"]],["Shoulders",["frontdelt","sidedelt","reardelt"]],["Legs",["quads","hams"]],["Glutes",["glutes"]],["Biceps",["biceps"]],["Triceps",["triceps"]]].forEach(([g,us])=>{
+      const c=Math.max(0,...us.map(u=>per[u]||0));const emptyHas=sessions.some(se=>se.empty&&(se.parts||[]).includes(g));if(emptyHas)return;if(c===0)warn.push([g,0]);else if(c===1)warn.push([g,1])})}
+  return {sessions,vol,split:adv?"Your days":smSplitName(n),extraDays:!adv&&days.length>6?days.slice(6):[],warn};
 }
 function smWhy(a,r){
   const out=[];const n=r.sessions.length;
+  if(a.mode==="adv"){out.push("Built from the days you set. Sets and reps still follow your goal.");}else
   out.push(n<=3?`Full-body workouts so each muscle gets trained ${n>=2?"2–3 times":"once"} a week.`:n===4?"Upper and lower days, so each muscle gets trained twice a week. That grows muscle faster than once.":`Each muscle gets trained about twice a week across ${n} days.`);
   const f=(a.even?[]:a.focus).map(k=>SM_NAME[k].l);
   const area=(us)=>us.reduce((t,u)=>t+(r.vol[u]||0),0);
@@ -1712,7 +1740,7 @@ function smMap(sel){
   const fig=(h,l)=>`<figure><svg viewBox="20 0 100 288" role="img" aria-label="${l} muscles">${SIL}${h.join("")}<g transform="translate(140,0) scale(-1,1)">${h.join("")}</g></svg><figcaption>${l}</figcaption></figure>`;
   return `<div class="smmap">${fig(F,"Front")}${fig(B,"Back")}</div>`}
 function smView(){
-  const o=state.onb,a=o.a,s=o.step,N=5;
+  const o=state.onb,a=o.a,s=o.step,N=a.mode==="adv"?6:5;const ADV=6;
   const bar=`<div class="smsteps">${Array.from({length:N},(_,i)=>`<i class="${i<s?"on":""}"></i>`).join("")}</div>`;
   const back=`<button class="btn small" id="smback">‹ Back</button>`;
   const head=(t,lead)=>`<div class="smtop">${back}${bar}</div><div class="eyebrow">${s<=N?`Step ${s} of ${N}`:"Built for you"}</div><h1 class="smh">${t}</h1>${lead?`<p class="smlead">${lead}</p>`:""}`;
@@ -1743,15 +1771,31 @@ function smView(){
      <div class="lbl">Time per workout</div>${seg("smmins",[[30,"30 min"],[45,"45 min"],[60,"60 min"],[75,"75+"]],a.mins)}
      <div class="lbl">Where do you train?</div>${seg("smwhere",[["gym","Full gym"],["db","Dumbbells"],["home","Home"]],a.where)}
      <div class="lbl">Anything to work around? <button class="infob" id="smlinfo" aria-label="About this" title="We swap out exercises that are often hard on these. This isn't medical advice. If something hurts, check with a doctor or physical therapist.">i</button></div>
-     <div class="gchips">${[["back","Lower back"],["knees","Knees"],["shoulders","Shoulders"]].map(([k,l])=>`<button class="gchip ${a.limits.includes(k)?"on":""}" data-smlim="${k}" aria-pressed="${a.limits.includes(k)}">${l}</button>`).join("")}<button class="gchip ${a.limits.length?"":"on"}" data-smlim="" aria-pressed="${!a.limits.length}">Nothing</button></div>`;
-    next=`<button class="btn primary smnext" id="smnext" ${a.days.length?"":"disabled"}>Build my plan</button>`}
-  else {const r=o.r||(o.r=smBuild(a));const kg=a.units==="metric";
+     <div class="gchips">${[["back","Lower back"],["knees","Knees"],["shoulders","Shoulders"]].map(([k,l])=>`<button class="gchip ${a.limits.includes(k)?"on":""}" data-smlim="${k}" aria-pressed="${a.limits.includes(k)}">${l}</button>`).join("")}<button class="gchip ${a.limits.length?"":"on"}" data-smlim="" aria-pressed="${!a.limits.length}">Nothing</button></div>
+     <div class="lbl">Week pattern <button class="infob" id="smpinfo" aria-label="About week patterns" title="Same every week: one plan, repeated. Alternate: odd weeks are hypertrophy (8–12 reps), even weeks are heavier strength weeks (4–6 reps on the big lifts). Each week type is tracked on its own, and you can change this later in Plans.">i</button></div>
+     ${opt("smpat","same",a.pattern!=="alt","",`Same every week`,`One plan, repeated. Simplest.`)}
+     ${opt("smpat","alt",a.pattern==="alt","",`Alternate: hypertrophy / strength`,`Odd weeks 8⁠–⁠12 reps, even weeks heavier at 4⁠–⁠6. Each week type tracked on its own.`)}`;
+    next=`<button class="btn primary smnext" id="smnext" ${a.days.length?"":"disabled"}>Next</button>`}
+  else if(s===5){
+    body=head("How should we build your days?")+opt("smmode","auto",a.mode!=="adv",'<path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/>',`Build it for me <span class="smrec">Recommended</span>`,`We pick the split, exercises, sets and reps from your goal, focus and schedule.`)
+      +opt("smmode","adv",a.mode==="adv",'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',`Advanced: I'll set my days`,`You choose what each day trains. We can still fill in the exercises, or you pick them all.`)
+      +`<p class="savenote">Either way you can change anything after you start.</p>`;
+    next=`<button class="btn primary smnext" id="smnext">${a.mode==="adv"?"Next":"Build my plan"}</button>`}
+  else if(s===ADV&&a.mode==="adv"){a.adv=smAdvDefaults(a);const ds=Object.keys(a.adv).map(Number).sort((x,y)=>((x+6)%7)-((y+6)%7));
+    body=head("Your days","Tap what each day trains.")+ds.map(wd=>{const d=a.adv[wd];return `<div class="smgrp smadv"><h4><span>${WD_LONG[wd]}</span><small>${d.parts.length?d.parts.map(x=>`<span>${x}</span>`).join(" + "):"—"}</small></h4>
+      <div class="gchips">${SM_PARTS.map(x=>`<button class="gchip ${d.parts.includes(x)?"on":""}" data-smpart="${wd}|${x}" aria-pressed="${d.parts.includes(x)}">${x}</button>`).join("")}</div>
+      <div class="dchips smseg smfill" role="group" aria-label="Exercises for ${WD_LONG[wd]}"><button class="dchip wide ${d.fill?"on":""}" data-smfill="${wd}|1" aria-pressed="${d.fill}">Fill exercises for me</button><button class="dchip wide ${d.fill?"":"on"}" data-smfill="${wd}|0" aria-pressed="${!d.fill}">I'll pick them</button></div></div>`}).join("")
+      +`<p class="savenote">Days you fill yourself start empty. Add exercises from the Workout tab after you start.</p>`;
+    next=`<button class="btn primary smnext" id="smnext">Build my plan</button>`}
+  else {if(a.mode==="adv"&&!a.adv)a.adv=smAdvDefaults(a);const r=o.r||(o.r=smBuild(a));const kg=a.units==="metric";const advR=a.mode==="adv";
     const start=a.w?`${toDispU(a.w,kg)} ${kg?"kg":"lb"}${a.ft!=null?` · ${kg?Math.round((a.ft*12+(a.inch||0))*2.54)+" cm":`${a.ft} ft ${a.inch||0}`}`:""}${a.age?` · ${a.age}`:""}`:"Skipped";
-    body=`<div class="smtop">${back}${bar}</div><div class="eyebrow">Built for you</div><h1 class="smh"><span>${esc(r.split)}</span> · <span>${r.sessions.length} day${r.sessions.length===1?"":"s"}</span></h1>
+    body=`<div class="smtop">${back}${bar}</div><div class="eyebrow">${advR?"Built from your days":"Built for you"}</div><h1 class="smh">${advR?`<span>Your ${r.sessions.length}-day plan</span>`:`<span>${esc(r.split)}</span> · <span>${r.sessions.length} day${r.sessions.length===1?"":"s"}</span>`}</h1>
      <div class="smsum"><div><span>Goal</span><b>${esc(SM_GOALS.find(g=>g[0]===a.goal)[1])}</b></div><div><span>Starting at</span><b>${esc(start)}</b></div>
-      <div><span>Focus</span><b>${a.even||!a.focus.length?"<span>No focus · even all over</span>":a.focus.map(k=>`<span>${esc(SM_NAME[k].l)}</span>`).join(", ")}</b></div><div><span>Schedule</span><b>${a.days.slice().sort((x,y)=>((x+6)%7)-((y+6)%7)).map(i=>`<span>${WD_SHORT[i]}</span>`).join(", ")} · <span>${a.mins===75?"75+":a.mins} min</span></b></div></div>
+      <div><span>Focus</span><b>${a.even||!a.focus.length?"<span>No focus · even all over</span>":a.focus.map(k=>`<span>${esc(SM_NAME[k].l)}</span>`).join(", ")}</b></div><div><span>Week pattern</span><b>${a.pattern==="alt"?"Alternate: hypertrophy / strength":"Same every week"}</b></div><div><span>Schedule</span><b>${a.days.slice().sort((x,y)=>((x+6)%7)-((y+6)%7)).map(i=>`<span>${WD_SHORT[i]}</span>`).join(", ")} · <span>${a.mins===75?"75+":a.mins} min</span></b></div></div>
      <div class="smwhy"><b>Why this plan <button class="infob" id="smwinfo" aria-label="About the plan" title="Built from common training guidance: each muscle about twice a week, roughly 10–20 hard sets per muscle per week for most people, reps matched to your goal. It's a starting point, not medical advice.">i</button></b><ul>${smWhy(a,r).map(t=>typeof t==="string"?`<li>${esc(t)}</li>`:`<li class="smfl"><span>${esc(t.h)}</span>: <span>${esc(t.t)}</span></li>`).join("")}</ul></div>
-     ${r.sessions.map(se=>`<div class="smday"><h3><span><span>${WD_SHORT[se.wd]}</span> · <span>${esc(se.title)}</span></span><small>~${se.mins} min</small></h3>${se.items.map(x=>`<div class="smex"><span class="${x.focus?"pri":""}">${esc(x.name)}</span><span>${x.cardio?`${x.reps[0]} min`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}${/\(seconds\)/.test(x.name)?" sec":""}`}</span></div>`).join("")}</div>`).join("")}
+     ${(r.warn||[]).length?`<div class="smwarn"><b>Heads-up</b>${(()=>{const one=r.warn.filter(w=>w[1]).map(w=>w[0]),none=r.warn.filter(w=>!w[1]).map(w=>w[0]);return (one.length?`<div><span>Once a week:</span> <span>${esc(one.join(", "))}</span>. <span>Twice a week usually grows faster.</span></div>`:"")+(none.length?`<div><span>Not on any day:</span> <span>${esc(none.join(", "))}</span>.</div>`:"")})()}</div>`:""}
+     ${r.sessions.map(se=>`<div class="smday"><h3><span><span>${WD_SHORT[se.wd]}</span> · ${se.parts?se.parts.length?se.parts.map(x=>`<span>${x}</span>`).join(" + "):"<span>Workout</span>":`<span>${esc(se.title)}</span>`}</span><small>${se.empty?"Empty · you pick":`~${se.mins} min`}</small></h3>${se.items.map(x=>`<div class="smex"><span class="${x.focus?"pri":""}">${esc(x.name)}</span><span>${x.cardio?`${x.reps[0]} min`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}${/\(seconds\)/.test(x.name)?" sec":""}`}</span></div>`).join("")}</div>`).join("")}
+     ${a.pattern==="alt"?`<p class="savenote">Even weeks use a strength version of these days: heavier, fewer reps, no drop sets. You can change those days on their own.</p>`:""}
      ${r.extraDays.length?`<div class="smday"><h3><span><span>${r.extraDays.map(i=>WD_SHORT[i]).join(", ")}</span> · <span>Cardio & Core</span></span><small>~30 min</small></h3></div>`:""}
      <p class="savenote">Swap any exercise after you start. You can also rebuild this any time from Plans.</p>`;
     next=`<div class="smbtns"><button class="btn" id="smredo">Change answers</button><button class="btn primary" id="smgo">Start this plan</button></div>`}
@@ -1768,7 +1812,7 @@ function smReadAbout(){const a=state.onb.a,kg=a.units==="metric",err=$("#sm-err"
   Object.assign(a,{w:lb(w),age,ft,inch:ft!=null?(inch||0):null,goalW:lb(gw)});return true}
 function bindSmart(){const o=state.onb,a=o.a,re=()=>{o.r=null;render()};
   const go=(n)=>{o.step=n;o.r=null;render();window.scrollTo(0,0)};
-  $("#smback").onclick=()=>{if(o.step>1)go(o.step-1);else{state.onb=null;render();window.scrollTo(0,0)}};
+  $("#smback").onclick=()=>{if(o.step>1)go(o.step===7&&a.mode!=="adv"?5:o.step-1);else{state.onb=null;render();window.scrollTo(0,0)}};
   document.querySelectorAll("[data-smgoal]").forEach(b=>b.onclick=()=>{a.goal=b.dataset.smgoal;re()});
   document.querySelectorAll("[data-smexp]").forEach(b=>b.onclick=()=>{a.exp=b.dataset.smexp;re()});
   document.querySelectorAll("[data-smunits]").forEach(b=>b.onclick=()=>{smReadAbout();a.units=b.dataset.smunits;re()});
@@ -1780,7 +1824,12 @@ function bindSmart(){const o=state.onb,a=o.a,re=()=>{o.r=null;render()};
   document.querySelectorAll("[data-smwhere]").forEach(b=>b.onclick=()=>{a.where=b.dataset.smwhere;re()});
   document.querySelectorAll("[data-smlim]").forEach(b=>b.onclick=()=>{const k=b.dataset.smlim;a.limits=!k?[]:a.limits.includes(k)?a.limits.filter(x=>x!==k):[...a.limits,k];re()});
   ["#smlinfo","#smwinfo"].forEach(id=>{const i=$(id);if(i)i.onclick=()=>toast(i.title,9000)});
-  const nx=$("#smnext");if(nx)nx.onclick=()=>{if(o.step===2&&!smReadAbout())return;go(o.step+1)};
+  document.querySelectorAll("[data-smpat]").forEach(b=>b.onclick=()=>{a.pattern=b.dataset.smpat;const y=window.scrollY;re();window.scrollTo(0,y)});
+  document.querySelectorAll("[data-smmode]").forEach(b=>b.onclick=()=>{a.mode=b.dataset.smmode;re()});
+  document.querySelectorAll("[data-smpart]").forEach(b=>b.onclick=()=>{const [wd,x]=b.dataset.smpart.split("|");const d=a.adv[wd];d.parts=d.parts.includes(x)?d.parts.filter(y=>y!==x):SM_PARTS.filter(y=>y===x||d.parts.includes(y));const y=window.scrollY;re();window.scrollTo(0,y)});
+  document.querySelectorAll("[data-smfill]").forEach(b=>b.onclick=()=>{const [wd,v]=b.dataset.smfill.split("|");a.adv[wd].fill=v==="1";const y=window.scrollY;re();window.scrollTo(0,y)});
+  const spi=$("#smpinfo");if(spi)spi.onclick=()=>toast(spi.title,9000);
+  const nx=$("#smnext");if(nx)nx.onclick=()=>{if(o.step===2&&!smReadAbout())return;go(o.step===5&&a.mode!=="adv"?7:o.step+1)};
   const sk=$("#smskip");if(sk)sk.onclick=()=>go(3);
   const rd=$("#smredo");if(rd)rd.onclick=()=>go(1);
   const sg=$("#smgo");if(sg)sg.onclick=()=>smApply()}
@@ -1797,7 +1846,8 @@ function smApply(){const o=state.onb,a=o.a,r=o.r||smBuild(a);
   const days={};r.sessions.forEach(se=>{days[String(se.wd)]={title:se.title,items:se.items.map(x=>{const L=LIB.find(y=>y.name===x.name);return {name:x.name,g:L?L.g:"",type:L?(L.type||"lift"):"lift",sets:x.sets,reps:x.reps,drop:false}})}});
   r.extraDays.forEach(wd=>{days[String(wd)]={title:"Cardio & Core",items:[{name:"Incline Treadmill Walk",type:"cardio",sets:1,reps:[20,20]},{name:"Cable Crunch",type:"lift",sets:3,reps:[12,15]},{name:"Pallof Press",type:"lift",sets:3,reps:[10,12]}]}});
   const why=smWhy(a,r);
-  applyProgram({key:"smart:"+Date.now().toString(36),title:`Built for you · ${r.split}`,author:uid||null,weeks:[{days}],desc:"A plan built from your answers: your goal, focus spots and schedule. Each muscle gets trained about twice a week, with extra sets for your focus.",who:"",progress:"Progressive overload is on for your big lifts. Hit your reps on every set and the weight goes up next time.",equip:a.where==="gym"?"Full gym":a.where==="db"?"Dumbbells":"Home"},0);
+  const wkA={days},alt=a.pattern==="alt";
+  applyProgram({key:"smart:"+Date.now().toString(36),title:a.mode==="adv"?"Built from your days":`Built for you · ${r.split}`,author:uid||null,weeks:alt?[wkA,abStrengthWeek(wkA)]:[wkA],...(alt?{pattern:"alt",wkNames:["Hypertrophy","Strength"]}:{}),desc:"A plan built from your answers: your goal, focus spots and schedule. Each muscle gets trained about twice a week, with extra sets for your focus.",who:"",progress:"Progressive overload is on for your big lifts. Hit your reps on every set and the weight goes up next time.",equip:a.where==="gym"?"Full gym":a.where==="db"?"Dumbbells":"Home"},0);
   const ex={...((plan.po||{}).ex||{})};r.sessions.forEach(se=>se.items.forEach(x=>{if(x.big)ex[x.name.toLowerCase()]=true}));
   plan.po={...(plan.po||{}),mode:"auto",ex};
   savePlan();syncDays();state.onb=null;
