@@ -118,7 +118,7 @@
         pats.push({ re: new RegExp("^" + esc + "$"), t: d[k], keys: k });
       } else dict[k] = d[k];
     });
-    pats.sort((a, b) => b.keys.length - a.keys.length);
+    const lit = (k) => k.replace(/\{x\d*\}/g, "").length; pats.sort((a, b) => lit(b.keys) - lit(a.keys) || b.keys.length - a.keys.length);
     return ready().then(start);
   }).catch(() => {}).finally(() => ready().then(unhide));
 })();
