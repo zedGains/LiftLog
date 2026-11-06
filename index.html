@@ -1009,14 +1009,19 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null,ab:v.ab||null}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null,ab:v.ab||null,abTwin:v.abTwin||null}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
   trainKeys().forEach((k,i)=>{DAYS[k].label="Day "+(i+1)})}
-function dayKeys(){const all=Object.keys(DAYS);const o=(plan.dayOrder||[]).filter(k=>DAYS[k]);return [...o,...all.filter(k=>!o.includes(k))]}
+function dayKeys(){const all=Object.keys(DAYS);const o=(plan.dayOrder||[]).filter(k=>DAYS[k]);const L=[...o,...all.filter(k=>!o.includes(k))];
+  const tw=new Set(plan.days.filter(d=>d.abB).map(d=>d.key));if(!tw.size)return L;
+  if(abWeek()!=="B")return L.filter(k=>!tw.has(k));
+  const hidden=new Set(Object.entries(plan.abTwin||{}).filter(([a,b])=>tw.has(b)&&DAYS[b]).map(([a])=>a));
+  return L.filter(k=>!hidden.has(k))}
+function dayKeyOrder(k){const d=plan.days.find(x=>x.key===k&&x.abB);return d?d.twinOf:k}
 const WEEK_RANK=[1,2,3,4,5,6,0];
-function firstWd(k){const r=WEEK_RANK.findIndex(i=>plan.schedule[String(i)]===k);return r<0?99:r}
+function firstWd(k){const kk=dayKeyOrder(k);const r=WEEK_RANK.findIndex(i=>plan.schedule[String(i)]===kk);return r<0?99:r}
 // Day numbers follow the week: the first workout of the week is Day 1, and so on. Days not on the week come after, in your saved order.
 function trainKeys(){const base=dayKeys().filter(k=>!DAYS[k].prog);return base.map((k,i)=>[k,i]).sort((a,b)=>(firstWd(a[0])-firstWd(b[0]))||(a[1]-b[1])).map(a=>a[0])}
 function moveDay(k,dir){
@@ -1130,10 +1135,12 @@ function effItem(dayKey,orig,sec){
     alts:LIB.filter(x=>x.g===L.g&&x.id!==L.id).slice(0,3).map(x=>x.name),
     sec:sectionFor(L.g,dayKey),slot,dayKey,replaced:orig.name,lib:L.id,custom:!!L.custom};
 }
-function extraItem(dayKey,x){const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
-  return {id:(L.custom?"c_":"x_")+L.id,name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
+function extraItem(dayKey,x){
+  if(x.t){const t=x.t;return {id:x.hid||("t_"+slug(t.name)),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:t.name,sets:x.sets,reps:x.reps,rs:null,drop:!!x.drop,type:t.type||"lift",target:t.target,g:t.g,p:t.p||[],s:t.s||[],each:!!t.each,note:t.note||"",cue:t.cue,tip:t.tip,alts:Array.isArray(x.alts)?x.alts:t.alts||[],sec:x.sec||t.sec||"Other",slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:null,custom:false}}
+  const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
+  return {id:x.hid||((L.custom?"c_":"x_")+L.id),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
     note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name),
-    sec:sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
+    sec:x.sec||sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
 function applyPick(it,exId,sets,reps,drop,rs){
   if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,...(rs&&rs.length?{rs}:{}),drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
   if(it.addMode){const sid=Date.now().toString(36);(plan.extra[it.dayKey]=plan.extra[it.dayKey]||[]).push({sid,ex:exId,sets,reps,drop});
@@ -1175,6 +1182,24 @@ function abStrength(x){if(x.type!=="lift"||AB_CORE.test(x.name)||/^(Abs|Obliques
 const AB_INFO="Week A is your plan as you have it: hypertrophy. Week B uses the same exercises for strength: about 10–15% more weight, 4–8 reps on the big lifts, no drop sets, 2–3 minutes rest, 1–2 reps left in the tank. Small muscles stay at 8–12 reps. The weeks switch every Monday, and progressive overload compares each week with the last time you did that same week.";
 function abBanner(){const w=wkType();if(!w)return "";const n=wkNum();const pa=altProg();
   return `<div class="abban ${w}"><span class="wtag ${w}">${esc(wkName(w))}</span><span class="abwk">Week ${n} · ${n%2?"odd":"even"}</span><small>${pa?`Next week: ${esc(wkName(w==="A"?"B":"A"))}`:w==="A"?"Next week: strength":"Heavier, fewer reps, no drop sets"}</small><button class="infob" data-abinfo aria-label="How alternating weeks work" title="${esc(pa?"This program alternates: odd weeks and even weeks are set up differently by the trainer. Each week type is saved and compared only with the same type.":AB_INFO)}">i</button></div>`}
+// Strength days are separate days (twins of your hypertrophy days). Editing one never changes the other.
+// They start as a strength copy; history is shared by exercise and tagged by week.
+function abTwinOf(k){return (plan.abTwin||{})[k]||null}
+function abIsTwin(k){return !!(DAYS[k]&&plan.days.find(d=>d.key===k&&d.abB))}
+function abMakeTwin(k,force){
+  const tw=plan.abTwin=plan.abTwin||{};if(tw[k]&&!force&&plan.days.find(d=>d.key===tw[k]))return tw[k];
+  const D=DAYS[k];if(!D)return null;const key=tw[k]&&plan.days.find(d=>d.key===tw[k])?tw[k]:"ab_"+k.replace(/[^a-z0-9_]/gi,"")+"_"+newId().slice(0,4);
+  const items=daySections(k).flatMap(sc=>sc.items).map((it,i)=>{const y=abStrength(it);const L=it.lib||(LIB.find(l=>l.name.toLowerCase()===String(it.name).toLowerCase())||{}).id;
+    const base={sid:newId(),sets:y.sets,reps:y.reps,drop:y.abB?false:!!it.drop,hid:it.id,abT:y.abT,sec:it.sec,_o:i};
+    return L?{...base,ex:L}:{...base,t:{name:it.name,type:it.type,target:it.target,g:it.g,p:it.p||[],s:it.s||[],each:!!it.each,note:it.note||"",alts:it.alts||[],sec:it.sec,cue:it.cue,tip:it.tip}}}).sort((a,b)=>(a.abT-b.abT)||(a._o-b._o)).map(({_o,...x})=>x);
+  const ex=plan.days.find(d=>d.key===key);
+  if(!ex) plan.days.push({key,label:D.label,title:D.baseTitle||D.title,color:D.color,abB:true,twinOf:k});
+  else {ex.title=D.baseTitle||D.title;ex.twinOf=k}
+  plan.extra[key]=items; tw[k]=key; return key}
+function sectionG(it){return (GROUPS||[]).includes(it.sec)?it.sec:"Chest"}
+function abEnsureTwins(){if(!abOn())return false;let made=false;
+  [0,1,2,3,4,5,6].forEach(wd=>{const k=plan.schedule[String(wd)];if(k&&DAYS[k]&&!DAYS[k].prog&&!abIsTwin(k)&&!(abTwinOf(k)&&plan.days.find(d=>d.key===abTwinOf(k)))){abMakeTwin(k);made=true}});
+  if(made){savePlan();syncDays()}return made}
 function abPanel(){const pa=altProg(),on=!!pa||abOn(),w=wkType(),n=wkNum();
   const tiles=on?(()=>{const st=Math.max(1,n<=4?1:n-2);return `<div class="wks">${Array.from({length:6},(_,i)=>{const k=st+i,t=k%2?"A":"B";return `<span class="${t} ${k===n?"now":""}">Wk ${k}<small>${esc(wkShort(t))}</small></span>`}).join("")}</div>
     <p class="savenote">You're in <b>week ${n} (${n%2?"odd":"even"})</b>. Week 1 started ${fmtDate(pa?pa.start:plan.ab.anchor)}. A new week starts every Monday.</p>`})():"";
@@ -1186,8 +1211,11 @@ function abPanel(){const pa=altProg(),on=!!pa||abOn(),w=wkType(),n=wkNum();
     <div class="porow"><span><span class="wtag A">Odd</span> ${esc(wkName("A"))}</span><small class="mini">${pa?"From the program":"Your plan as it is"}</small></div>
     <div class="porow"><span><span class="wtag B">Even</span> ${esc(wkName("B"))}</span><small class="mini">${pa?"From the program":"Heavier · 4–8 reps"}</small></div>
     <div class="lbl">Wrong week?</div><div class="dchips abseg"><button class="dchip wide on" data-abshift="0" aria-pressed="true">This is week ${n}</button>${n>1?`<button class="dchip wide" data-abshift="-1">Make it week ${n-1}</button>`:""}<button class="dchip wide" data-abshift="1">Make it week ${n+1}</button></div>
+    ${pa?"":`<div class="lbl">Strength days</div><p class="savenote" style="margin-top:0">Strength days are separate from your hypertrophy days. Change an exercise on one and the other stays the same. Edit them from the Workout tab on a strength week.</p>
+     <div class="btns"><button class="btn small" id="abrebuild">Redo strength days from my plan</button></div>`}
     <p class="savenote">${pa?"Each week type is saved and compared only with the same type.":esc(AB_INFO)}</p>`:""}</details>`}
 function bindAbPanel(){const dp=$("#abpanel");if(dp)dp.ontoggle=()=>{state.abOpen=dp.open};
+  const rb=$("#abrebuild");if(rb)armBtn(rb,"Tap again: replaces your strength days",()=>{const was=abWeek;Object.keys(plan.abTwin||{}).forEach(k=>{if(DAYS[k])abMakeTwin(k,true)});savePlan();syncDays();render();toast("Strength days redone from your plan")});
   document.querySelectorAll("[data-abmode]").forEach(b=>b.onclick=()=>{const on=b.dataset.abmode==="alt";if(on===abOn())return;plan.ab={...(plan.ab||{}),on};
     if(on&&!plan.ab.anchor)plan.ab.anchor=wkStartOf(TODAY);savePlan();syncDays();render();toast(on?`Alternating weeks on. This is week ${wkNum()}, ${wkName(wkType()).toLowerCase()}`:"Linear: the same plan every week")});
   document.querySelectorAll("[data-abshift]").forEach(b=>b.onclick=()=>{const d=+b.dataset.abshift;if(!d)return;const pa=altProg();const a=pa?pa.start:plan.ab.anchor;
@@ -1202,7 +1230,6 @@ function daySections(dayKey){
   const ord=(plan.order&&plan.order[dayKey])||{};
   Object.keys(map).forEach(k=>{const o=ord[k];if(!o||!o.length)return;const pos=x=>{const i=o.indexOf(x.slot);return i<0?1e6:i};
     map[k]=map[k].map((x,i)=>[x,i]).sort((a,b)=>(pos(a[0])-pos(b[0]))||(a[1]-b[1])).map(a=>a[0])});
-  if(abWeek()==="B") Object.keys(map).forEach(k=>{map[k]=map[k].map(abStrength).map((x,i)=>[x,i]).sort((a,b)=>(a[0].abT-b[0].abT)||(a[1]-b[1])).map(a=>a[0])});
   return applySupers(dayKey,order.filter(k=>map[k]&&map[k].length).map(k=>({sec:k,items:map[k]})));
 }
 function setOrder(dayKey,sec,slots){(plan.order[dayKey]=plan.order[dayKey]||{})[sec]=slots;savePlan()}
@@ -1468,7 +1495,7 @@ function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";c
 
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-function schedOf(wd){const k=plan.schedule[String(wd)];return k&&DAYS[k]?k:null}
+function schedOf(wd){const k=plan.schedule[String(wd)];if(!k||!DAYS[k])return null;if(abWeek()==="B"){const t=abTwinOf(k);if(t&&DAYS[t])return t}return k}
 function weekdayTab(){if((plan.skips||{})[TODAY])return null;return schedOf(nowD().getDay())}
 function plannedToday(){return schedOf(nowD().getDay())}
 // "Not training today": today becomes a rest day just this once. The workout is back on its weekday next week.
@@ -1490,7 +1517,7 @@ function renderTabs(){
 }
 function goWeek(){state.dayMenu=false;renderDayMenu(pickTab());openWeekEditor()}
 // Put a workout on a weekday. If that workout is already on another weekday, the two days trade places.
-function assignWeekday(wd,k){const cur=schedOf(wd);const from=k?[0,1,2,3,4,5,6].filter(i=>i!==wd&&plan.schedule[String(i)]===k):[];
+function assignWeekday(wd,k){if(k)k=dayKeyOrder(k);const cur=schedOf(wd);const from=k?[0,1,2,3,4,5,6].filter(i=>i!==wd&&plan.schedule[String(i)]===k):[];
   if(k)plan.schedule[String(wd)]=k;else delete plan.schedule[String(wd)];
   let msg=`${WD_LONG[wd]}: ${k?DAYS[k].title:"rest day"}`;
   if(k&&from.length&&cur!==k){from.forEach(i=>{if(cur)plan.schedule[String(i)]=cur;else delete plan.schedule[String(i)]});
@@ -1794,6 +1821,8 @@ function welcomeView(){
 }
 function render(){
   try{altSync()}catch(e){console.warn(e)}
+  try{if(!state.loading&&!state.needsStart)abEnsureTwins()}catch(e){console.warn(e)}
+  try{const t=state.tab;if(t&&DAYS[t]){if(abWeek()==="B"){const tw=abTwinOf(t);if(tw&&DAYS[tw])state.tab=tw}else if(abIsTwin(t)){const d=plan.days.find(x=>x.key===t);if(d&&DAYS[d.twinOf])state.tab=d.twinOf}}}catch(e){}
   if(state.loading){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=`<p class="boot">Loading your plan…</p>`;return}
   if(state.onb){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=smView();bindSmart();return}
   if(state.needsStart){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=welcomeView();
