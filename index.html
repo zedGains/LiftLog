@@ -848,6 +848,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 .tabs nav{max-width:560px;margin:0 auto;display:flex;height:var(--tabh);overflow-x:auto;scrollbar-width:none}
 .tabs nav::-webkit-scrollbar{display:none}
+.kbopen .tabs{visibility:hidden}
 .tab{flex:1 0 66px;all:unset;flex:1 0 66px;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;align-content:center;gap:3px;text-align:center;position:relative;min-width:0}
 .tab:focus-visible{outline:2px solid var(--fg);outline-offset:-4px}
 .tab .k{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;line-height:1}
@@ -2346,8 +2347,19 @@ function showKcalHow(){
   $("#bwupd",sh).onclick=goAbout;
 }
 
-function closeSheet(){if(state.open==="__add")state.pendingSuper=null;$("#sheet").hidden=true;$("#scrim").hidden=true;state.open=null}
+function closeSheet(){if(state.open==="__add")state.pendingSuper=null;$("#sheet").hidden=true;$("#scrim").hidden=true;state.open=null;try{const a=document.activeElement;if(a&&a.blur&&$("#sheet").contains(a))a.blur();setTimeout(()=>window.__llViewFix&&window.__llViewFix(),80)}catch(e){}}
 $("#scrim").onclick=closeSheet;
+// iPhone: after the keyboard closes, fixed bars can stay drawn mid-screen until the page scrolls. Hide the tab bar while typing and snap it back after.
+(function(){const vv=window.visualViewport,root=document.documentElement;
+  const typing=()=>{const a=document.activeElement;return !!(a&&a.matches&&a.matches("input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select"))};
+  const fix=()=>{const kb=vv?(window.innerHeight-vv.height>120):false;root.classList.toggle("kbopen",kb||(typing()&&!!vv&&window.innerHeight-vv.height>60));
+    if(!kb){const t=document.querySelector(".tabs");if(t){t.style.transform="translateZ(0)";requestAnimationFrame(()=>{t.style.transform=""})}}};
+  if(vv){vv.addEventListener("resize",fix);vv.addEventListener("scroll",fix)}
+  document.addEventListener("focusout",()=>setTimeout(()=>{if(!typing()){if(vv&&vv.offsetTop>0)window.scrollTo(window.scrollX,window.scrollY);fix()}},80));
+  document.addEventListener("focusin",()=>setTimeout(fix,250));
+  window.addEventListener("orientationchange",()=>setTimeout(fix,350));
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)setTimeout(fix,60)});
+  window.__llViewFix=fix})();
 /* every sheet gets an X in the top corner that stays put while you scroll, and you can swipe it down to close */
 (function(){const sh=$("#sheet");
   const shut=()=>{const c=sh.querySelector("#closesheet,#declose,#pvclose,#ucancel,#wkcancel");if(c){c.click();return}closeSheet();render()};
