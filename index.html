@@ -1177,6 +1177,10 @@ function extraItem(dayKey,x){
 function applyPick(it,exId,sets,reps,drop,rs){
   if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,...(rs&&rs.length?{rs}:{}),drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
   if(it.addMode){const sid=Date.now().toString(36);(plan.extra[it.dayKey]=plan.extra[it.dayKey]||[]).push({sid,ex:exId,sets,reps,drop});
+    // hypertrophy and strength days are separate: a new exercise goes on both (the strength one gets strength sets/reps)
+    try{const tw=plan.days.find(d=>d.key===it.dayKey&&d.abB);const other=tw?tw.twinOf:abTwinOf(it.dayKey);
+      if(other&&DAYS[other]&&other!==it.dayKey){let x={sid:sid+"b",ex:exId,sets,reps,drop};if(!tw){const L=libById(exId);const y=abStrength({name:L?L.name:"",type:L&&L.type||"lift",sets,reps,drop,g:L&&L.g});x={...x,sets:y.sets,reps:y.reps,drop:y.abB?false:drop}}
+        (plan.extra[other]=plan.extra[other]||[]).push(x)}}catch(e){console.warn(e)}
     const ps=state.pendingSuper; if(ps&&ps.day===it.dayKey){state.pendingSuper=null;setSuper(it.dayKey,ps.slot,it.dayKey+":+"+sid)}}
   else if(it.extra){const x=(plan.extra[it.dayKey]||[]).find(y=>y.sid===it.extra);if(x)Object.assign(x,{ex:exId,sets,reps,drop})}
   else plan.slots[it.slot]={ex:exId,sets,reps,drop};
@@ -1381,6 +1385,7 @@ function isPending(id){
 function phFor(it,d,i,last,poPl){const isC=it.type==="cardio";const ls0=last&&last.sets&&last.sets.length?last.sets:null;const L=ls0?(ls0[i]||ls0[ls0.length-1]):null;
   let w=L&&L.w!=null&&L.w!==""&&Number(L.w)>0?L.w:null,r=L&&L.r!=null&&L.r!==""?L.r:null,real=!!(w!=null||r!=null);
   if(poPl&&d.po&&d.po.on&&poPl.reps&&poPl.reps[i])r=poPl.reps[i];
+  if(poPl&&d.po&&d.po.on&&poPl.w&&poPl.w[i])w=Math.round(poPl.w[i]*10000)/10000;
   let wReal=w!=null;
   for(let j=i-1;j>=0&&!wReal;j--){const x=d.sets[j];if(x&&x.w!==""&&x.w!=null){w=x.w;wReal=true;break}}
   let rReal=r!=null&&real;
@@ -1491,7 +1496,7 @@ function hintFor(it){
   // same rule as progressive overload: every set reached the top of the range
   if(ss.length>=Math.min(nSets(it,{sets:last.sets||[]})||1,(last.sets||[]).length)&&ss.every(x=>x.r>=it.reps[1])&&ss.every(x=>(x.w||0)>=(s.w||0))){
     const small=/curl|raise|fly|flies|sway|extension|pushdown|pull downs|skull/i.test(it.name);const step=isKg()?(small?2.5:5):(small?5:10);
-    return s.w?`Hit ${s.r} reps at ${toDisp(s.w)} ${wU()} last time. Try ${Math.round((toDisp(s.w)+step)*10)/10} ${wU()}.`:`Hit ${s.r} reps last time. Add weight or reps.`;
+    return s.w?`Hit ${s.r} reps at ${toDisp(s.w)} ${wU()} last time. Try ${isKg()?Math.round((toDisp(s.w)+step)/2.5)*2.5:Math.round((toDisp(s.w)+step)*10)/10} ${wU()}.`:`Hit ${s.r} reps last time. Add weight or reps.`;
   }
   return "";
 }
@@ -1526,9 +1531,10 @@ function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0)
   const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
   return ss.every((s,i)=>tg[i]==null||!s.w||s.r>=tg[i])}
 function poHist(it){const fr=freshSet().has(it.id),wk=wkType();return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&(!wk||(e.wk||"A")===wk)&&poSets(e).some(s=>s.w>0&&s.r>0))}
-function poPlan(it){
+function poPlan(it){const r=poPlan0(it);if(r&&isKg()&&Array.isArray(r.w))r.w=r.w.map(x=>x?rPlate(x):x);return r}
+function poPlan0(it){
   if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];
-  if(!last&&abWeek()==="B"&&it.abB){const prev=entriesOf(it.id).filter(e=>e.done&&!e.alt&&(e.wk||"A")==="A"&&poSets(e).some(s=>s.w>0)).slice(-1)[0];if(!prev)return null;
+  if(!last&&wkType()==="B"){const prev=entriesOf(it.id).filter(e=>e.done&&!e.alt&&(e.wk||"A")==="A"&&poSets(e).some(s=>s.w>0)).slice(-1)[0];if(!prev)return null;
     const top=Math.max(...poSets(prev).map(s=>s.w)),mul=it.abT<=2?1.12:it.abT<=3?1.08:1.03,w0=Math.max(minPlate(),rPlate(top*mul));
     return {kind:"first",w:Array(it.sets).fill(w0),reps:Array(it.sets).fill(it.reps[0]),tg:null,last:prev,inc:0,miss:0,shape:"straight",why:""}}
   if(!last)return null;
@@ -1553,7 +1559,7 @@ function poPlan(it){
 function poW(pl){const ws=pl.w.filter(Boolean);if(!ws.length)return "";return (ws.every(w=>Math.abs(w-ws[0])<0.01)?toDisp(ws[0]):ws.map(w=>toDisp(w)).join(" · "))+" "+wU()}
 function poIncTxt(v){return `${Math.round(toDisp(v)*100)/100} ${wU()}`}
 function poFill(it,d,pl){const n=nSets(it,d);while(d.sets.length<n)d.sets.push({w:"",r:""});
-  for(let i=0;i<n&&i<pl.w.length;i++){if(pl.w[i])d.sets[i].w=String(Math.round(pl.w[i]*10000)/10000)}
+  for(let i=0;i<n&&i<pl.w.length;i++){if(pl.w[i]){d.sets[i].w=String(Math.round(pl.w[i]*10000)/10000)}}
   d.autoIdx=[];d.po={k:pl.kind,on:true,tg:pl.tg}}
 function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&&i<ss.length;i++){if(ss[i].w)d.sets[i].w=String(ss[i].w)}d.autoIdx=[];d.po={k:pl.kind,on:false,tg:null}}
 // prescribed numbers for a fresh draft (Automatic fills them in; Suggest waits for a tap)
@@ -1590,7 +1596,7 @@ function poBox(it,d){
 function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";const pl=poPlan(it);if(!pl)return "";
   const auto=poCfg().mode==="auto",r=pl.reps.filter(Boolean);
   const rt=r.length&&r.every(x=>x===r[0])?` × ${r[0]}`:r.length?` × ${r.join("-")}`:"";
-  return `<span class="poline ${pl.kind==="first"?"up":pl.kind}">${pl.kind==="up"||pl.kind==="first"?"↑ ":pl.kind==="down"?"↓ ":"= "}${auto?"This week":"Next"}: ${esc(poW(pl))}${rt}</span>`}
+  return `<span class="poline ${pl.kind==="first"?"up":pl.kind}">${pl.kind==="up"||pl.kind==="first"?"↑ ":pl.kind==="down"?"↓ ":"= "}This week: ${esc(poW(pl))}${rt}</span>`}
 
 /* ---------- render ---------- */
 const WD_LONG=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -2148,7 +2154,7 @@ function openSheet(id,keepScroll){
        <label class="tick small"><input type="checkbox" id="dropauto" ${dropAuto?"checked":""}> Auto-fill drop weights</label></div>`:""}
      <a class="form" href="${yt(d.alt||it.name)}" target="_blank" rel="noopener">▶ Watch form on YouTube</a></div></div>`
    :`<p class="coach" style="margin-block:8px 4px">${esc(it.note)}</p>`}
-  ${poBox(it,d)}
+  ${d.alt?"":poBox(it,d)}
   <div class="lbl"><span>${isCardio?"Log time":"Log your sets"}</span>${last?` · <span>Last time</span> <span>${fmtDate(last.date)}</span>${setsText(last.sets,it.type)?`: <bdi dir="ltr">${esc(setsText(last.sets,it.type))}</bdi>`:""}`:""}</div>
   <div class="sets">${rows}</div>
   ${isCardio?"":`<div class="setctl"><button class="btn small" id="rmset" ${N<=1?"disabled":""} aria-label="Remove set ${N}">− Remove set</button><span class="setcount">${N} set${N===1?"":"s"}</span><button class="btn small" id="addset" ${N>=12?"disabled":""}>+ Add set</button></div>
@@ -2191,6 +2197,7 @@ function openSheet(id,keepScroll){
     if(!d.marked&&filled>=NN){d.marked=true;d.autoMark=true;const mb=$("#markbtn",sh);if(mb){mb.textContent="✓ Marked done";mb.className="btn okd"}}
     else if(!d.marked){const mb=$("#markbtn",sh);if(mb)mb.textContent=filled?`Mark done · ${filled} of ${NN} sets`:"Mark done"}
     else if(raw===""&&d.marked&&d.autoMark&&filled<NN){d.marked=false;d.autoMark=false;const mb=$("#markbtn",sh);if(mb){mb.textContent=filled?`Mark done · ${filled} of ${NN} sets`:"Mark done";mb.className="btn primary"}}
+    if(inp.dataset.f==="w"&&!isCardio&&raw!==""){const lb=fromDisp(raw),lw=Math.max(0,...entriesOf(it.id).flatMap(e=>(e.sets||[]).map(x=>Number(x.w)||0)));if(lb>1200||(lw>0&&lb>lw*3+100)){clearTimeout(window.__bigW);window.__bigW=setTimeout(()=>toast(`${raw} ${wU()} looks heavy. Double-check that number.`,4000),700)}}
     saveDrafts(); clearTimeout(window.__rr); window.__rr=setTimeout(render,400);
     if(it.drop&&inp.dataset.f==="w"){
       if(dropAuto){
@@ -2589,7 +2596,7 @@ function planView(){
    ${weightPanel()}
    <div class="panel"><h2 class="hhead">History <button class="btn small" id="shareweek">Share my week</button></h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
-    ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
+    ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0||state.histEdit===dnKey(x.date,x.day)?"open":""}>
       <summary><span class="sd" style="background:var(${DAYS[x.day]?DAYS[x.day].color:"--green"})"></span>
         <span class="sm"><b>${fmtDate(x.date)}</b>${(()=>{const t=(x.items.find(({e})=>e.wk)||{}).e;return t&&t.wk?` <span class="wtag ${t.wk}">${esc(wkShort(t.wk))}</span>`:""})()} · ${esc(DAYS[x.day]?DAYS[x.day].label+" "+DAYS[x.day].title:(x.items[0]&&x.items[0].e.dl?x.items[0].e.dl+" "+(x.items[0].e.dt||""):"Workout"))}<br><small>${x.items.length} exercise${x.items.length===1?"":"s"}${x.kcal?` · ~${x.kcal} kcal`:""} · logged ${fmtStamp(x.loggedAt)}${x.updatedAt-x.loggedAt>60000?` · edited ${fmtStamp(x.updatedAt)}`:""}</small></span></summary>
       ${histNotes(x)}
@@ -2616,7 +2623,7 @@ function histNotes(x){const k=dnKey(x.date,x.day),dn=dnGet(x.date,x.day);
     <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(e.note)}</span></span>`:""}</div>`).join("")}</div>
     <button class="linkbtn hnbtn" data-hnedit="${esc(k)}">Edit workout or notes</button>`}
 function bindHistNotes(){
-  document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y)});
+  document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y);const ed=document.querySelector(".hnedit");if(ed)ed.scrollIntoView({block:"nearest"})});
   document.querySelectorAll("[data-htag]").forEach(b=>b.onclick=()=>{b.classList.toggle("on");b.setAttribute("aria-pressed",b.classList.contains("on"))});
   const c=$("#hncancel");if(c)c.onclick=()=>{state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y)};
   const sv=$("#hnsave");if(sv)sv.onclick=()=>{const k=sv.dataset.hk;const x=sessions().find(s=>dnKey(s.date,s.day)===k);if(!x)return;
