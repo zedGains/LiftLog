@@ -849,6 +849,18 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .tabs nav{max-width:560px;margin:0 auto;display:flex;height:var(--tabh);overflow-x:auto;scrollbar-width:none}
 .tabs nav::-webkit-scrollbar{display:none}
 .kbopen .tabs{visibility:hidden}
+.dncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 13px 10px;margin:0 0 12px}
+.dnlbl{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.dnlbl small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none;margin-left:4px}
+.dncard textarea,.hnedit textarea,.tnote textarea{width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:15px/1.4 var(--body);padding:9px 11px;resize:none;min-height:42px}
+.dntags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}.dntag{min-height:36px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--fg);font:600 13.5px var(--body);padding:6px 12px;cursor:pointer}
+.dntag.on{background:var(--green);border-color:var(--green);color:var(--on-accent,#fff)}
+.dnsave{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.tnote{margin:12px 0 4px}.tnote label{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.tnote label small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none}
+.lnote{display:flex;gap:6px;font-size:13.5px;color:var(--orange);margin-top:4px;line-height:1.35;text-align:start}
+.hdnote{background:color-mix(in srgb,var(--orange) 9%,transparent);border:1px solid color-mix(in srgb,var(--orange) 38%,var(--line));border-radius:12px;padding:8px 11px;margin:8px 0;font-size:14px;line-height:1.4}
+.hdnote small{display:block;font:800 11.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:2px}.hdnote span{white-space:pre-wrap}
+.history .hnote{flex-basis:100%;font-size:13px;color:var(--orange);margin-top:2px}.hnbtn{margin:6px 0 2px;padding:8px 0;min-height:36px}
+.history>div{flex-wrap:wrap}.hnedit{margin:8px 0}.hnedit .dnlbl{margin-top:10px}
 .tab{flex:1 0 66px;all:unset;flex:1 0 66px;box-sizing:border-box;cursor:pointer;display:grid;place-items:center;align-content:center;gap:3px;text-align:center;position:relative;min-width:0}
 .tab:focus-visible{outline:2px solid var(--fg);outline-offset:-4px}
 .tab .k{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.06em;text-transform:uppercase;line-height:1}
@@ -1013,7 +1025,7 @@ const LIB=[]; Object.keys(LIB_RAW).forEach(g=>LIB_RAW[g].forEach(([name,eq,p,s2]
   type:g==="Cardio"?"cardio":eq==="Bodyweight"?"bw":"lift",p:p||G2M[g],s:s2||[]})));
 
 /* ---------- your plan changes (swaps + custom exercises) ---------- */
-function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null,ab:v.ab||null,abTwin:v.abTwin||null}}
+function normPlan(v){v=v||{};return {rev:v.rev||0,slots:v.slots||{},customs:v.customs||[],days:v.days||[],extra:v.extra||{},schedule:v.schedule||{},template:v.template||null,units:v.units||null,bw:v.bw||null,profile:v.profile||{},hidden:v.hidden||{},myPrograms:v.myPrograms||[],activeProgram:v.activeProgram||null,order:v.order||{},tourDone:!!v.tourDone,notify:v.notify||{},exNotes:v.exNotes||{},altsMine:v.altsMine||{},skips:v.skips||{},goal:v.goal||null,badgeSeen:v.badgeSeen||null,refActive:v.refActive||0,lvlSeen:v.lvlSeen||1,fresh:v.fresh||null,holidaySeen:v.holidaySeen||{},supers:v.supers||{},weighins:v.weighins||[],sets:v.sets||{},dayOrder:v.dayOrder||[],partners:v.partners||[],ptrack:v.ptrack||{},po:v.po||null,poOwn:!!v.poOwn,setup:v.setup||null,ab:v.ab||null,abTwin:v.abTwin||null,dayNotes:v.dayNotes||{}}}
 let plan=normPlan(ls.get("ll.plan",null));
 const DAY_COLORS=[["--green","Green"],["--purple","Purple"],["--orange","Orange"],["--slate","Slate"],["--red","Red"],["--blue","Blue"],["--yellow","Yellow"]];
 function syncDays(){Object.keys(DAYS).forEach(k=>{if(!BUILTIN.includes(k))delete DAYS[k]});plan.days.forEach(d=>{DAYS[d.key]={key:d.key,label:d.label,title:d.title,baseTitle:d.title,short:d.title,color:d.color,custom:true,prog:!!d.prog,note:d.note||"",sections:[]}});
@@ -1285,7 +1297,7 @@ function lastEntry(id,type){const fr=freshSet().has(id);const es=entriesOf(id).f
 function draftFor(it){
   if(!state.drafts[it.id]){
     const t=shownToday(it.id);
-    state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??""})),alt:t.alt||null,marked:true,partners:JSON.parse(JSON.stringify(t.partners||{}))}:{sets:Array.from({length:it.sets},()=>({w:"",r:""})),alt:null,marked:false};
+    state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??""})),alt:t.alt||null,marked:true,...(t.note?{tnote:t.note}:{}),partners:JSON.parse(JSON.stringify(t.partners||{}))}:{sets:Array.from({length:it.sets},()=>({w:"",r:""})),alt:null,marked:false};
     if(!t&&it.type==="lift"){try{poStart(it,state.drafts[it.id])}catch(e){console.warn(e)}}
   }
   const d=state.drafts[it.id];
@@ -1364,7 +1376,8 @@ function logItem(it,d,DATE,dayKey){
     const sets=more?[...(prev.sets||[]),...cleanSets(dSets(it,d))]:cleanSets(dSets(it,d));
     const pp=more?{...cleanP(prev.partners),...cleanP(d.partners)}:cleanP(d.partners);
     const kc=exKcal(it,sets);
-    if(d.marked) es.push({date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||(more?prev.alt:null)||null,sets,...(Object.keys(pp).length?{partners:pp}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
+    const tn=String(d.tnote||"").trim().slice(0,400),note=more&&prev.note?(tn&&tn!==prev.note?prev.note+" · "+tn:prev.note):tn;
+    if(d.marked) es.push({...(note?{note}:{}),date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||(more?prev.alt:null)||null,sets,...(Object.keys(pp).length?{partners:pp}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
     if(d.marked&&d.po&&d.po.on&&Array.isArray(d.po.tg)&&!d.alt){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.tg=more&&prev.tg?prev.tg:d.po.tg}
     if(d.marked&&wkType(DATE)){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.wk=wkType(DATE)}
     es.sort((a,b)=>a.date<b.date?-1:1);
@@ -1374,6 +1387,27 @@ function logItem(it,d,DATE,dayKey){
 // a second tap right after a screen changes lands on whatever is under the finger now; ignore it
 let tapBlock=0,tapSel=null;function blockTaps(ms,sel){tapBlock=Date.now()+(ms||450);tapSel=sel||null}
 document.addEventListener("click",e=>{if(Date.now()<tapBlock&&(!tapSel||(e.target.closest&&e.target.closest(tapSel)))){e.stopPropagation();e.preventDefault()}},true);
+/* ---------- workout notes: one per day's workout, plus a note per exercise for that day ---------- */
+const DN_TAGS=["Low sleep","Felt strong","Sore","Short on time","Gym busy","Light day"];
+function dnKey(date,day){return date+"|"+day}
+function dnGet(date,day){return (plan.dayNotes||{})[dnKey(date,day)]||null}
+let dnT=null;function dnSet(date,day,o){plan.dayNotes=plan.dayNotes||{};const k=dnKey(date,day);const t=String(o.t||"").slice(0,800),tags=(o.tags||[]).filter(x=>DN_TAGS.includes(x));
+  if(!t.trim()&&!tags.length)delete plan.dayNotes[k];else plan.dayNotes[k]={t,tags,at:Date.now()};clearTimeout(dnT);dnT=setTimeout(savePlan,700)}
+function dnCard(day){const date=logDate();const n=dnGet(date,day)||{t:"",tags:[]};const past=date!==TODAY;
+  return `<div class="dncard"><label class="dnlbl" for="dntxt">${past?`Notes for ${fmtDate(date)}`:"Today's notes"}</label>
+    <textarea id="dntxt" rows="${n.t?Math.min(5,Math.max(2,Math.ceil(n.t.length/34))):1}" maxlength="800" placeholder="Goal for today, how it went, why the weight changed…">${esc(n.t)}</textarea>
+    <div class="dntags" role="group" aria-label="Quick tags">${DN_TAGS.map(x=>`<button type="button" class="dntag ${n.tags.includes(x)?"on":""}" data-dntag="${x}" aria-pressed="${n.tags.includes(x)}">${x}</button>`).join("")}</div>
+    <p class="dnsave" id="dnsaved">${n.at?"Saved":"Saves by itself. Edit it later from History."}</p></div>`}
+function bindDn(day){const ta=$("#dntxt");if(!ta)return;const date=logDate();const cur=()=>dnGet(date,day)||{t:"",tags:[]};
+  const grow=()=>{ta.style.height="auto";ta.style.height=Math.min(ta.scrollHeight+2,180)+"px"};if(ta.value)grow();
+  ta.oninput=()=>{grow();dnSet(date,day,{...cur(),t:ta.value});const sv=$("#dnsaved");if(sv)sv.textContent="Saved"};
+  document.querySelectorAll("[data-dntag]").forEach(b=>b.onclick=()=>{const c=cur(),x=b.dataset.dntag;const tags=c.tags.includes(x)?c.tags.filter(y=>y!==x):[...c.tags,x];
+    dnSet(date,day,{t:ta.value,tags});b.classList.toggle("on",tags.includes(x));b.setAttribute("aria-pressed",tags.includes(x));const sv=$("#dnsaved");if(sv)sv.textContent="Saved"})}
+function exNoteBox(it,d){return `<div class="tnote"><label for="tnote">Note for today <small>(this workout only)</small></label>
+  <textarea id="tnote" rows="${d.tnote?2:1}" maxlength="400" placeholder="e.g. Went lighter, shoulder felt off">${esc(d.tnote||"")}</textarea></div>`}
+function bindExNote(sh,it,d){const ta=$("#tnote",sh);if(!ta)return;
+  ta.oninput=()=>{ta.style.height="auto";ta.style.height=Math.min(ta.scrollHeight+2,140)+"px";d.tnote=ta.value;saveDrafts();
+    const t=shownToday(it.id);if(t&&!isPending(it.id)){const v=ta.value.trim().slice(0,400);if(v)t.note=v;else delete t.note;t.ts=t.ts||Date.now();persist(it.id)}}}
 function saveDay(dayKey){
   const DATE=logDate(), past=DATE!==TODAY;
   const all=daySections(dayKey).flatMap(s=>s.items);
@@ -1927,6 +1961,7 @@ function render(){
   ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
     return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)} <button class="infob" id="leftinfo" aria-label="How unsaved workouts work" title="You can save a missed day any time before the week ends. At 12:00 AM Monday, unsaved marks expire.">i</button></b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save. Save by Sunday night.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
+  ${restDay?"":dnCard(tab)}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
     if(done||items.some(it=>todayEntry(it.id))) return "";
     if(sk&&DAYS[sk]) return `<div class="skipban"><span>😴 <b>Rest today</b> · ${esc(DAYS[sk].title)} back next ${wdName}</span><button class="linkbtn" id="unskip">Undo</button></div>`;
@@ -1964,6 +1999,7 @@ function render(){
   document.querySelectorAll("[data-abinfo]").forEach(b=>b.onclick=()=>toast(b.title,10000));
   const lsv=$("#leftsave"); if(lsv) lsv.onclick=()=>saveLeft(lsv.dataset.lday);
   const lin=$("#leftinfo"); if(lin) lin.onclick=()=>toast(lin.title);
+  try{bindDn(tab)}catch(e){console.warn(e)}
   const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
     showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})};
   const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
@@ -2010,6 +2046,7 @@ function card(it){
      <span class="meta"><span class="tag">${esc(it.target)}</span><span class="rx">${rxText(it)}</span>${it.drop?'<span class="tag ghost">Drop sets</span>':""}${status}</span>
      ${cur.length?`<span class="last today">Today: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
      <span class="last">${lastTxt}</span>
+     ${(()=>{const ln=(wt&&it.type!=="cardio"?lastEntry(it.id,wt):last)||last;return ln&&ln.note?`<span class="lnote"><span aria-hidden="true">📝</span> <span>${esc(ln.note)}</span></span>`:""})()}
      ${vsLine(it)}
      ${poOn(it)?poLine(it):h&&!m?`<span class="hint">${esc(h)}</span>`:""}
    </button>
@@ -2076,6 +2113,7 @@ function openSheet(id,keepScroll){
     ${last&&!isCardio?`<button class="btn small" id="copylast">Copy last time</button>`:""}
     <button class="btn small" id="startrest">Start rest timer (${fmtT(timer.preset)})</button>
   </div>
+  ${exNoteBox(it,d)}
   <div class="btns">
     ${m?`<button class="btn okd" id="markbtn">✓ Marked done</button><button class="btn" id="unmark">Unmark</button>`:`<button class="btn primary" id="markbtn">Mark done</button>`}
   </div>
@@ -2142,7 +2180,7 @@ function openSheet(id,keepScroll){
   sh.querySelectorAll("[data-sdp]").forEach(b=>b.onclick=()=>{setDropPct(b.dataset.sdp);refillDrops(it,d);saveDrafts();openSheet(id,true);render()});
   const da=$("#dropauto",sh); if(da) da.onchange=()=>{dropAuto=da.checked;ls.set("ll.dropAuto",dropAuto);if(dropAuto)refillDrops(it,d);else d.autoIdx=[];saveDrafts();openSheet(id,true);render()};
   $("#browse",sh).onclick=()=>openPicker(it);
-  bindNote(sh,it);
+  bindNote(sh,it);bindExNote(sh,it,d);
   const ea=$("#editalts",sh); if(ea) ea.onclick=()=>openMyAlts(it);
   const mk=$("#mkss",sh); if(mk) mk.onclick=()=>openSuperPick(it);
   const sp=$("#splitss",sh); if(sp) sp.onclick=()=>withUndo("Superset split",()=>{splitSuper(it.dayKey,it.slot);savePlan();closeSheet();render()});
@@ -2471,7 +2509,7 @@ function planView(){
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0?"open":""}>
       <summary><span class="sd" style="background:var(${DAYS[x.day]?DAYS[x.day].color:"--green"})"></span>
         <span class="sm"><b>${fmtDate(x.date)}</b>${(()=>{const t=(x.items.find(({e})=>e.wk)||{}).e;return t&&t.wk?` <span class="wtag ${t.wk}">${esc(wkShort(t.wk))}</span>`:""})()} · ${esc(DAYS[x.day]?DAYS[x.day].label+" "+DAYS[x.day].title:(x.items[0]&&x.items[0].e.dl?x.items[0].e.dl+" "+(x.items[0].e.dt||""):"Workout"))}<br><small>${x.items.length} exercise${x.items.length===1?"":"s"}${x.kcal?` · ~${x.kcal} kcal`:""} · logged ${fmtStamp(x.loggedAt)}${x.updatedAt-x.loggedAt>60000?` · edited ${fmtStamp(x.updatedAt)}`:""}</small></span></summary>
-      <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span></div>`).join("")}</div>
+      ${histNotes(x)}
     </details>`).join("")}</div>`:`<p>No saved workouts yet. Finish a day and tap <b>Save</b> at the bottom, and it shows up here with the date and time you logged it.</p>`}
     <div class="btns"><button class="btn primary" id="exportcsv" ${ss.length?"":"disabled"}>Download all logs (CSV)</button></div>
     <p class="savenote">Opens in Excel or Google Sheets: one row per set, with the workout date, day, exercise, weight, reps and the time you logged it.</p></div>
@@ -2483,6 +2521,25 @@ function planView(){
    ${partnerPanel()}
    ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
+function histNotes(x){const k=dnKey(x.date,x.day),dn=dnGet(x.date,x.day);
+  if(state.histEdit===k) return `<div class="hnedit"><label class="dnlbl" for="hdn">Day note</label><textarea id="hdn" rows="3" maxlength="800" placeholder="Goal, how it went…">${esc(dn?dn.t:"")}</textarea>
+    <div class="dntags" role="group" aria-label="Quick tags">${DN_TAGS.map(t=>`<button type="button" class="dntag ${dn&&dn.tags.includes(t)?"on":""}" data-htag="${t}" aria-pressed="${!!(dn&&dn.tags.includes(t))}">${t}</button>`).join("")}</div>
+    ${x.items.map(({it,e},i)=>`<label class="dnlbl" for="hn${i}">${esc(it.name)} <small>${esc(setsText(e.sets,it.type))||"done"}</small></label><textarea id="hn${i}" data-hn="${i}" rows="1" maxlength="400" placeholder="Note for this exercise">${esc(e.note||"")}</textarea>`).join("")}
+    <div class="btns"><button class="btn primary small" id="hnsave" data-hk="${esc(k)}">Save notes</button><button class="btn small" id="hncancel">Cancel</button></div></div>`;
+  return `${dn&&(dn.t||dn.tags.length)?`<div class="hdnote"><small>Day note${dn.tags.length?` · ${dn.tags.map(esc).join(" · ")}`:""}</small>${dn.t?`<span>${esc(dn.t)}</span>`:""}</div>`:""}
+    <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> ${esc(e.note)}</span>`:""}</div>`).join("")}</div>
+    <button class="linkbtn hnbtn" data-hnedit="${esc(k)}">${dn||x.items.some(({e})=>e.note)?"Edit notes":"+ Add notes"}</button>`}
+function bindHistNotes(){
+  document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y);const t=$("#hdn");if(t)t.focus()});
+  document.querySelectorAll("[data-htag]").forEach(b=>b.onclick=()=>{b.classList.toggle("on");b.setAttribute("aria-pressed",b.classList.contains("on"))});
+  const c=$("#hncancel");if(c)c.onclick=()=>{state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y)};
+  const sv=$("#hnsave");if(sv)sv.onclick=()=>{const k=sv.dataset.hk;const x=sessions().find(s=>dnKey(s.date,s.day)===k);if(!x)return;
+    dnSet(x.date,x.day,{t:$("#hdn").value,tags:[...document.querySelectorAll("[data-htag].on")].map(b=>b.dataset.htag)});
+    document.querySelectorAll("[data-hn]").forEach(ta=>{const r=x.items[+ta.dataset.hn];if(!r)return;const v=ta.value.trim().slice(0,400);
+      const e=(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z===r.e)||(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z.date===r.e.date&&z.day===r.e.day);
+      if(!e||(e.note||"")===v)return;if(v)e.note=v;else delete e.note;persist(r.it.id)});
+    state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y);toast("Notes saved")};
+}
 /* ---------- settings as dropdowns: one section open at a time ---------- */
 const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["Training",["popref","wpref"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
 const SET_IC={about:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',acctp:'<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',avpanel:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/>',tprofp:'<path d="M6 4v16M18 4v16M3 8v8M21 8v8M6 12h12"/>',
@@ -2579,11 +2636,11 @@ function sessions(){
 }
 function buildCSV(){
   const q=(v)=>{v=v==null?"":String(v);return /[",\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
-  const rows=[["workout_date","day","day_name","section","exercise","done_as","set",`weight_${wU()}`,"reps","minutes","est_kcal_exercise","logged_at","last_edited"]];
+  const rows=[["workout_date","day","day_name","section","exercise","done_as","set",`weight_${wU()}`,"reps","minutes","est_kcal_exercise","logged_at","last_edited","exercise_note","day_note"]];
   sessions().slice().reverse().forEach(s=>s.items.forEach(({it,e})=>{
     const sets=e.sets&&e.sets.length?e.sets:[{w:null,r:null}];
     sets.forEach((st,i)=>rows.push([s.date,DAYS[s.day]?DAYS[s.day].label:(e.dl||""),DAYS[s.day]?DAYS[s.day].title:(e.dt||""),it.sec,it.name,e.alt||"",i+1,
-      it.type==="cardio"?"":toDisp(st.w),it.type==="cardio"?"":st.r,it.type==="cardio"?st.w:"",i===0&&e.kcal!=null?e.kcal:"",isoLocal(e.loggedAt||e.ts),isoLocal(e.ts)]));
+      it.type==="cardio"?"":toDisp(st.w),it.type==="cardio"?"":st.r,it.type==="cardio"?st.w:"",i===0&&e.kcal!=null?e.kcal:"",isoLocal(e.loggedAt||e.ts),isoLocal(e.ts),i===0?(e.note||""):"",i===0?(()=>{const n=dnGet(s.date,s.day);return n?[n.tags.join(", "),n.t].filter(Boolean).join(" · "):""})():""]));
   }));
   return rows.map(r=>r.map(q).join(",")).join("\n");
 }
@@ -2594,7 +2651,7 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindSkins();const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
+function bindPlan(){bindSkins();bindHistNotes();const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
   const cs2=$("#closesettings");if(cs2)cs2.onclick=()=>{state.settings=false;render();window.scrollTo(0,0)};const os=$("#ownerstats");if(os)os.onclick=()=>openStats("owner");const so=$("#signout");if(so)so.onclick=()=>{if(!window.LIFTLOG_ACCOUNT)return;so.disabled=true;so.textContent="Signing out…";window.LIFTLOG_ACCOUNT.signOut()};
