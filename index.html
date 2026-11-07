@@ -108,7 +108,7 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .moveday{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
 .moveday span{font-family:var(--mono);font-weight:700;margin-right:auto}
 .moveday .btn{padding:6px 10px;font-size:12.5px}
-.pbox{border:2px solid var(--accent);border-radius:12px;padding:12px;display:grid;gap:10px;margin-top:16px}
+.pbox{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px;margin-top:16px}
 .pbh{display:flex;justify-content:space-between;align-items:baseline}
 .pbh b{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.06em}
 .ptrow{display:grid;grid-template-columns:1fr 92px 76px;gap:8px;align-items:center}
@@ -165,7 +165,7 @@ h1{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;margi
 .daypick{all:unset;cursor:pointer;display:grid;gap:2px;border-radius:8px}
 .daypick:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 .dph1{display:flex;align-items:center;gap:6px}.dph1 h1{margin:2px 0 0}
-h1,h2,h3,h4,.name,#sheet-title,.pn,.wct{overflow-wrap:anywhere;min-width:0}.dph1 h1{min-width:0}.dph1 svg{flex:none;margin-top:2px}
+h2,h3,h4,.name,#sheet-title,.pn,.wct{overflow-wrap:anywhere;min-width:0}h1{overflow-wrap:break-word;min-width:0}@media (max-width:300px){h1{font-size:26px!important}}.dph1 h1{min-width:0}.dph1 svg{flex:none;margin-top:2px}
 .mscrim{position:fixed;inset:0;background:rgba(10,12,15,.35);z-index:25}
 .dmenu{position:fixed;left:12px;right:12px;z-index:30;background:var(--surface);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.28);padding:6px;display:grid;max-width:536px;margin:0 auto;max-height:calc(100vh - 170px);overflow-y:auto}
 .dmi{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:12px 1fr auto;gap:12px;align-items:center;padding:11px 12px;border-radius:10px}
@@ -699,7 +699,7 @@ textarea{all:unset;width:100%;padding:10px 0;font-size:15px;line-height:1.4;whit
 .pobox.up{background:color-mix(in srgb,var(--green) 12%,var(--surface));border-color:color-mix(in srgb,var(--green) 35%,transparent)}.pobox.same{background:var(--warn-soft,#FFF3D6);border-color:color-mix(in srgb,var(--yellow) 45%,transparent)}
 .pobox .polast{font:12.5px var(--mono);color:var(--muted);margin-top:3px}.pobox .pobtns{margin-top:8px}.pobox .linkbtn{align-self:flex-start;margin-top:6px}
 .pohint{font-size:13px;color:var(--muted);margin:-2px 0 8px}
-.field.pofill{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}.field{position:relative}.poplus{position:absolute;top:50%;transform:translateY(-50%);right:34px;background:var(--green);color:#fff;font:700 10.5px var(--body);border-radius:6px;padding:1px 5px;z-index:1}.poplus.down{background:var(--slate)}.field .poplus{color:#fff!important;font:700 11px var(--body)!important;letter-spacing:0;text-transform:none;line-height:1.4}
+.field.pofill{border-color:color-mix(in srgb,var(--green) 55%,var(--line))}.field{position:relative}.poplus{position:absolute;top:50%;transform:translateY(-50%);right:34px;background:var(--green);color:var(--on-green,#fff);font:700 10.5px var(--body);border-radius:6px;padding:1px 5px;z-index:1}.poplus.down{background:var(--slate)}.field .poplus{color:#fff!important;font:700 11px var(--body)!important;letter-spacing:0;text-transform:none;line-height:1.4}
 .poline{display:block;font:13px var(--mono);margin-top:4px;color:var(--green)}.poline.same{color:var(--muted)}.poline.down{color:var(--slate)}
 .drow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .dcustom{width:96px}.dcustom input{font-size:14px;padding:6px 0}
@@ -793,7 +793,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .setrow .n{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .field{display:flex;align-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:0 10px;min-width:0}
 .field input{all:unset;width:100%;min-width:0;padding:11px 0;font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
-.field input::placeholder{color:var(--muted);opacity:.6;font-weight:500}
+.field input::placeholder,textarea::placeholder{color:var(--muted);opacity:1;font-weight:500;font-style:italic}
 .field span{font-size:12px;color:var(--muted);margin-left:4px}
 .drops{font-size:12px;color:var(--muted);grid-column:2 / -1;margin-top:-2px;font-family:var(--mono)}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
@@ -823,7 +823,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .timer.over .ring .t{color:var(--accent)}
 .flash{animation:flash .9s ease 3}
 @keyframes flash{50%{background:var(--accent)}}
-.pill{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:15;background:var(--green);color:#fff;border:0;border-radius:999px;padding:7px 12px;font-family:var(--mono);font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
+.pill{position:fixed;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:15;background:var(--green);color:var(--on-green,#fff);border:0;border-radius:999px;padding:7px 12px;font-family:var(--mono);font-weight:700;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.2);cursor:pointer}
 .pill.over{background:var(--red)}
 
 /* plan */
@@ -838,7 +838,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .weekpick{margin-top:10px}
 .dchip.wide{font-family:var(--body);font-weight:600}
 .week b{font-family:var(--display);font-size:14px;letter-spacing:.05em}
-.week .on1{background:var(--red);color:#fff}.week .on2{background:var(--blue);color:#fff}.week .on3{background:var(--yellow);color:var(--on-yellow)}
+.week .on1{background:var(--red);color:#fff}.week .on2{background:var(--blue);color:var(--on-blue,#fff)}.week .on3{background:var(--yellow);color:var(--on-yellow)}
 .week .today{outline:2px solid var(--fg);outline-offset:-2px}
 .calc{display:grid;grid-template-columns:minmax(84px,1.3fr) repeat(3,minmax(0,1fr));gap:8px;align-items:center;font-family:var(--mono);font-variant-numeric:tabular-nums}
 .calc .field{max-width:none}.calc output{min-width:0}
@@ -850,8 +850,8 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .tabs nav::-webkit-scrollbar{display:none}
 .kbopen .tabs{visibility:hidden}
 .insteadof{display:block;font:500 14px var(--body);letter-spacing:0;text-transform:none;color:var(--muted);margin-top:2px}
-.hnex{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}.hsets{display:grid;gap:6px;margin:0 0 6px}.hset{display:flex;align-items:center;gap:6px}.hset .hn{width:44px;font-size:13px;color:var(--muted)}
-.hset input{width:68px;min-height:40px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;color:var(--fg);font:600 15px var(--body);text-align:center}.hset .hu{font-size:12.5px;color:var(--muted)}.hset .hx2{color:var(--muted)}
+.hnex{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}.hsets{display:grid;gap:6px;margin:0 0 6px}.hset{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}.hset .hn{width:44px;font-size:13px;color:var(--muted)}
+.hnedit .btns{flex-wrap:wrap}.hset input{width:min(68px,19vw);min-width:46px;min-height:40px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;color:var(--fg);font:600 15px var(--body);text-align:center}.hset .hu{font-size:12.5px;color:var(--muted)}.hset .hx2{color:var(--muted)}
 /* bigger tap areas without changing the look */
 .infob{position:relative}.infob::after{content:"";position:absolute;inset:-12px}
 .linkbtn{position:relative}.linkbtn::after{content:"";position:absolute;inset:-12px -6px}
@@ -859,11 +859,12 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 /* Arabic: keep set and weight numbers left-to-right */
 [dir=rtl] .rx,[dir=rtl] .v,[dir=rtl] .last b,[dir=rtl] .poline,[dir=rtl] .hset,[dir=rtl] .setrow .field{unicode-bidi:isolate;direction:ltr}
 :lang(ar) h1,:lang(ar) h2,:lang(ar) h3,:lang(ar) h4,:lang(ar) .lbl,:lang(ar) .eyebrow,:lang(ar) .dnlbl,:lang(ar) .tag{letter-spacing:0!important}
+.field:focus-within{outline:2px solid var(--fg);outline-offset:2px}.pick:focus-visible,.dntag:focus-visible,.hset input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .dncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 13px 10px;margin:0 0 12px}
 .dnlbl{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.dnlbl small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none;margin-left:4px}
 .dncard textarea,.hnedit textarea,.tnote textarea{width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:15px/1.4 var(--body);padding:9px 11px;resize:none;min-height:42px}
 .dntags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}.dntag{min-height:36px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--fg);font:600 13.5px var(--body);padding:6px 12px;cursor:pointer}
-.dntag.on{background:var(--green);border-color:var(--green);color:var(--on-accent,#fff)}
+.dntag.on{background:var(--green);border-color:var(--green);color:var(--on-green,#fff)}
 .dnsave{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
 .tnote{margin:12px 0 4px}.tnote label{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.tnote label small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none}
 .lnote{display:flex;gap:6px;font-size:13.5px;color:var(--orange);margin-top:4px;line-height:1.35;text-align:start}
@@ -969,7 +970,7 @@ const ymd=(d=nowD())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate
 const TODAY=ymd();
 const fmtDate=(s)=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(LOC,{weekday:"short",month:"short",day:"numeric"})};
 const r5=(x)=>Math.round(x/5)*5;
-const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){if(!ls._warned){ls._warned=true;setTimeout(()=>{try{toast("This phone's storage is full or blocked, so changes may not be kept. Free up space or turn off private mode.",9000)}catch(_){}},50)}return false}}};
 const thaw=(v)=>v==null?v:JSON.parse(JSON.stringify(v));
 const yt=(q)=>"https://www.youtube.com/results?search_query="+encodeURIComponent(q+" proper form");
 const rxText=(it)=>{
@@ -1377,20 +1378,24 @@ function isPending(id){
   const it0=ALL[id]||{sets:d.sets.length};return JSON.stringify(cleanSets(dSets(it0,d)))!==JSON.stringify(t.sets||[])||(d.alt||null)!==(t.alt||null)||JSON.stringify(cleanP(d.partners))!==JSON.stringify(t.partners||{});
 }
 // what the grey hint in a box means: last time's numbers, this week's target, or the plan
-function phFor(it,d,i,last,poPl){const isC=it.type==="cardio";const L=last&&last.sets&&last.sets[i]?last.sets[i]:null;
-  let w=L&&L.w!=null&&L.w!==""?L.w:null,r=L&&L.r!=null&&L.r!==""?L.r:null;
+function phFor(it,d,i,last,poPl){const isC=it.type==="cardio";const ls0=last&&last.sets&&last.sets.length?last.sets:null;const L=ls0?(ls0[i]||ls0[ls0.length-1]):null;
+  let w=L&&L.w!=null&&L.w!==""&&Number(L.w)>0?L.w:null,r=L&&L.r!=null&&L.r!==""?L.r:null,real=!!(w!=null||r!=null);
   if(poPl&&d.po&&d.po.on&&poPl.reps&&poPl.reps[i])r=poPl.reps[i];
-  if(w==null){for(let j=i-1;j>=0;j--){const x=d.sets[j];if(x&&x.w!==""&&x.w!=null){w=x.w;break}}}
-  if(isC){if(w==null)w=it.reps&&it.reps[0]||null;r=null}
-  else if(r==null){const G=it.type==="lift"&&poOn(it)?poGoalRaw(it):Array.isArray(it.rs)?it.rs:null;r=Array.isArray(G)?poGoalAt(G,i):(it.reps?it.reps[1]:null)}
-  if(it.type==="bw"&&w==null)w=null;return {w,r}}
+  let wReal=w!=null;
+  for(let j=i-1;j>=0&&!wReal;j--){const x=d.sets[j];if(x&&x.w!==""&&x.w!=null){w=x.w;wReal=true;break}}
+  let rReal=r!=null&&real;
+  if(isC){if(w==null)w=it.reps&&it.reps[0]||null;r=null;rReal=false}
+  else if(r==null){const G=it.type==="lift"&&poOn(it)?poGoalRaw(it):Array.isArray(it.rs)?it.rs:null;r=Array.isArray(G)?poGoalAt(G,i):(it.reps?it.reps[1]:null);rReal=false}
+  return {w,r,wReal,rReal}}
 // a box left empty counts as the number shown in grey. A set left fully empty is skipped, unless every set is empty (then it's "as planned").
-function fillPh(it,d){if(!d||!d.sets)return;const N=nSets(it,d);const last=lastEntry(it.id,undefined,d.alt||null);const poPl=poOn(it)?poPlan(it):null;
+// Only numbers you really did before count (last time's log, this week's overload target, or a weight you typed above). Never invented.
+function fillPh(it,d){if(!d||!d.sets)return;const N=nSets(it,d);while(d.sets.length<N)d.sets.push({w:"",r:""});const last=lastEntry(it.id,undefined,d.alt||null);const poPl=poOn(it)&&!d.alt?poPlan(it):null;
   const has=x=>x!==""&&x!=null;const rows=d.sets.slice(0,N);const none=rows.every(x=>!has(x.w)&&!has(x.r));
+  if(none&&!last&&it.type!=="cardio")return; // nothing to go on: logs as "done"
   rows.forEach((x,i)=>{const ph=phFor(it,d,i,last,poPl);const hw=has(x.w),hr=has(x.r);
     if(!hw&&!hr&&!none)return;
-    if(!hw&&ph.w!=null&&Number(ph.w)>0)x.w=String(ph.w);
-    if(!hr&&it.type!=="cardio"&&ph.r!=null)x.r=String(ph.r)})}
+    if(!hw&&ph.w!=null&&Number(ph.w)>0&&(ph.wReal||it.type==="cardio"))x.w=String(ph.w);
+    if(!hr&&it.type!=="cardio"&&ph.r!=null&&ph.rReal)x.r=String(ph.r)})}
 // search that forgives spaces, hyphens and common gym shorthand
 const EX_ABBR={ohp:"overhead press",rdl:"romanian deadlift",sldl:"stiff leg deadlift",db:"dumbbell",bb:"barbell",kb:"kettlebell",ez:"ez bar",bw:"bodyweight",bss:"bulgarian split squat",ghr:"glute ham raise",lat:"lat",pec:"pec",tri:"tricep",bi:"bicep",cgbp:"close grip bench press",inc:"incline",dec:"decline",mil:"military press",pullup:"pull up",pullups:"pull ups",chinup:"chin up",chinups:"chin ups",pushup:"push up",pushups:"push ups",situp:"sit up",situps:"sit ups"};
 const exNorm=t=>String(t).toLowerCase().replace(/[-_/().,]+/g," ").replace(/\s+/g," ").trim();
@@ -1414,7 +1419,7 @@ function logItem(it,d,DATE,dayKey){
     const sets=more?[...(prev.sets||[]),...cleanSets(dSets(it,d))]:cleanSets(dSets(it,d));
     const pp=more?{...cleanP(prev.partners),...cleanP(d.partners)}:cleanP(d.partners);
     const kc=exKcal(it,sets);
-    const tn=String(d.tnote||"").trim().slice(0,400),note=more&&prev.note?(tn&&tn!==prev.note?prev.note+" · "+tn:prev.note):tn;
+    const tn=String(d.tnote||"").trim().slice(0,400)||(!more&&prev&&prev.note&&d.tnote===undefined?prev.note:""),note=more&&prev.note?(tn&&tn!==prev.note?prev.note+" · "+tn:prev.note):tn;
     if(d.marked) es.push({...(note?{note}:{}),date:DATE,day:dayKey,dl:DAYS[dayKey].label,dt:DAYS[dayKey].title,name:it.name,sec:it.sec,type:it.type,done:true,alt:d.alt||(more?prev.alt:null)||null,sets,...(Object.keys(pp).length?{partners:pp}:{}),kcal:kc==null?null:Math.round(kc),loggedAt:(prev&&(prev.loggedAt||prev.ts))||now,ts:now});
     if(d.marked&&d.po&&d.po.on&&Array.isArray(d.po.tg)&&!d.alt){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.tg=more&&prev.tg?prev.tg:d.po.tg}
     if(d.marked&&wkType(DATE)){const ne=es[es.length-1];if(ne&&ne.date===DATE)ne.wk=wkType(DATE)}
@@ -1429,11 +1434,12 @@ document.addEventListener("click",e=>{if(Date.now()<tapBlock&&(!tapSel||(e.targe
 const DN_TAGS=["Low sleep","Felt strong","Sore","Short on time","Gym busy","Light day"];
 function dnKey(date,day){return date+"|"+day}
 function dnGet(date,day){return (plan.dayNotes||{})[dnKey(date,day)]||null}
-let dnT=null;function dnSet(date,day,o){plan.dayNotes=plan.dayNotes||{};const k=dnKey(date,day);const t=String(o.t||"").slice(0,800),tags=(o.tags||[]).filter(x=>DN_TAGS.includes(x));
+let dnT=null;window.addEventListener("pagehide",()=>{if(dnT){clearTimeout(dnT);dnT=null;try{savePlan()}catch(e){}}});document.addEventListener("visibilitychange",()=>{if(document.hidden&&dnT){clearTimeout(dnT);dnT=null;try{savePlan()}catch(e){}}});
+function dnSet(date,day,o){plan.dayNotes=plan.dayNotes||{};const k=dnKey(date,day);const t=String(o.t||"").slice(0,800),tags=(o.tags||[]).filter(x=>DN_TAGS.includes(x));
   if(!t.trim()&&!tags.length)delete plan.dayNotes[k];else plan.dayNotes[k]={t,tags,at:Date.now()};clearTimeout(dnT);dnT=setTimeout(savePlan,700)}
 function dnCard(day){const date=logDate();const n=dnGet(date,day)||{t:"",tags:[]};const past=date!==TODAY;
   return `<div class="dncard"><label class="dnlbl" for="dntxt">${past?`Notes for ${fmtDate(date)}`:"Today's notes"}</label>
-    <textarea id="dntxt" rows="${n.t?Math.min(5,Math.max(2,Math.ceil(n.t.length/34))):1}" maxlength="800" placeholder="Goal for today, how it went, why the weight changed…">${esc(n.t)}</textarea>
+    <textarea id="dntxt" dir="auto" rows="${n.t?Math.min(5,Math.max(2,Math.ceil(n.t.length/34))):2}" maxlength="800" placeholder="Goal for today, how it went, why the weight changed…">${esc(n.t)}</textarea>
     <div class="dntags" role="group" aria-label="Quick tags">${DN_TAGS.map(x=>`<button type="button" class="dntag ${n.tags.includes(x)?"on":""}" data-dntag="${x}" aria-pressed="${n.tags.includes(x)}">${x}</button>`).join("")}</div>
     <p class="dnsave" id="dnsaved">${n.at?"Saved":"Saves by itself. Edit it later from History."}</p></div>`}
 function bindDn(day){const ta=$("#dntxt");if(!ta)return;const date=logDate();const cur=()=>dnGet(date,day)||{t:"",tags:[]};
@@ -1441,8 +1447,8 @@ function bindDn(day){const ta=$("#dntxt");if(!ta)return;const date=logDate();con
   ta.oninput=()=>{grow();dnSet(date,day,{...cur(),t:ta.value});const sv=$("#dnsaved");if(sv)sv.textContent="Saved"};
   document.querySelectorAll("[data-dntag]").forEach(b=>b.onclick=()=>{const c=cur(),x=b.dataset.dntag;const tags=c.tags.includes(x)?c.tags.filter(y=>y!==x):[...c.tags,x];
     dnSet(date,day,{t:ta.value,tags});b.classList.toggle("on",tags.includes(x));b.setAttribute("aria-pressed",tags.includes(x));const sv=$("#dnsaved");if(sv)sv.textContent="Saved"})}
-function exNoteBox(it,d){return `<div class="tnote"><label for="tnote">Note for today <small>(this workout only)</small></label>
-  <textarea id="tnote" rows="${d.tnote?2:1}" maxlength="400" placeholder="e.g. Went lighter, shoulder felt off">${esc(d.tnote||"")}</textarea></div>`}
+function exNoteBox(it,d){return `<div class="tnote"><label for="tnote"><span>Note for today</span> <small>(this workout only)</small></label>
+  <textarea id="tnote" dir="auto" rows="2" maxlength="400" placeholder="e.g. Went lighter, shoulder felt off">${esc(d.tnote||"")}</textarea></div>`}
 function bindExNote(sh,it,d){const ta=$("#tnote",sh);if(!ta)return;
   ta.oninput=()=>{ta.style.height="auto";ta.style.height=Math.min(ta.scrollHeight+2,140)+"px";d.tnote=ta.value;saveDrafts();
     const t=shownToday(it.id);if(t&&!isPending(it.id)){const v=ta.value.trim().slice(0,400);if(v)t.note=v;else delete t.note;t.ts=t.ts||Date.now();persist(it.id)}}}
@@ -1760,7 +1766,7 @@ function smBuild(a){
       if(L&&L.type==="bw"&&!timed) reps=[Math.max(reps[0],8),Math.max(reps[1],15)];
       if(timed) reps=[30,45];
       if(a.goal==="strength"&&big&&i===0&&a.exp!=="new") sets=Math.min(5,sets+1);
-      return {name:e[0],unit:s.u,big,focus:s.focus,keep:s.keep,sets,reps}}).filter(Boolean);
+      return {name:e[0],unit:s.u,big,focus:s.focus,keep:s.keep,sets,reps}}).filter(Boolean).filter((x,i,A)=>A.findIndex(y=>y.name===x.name)===i);
     return {kind:k,title:ad?smPartsTitle(ad.parts):SM_TITLE[k],wd:days[si],items,parts:ad?ad.parts:null}});
   // fit the time: first drop small moves that are already trained on another day, then trim sets, then drop more
   const seen=(u)=>sessions.reduce((t,se)=>t+se.items.filter(x=>x.unit===u).length,0);
@@ -2000,7 +2006,7 @@ function render(){
   ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
     return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)} <button class="infob" id="leftinfo" aria-label="How unsaved workouts work" title="You can save a missed day any time before the week ends. At 12:00 AM Monday, unsaved marks expire.">i</button></b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save. Save by Sunday night.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
-  ${restDay?"":dnCard(tab)}
+  ${DAYS[tab]?dnCard(tab):""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
     if(done||items.some(it=>todayEntry(it.id))) return "";
     if(sk&&DAYS[sk]) return `<div class="skipban"><span>😴 <b>Rest today</b> · ${esc(DAYS[sk].title)} back next ${wdName}</span><button class="linkbtn" id="unskip">Undo</button></div>`;
@@ -2024,10 +2030,10 @@ function render(){
     <div class="kcal">${plan.bw?`<div class="kbig"><span>Estimated burn</span><b>~${Math.round(dayKcal)}</b><small>kcal</small></div><p>${done?`From the ${done} workout${done===1?"":"s"} you marked, using your weights, reps, sets and ${toDisp(plan.bw)} ${wU()} body weight.`:"Mark workouts to see your estimate."} <button class="linkbtn" id="kcalhow">How it's figured</button></p>`
       :`<p><b>See calories burned:</b> add your body weight under <b>About you</b> in the Log tab. <button class="linkbtn" id="gotoabout">Go to About you</button></p>`}</div>
     <div class="logdate"><span class="lbl" style="margin:0">Date finished</span>
-      <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===ymd(tzD(Date.now()-864e5))?"on":""}" data-ld="yday">Yesterday</button>
+      <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===addDays(TODAY,-1)?"on":""}" data-ld="yday">Yesterday</button>
       <label class="field ldpick"><input type="date" id="logdate" value="${logDate()}" max="${TODAY}" aria-label="Date you finished ${esc(d.label)}"></label></div>
       ${ldPast?`<p class="ldnote">Saving to <b>${fmtDate(logDate())}</b>. If you already logged any of these workouts that day, this replaces them. Today's log isn't touched.</p>`:""}</div>
-    <p>Saves every workout you marked, with its weights and reps. Workouts you didn't mark aren't logged.</p>
+    <p>Saves every exercise you marked or typed numbers into. Empty sets are skipped.</p>
     ${ldPast?`<button class="btn primary bigsave" id="saveday" ${done?"":"disabled"}>${done?`Save ${d.label} log for ${fmtDate(logDate())}`:"Mark workouts to save"}</button>`
     :`<button class="btn primary bigsave" id="saveday" ${pending?"":"disabled"}>${pending?`Save ${d.label} log`:savedN?"Saved ✓":"Mark workouts to save"}</button>`}
     <p class="savenote">${state.mode==="db"?"Logs go to your account, so they're there next week on any device.":"Logs are saved on this phone only."}</p>
@@ -2047,7 +2053,7 @@ function render(){
   app.querySelectorAll("[data-check]").forEach(b=>b.onclick=()=>toggleMark(ALL[b.dataset.check]));
   $("#saveday").onclick=()=>saveDay(tab);
   app.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));
-  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{state.logDate=b.dataset.ld==="yday"?ymd(tzD(Date.now()-864e5)):null;render()});
+  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{state.logDate=b.dataset.ld==="yday"?addDays(TODAY,-1):null;render()});
   const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
   $("#addex").onclick=()=>openAdd(tab);
   const ed=$("#editday"); if(ed) ed.onclick=()=>openDayEditor(tab);
@@ -2078,14 +2084,14 @@ function card(it){
   if(wt&&it.type!=="cardio"){const a=lastEntry(it.id,wt),o=lastEntry(it.id,wt==="A"?"B":"A");
     lastTxt=a||o?`${a?`<span class="lwk ${wt}">${line(a,`Last ${wkName(wt).toLowerCase()} week`)}</span>`:`<span class="lwk ${wt}">No ${esc(wkName(wt).toLowerCase())} week yet</span>`}${o?`<span class="lwk ${wt==="A"?"B":"A"}">${line(o,`Last ${wkName(wt==="A"?"B":"A").toLowerCase()} week`)}</span>`:""}`:"No log yet"}
   const kc=m?exKcal(it,cur):null;
-  const status=(kc?`<span class="st kc">~${Math.round(kc)} kcal</span>`:"")+(m?(pend?'<span class="st pend">Not saved</span>':'<span class="st ok">Saved</span>'):(pend?'<span class="st pend">Unmarked, not saved</span>':""));
+  const status=(kc?`<span class="st kc">~${Math.round(kc)} kcal</span>`:"")+(m?(pend?'<span class="st pend">Not saved</span>':'<span class="st ok">Saved</span>'):(pend?'<span class="st pend">Not saved</span>':""));
   return `<div class="card ${m?"done":""}">
    <button class="main" data-open="${it.id}" aria-label="Open ${esc(it.name)}">
      <span class="name">${it.ss?`<span class="sstag">${it.ss}</span>`:""}${esc(it.name)}${alt?`<br><span class="swap">Doing: ${esc(alt)}</span>`:""}</span>
      <span class="meta"><span class="tag">${esc(it.target)}</span><span class="rx">${rxText(it)}</span>${it.drop?'<span class="tag ghost">Drop sets</span>':""}${status}</span>
      ${cur.length?`<span class="last today">Today: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
      <span class="last">${lastTxt}</span>
-     ${(()=>{const ln=(wt&&it.type!=="cardio"?lastEntry(it.id,wt):last)||last;return ln&&ln.note?`<span class="lnote"><span aria-hidden="true">📝</span> <span>${esc(ln.note)}</span></span>`:""})()}
+     ${(()=>{const ln=(wt&&it.type!=="cardio"?lastEntry(it.id,wt):last)||last;return ln&&ln.note?`<span class="lnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(ln.note)}</span></span>`:""})()}
      ${vsLine(it)}
      ${poOn(it)?poLine(it):h&&!m?`<span class="hint">${esc(h)}</span>`:""}
    </button>
@@ -2143,7 +2149,7 @@ function openSheet(id,keepScroll){
      <a class="form" href="${yt(d.alt||it.name)}" target="_blank" rel="noopener">▶ Watch form on YouTube</a></div></div>`
    :`<p class="coach" style="margin-block:8px 4px">${esc(it.note)}</p>`}
   ${poBox(it,d)}
-  <div class="lbl">${isCardio?"Log time":"Log your sets"}${last?(setsText(last.sets,it.type)?` · last ${fmtDate(last.date)}: ${esc(setsText(last.sets,it.type))}`:` · last done ${fmtDate(last.date)}`):""}</div>
+  <div class="lbl"><span>${isCardio?"Log time":"Log your sets"}</span>${last?` · <span>Last time</span> <span>${fmtDate(last.date)}</span>${setsText(last.sets,it.type)?`: <bdi dir="ltr">${esc(setsText(last.sets,it.type))}</bdi>`:""}`:""}</div>
   <div class="sets">${rows}</div>
   ${isCardio?"":`<div class="setctl"><button class="btn small" id="rmset" ${N<=1?"disabled":""} aria-label="Remove set ${N}">− Remove set</button><span class="setcount">${N} set${N===1?"":"s"}</span><button class="btn small" id="addset" ${N>=12?"disabled":""}>+ Add set</button></div>
    ${N!==it.sets?`<div class="keepsets"><span>Plan says ${it.sets}. This change is for today only.</span><button class="linkbtn" id="keepsets">Keep ${N} sets every week</button></div>`:plan.sets[it.slot]?`<div class="keepsets"><span>Saved to your plan: ${it.sets} sets every time (was ${(ORIG[it.slot&&it.slot.split(":")[1]]||{}).sets||"the original"}).</span><button class="linkbtn" id="unkeepsets">Go back to ${(ORIG[it.slot&&it.slot.split(":")[1]]||{}).sets||"original"}</button></div>`:""}`}
@@ -2159,7 +2165,7 @@ function openSheet(id,keepScroll){
   <p class="savenote">Your numbers save when you tap <b>Save ${DAYS[dayOf(it)].label} log</b> at the bottom of the day.</p>
   <div>
   </div>
-  ${it.extra?`<div class="swapnote"><span>You added this to ${esc(DAYS[it.dayKey].label)}.</span></div>`:""}
+  ${it.extra&&!(DAYS[it.dayKey]&&DAYS[it.dayKey].prog)?`<div class="swapnote"><span>You added this to ${esc(DAYS[it.dayKey].label)}.</span></div>`:""}
   ${it.replaced?`<div class="swapnote"><span>In your plan this replaces <b>${esc(it.replaced)}</b>.</span><button class="btn small" id="resetslot">Switch back</button></div>`:""}
   <div class="lbl altlbl"><span>Machine taken? Do one of these instead (today only)</span><button class="linkbtn" id="editalts">Edit choices</button></div>
   <div class="alts">
@@ -2179,7 +2185,7 @@ function openSheet(id,keepScroll){
   sh.hidden=false; $("#scrim").hidden=false; sh.scrollTop=st;
   sh.querySelectorAll('input[data-f]').forEach(inp=>inp.onkeydown=e=>{if(e.key!=="Enter")return;e.preventDefault();const all=[...sh.querySelectorAll('input[data-f]')];const n=all[all.indexOf(inp)+1];if(n)n.focus();else inp.blur()});
   sh.querySelectorAll("input").forEach(inp=>inp.oninput=()=>{
-    const i=+inp.dataset.i; const raw=inp.value.replace(/[^0-9.]/g,""); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw;
+    const i=+inp.dataset.i; const raw=inp.value.replace(/,/g,".").replace(/[^0-9.]/g,"").replace(/(\..*)\./g,"$1"); d.sets[i][inp.dataset.f]=inp.dataset.f==="w"&&!isCardio&&raw!==""?String(fromDisp(raw)):raw;
     const NN=nSets(it,d),filled=d.sets.slice(0,NN).filter(x=>(x.w??"")!==""||(x.r??"")!=="").length;
     if(inp.dataset.f==="w"&&!isCardio)sh.querySelectorAll('input[data-f="w"]').forEach(o=>{const j=+o.dataset.i;if(j>i&&o.value===""){const ph=phFor(it,d,j,lastEntry(it.id,undefined,d.alt||null),poOn(it)?poPlan(it):null);o.placeholder=ph.w!=null?toDisp(ph.w):"0"}});
     if(!d.marked&&filled>=NN){d.marked=true;d.autoMark=true;const mb=$("#markbtn",sh);if(mb){mb.textContent="✓ Marked done";mb.className="btn okd"}}
@@ -2433,9 +2439,15 @@ $("#scrim").onclick=closeSheet;
 // keyboard and screen readers: while a pop-up is open, the page behind it can't be reached; closing it returns you to where you were
 (function(){const sh=$("#sheet");let opener=null,openKey=null;
   const bg=()=>[document.getElementById("app"),document.querySelector(".tabs"),document.getElementById("pill")].filter(Boolean);
-  new MutationObserver(()=>{if(!sh.hidden){if(!opener){const a=document.activeElement;if(a&&!sh.contains(a)&&a!==document.body){opener=a;openKey=a.dataset&&(a.dataset.open||a.id)||null}}bg().forEach(e=>e.inert=true)}
+  // phone Back button closes the pop-up instead of leaving the app
+  let pushed=false;window.addEventListener("popstate",()=>{if(pushed){pushed=false;if(!sh.hidden)closeSheet()}});
+  new MutationObserver(()=>{if(!sh.hidden&&!pushed){try{history.pushState({llSheet:1},"");pushed=true}catch(e){}}
+    if(sh.hidden&&pushed){pushed=false;try{if(history.state&&history.state.llSheet)history.back()}catch(e){}}}).observe(sh,{attributes:true,attributeFilter:["hidden"]});
+  new MutationObserver(()=>{if(!sh.hidden){if(!opener){const a=document.activeElement;if(a&&!sh.contains(a)&&a!==document.body){opener=a;openKey=a.dataset&&(a.dataset.open||a.id)||null;
+        setTimeout(()=>{if(sh.hidden||sh.contains(document.activeElement))return;const t=$("#sheet-title");if(t){t.tabIndex=-1;try{t.focus({preventScroll:true})}catch(e){}}},60)}}bg().forEach(e=>e.inert=true)}
     else{bg().forEach(e=>e.inert=false);const o=opener;opener=null;const k=openKey;openKey=null;
-      setTimeout(()=>{if(!sh.hidden)return;let t=o&&document.contains(o)?o:null;if(!t&&k)t=document.querySelector(`[data-open="${CSS.escape(k)}"]`)||document.getElementById(k);if(t&&t.focus&&document.activeElement===document.body)try{t.focus({preventScroll:true})}catch(e){}},30)}}).observe(sh,{attributes:true,attributeFilter:["hidden"]});
+      const back=()=>{if(!sh.hidden)return;const ae=document.activeElement;if(ae&&ae!==document.body&&document.contains(ae))return;let t=o&&document.contains(o)?o:null;if(!t&&k)t=document.querySelector(`[data-open="${CSS.escape(k)}"]`)||document.getElementById(k);if(t&&t.focus)try{t.focus({preventScroll:true})}catch(e){}};
+      [30,200,480,900].forEach(ms=>setTimeout(back,ms))}}).observe(sh,{attributes:true,attributeFilter:["hidden"]});
   sh.addEventListener("keydown",e=>{if(e.key!=="Tab"||sh.hidden)return;const f=[...sh.querySelectorAll('button,a[href],input,textarea,select,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);if(!f.length)return;
     const i=f.indexOf(document.activeElement);if(e.shiftKey&&(i<=0)){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&(i===f.length-1||i<0)){e.preventDefault();f[0].focus()}})})();
 // iPhone: after the keyboard closes, fixed bars can stay drawn mid-screen until the page scrolls. Hide the tab bar while typing and snap it back after.
@@ -2495,17 +2507,18 @@ function openDeItem(p,wi,wd,i,save){const d=p.weeks[wi].days[wd];const x=d.items
    `<div class="cfg"><label>Sets<span class="field"><input id="dei-sets" inputmode="numeric" value="${x.sets||3}"></span></label>
      <label>Reps from<span class="field"><input id="dei-r0" inputmode="numeric" value="${x.reps?x.reps[0]:8}"></span></label>
      <label>to<span class="field"><input id="dei-r1" inputmode="numeric" value="${x.reps?x.reps[1]:12}"></span></label></div>
-    <label class="cfrs">Or reps for each set <small>e.g. 10-8-6-6. Sets it to that many sets.</small><span class="field"><input id="dei-rs" inputmode="text" placeholder="10-8-6-6" value="${Array.isArray(x.rs)?x.rs.join("-"):""}" autocomplete="off"></span></label>
+    <label class="cfrs">Or reps for each set <small>e.g. 10-8-6-6. When filled, this sets the sets and reps.</small><span class="field"><input id="dei-rs" inputmode="text" placeholder="10-8-6-6" value="${Array.isArray(x.rs)?x.rs.join("-"):""}" autocomplete="off"></span></label>
     <label class="tick"><input type="checkbox" id="dei-drop" ${x.drop?"checked":""}> Drop sets</label>`}
    <div class="btns"><button class="btn primary" id="deisave" style="flex:1">Save</button></div>`;
   sh.scrollTop=0;const back=()=>openDayEdit(p,wi,wd);$("#deiback",sh).onclick=back;
+  const rsI=$("#dei-rs",sh);const syncRs=()=>{const on=!!parseRS(rsI.value);["#dei-sets","#dei-r0","#dei-r1"].forEach(q=>{const el=$(q,sh);if(el){el.disabled=on;el.closest("label").style.opacity=on?.5:""}})};if(rsI){rsI.oninput=syncRs;syncRs()}
   $("#deisave",sh).onclick=()=>{const n=(id,dflt,mx)=>{const el=$(id,sh);const v=el?parseInt(el.value,10):NaN;return isNaN(v)||v<1?dflt:Math.min(v,mx)};
     if(isC){const m=n("#dei-r0",10,600);x.reps=[m,m]}
     else{const rsv=parseRS(($("#dei-rs",sh)||{}).value);const a=n("#dei-r0",8,100),b=Math.max(a,n("#dei-r1",12,100));
       if(rsv){x.rs=rsv;x.sets=rsv.length;x.reps=[Math.min(...rsv),Math.max(...rsv)]}else{delete x.rs;x.sets=n("#dei-sets",3,12);x.reps=[a,b]}
       x.drop=!!($("#dei-drop",sh)||{}).checked}
     save();back();toast("Saved")}}
-function restFor(it){return it&&it.type==="lift"&&abWeek()==="B"?Math.max(timer.preset,150):timer.preset}
+function restFor(it){return it&&it.type==="lift"&&wkType()==="B"?Math.max(timer.preset,150):timer.preset}
 function startTimer(sec){
   try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume&&audioCtx.resume()}catch(e){}
   timer.endAt=Date.now()+(sec||timer.preset)*1000;timer.running=true;timer.over=false;
@@ -2592,18 +2605,18 @@ function planView(){
    ${(()=>{const pn=programNotes();return pn?`<details class="panel pnotes"><summary><h2>Program notes</h2><span>${esc(pn.sub)}</span></summary>${pn.items.map(x=>`<div class="pnote"><b class="pnh">${esc(x.h)}</b><p>${x.b?`<b>${esc(x.b)}</b> `:""}${esc(x.t||"")}</p></div>`).join("")}</details>`:""})()}
   </div>`}
 function histNotes(x){const k=dnKey(x.date,x.day),dn=dnGet(x.date,x.day);
-  if(state.histEdit===k) return `<div class="hnedit"><label class="dnlbl" for="hdn">Day note</label><textarea id="hdn" rows="3" maxlength="800" placeholder="Goal, how it went…">${esc(dn?dn.t:"")}</textarea>
+  if(state.histEdit===k) return `<div class="hnedit"><label class="dnlbl" for="hdn">Day note</label><textarea id="hdn" dir="auto" rows="3" maxlength="800" placeholder="Goal, how it went…">${esc(dn?dn.t:"")}</textarea>
     <div class="dntags" role="group" aria-label="Quick tags">${DN_TAGS.map(t=>`<button type="button" class="dntag ${dn&&dn.tags.includes(t)?"on":""}" data-htag="${t}" aria-pressed="${!!(dn&&dn.tags.includes(t))}">${t}</button>`).join("")}</div>
     ${x.items.map(({it,e},i)=>{const C=it.type==="cardio";const ss=(e.sets&&e.sets.length?e.sets:[{w:"",r:""}]);
       return `<div class="hnex"><div class="dnlbl">${esc(e.alt||it.name)}</div>
-      <div class="hsets">${ss.map((st,j)=>`<div class="hset"><span class="hn">${C?"Min":`Set ${j+1}`}</span><input data-hs="${i}:${j}:w" inputmode="decimal" value="${esc(st.w==null||st.w===""?"":C?st.w:toDisp(st.w))}" aria-label="${C?"Minutes":`Set ${j+1} weight`}"><span class="hu">${C?"min":wU()}</span>${C?"":`<span class="hx2">×</span><input data-hs="${i}:${j}:r" inputmode="numeric" value="${esc(st.r==null?"":st.r)}" aria-label="Set ${j+1} reps"><span class="hu">reps</span>`}</div>`).join("")}</div>
-      <textarea id="hn${i}" data-hn="${i}" rows="1" maxlength="400" placeholder="Note for this exercise" aria-label="Note for ${esc(it.name)}">${esc(e.note||"")}</textarea></div>`}).join("")}
-    <div class="btns"><button class="btn primary small" id="hnsave" data-hk="${esc(k)}">Save notes</button><button class="btn small" id="hncancel">Cancel</button></div></div>`;
-  return `${dn&&(dn.t||dn.tags.length)?`<div class="hdnote"><small>Day note${dn.tags.length?` · ${dn.tags.map(esc).join(" · ")}`:""}</small>${dn.t?`<span>${esc(dn.t)}</span>`:""}</div>`:""}
-    <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> ${esc(e.note)}</span>`:""}</div>`).join("")}</div>
+      <div class="hsets">${ss.map((st,j)=>`<div class="hset"><span class="hn">${C?"Min":`Set ${j+1}`}</span><input data-hs="${i}:${j}:w" inputmode="decimal" value="${esc(st.w==null||st.w===""?"":C?st.w:toDisp(st.w))}" aria-label="${esc(e.alt||it.name)}, ${C?"minutes":`set ${j+1} weight`}"><span class="hu">${C?"min":wU()}</span>${C?"":`<span class="hx2">×</span><input data-hs="${i}:${j}:r" inputmode="numeric" value="${esc(st.r==null?"":st.r)}" aria-label="${esc(e.alt||it.name)}, set ${j+1} reps"><span class="hu">reps</span>`}</div>`).join("")}</div>
+      <textarea id="hn${i}" data-hn="${i}" dir="auto" rows="2" maxlength="400" placeholder="Note for this exercise" aria-label="Note for ${esc(it.name)}">${esc(e.note||"")}</textarea></div>`}).join("")}
+    <div class="btns"><button class="btn primary small" id="hnsave" data-hk="${esc(k)}">Save changes</button><button class="btn small" id="hncancel">Cancel</button></div></div>`;
+  return `${dn&&(dn.t||dn.tags.length)?`<div class="hdnote"><small><span>Day note</span>${dn.tags.map(t=>` · <span>${esc(t)}</span>`).join("")}</small>${dn.t?`<span dir="auto">${esc(dn.t)}</span>`:""}</div>`:""}
+    <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(e.note)}</span></span>`:""}</div>`).join("")}</div>
     <button class="linkbtn hnbtn" data-hnedit="${esc(k)}">Edit workout or notes</button>`}
 function bindHistNotes(){
-  document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y);const t=$("#hdn");if(t)t.focus()});
+  document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y)});
   document.querySelectorAll("[data-htag]").forEach(b=>b.onclick=()=>{b.classList.toggle("on");b.setAttribute("aria-pressed",b.classList.contains("on"))});
   const c=$("#hncancel");if(c)c.onclick=()=>{state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y)};
   const sv=$("#hnsave");if(sv)sv.onclick=()=>{const k=sv.dataset.hk;const x=sessions().find(s=>dnKey(s.date,s.day)===k);if(!x)return;
@@ -2612,10 +2625,10 @@ function bindHistNotes(){
       const e=(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z===r.e)||(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z.date===r.e.date&&z.day===r.e.day);
       if(!e)return;let ch=false;if((e.note||"")!==v){if(v)e.note=v;else delete e.note;ch=true}
       const C=r.it.type==="cardio";const ns=(e.sets&&e.sets.length?e.sets:[{w:"",r:""}]).map((st,j)=>{const gw=document.querySelector(`[data-hs="${ta.dataset.hn}:${j}:w"]`),gr=document.querySelector(`[data-hs="${ta.dataset.hn}:${j}:r"]`);
-        const wv=gw?gw.value.replace(/[^0-9.]/g,""):"",rv=gr?gr.value.replace(/[^0-9]/g,""):"";return {w:wv===""?null:(C?Number(wv):fromDisp(wv)),r:C?null:(rv===""?null:Number(rv))}}).filter(st=>st.w!=null||st.r!=null);
+        const wv=gw?gw.value.replace(/,/g,".").replace(/[^0-9.]/g,""):"",rv=gr?gr.value.replace(/[^0-9]/g,""):"";return {w:wv===""?null:(C?Number(wv):fromDisp(wv)),r:C?null:(rv===""?null:Number(rv))}}).filter(st=>st.w!=null||st.r!=null);
       if(JSON.stringify(ns)!==JSON.stringify(cleanSets(e.sets||[]))){e.sets=ns;try{const k2=exKcal(r.it,ns);e.kcal=k2==null?null:Math.round(k2)}catch(_){}ch=true}
       if(ch){e.ts=Date.now();persist(r.it.id)}});
-    state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y);toast("Notes saved")};
+    state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y);toast("Changes saved")};
 }
 /* ---------- settings as dropdowns: one section open at a time ---------- */
 const SET_GROUPS=[["You",["about","acctp","avpanel","tprofp"]],["Training",["popref","wpref"]],["App",["skinp","langtz","notifs"]],["Help & tools",["fbpanel","tutorial","dropp","platep","aboutp"]]];
@@ -2712,7 +2725,7 @@ function sessions(){
     .sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:0);
 }
 function buildCSV(){
-  const q=(v)=>{v=v==null?"":String(v);return /[",\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
+  const q=(v)=>{v=v==null?"":String(v);if(/^[=+\-@\t\r]/.test(v)&&!/^-?\d/.test(v))v="'"+v;return /[",\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};
   const rows=[["workout_date","day","day_name","section","exercise","done_as","set",`weight_${wU()}`,"reps","minutes","est_kcal_exercise","logged_at","last_edited","exercise_note","day_note"]];
   sessions().slice().reverse().forEach(s=>s.items.forEach(({it,e})=>{
     const sets=e.sets&&e.sets.length?e.sets:[{w:null,r:null}];
@@ -2722,7 +2735,7 @@ function buildCSV(){
   return rows.map(r=>r.map(q).join(",")).join("\n");
 }
 async function exportCSV(){
-  const csv=buildCSV(); const name=`lift-log-${TODAY}.csv`;
+  const csv="\uFEFF"+buildCSV(); const name=`lift-log-${TODAY}.csv`;
   let dl=null; try{dl=await window.claude?.use?.("downloads")}catch(e){}
   if(dl){try{await dl.save({filename:name,data:csv});toast("CSV saved");return}catch(e){if(e&&e.code==="declined")return;}}
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
@@ -2898,7 +2911,7 @@ function builderView(){
     <div class="btns">${wi>0?`<button class="btn small" id="copyprev">Copy week ${wi} into week ${wi+1}</button>`:""}
       ${empty&&wi===0?`<button class="btn small" id="fromplan">Start from my current week</button>`:""}
       ${!empty?`<button class="btn small" id="clearweek">Clear week ${wi+1}</button>`:""}
-      ${p.weeks.length>1?`<button class="btn small danger" id="delweek">Delete week ${wi+1}</button>`:""}</div>
+      ${p.weeks.length>1&&p.pattern!=="alt"?`<button class="btn small danger" id="delweek">Delete week ${wi+1}</button>`:""}</div>
    </div>
    <div class="panel"><h2>Share & use</h2>
     ${state.mode==="db"?`<p>${p.published?`Published to the community${p.pubAt?` · last updated ${fmtStamp(p.pubAt)}`:""}. Edits go live when you tap Update.`:"Publish so anyone using this app can browse it, like it and copy it. Only the program is shared, never your logs or body info."}</p>
@@ -3205,7 +3218,7 @@ function partnerBox(it,d){
 }
 function bindPartnerBox(sh,it,d){
   sh.querySelectorAll("[data-pw],[data-pr]").forEach(inp=>{const pid=inp.dataset.pw||inp.dataset.pr,f=inp.dataset.pw?"w":"r";
-    inp.oninput=()=>{d.partners=d.partners||{};const x=d.partners[pid]=d.partners[pid]||{w:"",r:""};const raw=inp.value.replace(/[^0-9.]/g,"");x[f]=f==="w"&&raw!==""?String(fromDisp(raw)):raw;saveDrafts();clearTimeout(window.__rr);window.__rr=setTimeout(render,400)};
+    inp.oninput=()=>{d.partners=d.partners||{};const x=d.partners[pid]=d.partners[pid]||{w:"",r:""};const raw=inp.value.replace(/,/g,".").replace(/[^0-9.]/g,"").replace(/(\..*)\./g,"$1");x[f]=f==="w"&&raw!==""?String(fromDisp(raw)):raw;saveDrafts();clearTimeout(window.__rr);window.__rr=setTimeout(render,400)};
     inp.onchange=()=>openSheet(it.id,true)});
   const on=$("#ptrackon",sh); if(on) on.onclick=()=>{plan.ptrack[it.id]=true;savePlan();openSheet(it.id,true);render()};
   const off=$("#ptrackoff",sh); if(off) off.onclick=()=>{plan.ptrack[it.id]=false;savePlan();openSheet(it.id,true);render()};
@@ -4472,11 +4485,15 @@ function skinFx(){const el=document.querySelector(".skinfx");if(!el)return;const
 function curSkin(){return document.documentElement.getAttribute("data-skin")||""}
 function loadSkinFont(k){const x=SKINS.find(s=>s.id===k);if(!x||!x.f||document.querySelector(`link[data-skinf="${k}"]`))return;const l=document.createElement("link");l.rel="stylesheet";l.dataset.skinf=k;l.href=`https://fonts.googleapis.com/css2?family=${x.f}&display=swap`;document.head.appendChild(l)}
 // text on the accent color: switch to near-black when white would be hard to read (bright greens, cyans, etc.)
-function fixInk(){try{const r=document.documentElement;r.style.removeProperty("--accent-ink");const v=getComputedStyle(r).getPropertyValue("--accent").trim();if(!v)return;
-  const c=document.createElement("canvas").getContext("2d");c.fillStyle=v;const h=c.fillStyle;let rgb;
-  if(h[0]==="#")rgb=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));else{const m=h.match(/[\d.]+/g);if(!m)return;rgb=m.slice(0,3).map(Number)}
+let inkCv=null;function inkFor(v){if(!v)return null;inkCv=inkCv||document.createElement("canvas").getContext("2d");inkCv.fillStyle="#000";inkCv.fillStyle=v;const h=inkCv.fillStyle;let rgb;
+  if(h[0]==="#")rgb=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));else{const m=h.match(/[\d.]+/g);if(!m)return null;rgb=m.slice(0,3).map(Number)}
   const L=a=>{const x=a.map(u=>{u/=255;return u<=.03928?u/12.92:Math.pow((u+.055)/1.055,2.4)});return .2126*x[0]+.7152*x[1]+.0722*x[2]};const l=L(rgb);
-  const cw=1.05/(l+.05),cb=(l+.05)/(L([14,17,22])+.05);if(cw<4.5&&cb>cw)r.style.setProperty("--accent-ink","#0E1116")}catch(e){}}
+  const cw=1.05/(l+.05),cb=(l+.05)/(L([14,17,22])+.05);return cw<4.5&&cb>cw?"#0E1116":null}
+function fixInk(){try{const b=document.body;if(!b)return;["--accent-ink","--on-green","--on-blue"].forEach(k=>b.style.removeProperty(k));const cs=getComputedStyle(b);
+  const a=inkFor(cs.getPropertyValue("--accent").trim());if(a)b.style.setProperty("--accent-ink",a);
+  const g=inkFor(cs.getPropertyValue("--green").trim());b.style.setProperty("--on-green",g||"#fff");
+  const bl=inkFor(cs.getPropertyValue("--blue").trim());b.style.setProperty("--on-blue",bl||"#fff")}catch(e){}}
+try{new MutationObserver(()=>fixInk()).observe(document.body,{attributes:true,attributeFilter:["data-day","class"]});new MutationObserver(()=>setTimeout(fixInk,30)).observe(document.documentElement,{attributes:true,attributeFilter:["data-skin","data-theme"]})}catch(e){}
 window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").addEventListener&&window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>setTimeout(fixInk,50));
 setTimeout(fixInk,300);
 function setSkin(k){setTimeout(fixInk,60);ls.set("ll.skin",k);if(k){loadSkinFont(k);document.documentElement.setAttribute("data-skin",k)}else document.documentElement.removeAttribute("data-skin");skinFx();

@@ -70,6 +70,7 @@
       if (t != null) { const lead = v.match(/^\s*/)[0], tail = v.match(/\s*$/)[0]; n.nodeValue = lead + t + tail; }
       n.__i18 = n.nodeValue; return;
     }
+    if (n.nodeType === 1 && n.tagName === "TEXTAREA" && !n.hasAttribute("data-noi18n")) { attrs(n); return; }
     if (n.nodeType !== 1 || SKIP.has(n.tagName) || n.hasAttribute("data-noi18n")) return;
     attrs(n);
     if (n.tagName === "INPUT" && (n.type === "button" || n.type === "submit") && n.value) { if (collect) rec(n.value); else if (dict) { const t = look(n.value); if (t != null) n.value = t; } }
