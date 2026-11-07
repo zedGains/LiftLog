@@ -860,6 +860,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 [dir=rtl] .rx,[dir=rtl] .v,[dir=rtl] .last b,[dir=rtl] .poline,[dir=rtl] .hset,[dir=rtl] .setrow .field{unicode-bidi:isolate;direction:ltr}
 :lang(ar) h1,:lang(ar) h2,:lang(ar) h3,:lang(ar) h4,:lang(ar) .lbl,:lang(ar) .eyebrow,:lang(ar) .dnlbl,:lang(ar) .tag{letter-spacing:0!important}
 .field:focus-within{outline:2px solid var(--fg);outline-offset:2px}.pick:focus-visible,.dntag:focus-visible,.hset input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.updban{border:1px solid color-mix(in srgb,var(--accent) 50%,var(--line));background:color-mix(in srgb,var(--accent) 10%,var(--surface));border-radius:14px;padding:11px 13px;margin:0 0 12px}.updban b{display:block;margin-bottom:2px}.updban span{font-size:14px;color:var(--muted)}.updban .btns{margin-top:8px}
 .dncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 13px 10px;margin:0 0 12px}
 .dnlbl{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.dnlbl small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none;margin-left:4px}
 .dncard textarea,.hnedit textarea,.tnote textarea{width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:15px/1.4 var(--body);padding:9px 11px;resize:none;min-height:42px}
@@ -1182,7 +1183,9 @@ function applyPick(it,exId,sets,reps,drop,rs){
       if(other&&DAYS[other]&&other!==it.dayKey){let x={sid:sid+"b",ex:exId,sets,reps,drop};if(!tw){const L=libById(exId);const y=abStrength({name:L?L.name:"",type:L&&L.type||"lift",sets,reps,drop,g:L&&L.g});x={...x,sets:y.sets,reps:y.reps,drop:y.abB?false:drop}}
         (plan.extra[other]=plan.extra[other]||[]).push(x)}}catch(e){console.warn(e)}
     const ps=state.pendingSuper; if(ps&&ps.day===it.dayKey){state.pendingSuper=null;setSuper(it.dayKey,ps.slot,it.dayKey+":+"+sid)}}
-  else if(it.extra){const x=(plan.extra[it.dayKey]||[]).find(y=>y.sid===it.extra);if(x)Object.assign(x,{ex:exId,sets,reps,drop})}
+  else if(it.extra){const x=(plan.extra[it.dayKey]||[]).find(y=>y.sid===it.extra);if(x){Object.assign(x,{ex:exId,sets,reps,drop});if(rs&&rs.length)x.rs=rs;else delete x.rs;
+    // a copied exercise (strength day) is now a different exercise: drop the copy and the old history link
+    delete x.t;delete x.hid;delete x.alts}}
   else plan.slots[it.slot]={ex:exId,sets,reps,drop};
   if(!it.addMode&&it.slot) delete plan.sets[it.slot];
   savePlan();
@@ -1207,6 +1210,25 @@ function altCapture(ap){const w=ap.snapshot&&ap.snapshot[ap.week];if(!w)return;w
     let items;try{items=daySections(k).flatMap(sc=>sc.items)}catch(e){return}
     w.days[wd]={...(w.days[wd]||{}),title:D?(D.title||"Workout"):"Workout",items:items.map(it=>({name:it.name,g:it.g||it.target||"",type:it.type||"lift",sets:it.sets,reps:it.reps,drop:!!it.drop,...(it.rs?{rs:it.rs}:{}),...(Array.isArray(it.alts)&&it.alts.length?{alts:it.alts.slice(0,8)}:{})}))}});
   Object.keys(w.days).forEach(wd=>{if(plan.schedule[wd]!=="pw"+wd&&!plan.schedule[wd]&&!plan.days.some(d=>d.key==="pw"+wd))delete w.days[wd]})}
+// a program's fingerprint, to tell when the trainer changed it
+function progHash(p){const t=JSON.stringify([p.weeks||[],p.pattern||"",p.wkNames||null]);let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)}
+function progSource(ap){if(!ap||!ap.key)return null;const k=String(ap.key);let p=null;
+  if(k.startsWith("mine:")){const m=(plan.myPrograms||[]).find(x=>"mine:"+x.id===k);if(m)p={key:k,title:m.title||"My program",author:m.author||ap.author||null,weeks:m.weeks,po:m.po,pattern:m.pattern,wkNames:m.wkNames,...progNoteFields(m)}}
+  else{const c=(pg.community||[]).find(x=>x.key===k);if(c)p={key:k,title:c.title,author:c.author,weeks:c.weeks,po:c.po,pattern:c.pattern,wkNames:c.wkNames,...progNoteFields(c)}}
+  return p&&Array.isArray(p.weeks)&&p.weeks.length?p:null}
+function progUpdate(){const ap=plan.activeProgram;if(!ap||!ap.srcHash)return null;const src=progSource(ap);if(!src)return null;const h=progHash(src);return h!==ap.srcHash&&h!==ap.dismissHash?{src,h}:null}
+function progUpdateBanner(){const u=progUpdate();if(!u)return "";return `<div class="updban" role="status"><div><b>${esc(u.src.title)} was updated</b><span>The trainer changed this program. Get the new version? Your logs stay; changes you made to its days are replaced.</span></div>
+  <div class="btns"><button class="btn primary small" id="progupd">Get the update</button><button class="btn small" id="progupdno">Not now</button></div></div>`}
+function bindProgUpdate(){const g=$("#progupd");if(g)g.onclick=()=>{const u=progUpdate();if(!u)return;const ap=plan.activeProgram;const wi=Math.min(ap.week||0,u.src.weeks.length-1);
+    applyProgram({...u.src,fresh:true,start:ap.start},wi);render();toast("Updated to the latest version")};
+  const n=$("#progupdno");if(n)n.onclick=()=>{const u=progUpdate();if(u){plan.activeProgram.dismissHash=u.h;savePlan()}render()}}
+// linear programs move to the next week every Monday, and start over after the last week
+function linSync(){const ap=plan.activeProgram;if(!ap||altSyncing||ap.pattern==="alt"||!ap.lstart||!(ap.weeks>1)||!ap.snapshot||ap.snapshot.length<2)return;
+  const n=wkIdx(ap.lstart);if(n<0)return;const want=n%ap.snapshot.length;if(want===ap.week)return;
+  try{altCapture(ap)}catch(e){console.warn(e)}
+  altSyncing=true;try{const lst=ap.lstart;applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po},want);plan.activeProgram.lstart=lst;
+    if(want===0&&n>0)plan.activeProgram.round=Math.floor(n/ap.snapshot.length)+1;savePlan()}finally{altSyncing=false}
+  setTimeout(()=>toast(want===0?`New round: back to week 1 of ${ap.title}`:`Week ${want+1} of ${ap.title} is up`,4000),400)}
 function altSync(){const ap=altProg();if(!ap||altSyncing)return;const want=wkType()==="A"?0:1;if(ap.week===want||!ap.snapshot||!ap.snapshot[want])return;
   try{altCapture(ap)}catch(e){console.warn(e)}
   altSyncing=true;try{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:"alt",wkNames:ap.wkNames,start:ap.start},want)}finally{altSyncing=false}}
@@ -1276,6 +1298,10 @@ function daySections(dayKey){
   const ord=(plan.order&&plan.order[dayKey])||{};
   Object.keys(map).forEach(k=>{const o=ord[k];if(!o||!o.length)return;const pos=x=>{const i=o.indexOf(x.slot);return i<0?1e6:i};
     map[k]=map[k].map((x,i)=>[x,i]).sort((a,b)=>(pos(a[0])-pos(b[0]))||(a[1]-b[1])).map(a=>a[0])});
+  if(d.prog){const sl={};Object.values(map).flat().forEach(x=>sl[x.slot]=x);let all=(plan.extra[dayKey]||[]).map(x=>sl[dayKey+":+"+x.sid]).filter(Boolean);
+    Object.values(map).flat().forEach(x=>{if(!all.includes(x))all.push(x)});const o=ord["Workout"];
+    if(o&&o.length){const pos=x=>{const i=o.indexOf(x.slot);return i<0?1e6:i};all=all.map((x,i)=>[x,i]).sort((a,b)=>(pos(a[0])-pos(b[0]))||(a[1]-b[1])).map(a=>a[0])}
+    return applySupers(dayKey,all.length?[{sec:"Workout",items:all}]:[])}
   return applySupers(dayKey,order.filter(k=>map[k]&&map[k].length).map(k=>({sec:k,items:map[k]})));
 }
 function setOrder(dayKey,sec,slots){(plan.order[dayKey]=plan.order[dayKey]||{})[sec]=slots;savePlan()}
@@ -1944,7 +1970,9 @@ function smApply(){const o=state.onb,a=o.a,r=o.r||smBuild(a);
   r.extraDays.forEach(wd=>{days[String(wd)]={title:"Cardio & Core",items:[{name:"Incline Treadmill Walk",type:"cardio",sets:1,reps:[20,20]},{name:"Cable Crunch",type:"lift",sets:3,reps:[12,15]},{name:"Pallof Press",type:"lift",sets:3,reps:[10,12]}]}});
   const why=smWhy(a,r);
   const wkA={days},alt=a.pattern==="alt";
-  applyProgram({key:"smart:"+Date.now().toString(36),title:a.mode==="adv"?"Built from your days":`Built for you · ${r.split}`,author:uid||null,weeks:alt?[wkA,abStrengthWeek(wkA)]:[wkA],...(alt?{pattern:"alt",wkNames:["Hypertrophy","Strength"]}:{}),desc:"A plan built from your answers: your goal, focus spots and schedule. Each muscle gets trained about twice a week, with extra sets for your focus.",who:"",progress:"Progressive overload is on for your big lifts. Hit your reps on every set and the weight goes up next time.",equip:a.where==="gym"?"Full gym":a.where==="db"?"Dumbbells":"Home"},0);
+  // new lifters keep the same number of sets on strength weeks (they can change it any time)
+  const strB=()=>{const B=abStrengthWeek(wkA);if(a.exp==="new")Object.keys(B.days).forEach(wd=>{const A=(wkA.days[wd]||{}).items||[];B.days[wd].items.forEach(x=>{const m=A.find(y=>y.name===x.name);if(m&&x.sets>m.sets)x.sets=m.sets})});return B};
+  applyProgram({key:"smart:"+Date.now().toString(36),title:a.mode==="adv"?"Built from your days":`Built for you · ${r.split}`,author:uid||null,weeks:alt?[wkA,strB()]:[wkA],...(alt?{pattern:"alt",wkNames:["Hypertrophy","Strength"]}:{}),desc:"A plan built from your answers: your goal, focus spots and schedule. Each muscle gets trained about twice a week, with extra sets for your focus.",who:"",progress:"Progressive overload is on for your big lifts. Hit your reps on every set and the weight goes up next time.",equip:a.where==="gym"?"Full gym":a.where==="db"?"Dumbbells":"Home"},0);
   const ex={...((plan.po||{}).ex||{})};r.sessions.forEach(se=>se.items.forEach(x=>{if(x.big)ex[x.name.toLowerCase()]=true}));
   plan.po={...(plan.po||{}),mode:"auto",ex};
   savePlan();syncDays();state.onb=null;
@@ -1969,6 +1997,7 @@ function welcomeView(){
 }
 function render(){
   try{altSync()}catch(e){console.warn(e)}
+  try{linSync()}catch(e){console.warn(e)}
   try{if(!state.loading&&!state.needsStart)abEnsureTwins()}catch(e){console.warn(e)}
   try{const t=state.tab;if(t&&DAYS[t]){if(abWeek()==="B"){const tw=abTwinOf(t);if(tw&&DAYS[tw])state.tab=tw}else if(abIsTwin(t)){const d=plan.days.find(x=>x.key===t);if(d&&DAYS[d.twinOf])state.tab=d.twinOf}}}catch(e){}
   if(state.loading){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=`<p class="boot">Loading your plan…</p>`;return}
@@ -2003,7 +2032,7 @@ function render(){
   app.innerHTML=`
   <header class="dayhead">
     <div class="row"><div><button class="daypick" id="daypick" aria-haspopup="listbox" aria-expanded="${!!state.dayMenu}"><span class="eyebrow">${esc(d.label)} · ${schedNames(tab)}${weekdayTab()===tab?" · Today":""}</span><span class="dph1"><h1>${esc(d.title)}</h1><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>${d.autoTitle?`<div class="autonote">Renamed from ${esc(d.baseTitle)} to match your exercises</div>`:""}</div>${d.custom?`<button class="btn small" id="editday">Edit day</button>`:`<div class="plate" aria-hidden="true"><span></span></div>`}</div>
-    <div class="chips">${secs.map(s=>`<span class="chip">${s.sec}</span>`).join("")}</div>
+    <div class="chips">${[...new Set(secs.flatMap(s=>s.items.map(i=>i.sec||s.sec)))].map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>
     ${abBanner()}
     <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
@@ -2011,6 +2040,7 @@ function render(){
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
     return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)} <button class="infob" id="leftinfo" aria-label="How unsaved workouts work" title="You can save a missed day any time before the week ends. At 12:00 AM Monday, unsaved marks expire.">i</button></b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save. Save by Sunday night.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
+  ${d.prog?progUpdateBanner():""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${DAYS[tab]?dnCard(tab):""}
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
@@ -2050,7 +2080,7 @@ function render(){
   document.querySelectorAll("[data-abinfo]").forEach(b=>b.onclick=()=>toast(b.title,10000));
   const lsv=$("#leftsave"); if(lsv) lsv.onclick=()=>saveLeft(lsv.dataset.lday);
   const lin=$("#leftinfo"); if(lin) lin.onclick=()=>toast(lin.title);
-  try{bindDn(tab)}catch(e){console.warn(e)}
+  try{bindDn(tab)}catch(e){console.warn(e)}try{bindProgUpdate()}catch(e){}
   const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
     showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})};
   const es=$("#editsaved"); if(es) es.onclick=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
@@ -2483,7 +2513,9 @@ $("#scrim").onclick=closeSheet;
   sh.addEventListener("touchstart",e=>{reset();if(e.touches.length!==1||sh.scrollTop>2)return;const t=e.target;if(t.closest("input,textarea,select,button,a,label"))return;
     const top=sh.getBoundingClientRect().top;if(e.touches[0].clientY-top>64)return;y0=e.touches[0].clientY},{passive:true});
   sh.addEventListener("touchmove",e=>{if(y0==null)return;if(e.touches.length!==1){reset();return}dy=e.touches[0].clientY-y0;
-    if(dy>0&&sh.scrollTop<=2){sh.classList.add("dragging");sh.style.transform=`translateY(${Math.min(dy,window.innerHeight*.6)}px)`}else if(dy<-4)reset()},{passive:true});
+    if(dy>0&&sh.scrollTop<=2){sh.classList.add("dragging");sh.style.transform=`translateY(${Math.min(dy,window.innerHeight*.6)}px)`}else if(dy<-4)reset();
+  // safety net: if the touch ends without telling us, snap back
+  clearTimeout(sh.__wd);sh.__wd=setTimeout(()=>{if(sh.style.transform)reset()},900)},{passive:true});
   const end=()=>{if(y0==null){reset();return}const far=dy>110;reset();if(far)shut()};
   sh.addEventListener("touchend",end);sh.addEventListener("touchcancel",reset);
   // safety net: a pop-up should never be left moved off the screen
@@ -2811,7 +2843,7 @@ function programsView(){
   const ap=plan.activeProgram;
   const head=`<header class="dayhead"><div class="row"><div><div class="eyebrow">Plans to follow or share</div><h1>Programs</h1></div><div class="plate" aria-hidden="true"><span></span></div></div>
    <div class="seg" role="tablist"><button class="segb ${pg.seg==="community"?"on":""}" role="tab" aria-selected="${pg.seg==="community"}" data-seg="community">Community</button><button class="segb ${pg.seg==="mine"?"on":""}" role="tab" aria-selected="${pg.seg==="mine"}" data-seg="mine">My programs</button></div></header>`;
-  const banner=ap?`<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>${ap.pattern==="alt"?`Week ${wkNum()} · ${esc(wkName(wkType()))}. Odd and even weeks switch on their own every Monday`:`Week ${ap.week+1} of ${ap.weeks}`}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
+  const banner=ap?`${progUpdateBanner()}<div class="panel activep"><div class="eyebrow">You're following</div><b class="apt">${esc(ap.title)}</b><p>${ap.pattern==="alt"?`Week ${wkNum()} · ${esc(wkName(wkType()))}. Odd and even weeks switch on their own every Monday`:ap.weeks>1?`Week ${ap.week+1} of ${ap.weeks}${ap.round>1?` · round ${ap.round}`:""}. Moves to the next week every Monday, and starts over after week ${ap.weeks}`:`Week 1 of 1`}${ap.author?` · by ${esc(nameOf(ap.author))}`:""}. Its days are in your tabs and on your week.</p>
     <div class="btns">${ap.pattern!=="alt"&&ap.week+1<ap.weeks?`<button class="btn primary small" id="apnext">Load week ${ap.week+2}</button>`:""}${ap.pattern!=="alt"&&ap.week>0?`<button class="btn small" id="apprev">Back to week ${ap.week}</button>`:""}<button class="btn small" id="apstop">Stop following</button></div></div>`:"";
   const smrow=`<button class="rowbtn smentry" id="smopen" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 5.3L20 9l-4.4 3.8L17 18.5 12 15.6 7 18.5l1.4-5.7L4 9l5.8-.7z"/></svg></span><span class="rbt"><b>${plan.setup?"Rebuild my plan":"Build a plan for me"}</b><small>Goal, focus and schedule → a plan made for you</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;
   return head+banner+`<div class="plan">${smrow}${poPanel()}${abPanel()}</div>`+(pg.seg==="community"?communityView():mineView());
@@ -2947,6 +2979,7 @@ function bindPrograms(){
   const np=$("#newprog"); if(np) np.onclick=()=>{const p={id:newId(),title:"",goal:"General fitness",level:"Beginner",desc:"",weeks:[emptyWeek()],published:false,createdAt:Date.now(),updatedAt:Date.now()};
     plan.myPrograms.unshift(p);savePlan();state.builder={id:p.id,week:0};render();window.scrollTo(0,0);setTimeout(()=>{const t=$("#bp-title");if(t)t.focus()},50)};
   const ap=plan.activeProgram;
+  try{bindProgUpdate()}catch(e){}
   const nx=$("#apnext"); if(nx) nx.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:ap.pattern,wkNames:ap.wkNames,start:ap.start},ap.week+1);render();toast(`Week ${ap.week+2} loaded`)};
   const pv=$("#apprev"); if(pv) pv.onclick=()=>{applyProgram({key:ap.key,title:ap.title,author:ap.author,weeks:ap.snapshot,notes:ap.notes,po:ap.po,pattern:ap.pattern,wkNames:ap.wkNames,start:ap.start},ap.week-1);render();toast(`Week ${ap.week} loaded`)};
   armBtn($("#apstop"),"Tap again to stop",stopProgram);
@@ -3144,14 +3177,14 @@ function openUse(p){
      <h3 id="sheet-title">Start ${esc(p.title)}?</h3>
      ${p.weeks.length>1?`<div class="dlabel">Start on</div><div class="wtabs">${p.weeks.map((x,i)=>`<button class="gchip ${i===wi?"on":""}" data-uw="${i}">Week ${i+1}</button>`).join("")}</div>`:""}
      <div class="cal small">${calCells(w,false)}</div>
-     <p class="coach">Your week becomes this program: ${n} training day${n===1?"":"s"}, each with its own tab named for its weekday. Days 1–3 stay in your tabs but come off your week, and all your logs stay.${p.weeks.length>1?(p.pattern==="alt"?" The weeks switch on their own every Monday.":" Move to the next week from the Programs tab when you're ready."):""}</p>
+     <p class="coach">Your week becomes this program: ${n} training day${n===1?"":"s"}, each with its own tab named for its weekday. Days 1–3 stay in your tabs but come off your week, and all your logs stay.${p.weeks.length>1?(p.pattern==="alt"?" The weeks switch on their own every Monday.":` It moves to the next week every Monday and starts over after week ${p.weeks.length}.`):""}</p>
      ${plan.activeProgram?`<p class="savenote">This replaces ${esc(plan.activeProgram.title)}.</p>`:""}
      <div class="btns"><button class="btn primary" id="ugo" style="flex:1" ${n?"":"disabled"}>${n?`Start week ${wi+1}`:"This week has no workouts"}</button></div>`;
     $("#ucancel",sh).onclick=closeSheet;
     sh.querySelectorAll("[data-uw]").forEach(b=>b.onclick=()=>{wi=+b.dataset.uw;draw()});
     $("#ugo",sh).onclick=()=>{
       const prevKey=plan.activeProgram&&plan.activeProgram.key;
-      applyProgram(p,wi);
+      applyProgram({...p,fresh:true},wi);
       if(state.mode==="db"&&!/^(mine|f):/.test(String(p.key))){if(prevKey)pg.myUses.delete(prevKey);pg.myUses.add(p.key);if(!pg.myStarted[p.key])pg.myStarted[p.key]=Date.now();recount();writeSocial()}
       else if(prevKey&&pg.myUses.has(prevKey)){pg.myUses.delete(prevKey);recount();writeSocial()}
       closeSheet(); const first=WEEK_ORDER.find(i=>(p.weeks[wi].days||{})[String(i)]);
@@ -3185,7 +3218,9 @@ function applyProgram(p,wi){
   if(!plan.activeProgram||plan.activeProgram.key!==p.key) plan.poOwn=false;
   const prevAp=plan.activeProgram&&plan.activeProgram.key===p.key?plan.activeProgram:null;
   const alt=p.pattern==="alt"&&p.weeks.length>=2;
-  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,...(alt?{pattern:"alt",wkNames:Array.isArray(p.wkNames)?p.wkNames.slice(0,2):null,start:p.start||(prevAp&&prevAp.start)||ymd(new Date(Date.parse(wkStartOf(TODAY))-wi*7*864e5+12*3600e3))}:{}),author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),po:p.po&&p.po.mode?{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}:null,an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
+  const lstart=ymd(new Date(Date.parse(wkStartOf(TODAY))-wi*7*864e5+12*3600e3));
+  const srcHash=p.fresh||!prevAp?progHash(p):(prevAp.srcHash||progHash(p));
+  plan.activeProgram={key:p.key,title:p.title,week:wi,weeks:p.weeks.length,lstart,srcHash,...(prevAp&&prevAp.dismissHash&&!p.fresh?{dismissHash:prevAp.dismissHash}:{}),...(alt?{pattern:"alt",wkNames:Array.isArray(p.wkNames)?p.wkNames.slice(0,2):null,start:p.start||(prevAp&&prevAp.start)||ymd(new Date(Date.parse(wkStartOf(TODAY))-wi*7*864e5+12*3600e3))}:{}),author:p.author||null,snapshot:JSON.parse(JSON.stringify(p.weeks)),po:p.po&&p.po.mode?{mode:p.po.mode,up:p.po.up||null,low:p.po.low||null}:null,an:(p.author&&pg.names[p.author])||(plan.activeProgram&&plan.activeProgram.key===p.key&&plan.activeProgram.an)||null,notes:p.notes||(Object.keys(progNoteFields(p)).length?progNoteFields(p):prevN||{})};
   savePlan(); syncDays();
 }
 function stopProgram(){
