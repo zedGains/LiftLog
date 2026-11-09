@@ -1,0 +1,105 @@
+1747	Muscles de la semaine
+1748	Séries par muscle, du lundi au dimanche. Les muscles secondaires comptent une demi-série. Les échauffements ne comptent pas.
+1749	Séries par muscle, du lundi au dimanche. Les muscles secondaires comptent une demi-série. Les échauffements ne comptent pas. Enregistre une séance et ça se remplit.
+338	Aucune
+1750	Peu
+137	Presque
+1751	Bien
+1752	Beaucoup
+1753	Touche un muscle pour voir ses séries.
+1754	Touche un muscle pour voir ses séries. Faible pour l'instant : {x}.
+1755	Deltoïdes avant et côtés
+1466	Deltoïdes arrière
+1756	Haut du dos
+1757	Dorsaux
+591	Trapèzes
+93	Biceps
+593	Triceps
+222	Avant-bras
+47	Abdos
+347	Obliques
+1469	Bas du dos
+404	Quadriceps
+250	Ischios
+242	Fessiers
+118	Mollets
+128	Pectoraux
+1758	objectif {0}–{1}
+1759	{x} séries · {x2}
+1760	{x} série · {x2}
+1761	Rien pour {x} cette semaine.
+1762	Extras de séance
+1763	% du poids de chaque série en dessous (touche-en un pour remplir la série suivante)
+1764	Carte des muscles de la semaine dans l'onglet Journal
+1765	Touche le numéro d'une série pendant la séance pour la passer en AMRAP, à l'échec ou en échauffement.
+1766	AMRAP
+1767	EMOM
+1768	Le plus de tours possible
+1769	Chaque minute
+1770	Durée
+1771	Durée totale
+1772	Toutes les
+1773	Que contient un tour ? (facultatif)
+1774	Quoi faire à chaque tour, un par ligne (facultatif)
+1775	Lancer l'AMRAP
+1776	Lancer l'EMOM
+1777	Décompte {0}-{1}-{2}, puis touche +{3} tour à chaque tour fini. Bip pendant les {4} dernières secondes. Garde la sonnerie activée.
+1778	Décompte {0}-{1}-{2}, puis un bip et une vibration au début de chaque tour. Garde la sonnerie activée.
+1779	AMRAP dans {0}
+1780	EMOM dans {0}
+1781	Prépare-toi
+1782	+{0} tour
+1783	Annuler le tour
+1784	Pause
+1785	Reprendre
+1786	Fin
+1787	Touche encore pour finir
+1788	temps restant
+1789	Tour {0}
+1790	Minute {0} sur {1}
+1791	Tour {0} sur {1}
+1792	jusqu'au suivant
+1793	marqué raté
+1794	Raté celui-ci
+1795	Annuler raté
+1796	Min {0}
+1797	T {0}
+1798	maintenant
+1799	En pause
+1800	AMRAP de {0} min
+1801	{0} tours
+1802	{0} tour
+1803	− rep
+1804	+ rep
+1805	{0} reps en plus
+1806	Enregistrer dans le journal du jour
+1338	Supprimer
+1807	Touche encore pour supprimer
+1808	Enregistré dans le journal du jour
+1809	Enregistré. Nouveau record 🎉
+1810	Tes derniers résultats
+1811	Termine ou arrête le chrono d'abord
+1812	terminé plus tôt
+1813	ÉCHAUF.
+1814	ÉCHEC
+1815	AMRAP : le plus de reps possible avec une bonne technique.
+1816	À l'échec : jusqu'à ne plus pouvoir faire une rep.
+1817	Objectif : dépasser <b>{0}</b>.
+1818	Objectif : dépasser
+1819	{0} reps, {1} de plus que {2}. Nouveau record pour cette série.
+1820	Max estimé : {0} lb.
+1821	Max estimé : {0} kg.
+1822	AMRAP : le plus de reps possible
+1823	À l'échec
+1824	Échauffement : ne compte ni pour les records ni pour le volume
+1825	Série normale
+1826	Dernière série
+1827	Normale
+1828	AMRAP : le plus de reps possible avec une bonne technique. À l'échec : jusqu'à ne plus pouvoir faire une rep.
+1829	Ta série AMRAP a dépassé l'objectif de 2+ reps, donc plus grosse hausse : +{x} sur chaque série.
+1830	Type de la série {0} : normale. Touche pour changer
+1831	Type de la série {0} : AMRAP. Touche pour changer
+1832	Type de la série {0} : à l'échec. Touche pour changer
+1833	Type de la série {0} : échauffement. Touche pour changer
+1834	Pourcentage de la série {0}
+1835	Minuteur

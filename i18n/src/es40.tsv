@@ -1,0 +1,105 @@
+1747	Músculos de esta semana
+1748	Series por músculo, de lunes a domingo. Los músculos secundarios cuentan media serie. Los calentamientos no cuentan.
+1749	Series por músculo, de lunes a domingo. Los músculos secundarios cuentan media serie. Los calentamientos no cuentan. Guarda un entreno y se llena.
+338	Nada
+1750	Poco
+137	Cerca
+1751	Bien
+1752	Mucho
+1753	Toca un músculo para ver sus series.
+1754	Toca un músculo para ver sus series. Bajo hasta ahora: {x}.
+1755	Deltoides frontal y lateral
+1466	Deltoides posterior
+1756	Espalda alta
+1757	Dorsales
+591	Trapecios
+93	Bíceps
+593	Tríceps
+222	Antebrazos
+47	Abdominales
+347	Oblicuos
+1469	Zona lumbar
+404	Cuádriceps
+250	Isquiotibiales
+242	Glúteos
+118	Pantorrillas
+128	Pecho
+1758	objetivo {0}–{1}
+1759	{x} series · {x2}
+1760	{x} serie · {x2}
+1761	Nada de {x} todavía esta semana.
+1762	Extras del entreno
+1763	% del peso de cada serie debajo (toca uno para llenar la siguiente serie)
+1764	Mapa de calor de músculos de la semana en la pestaña Registro
+1765	Toca el número de una serie en un entreno para hacerla AMRAP, al fallo o de calentamiento.
+1766	AMRAP
+1767	EMOM
+1768	Tantas rondas como puedas
+1769	Cada minuto en el minuto
+1770	Duración
+1771	Tiempo total
+1772	Cada
+1773	¿Qué hay en una ronda? (opcional)
+1774	Qué hacer en cada ronda, uno por línea (opcional)
+1775	Iniciar AMRAP
+1776	Iniciar EMOM
+1777	Cuenta regresiva {0}-{1}-{2}, luego toca +{3} ronda cada vez que termines una. Suena en los últimos {4} segundos. Deja el timbre activado.
+1778	Cuenta regresiva {0}-{1}-{2}, luego un pitido y vibración al inicio de cada ronda. Deja el timbre activado.
+1779	AMRAP empieza en {0}
+1780	EMOM empieza en {0}
+1781	Prepárate
+1782	+{0} ronda
+1783	Deshacer ronda
+1784	Pausa
+1785	Seguir
+1786	Terminar
+1787	Toca otra vez para terminar
+1788	tiempo restante
+1789	Ronda {0}
+1790	Minuto {0} de {1}
+1791	Ronda {0} de {1}
+1792	hasta la siguiente
+1793	marcado como fallado
+1794	Fallé esta
+1795	Deshacer fallo
+1796	Min {0}
+1797	R {0}
+1798	ahora
+1799	En pausa
+1800	AMRAP de {0} min
+1801	{0} rondas
+1802	{0} ronda
+1803	− rep
+1804	+ rep
+1805	{0} reps extra
+1806	Guardar en el registro de hoy
+1338	Descartar
+1807	Toca otra vez para descartar
+1808	Guardado en el registro de hoy
+1809	Guardado. ¡Nuevo récord 🎉!
+1810	Tus últimos resultados
+1811	Termina o detén el reloj primero
+1812	terminado antes
+1813	CALENT.
+1814	FALLO
+1815	AMRAP: tantas reps como puedas con buena técnica.
+1816	Al fallo: hasta que no puedas hacer otra rep.
+1817	Meta: supera <b>{0}</b>.
+1818	Meta: supera
+1819	{0} reps, {1} más que {2}. Nuevo récord para esta serie.
+1820	Máximo estimado: {0} lb.
+1821	Máximo estimado: {0} kg.
+1822	AMRAP: tantas reps como puedas
+1823	Al fallo
+1824	Calentamiento: no cuenta para récords ni volumen
+1825	Serie normal
+1826	Última serie
+1827	Normal
+1828	AMRAP: tantas reps como puedan con buena técnica. Al fallo: hasta que no puedan hacer otra rep.
+1829	Tu serie AMRAP superó la meta por 2+ reps, así que el salto es mayor: +{x} en cada serie.
+1830	Tipo de serie {0}: normal. Toca para cambiar
+1831	Tipo de serie {0}: AMRAP. Toca para cambiar
+1832	Tipo de serie {0}: al fallo. Toca para cambiar
+1833	Tipo de serie {0}: calentamiento. Toca para cambiar
+1834	Porcentaje de la serie {0}
+1835	Temporizador
