@@ -1015,7 +1015,7 @@ function setsText(sets,type){
   if(type==="cardio") return sets[0].w?`${sets[0].w} min`:"done";
   const top=sets.filter(s=>s.r||s.w);
   if(!top.length) return "";
-  return top.map(s=>(s.k==="w"?"W ":"")+(s.w?`${toDisp(s.w)}×`:"BW×")+(s.r||"?")+(s.k==="a"?"+":s.k==="f"?" F":"")).join(", ");
+  return top.map(s=>(s.k==="w"?"W ":"")+(s.w?`${toDisp(s.w)}×`:type==="lift"?"":"BW×")+(s.r||"?")+(!s.w&&type==="lift"?" reps":"")+(s.k==="a"?"+":s.k==="f"?" F":"")).join(", ");
 }
 
 /* ---------- state & storage ---------- */
@@ -1038,7 +1038,7 @@ const G2M={Chest:["chest"],Back:["lats","midback"],Shoulders:["shoulders"],Traps
  Quads:["quads"],Hamstrings:["hamstrings"],Glutes:["glutes"],Calves:["calves"],Abs:["abs"],Obliques:["obliques"],"Full Body":["quads","glutes","shoulders","traps"],Cardio:[]};
 const LIB_RAW={
  Chest:[["Barbell Bench Press","Barbell"],["Incline Barbell Bench Press","Barbell"],["Decline Barbell Bench Press","Barbell"],["Dumbbell Bench Press","Dumbbell"],["Incline Dumbbell Press","Dumbbell"],["Decline Dumbbell Press","Dumbbell"],["Flat Dumbbell Flies","Dumbbell"],["Incline Dumbbell Flies","Dumbbell"],["Cable Crossover","Cable"],["Low-to-High Cable Fly","Cable"],["High-to-Low Cable Fly","Cable"],["Pec Deck Fly","Machine"],["Chest Press Machine","Machine"],["Incline Chest Press Machine","Machine"],["Smith Machine Bench Press","Smith"],["Push-Ups","Bodyweight"],["Chest Dips","Bodyweight"],["Dumbbell Pullover","Dumbbell"],["Floor Press","Barbell",["chest","triceps"],["shoulders"]],["Dumbbell Floor Press","Dumbbell"],["Close-Grip Dumbbell Press","Dumbbell",["chest","triceps"],[]],["Landmine Press","Barbell",["chest","shoulders"],["triceps"]],["Machine Fly","Machine"],["Single-Arm Cable Fly","Cable"],["Svend Press","Plate"],["Hammer Strength Chest Press","Machine"],["Decline Chest Press Machine","Machine"],["Incline Push-Ups","Bodyweight"],["Decline Push-Ups","Bodyweight",["chest"],["shoulders","triceps"]],["Deficit Push-Ups","Bodyweight"],["Weighted Dips","Bodyweight",["chest","triceps"],["shoulders"]],["Paused Bench Press","Barbell",["chest"],["triceps","shoulders"]],["Spoto Press","Barbell",["chest"],["triceps","shoulders"]],["Smith Machine Incline Bench Press", "Smith"],["Cable Chest Press", "Cable"],["Dumbbell Squeeze Press", "Dumbbell"],["Larsen Press", "Barbell"],["Incline Cable Fly", "Cable"],["Decline Dumbbell Flies", "Dumbbell"],["Kettlebell Floor Press", "Kettlebell"],["Resistance Band Chest Press", "Other"]],
- Back:[["Pull-Ups","Bodyweight"],["Chin-Ups","Bodyweight"],["Assisted Pull-Up Machine","Machine"],["Lat Pulldown","Cable"],["Close-Grip Lat Pulldown","Cable"],["Underhand Lat Pulldown","Cable"],["Straight-Arm Pulldown","Cable"],["Barbell Row","Barbell"],["Underhand Barbell Row","Barbell"],["One-Arm Dumbbell Row","Dumbbell"],["Seated Cable Row","Cable"],["T-Bar Row","Barbell"],["Chest-Supported Row Machine","Machine"],["Pendlay Row","Barbell"],["Inverted Row","Bodyweight"],["Deadlift","Barbell",["lowerback","glutes"],["hamstrings","traps","lats"]],["Back Extension","Bodyweight",["lowerback"],["glutes","hamstrings"]],["Trap Bar Deadlift","Trap bar",["quads","glutes","lowerback"],["hamstrings","traps"]],["Sumo Deadlift","Barbell",["glutes","quads","lowerback"],["hamstrings","traps"]],["Rack Pull","Barbell",["lowerback","traps"],["glutes","lats"]],["Deficit Deadlift","Barbell",["lowerback","hamstrings"],["glutes","traps"]],["Snatch-Grip Deadlift","Barbell",["lowerback","traps"],["hamstrings","glutes"]],["Meadows Row","Barbell"],["Seal Row","Barbell"],["Kroc Row","Dumbbell"],["Chest-Supported Dumbbell Row","Dumbbell"],["Single-Arm Cable Row","Cable"],["Machine Row","Machine"],["High Row Machine","Machine"],["Wide-Grip Lat Pulldown","Cable"],["Neutral-Grip Pull-Ups","Bodyweight"],["Weighted Pull-Ups","Bodyweight"],["Rope Straight-Arm Pulldown","Cable"],["Dumbbell Pullover (lats)","Dumbbell"],["Superman Hold (seconds)","Bodyweight",["lowerback"],["glutes"]],["Hyperextension (weighted)","Plate",["lowerback"],["glutes","hamstrings"]],["Cable Pullover", "Cable", ["lats"], ["triceps"]],["Yates Row", "Barbell"],["Gorilla Row", "Kettlebell"],["Renegade Row", "Dumbbell"],["Chest-Supported T-Bar Row", "Machine"],["Single-Arm Lat Pulldown", "Cable"],["Iso-Lateral Row Machine", "Machine"],["Block Pull", "Barbell"],["Resistance Band Row", "Other"],["Kettlebell Row", "Kettlebell"]],
+ Back:[["Pull-Ups","Bodyweight"],["Chin-Ups","Bodyweight"],["Assisted Pull-Up Machine","Machine"],["Lat Pulldown","Cable"],["Close-Grip Lat Pulldown","Cable"],["Underhand Lat Pulldown","Cable"],["Straight-Arm Pulldown","Cable"],["Barbell Row","Barbell"],["Underhand Barbell Row","Barbell"],["One-Arm Dumbbell Row","Dumbbell"],["Seated Cable Row","Cable"],["T-Bar Row","Barbell"],["Chest-Supported Row Machine","Machine"],["Pendlay Row","Barbell"],["Inverted Row","Bodyweight"],["Deadlift","Barbell",["lowerback","glutes"],["hamstrings","traps","lats"]],["Back Extension","Bodyweight",["lowerback"],["glutes","hamstrings"]],["Trap Bar Deadlift","Trap bar",["quads","glutes","lowerback"],["hamstrings","traps"]],["Sumo Deadlift","Barbell",["glutes","quads","lowerback"],["hamstrings","traps"]],["Rack Pull","Barbell",["lowerback","traps"],["glutes","lats"]],["Deficit Deadlift","Barbell",["lowerback","hamstrings"],["glutes","traps"]],["Snatch-Grip Deadlift","Barbell",["lowerback","traps"],["hamstrings","glutes"]],["Meadows Row","Barbell"],["Seal Row","Barbell"],["Kroc Row","Dumbbell"],["Chest-Supported Dumbbell Row","Dumbbell"],["Single-Arm Cable Row","Cable"],["Machine Row","Machine"],["High Row Machine","Machine"],["Wide-Grip Lat Pulldown","Cable"],["Neutral-Grip Pull-Ups","Bodyweight"],["Weighted Pull-Ups","Bodyweight"],["Rope Straight-Arm Pulldown","Cable"],["Dumbbell Pullover (lats)","Dumbbell"],["Superman Hold (seconds)","Bodyweight",["lowerback"],["glutes"]],["Hyperextension (weighted)","Plate",["lowerback"],["glutes","hamstrings"]],["Cable Pullover", "Cable", ["lats"], ["triceps"]],["Yates Row", "Barbell"],["Gorilla Row", "Kettlebell"],["Renegade Row", "Dumbbell"],["Chest-Supported T-Bar Row", "Machine"],["Single-Arm Lat Pulldown", "Cable"],["Iso-Lateral Row Machine", "Machine"],["Block Pull", "Barbell"],["Resistance Band Row", "Other"],["Resistance Band Lat Pulldown","Other",["lats"],["biceps"]],["Kettlebell Row", "Kettlebell"]],
  Shoulders:[["Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Military Press","Barbell",["shoulders"],["triceps","traps"]],["Seated Dumbbell Shoulder Press","Dumbbell"],["Standing Barbell Overhead Press","Barbell"],["Seated Barbell Shoulder Press","Barbell"],["Arnold Press","Dumbbell"],["Shoulder Press Machine","Machine"],["Smith Machine Shoulder Press","Smith"],["Dumbbell Lateral Raise","Dumbbell"],["Seated Dumbbell Lateral Raise","Dumbbell"],["Cable Lateral Raise","Cable"],["Lateral Raise Machine","Machine"],["Front Dumbbell Raise","Dumbbell"],["Front Plate Raise","Plate"],["Upright Row","Barbell",["shoulders"],["traps"]],["Bent-Over Rear Delt Fly","Dumbbell",["reardelts"],["midback"]],["Reverse Pec Deck","Machine",["reardelts"],["midback"]],["Face Pulls","Cable",["reardelts"],["traps","midback"]],["Push Press","Barbell",["shoulders"],["triceps","quads"]],["Z Press","Barbell",["shoulders"],["triceps","abs"]],["Landmine Shoulder Press","Barbell"],["Behind-the-Neck Press","Barbell"],["Seated Military Press Machine","Machine"],["Cable Front Raise","Cable"],["Lu Raise","Dumbbell"],["Y Raise","Dumbbell",["shoulders","reardelts"],["traps"]],["Leaning Cable Lateral Raise","Cable"],["Dumbbell Upright Row","Dumbbell",["shoulders"],["traps"]],["Rear Delt Cable Fly","Cable",["reardelts"],["midback"]],["Band Pull-Aparts","Other",["reardelts"],["midback"]],["Seated Rear Delt Raise","Dumbbell",["reardelts"],["midback"]],["Pike Push-Ups","Bodyweight",["shoulders"],["triceps"]],["Handstand Push-Ups","Bodyweight",["shoulders"],["triceps"]],["Cuban Press", "Dumbbell"],["Bradford Press", "Barbell"],["Kettlebell Overhead Press", "Kettlebell"],["Cable Y Raise", "Cable"],["Egyptian Lateral Raise", "Cable"],["Dumbbell Rear Delt Row", "Dumbbell"],["Resistance Band Lateral Raise", "Other"],["Plate Halo", "Plate"]],
  Traps:[["Barbell Shrugs","Barbell"],["Dumbbell Shrugs","Dumbbell"],["Smith Machine Shrugs","Smith"],["Shrug Machine","Machine"],["Trap Bar Shrugs","Trap bar"],["Cable Shrugs","Cable"],["Farmer's Carry","Dumbbell",["traps","forearms"],[]],["Snatch-Grip Shrugs","Barbell"],["Behind-the-Back Shrugs","Barbell"],["Overhead Shrugs","Barbell",["traps"],["shoulders"]],["Kirk Shrugs","Barbell"],["Rack Pull Shrugs","Barbell"],["Neck Curl (plate)", "Plate"],["Neck Extension (plate)", "Plate"],["Neck Harness Extension", "Other"],["Kelso Shrug", "Dumbbell"]],
  Biceps:[["Barbell Curl","Barbell"],["EZ-Bar Curl","EZ bar"],["Standing Dumbbell Curl","Dumbbell"],["Seated Dumbbell Curl","Dumbbell"],["Incline Dumbbell Curl","Dumbbell"],["Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Concentration Curl","Dumbbell"],["EZ-Bar Preacher Curl","EZ bar"],["Preacher Curl Machine","Machine"],["Cable Curl","Cable"],["Rope Hammer Curl","Cable",["biceps","forearms"],[]],["Spider Curl","Dumbbell"],["Bayesian Cable Curl","Cable"],["Drag Curl","Barbell"],["Zottman Curl","Dumbbell",["biceps","forearms"],[]],["Cross-Body Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Machine Curl","Machine"],["21s","Barbell"],["Cable Rope Curl","Cable"],["High Cable Curl","Cable"],["Waiter Curl","Dumbbell"],["Preacher Hammer Curl","Dumbbell",["biceps","forearms"],[]],["Chin-Ups (close grip)","Bodyweight",["biceps","lats"],[]],["Kettlebell Curl", "Kettlebell"],["Reverse Barbell Curl", "Barbell", ["biceps", "forearms"], []],["Cable Preacher Curl", "Cable"],["Dumbbell Preacher Curl", "Dumbbell"],["Incline Hammer Curl", "Dumbbell"],["Resistance Band Curl", "Other"],["Prone Incline Curl", "Dumbbell"]],
@@ -1129,7 +1129,7 @@ function buildStarter(){
   Object.keys(STARTER_SPEC.days).forEach(k=>{const d=STARTER_SPEC.days[k];const secs={};const order=[];
     d.items.forEach(([name,sets,reps])=>{const L=LIB.find(x=>x.name===name);if(!L)return;const sec=["Quads","Hamstrings","Glutes","Calves"].includes(L.g)?"Legs":L.g;
       if(!secs[sec]){secs[sec]=[];order.push(sec)}
-      secs[sec].push({id:"s_"+L.id,name:L.name,sets,reps,type:L.type,target:L.g,g:L.g,p:L.p,s:L.s,alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name)})});
+      secs[sec].push({id:"s_"+L.id,name:L.name,sets,reps,type:L.type,target:L.g,g:L.g,p:L.p,s:L.s,alts:nearAlts(L)})});
     t.days[k]={label:d.label,title:d.title,short:d.title,color:d.color,sections:order.map(sec=>({sec,items:secs[sec]}))}});
   return t}
 const BLANK_TPL={name:"Your own plan",schedule:{},notes:{eyebrow:"Your plan"},days:{}};
@@ -1182,14 +1182,14 @@ function effItem(dayKey,orig,sec){
   return {id:(L.custom?"c_":"x_")+L.id,name:L.name,sets:o.sets,reps:o.reps,drop:!!o.drop,type,target:L.g,g:L.g,
     p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
     note:L.custom?`Your own exercise (${L.g}).`:"",
-    alts:LIB.filter(x=>x.g===L.g&&x.id!==L.id).slice(0,3).map(x=>x.name),
+    alts:nearAlts(L),
     sec:sectionFor(L.g,dayKey),slot,dayKey,replaced:orig.name,lib:L.id,custom:!!L.custom};
 }
 function extraItem(dayKey,x){
   if(x.t){const t=x.t;return {id:x.hid||("t_"+slug(t.name)),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:t.name,sets:x.sets,reps:x.reps,rs:null,drop:!!x.drop,type:t.type||"lift",target:t.target,g:t.g,p:t.p||[],s:t.s||[],each:!!t.each,note:t.note||"",cue:t.cue,tip:t.tip,alts:Array.isArray(x.alts)?x.alts:t.alts||[],sec:x.sec||t.sec||"Other",slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:null,custom:false}}
   const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
   return {id:x.hid||((L.custom?"c_":"x_")+L.id),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
-    note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:LIB.filter(y=>y.g===L.g&&y.id!==L.id).slice(0,3).map(y=>y.name),
+    note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:nearAlts(L),
     sec:x.sec||sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
 function applyPick(it,exId,sets,reps,drop,rs){
   if(it.progMode){const L=libById(exId);if(L)it.onPick({name:L.name,g:L.g,type:L.type||"lift",sets,reps,...(rs&&rs.length?{rs}:{}),drop:!!drop,p:L.p||G2M[L.g]||[],s:L.s||[],eq:L.eq||"Custom"});savePlan();return}
@@ -1251,6 +1251,7 @@ function altSync(){const ap=altProg();if(!ap||altSyncing)return;const want=wkTyp
 const AB_CORE=/crunch|leg raise|sway|plank|sit-up|twist|woodchop|pallof|side bend|ab wheel|hollow|dead bug|mountain climb|flutter|v-up|toes-to-bar/i;
 // [test, sets, reps, tier]; tier decides order (heaviest lifts first)
 const AB_RULES=[
+ [/shrug/i,3,[8,10],4],[/straight.?arm/i,3,[10,12],5],[/rope.*extension|overhead.*extension|triceps? extension/i,3,[8,10],4],
  [/leg extension/i,3,[8,10],4],[/lateral raise|rear|face pull|reverse pec/i,3,[10,12],5],[/fl(y|ies)|crossover|pec deck/i,2,[8,10],5],
  [/seated calf/i,3,[10,12],5],[/calf|calve/i,3,[8,10],4],[/reverse.?grip|reverse curl/i,2,[10,12],5],[/pull ?downs?\b.*rope|rope pull ?down|pushdown|kickback/i,2,[10,12],5],
  [/preacher/i,3,[8,10],4],[/curl/i,3,[6,8],3],[/skull|dip|close-grip|triceps? extension|overhead.*extension/i,3,[6,8],3],
@@ -1660,7 +1661,9 @@ function skipToday(){const k=plannedToday();if(!k)return;plan.skips=plan.skips||
 function unskipToday(){if(plan.skips){delete plan.skips[TODAY];savePlan()}render();toast("Back on: today is a workout day again")}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
-function defaultDay(){const k=state.lastDay;return DAYS[k]?k:(weekdayTab()||trainKeys()[0]||null)}
+function defaultDay(){const k=state.lastDay;if(DAYS[k])return k;const t=weekdayTab()||trainKeys()[0];if(t)return t;
+  // rest day on a program: show the next workout that's coming up
+  const wd=nowD().getDay();for(let i=1;i<=7;i++){const n=schedOf((wd+i)%7);if(n&&DAYS[n])return n}return dayKeys()[0]||null}
 function pickTab(){if(validTab(state.tab))return state.tab;if(state.tab==="workout")return defaultDay()||"workout";return defaultDay()||"workout"}
 const NAV_ICONS={workout:'<path d="M6 8v8M18 8v8M3 10.5v3M21 10.5v3M6 12h12" stroke-width="2.2" stroke-linecap="round"/>',
  programs:'<rect x="4" y="5" width="16" height="15" rx="2" stroke-width="2"/><path d="M4 9.5h16M9 3v4M15 3v4" stroke-width="2" stroke-linecap="round"/>',
@@ -1743,7 +1746,7 @@ const SM_EX=[
  ["Shoulder Press Machine","frontdelt",1,"g",""],["Seated Dumbbell Shoulder Press","frontdelt",1,"gd","s"],["Military Press","frontdelt",1,"g","sb"],["Pike Push-Ups","frontdelt",1,"h","s"],["Front Dumbbell Raise","frontdelt",0,"gd",""],
  ["Cable Lateral Raise","sidedelt",0,"g",""],["Dumbbell Lateral Raise","sidedelt",0,"gd",""],["Lateral Raise Machine","sidedelt",0,"g",""],["Resistance Band Lateral Raise","sidedelt",0,"h",""],["Seated Dumbbell Lateral Raise","sidedelt",0,"d",""],
  ["Reverse Pec Deck","reardelt",0,"g",""],["Face Pulls","reardelt",0,"g",""],["Bent-Over Rear Delt Fly","reardelt",0,"d",""],["Band Pull-Aparts","reardelt",0,"h",""],["Seated Rear Delt Raise","reardelt",0,"d",""],
- ["Lat Pulldown","lats",1,"g",""],["Pull-Ups","lats",1,"h",""],["One-Arm Dumbbell Row","lats",1,"d",""],["Single-Arm Lat Pulldown","lats",0,"g",""],["Straight-Arm Pulldown","lats",0,"g",""],["Dumbbell Pullover (lats)","lats",0,"d",""],["Close-Grip Lat Pulldown","lats",1,"g",""],
+ ["Lat Pulldown","lats",1,"g",""],["Pull-Ups","lats",1,"g",""],["Resistance Band Lat Pulldown","lats",1,"h",""],["One-Arm Dumbbell Row","lats",1,"d",""],["Single-Arm Lat Pulldown","lats",0,"g",""],["Straight-Arm Pulldown","lats",0,"g",""],["Dumbbell Pullover (lats)","lats",0,"d",""],["Close-Grip Lat Pulldown","lats",1,"g",""],
  ["Seated Cable Row","upperback",1,"g",""],["Chest-Supported Row Machine","upperback",1,"g",""],["Barbell Row","upperback",1,"g","b"],["Chest-Supported Dumbbell Row","upperback",1,"d",""],["Inverted Row","upperback",1,"h",""],["Resistance Band Row","upperback",0,"h",""],["Machine Row","upperback",0,"g",""],
  ["Dumbbell Shrugs","traps",0,"gd",""],["Shrug Machine","traps",0,"g",""],["Farmer's Carry","traps",0,"d",""],
  ["Back Extension","lowback",0,"gh",""],["Superman Hold (seconds)","lowback",0,"hd",""],
@@ -1845,7 +1848,7 @@ function smBuild(a){
         if(j>=0&&items.length>3){items.splice(j,1);continue}}
       break}});
   sessions.forEach(se=>{const items=se.items;
-    if(cardio) items.push({name:a.goal==="lose"?"Incline Treadmill Walk":"Stationary Bike",unit:"cardio",big:false,focus:false,sets:1,reps:[cardio,cardio],cardio:true});
+    if(cardio) items.push({name:eq!=="g"?"Fast Walk Outside":a.goal==="lose"?"Incline Treadmill Walk":"Stationary Bike",unit:"cardio",big:false,focus:false,sets:1,reps:[cardio,cardio],cardio:true});
     se.mins=Math.round(6+items.reduce((t,x)=>t+(x.cardio?x.reps[0]:x.sets*(x.big?(a.goal==="strength"?3.6:2.8):2.2)),0))});
   // sets per muscle per week (cardio and timed holds left out)
   const vol={};sessions.forEach(s=>s.items.forEach(x=>{if(!x.cardio)vol[x.unit]=(vol[x.unit]||0)+x.sets}));
@@ -1960,7 +1963,7 @@ function smReadAbout(){const a=state.onb.a,kg=a.units==="metric",err=$("#sm-err"
   Object.assign(a,{w:lb(w),age,ft,inch:ft!=null?(inch||0):null,goalW:lb(gw)});return true}
 function bindSmart(){const o=state.onb,a=o.a,re=()=>{o.r=null;render()};
   const go=(n)=>{blockTaps(400,"#smnext,#smback,.smfoot");o.step=n;o.r=null;render();window.scrollTo(0,0)};
-  $("#smback").onclick=()=>{if(o.step>1)go(o.step===7&&a.mode!=="adv"?5:o.step-1);else{blockTaps(400,"button,.card");state.onb=null;render();window.scrollTo(0,0)}};
+  $("#smback").onclick=()=>{if(o.step>1)go(o.step===7&&a.mode!=="adv"?5:o.step-1);else{blockTaps(400,"button,.card");state.onb=null;try{localStorage.removeItem("ll.onb")}catch(e){}render();window.scrollTo(0,0)}};
   document.querySelectorAll("[data-smgoal]").forEach(b=>b.onclick=()=>{a.goal=b.dataset.smgoal;re()});
   document.querySelectorAll("[data-smexp]").forEach(b=>b.onclick=()=>{a.exp=b.dataset.smexp;re()});
   document.querySelectorAll("[data-smunits]").forEach(b=>b.onclick=()=>{if(b.dataset.smunits===a.units)return;if(!smReadAbout())return;a.units=b.dataset.smunits;re()});
@@ -1992,7 +1995,8 @@ function smApply(){const o=state.onb,a=o.a,r=o.r||smBuild(a);
   plan.setup={...a,at:Date.now()};
   // the plan is applied like a program, so Plans can show it and you can stop or rebuild it
   const days={};r.sessions.forEach(se=>{days[String(se.wd)]={title:se.title,items:se.items.map(x=>{const L=LIB.find(y=>y.name===x.name);return {name:x.name,g:L?L.g:"",type:L?(L.type||"lift"):"lift",sets:x.sets,reps:x.reps,drop:false}})}});
-  r.extraDays.forEach(wd=>{days[String(wd)]={title:"Cardio & Core",items:[{name:"Incline Treadmill Walk",type:"cardio",sets:1,reps:[20,20]},{name:"Cable Crunch",type:"lift",sets:3,reps:[12,15]},{name:"Pallof Press",type:"lift",sets:3,reps:[10,12]}]}});
+  r.extraDays.forEach(wd=>{days[String(wd)]={title:"Cardio & Core",items:a.where==="gym"?[{name:"Incline Treadmill Walk",type:"cardio",sets:1,reps:[20,20]},{name:"Cable Crunch",type:"lift",sets:3,reps:[12,15]},{name:"Pallof Press",type:"lift",sets:3,reps:[10,12]}]
+    :[{name:"Fast Walk Outside",type:"cardio",sets:1,reps:[20,20]},{name:"Crunches",type:"bw",sets:3,reps:[12,20]},{name:"Side Plank (seconds)",type:"bw",sets:3,reps:[20,40]}]}});
   const why=smWhy(a,r);
   const wkA={days},alt=a.pattern==="alt";
   // new lifters keep the same number of sets on strength weeks (they can change it any time)
@@ -2000,7 +2004,7 @@ function smApply(){const o=state.onb,a=o.a,r=o.r||smBuild(a);
   applyProgram({key:"smart:"+Date.now().toString(36),title:a.mode==="adv"?"Built from your days":`Built for you · ${r.split}`,author:uid||null,weeks:alt?[wkA,strB()]:[wkA],...(alt?{pattern:"alt",wkNames:["Hypertrophy","Strength"]}:{}),desc:"A plan built from your answers: your goal, focus spots and schedule. Each muscle gets trained about twice a week, with extra sets for your focus.",who:"",progress:"Progressive overload is on for your big lifts. Hit your reps on every set and the weight goes up next time.",equip:a.where==="gym"?"Full gym":a.where==="db"?"Dumbbells":"Home"},0);
   const ex={...((plan.po||{}).ex||{})};r.sessions.forEach(se=>se.items.forEach(x=>{if(x.big)ex[x.name.toLowerCase()]=true}));
   plan.po={...(plan.po||{}),mode:"auto",ex};
-  savePlan();syncDays();state.onb=null;
+  savePlan();syncDays();state.onb=null;try{localStorage.removeItem("ll.onb")}catch(e){}
   const first=Object.keys(days).map(Number).sort((x,y)=>((x+6)%7)-((y+6)%7))[0];
   state.tab=first!=null?"pw"+first:"plan";ls.set("ll.tab",state.tab);render();window.scrollTo(0,0);
   toast("Your plan is ready");
@@ -2026,7 +2030,9 @@ function render(){
   try{if(!state.loading&&!state.needsStart)abEnsureTwins()}catch(e){console.warn(e)}
   try{const t=state.tab;if(t&&DAYS[t]){if(abWeek()==="B"){const tw=abTwinOf(t);if(tw&&DAYS[tw])state.tab=tw}else if(abIsTwin(t)){const d=plan.days.find(x=>x.key===t);if(d&&DAYS[d.twinOf])state.tab=d.twinOf}}}catch(e){}
   if(state.loading){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=`<p class="boot">Loading your plan…</p>`;return}
-  if(state.onb){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=smView();bindSmart();return}
+  // setup answers survive closing the app partway through
+  if(!state.onb&&state.needsStart&&!state.onbTried){state.onbTried=true;try{const sv=ls.get("ll.onb",null);if(sv&&sv.a&&Date.now()-sv.t<864e5)state.onb={step:Math.max(1,Math.min(sv.step||1,5)),a:sv.a}}catch(e){}}
+  if(state.onb){try{ls.set("ll.onb",{step:state.onb.step,a:state.onb.a,t:Date.now()})}catch(e){}document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=smView();bindSmart();return}
   if(state.needsStart){document.body.dataset.day="plan";$("#tabs").innerHTML="";$("#app").innerHTML=welcomeView();
     document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>b.dataset.start==="smart"?openSmart():startWith(b.dataset.start));return}
   const tab=pickTab(); document.body.dataset.day=tab; renderTabs();
@@ -3943,7 +3949,11 @@ function bindPlates(){const i=$("#platew");if(!i)return;const u=isKg()?"kg":"lb"
 
 /* ---------- backup choices ("Machine taken?") ---------- */
 function altKey(it){return String(it.name||"").toLowerCase()}
-function defaultAlts(x){return LIB.filter(y=>y.g===x.g&&y.name!==x.name).slice(0,3).map(y=>y.name)}
+function defaultAlts(x){return nearAlts(x)}
+// backup choices: same body part, closest equipment first (a bodyweight move suggests bodyweight, band or dumbbell moves, not a barbell)
+function eqKind(e){e=String(e||"").toLowerCase();return /body|other|band/.test(e)?0:/dumb|kettle/.test(e)?1:/cable|machine|smith/.test(e)?3:2}
+function nearAlts(x){const k=eqKind(x.eq),P=new Set(x.p||[]);return LIB.filter(y=>y.g===x.g&&y.name!==x.name&&(y.type||"lift")!=="cardio"===((x.type||"lift")!=="cardio"))
+  .map((y,i)=>[y,Math.abs(eqKind(y.eq)-k)*10-((y.p||[]).some(m=>P.has(m))?5:0)+i/1000]).sort((a,b)=>a[1]-b[1]).slice(0,3).map(a=>a[0].name)}
 function progAlts(it){if(!it.lib)return null;for(const k in plan.extra){const x=(plan.extra[k]||[]).find(y=>y.ex===it.lib&&Array.isArray(y.alts));if(x)return x.alts}return null}
 function altsOf(it){const o=(plan.altsMine||{})[altKey(it)];return Array.isArray(o)?o:(progAlts(it)||it.alts||[])}
 function openAltEdit(o){
