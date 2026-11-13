@@ -878,6 +878,8 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .hleg .h0{background:var(--map-muscle)}.hleg .h1{background:color-mix(in srgb,var(--green) 25%,var(--map-muscle))}.hleg .h2{background:color-mix(in srgb,var(--green) 55%,var(--map-muscle))}.hleg .h3{background:var(--green)}.hleg .h4{background:var(--orange)}
 .heatsel{border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
 .sheet{scroll-padding-top:56px}#sheet-title{padding-inline-end:44px}.pobox,.porow{margin-inline-end:0}
+.revban{position:sticky;top:6px;z-index:6;display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--orange);background:color-mix(in srgb,var(--orange) 14%,var(--surface));border-radius:14px;padding:10px 12px;margin:0 0 12px}
+.revban b{display:block}.revban span{font-size:13.5px;color:var(--muted)}.revban .btn{flex:none}.hnbtns{display:flex;flex-wrap:wrap;gap:4px 18px}
 .dncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 13px 10px;margin:0 0 12px}
 .dnlbl{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.dnlbl small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none;margin-left:4px}
 .dncard textarea,.hnedit textarea,.tnote textarea{width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:15px/1.4 var(--body);padding:9px 11px;resize:none;min-height:42px}
@@ -1357,16 +1359,16 @@ function todayEntry(id){return entriesOf(id).find(e=>e.date===TODAY)}
 function freshSet(){const f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];return new Set([...ls.get("ll.fresh."+TODAY,[]),...f])}
 function setFresh(fr,dayKey,at){const ids=[...fr];ls.set("ll.fresh."+TODAY,ids);const sa=plan.fresh&&plan.fresh.d===TODAY?{...(plan.fresh.at||{})}:{};if(dayKey&&at)sa[dayKey]=at;plan.fresh={d:TODAY,ids,at:sa};savePlan()}
 function shownToday(id){return freshSet().has(id)?null:todayEntry(id)}
-function lastEntry(id,type,alt){const fr=freshSet().has(id);const es=entriesOf(id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&(alt===undefined||(e.alt||null)===(alt||null)));
+function lastEntry(id,type,alt){const fr=!state.revisit&&freshSet().has(id);const lim=state.revisit?logDate():TODAY;const es=entriesOf(id).filter(e=>(fr?e.date<=lim:e.date<lim)&&e.done&&(alt===undefined||(e.alt||null)===(alt||null)));
   const t=type||wkType();if(t){const same=es.filter(e=>(e.wk||"A")===t);return same[same.length-1]||null}return es[es.length-1]||null}
 
 function draftFor(it){
   if(!state.drafts[it.id]){
-    const t=shownToday(it.id);
-    state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??"",...(x.k?{k:x.k}:{})})),alt:t.alt||null,marked:true,...(t.note?{tnote:t.note}:{}),partners:JSON.parse(JSON.stringify(t.partners||{}))}:{sets:Array.from({length:it.sets},(_,i)=>({w:"",r:"",...(it.lastK&&i===it.sets-1?{k:it.lastK}:{})})),alt:null,marked:false};
+    const t=state.revisit?entryOn(it.id,logDate()):shownToday(it.id);
+    state.drafts[it.id]=t?{sets:JSON.parse(JSON.stringify(t.sets)).map(x=>({w:x.w??"",r:x.r??"",...(x.k?{k:x.k}:{})})),alt:t.alt||null,marked:true,...(t.note?{tnote:t.note}:{}),partners:JSON.parse(JSON.stringify(t.partners||{})),...(state.revisit?{_o:JSON.stringify([t.sets||[],t.note||"",t.alt||null])}:{})}:{sets:Array.from({length:it.sets},(_,i)=>({w:"",r:"",...(it.lastK&&i===it.sets-1?{k:it.lastK}:{})})),alt:null,marked:false};
     // set types (AMRAP, to failure, warm-up) carry over from last time
     if(!t){try{const L=lastEntry(it.id,undefined,null);if(L&&L.sets)state.drafts[it.id].sets.forEach((x,i)=>{const k=L.sets[i]&&L.sets[i].k;if(k&&!x.k)x.k=k})}catch(e){}}
-    if(!t&&it.type==="lift"){try{poStart(it,state.drafts[it.id])}catch(e){console.warn(e)}}
+    if(!t&&it.type==="lift"&&!state.revisit){try{poStart(it,state.drafts[it.id])}catch(e){console.warn(e)}}
   }
   const d=state.drafts[it.id];
   if(d.n==null&&d.sets.length>it.sets) d.n=d.sets.length;
@@ -1384,7 +1386,7 @@ function dSets(it,d){return d.sets.slice(0,nSets(it,d))}
 /* unsaved marks: kept on the phone and in the account, so closing the app, midnight or another device never loses them */
 let draftAt=ls.get("ll.draftsAt."+TODAY,0),draftT=null,draftPending=0;
 try{collectLeft()}catch(e){console.warn(e)}
-function saveDrafts(){ls.set("ll.drafts."+TODAY,state.drafts);draftAt=Date.now();ls.set("ll.draftsAt."+TODAY,draftAt);queueDrafts()}
+function saveDrafts(){if(state.revisit)return;ls.set("ll.drafts."+TODAY,state.drafts);draftAt=Date.now();ls.set("ll.draftsAt."+TODAY,draftAt);queueDrafts()}
 function queueDrafts(){if(state.mode!=="db"||!col)return;clearTimeout(draftT);draftT=setTimeout(pushDrafts,1200)}
 function pushDrafts(){draftT=null;if(state.mode!=="db"||!col)return;draftPending++;
   const payload=JSON.parse(JSON.stringify({d:TODAY,at:draftAt,drafts:state.drafts,left:ls.get("ll.left",{}),gone:ls.get("ll.leftGone",[])}));
@@ -1419,9 +1421,10 @@ function saveLeft(d){if(d<wkStartOf(ymd())){dayRolled();keepLeft(ls.get("ll.left
   render();toast(`Saved ${n} workout${n===1?"":"s"} for ${fmtDate(d)}`);setTimeout(checkBadges,900)}
 
 function cleanSets(sets){return sets.map(s=>({w:s.w===""||s.w==null?null:Number(s.w),r:s.r===""||s.r==null?null:Number(s.r),...(s.k?{k:s.k}:{})})).filter(s=>s.w!==null||s.r!==null)}
-function isMarked(id){const d=state.drafts[id];return d?!!d.marked:!!shownToday(id)}
+function isMarked(id){const d=state.drafts[id];return d?!!d.marked:!!(state.revisit?entryOn(id,logDate()):shownToday(id))}
 function draftHasNums(d){return !!(d&&d.sets&&d.sets.some(x=>(x.w??"")!==""||(x.r??"")!==""))}
 function isPending(id){
+  if(state.revisit){const d=state.drafts[id];if(!d)return false;if(!d._o)return !!d.marked||draftHasNums(d);const it=ALL[id]||{sets:d.sets.length};return !!d.marked&&d._o!==JSON.stringify([cleanSets(dSets(it,d)),String(d.tnote||"").trim(),d.alt||null])}
   const d=state.drafts[id]; if(!d) return false; const t=shownToday(id);
   if(!d.marked) return !!t||draftHasNums(d);
   if(!t) return true;
@@ -1463,6 +1466,25 @@ function toggleMark(it,on){
 function dayHas(k,id){return daySections(k).some(s=>s.items.some(x=>x.id===id))}
 function dayOf(it){const cur=pickTab();if(DAYS[cur]&&dayHas(cur,it.id))return cur;return Object.keys(DAYS).find(k=>dayHas(k,it.id))}
 function logDate(){const v=state.logDate;return v&&v<TODAY?v:TODAY}
+/* ---------- go back to a past day: see what you logged, add what you forgot, fix numbers ---------- */
+function entryOn(id,date){return entriesOf(id).find(e=>e.date===date&&e.done)||null}
+function enterRevisit(date,day){if(!date||date>=TODAY){exitRevisit();return}if(!state.revisit)state.revStash=state.drafts;state.drafts={};state.revisit=true;state.logDate=date;
+  if(day&&DAYS[day])state.tab=day;else if(!DAYS[state.tab])state.tab=defaultDay();state.settings=false;state.open=null;render();window.scrollTo(0,0)}
+function exitRevisit(){if(state.revisit){state.drafts=state.revStash||{};state.revStash=null}state.revisit=false;state.logDate=null}
+function revisitBanner(){if(!state.revisit)return "";return `<div class="revban" role="status"><div><b>Editing ${fmtDate(logDate())}</b><span>What you logged that day is filled in. Add what you forgot or fix numbers, then save at the bottom.</span></div><button class="btn small" id="revexit">Back to today</button></div>`}
+function openPastPicker(){const sh=$("#sheet");const days=dayKeys();let pick=addDays(TODAY,-1),dk=null;
+  const draw=()=>{const wd=new Date(pick+"T12:00:00").getDay();if(!dk||!DAYS[dk])dk=(plan.schedule[String(wd)]&&DAYS[plan.schedule[String(wd)]]?plan.schedule[String(wd)]:null)||days[0];
+    const had=sessions().filter(x=>x.date===pick).map(x=>x.day);
+    sh.innerHTML=`<div class="grab"></div><h3 id="sheet-title">Log a past workout</h3>
+     <p class="savenote" style="margin-top:0">Forgot to log, or missed a few exercises? Pick the day and fill it in.</p>
+     <div class="dlabel">Which date?</div><label class="field" style="display:block"><input type="date" id="ppdate" value="${pick}" max="${addDays(TODAY,-1)}" aria-label="Date of the workout"></label>
+     <div class="dlabel">Which workout?</div><div class="dchips" role="group" aria-label="Workout">${days.map(k=>`<button class="dchip ${dk===k?"on":""}" data-ppday="${esc(k)}" aria-pressed="${dk===k}">${esc(DAYS[k].label)}${DAYS[k].title?` · ${esc(DAYS[k].title)}`:""}${had.includes(k)?" ✓":""}</button>`).join("")}</div>
+     ${had.length?`<p class="savenote">✓ means you already logged that workout on this date. Open it to add or fix exercises.</p>`:""}
+     <div class="btns"><button class="btn primary" id="ppgo" style="flex:1" ${days.length?"":"disabled"}>Open ${fmtDate(pick)}</button><button class="btn" id="ppx">Cancel</button></div>`;
+    $("#ppdate",sh).onchange=e=>{const v=e.target.value;if(v&&v<TODAY){pick=v;dk=null;draw()}else toast("Pick a day before today")};
+    sh.querySelectorAll("[data-ppday]").forEach(b=>b.onclick=()=>{dk=b.dataset.ppday;draw()});
+    $("#ppx",sh).onclick=closeSheet;$("#ppgo",sh).onclick=()=>{closeSheet();enterRevisit(pick,dk)}};
+  draw();sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;state.open="__past"}
 function logItem(it,d,DATE,dayKey){
     if(!state.logs[it.id]) state.logs[it.id]={entries:[]};
     const prev=state.logs[it.id].entries.find(e=>e.date===DATE);
@@ -1510,9 +1532,11 @@ function bindExNote(sh,it,d){const ta=$("#tnote",sh);if(!ta)return;
 function saveDay(dayKey){
   const DATE=logDate(), past=DATE!==TODAY;
   const all=daySections(dayKey).flatMap(s=>s.items);
-  const items=past?all.filter(it=>(isMarked(it.id)||draftHasNums(state.drafts[it.id]))&&state.drafts[it.id]):all.filter(it=>isPending(it.id));
+  const revChanged=it=>{const d=state.drafts[it.id];if(!d)return false;if(!d._o)return d.marked||draftHasNums(d);return d.marked&&d._o!==JSON.stringify([cleanSets(dSets(it,d)),String(d.tnote||"").trim(),d.alt||null])};
+  const items=past&&state.revisit?all.filter(revChanged):past?all.filter(it=>(isMarked(it.id)||draftHasNums(state.drafts[it.id]))&&state.drafts[it.id]):all.filter(it=>isPending(it.id));
   if(!items.length) return;
   items.forEach(it=>{const d=draftFor(it);if(!d.marked&&draftHasNums(d))d.marked=true;if(d.marked)fillPh(it,d);logItem(it,d,DATE,dayKey)});blockTaps();
+  if(past&&state.revisit){exitRevisit();render();window.scrollTo(0,0);toast(`Saved for ${fmtDate(DATE)}: ${items.length} exercise${items.length===1?"":"s"} updated`);setTimeout(checkBadges,900);return}
   if(past){items.forEach(it=>{delete state.drafts[it.id]});saveDrafts();state.logDate=null;
     render(); toast(`${DAYS[dayKey].label} saved for ${fmtDate(DATE)}: ${items.length} exercise${items.length===1?"":"s"} logged`); setTimeout(checkBadges,900); return}
   const n=all.filter(it=>todayEntry(it.id)).length;
@@ -2071,12 +2095,13 @@ function render(){
     <div class="row"><div><button class="daypick" id="daypick" aria-haspopup="listbox" aria-expanded="${!!state.dayMenu}"><span class="eyebrow">${esc(d.label)} · ${schedNames(tab)}${weekdayTab()===tab?" · Today":""}</span><span class="dph1"><h1>${esc(d.title)}</h1><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button>${d.autoTitle?`<div class="autonote">Renamed from ${esc(d.baseTitle)} to match your exercises</div>`:""}</div>${d.custom?`<button class="btn small" id="editday">Edit day</button>`:`<div class="plate" aria-hidden="true"><span></span></div>`}</div>
     <div class="chips">${[...new Set(secs.flatMap(s=>s.items.map(i=>i.sec||s.sec)))].map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>
     ${abBanner()}
-    <div class="progress-label"><span>Today${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
+    <div class="progress-label"><span>${state.revisit?`<span>${fmtDate(logDate())}</span>`:"Today"}${pending?` · <b style="color:var(--fg)">${pending} not saved yet</b>`:""}</span><span>${done} of ${items.length} marked</span></div>
     <div class="progress" aria-hidden="true"><i style="width:${items.length?done/items.length*100:0}%"></i></div>
   </header>
   ${savedFresh&&!ldPast?`<div class="savedbanner"><div><b>✓ ${esc(d.label)} saved today${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}</b><span>${savedFresh} exercise${savedFresh===1?"":"s"} in your History. The day is reset and ready for next time.</span></div><button class="btn small" id="editsaved">Edit today's log</button></div>`:""}
   ${(()=>{const ld=leftNow();if(!ld)return "";const n=leftItems(ld).length;
     return `<div class="leftban"><div><b>Unsaved workout from ${fmtDate(ld)} <button class="infob" id="leftinfo" aria-label="How unsaved workouts work" title="You can save a missed day any time before the week ends. At 12:00 AM Monday, unsaved marks expire.">i</button></b><span>You marked ${n} exercise${n===1?"":"s"} that day but didn't tap Save. Save by Sunday night.</span></div><div class="lbbtns"><button class="btn primary small" id="leftsave" data-lday="${ld}">Save to ${fmtDate(ld)}</button><button class="btn small" id="leftdrop" data-lday="${ld}">Discard</button></div></div>`})()}
+  ${revisitBanner()}
   ${d.prog?progUpdateBanner():""}
   ${d.note?`<div class="coach daynote"><b>Coach's note:</b> ${esc(d.note)}</div>`:""}
   ${DAYS[tab]?dnCard(tab):""}
@@ -2099,15 +2124,15 @@ function render(){
   ${(()=>{const c=dayChanges(tab);if(d.custom)return items.length?`<div class="resetrow"><span>${items.length} exercise${items.length===1?"":"s"} on ${esc(d.label)}.</span><button class="btn small" id="resetday">Clear all exercises</button></div>`:"";
      return `<div class="resetrow"><span>${c.total?c.text:"Matches your original training split."}</span><button class="btn small" id="resetday" ${c.total?"":"disabled"}>Reset to original</button></div>`})()}
   <div class="savebar">
-    <div class="savehead"><b>Finish ${d.label}</b><span>${ldPast?`${done} marked to save`:pending?`${pending} change${pending===1?"":"s"} to save`:savedN?`All saved${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}`:"Nothing marked yet"}</span></div>
+    <div class="savehead"><b>Finish ${d.label}</b><span>${state.revisit?`${pending} change${pending===1?"":"s"} to save`:ldPast?`${done} marked to save`:pending?`${pending} change${pending===1?"":"s"} to save`:savedN?`All saved${savedAt?" at "+tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"}):""}`:"Nothing marked yet"}</span></div>
     <div class="kcal">${plan.bw?`<div class="kbig"><span>Estimated burn</span><b>~${Math.round(dayKcal)}</b><small>kcal</small></div><p>${done?`From the ${done} workout${done===1?"":"s"} you marked, using your weights, reps, sets and ${toDisp(plan.bw)} ${wU()} body weight.`:"Mark workouts to see your estimate."} <button class="linkbtn" id="kcalhow">How it's figured</button></p>`
       :`<p><b>See calories burned:</b> add your body weight under <b>About you</b> in the Log tab. <button class="linkbtn" id="gotoabout">Go to About you</button></p>`}</div>
     <div class="logdate"><span class="lbl" style="margin:0">Date finished</span>
       <div class="ldrow"><button class="dchip wide ${logDate()===TODAY?"on":""}" data-ld="today">Today</button><button class="dchip wide ${logDate()===addDays(TODAY,-1)?"on":""}" data-ld="yday">Yesterday</button>
       <label class="field ldpick"><input type="date" id="logdate" value="${logDate()}" max="${TODAY}" aria-label="Date you finished ${esc(d.label)}"></label></div>
-      ${ldPast?`<p class="ldnote">Saving to <b>${fmtDate(logDate())}</b>. If you already logged any of these workouts that day, this replaces them. Today's log isn't touched.</p>`:""}</div>
+      ${ldPast?(state.revisit?`<p class="ldnote">Saving to <b>${fmtDate(logDate())}</b>. Only the exercises you add or change are saved. Today's log isn't touched.</p>`:`<p class="ldnote">Saving to <b>${fmtDate(logDate())}</b>. If you already logged any of these workouts that day, this replaces them. Today's log isn't touched.</p>`):""}</div>
     <p>Saves every exercise you marked or typed numbers into. Empty sets are skipped.</p>
-    ${ldPast?`<button class="btn primary bigsave" id="saveday" ${done?"":"disabled"}>${done?`Save ${d.label} log for ${fmtDate(logDate())}`:"Mark workouts to save"}</button>`
+    ${state.revisit?`<button class="btn primary bigsave" id="saveday" ${pending?"":"disabled"}>${pending?`Save changes for ${fmtDate(logDate())}`:"Nothing changed yet"}</button>`:ldPast?`<button class="btn primary bigsave" id="saveday" ${done?"":"disabled"}>${done?`Save ${d.label} log for ${fmtDate(logDate())}`:"Mark workouts to save"}</button>`
     :`<button class="btn primary bigsave" id="saveday" ${pending?"":"disabled"}>${pending?`Save ${d.label} log`:savedN?"Saved ✓":"Mark workouts to save"}</button>`}
     <p class="savenote">${state.mode==="db"?"Logs go to your account, so they're there next week on any device.":"Logs are saved on this phone only."}</p>
   </div>`;
@@ -2126,8 +2151,9 @@ function render(){
   app.querySelectorAll("[data-check]").forEach(b=>b.onclick=()=>toggleMark(ALL[b.dataset.check]));
   $("#saveday").onclick=()=>saveDay(tab);
   app.querySelectorAll("[data-mvday]").forEach(b=>b.onclick=()=>moveDay(b.dataset.mvday,+b.dataset.dir));
-  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{state.logDate=b.dataset.ld==="yday"?addDays(TODAY,-1):null;render()});
-  const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
+  app.querySelectorAll("[data-ld]").forEach(b=>b.onclick=()=>{if(state.revisit)exitRevisit();state.logDate=b.dataset.ld==="yday"?addDays(TODAY,-1):null;render()});
+  const rvx=$("#revexit");if(rvx)rvx.onclick=()=>{exitRevisit();state.tab=null;render();window.scrollTo(0,0)};
+  const ldi=$("#logdate"); if(ldi) ldi.onchange=()=>{const v=ldi.value;if(state.revisit){if(v&&v<TODAY){enterRevisit(v,state.tab);return}exitRevisit()}state.logDate=v&&v<TODAY?v:null;if(v>TODAY)toast("Pick today or an earlier day");render()};
   $("#addex").onclick=()=>openAdd(tab);
   const ed=$("#editday"); if(ed) ed.onclick=()=>openDayEditor(tab);
   app.querySelectorAll("[data-split]").forEach(b=>b.onclick=()=>withUndo("Superset split",()=>{splitSuper(b.dataset.sday,b.dataset.split);savePlan();render()}));
@@ -2146,7 +2172,7 @@ function bindReorder(sec,tab){
     const nb=document.querySelector(`.section.reordering [data-mv="${b.dataset.mv}"][data-i="${j}"]`)||document.querySelector(`.section.reordering [data-i="${j}"]`);if(nb&&!nb.disabled)nb.focus()});
 }
 function card(it){
-  const m=isMarked(it.id), pend=isPending(it.id), t=shownToday(it.id), last=lastEntry(it.id), h=hintFor(it);
+  const m=isMarked(it.id), pend=isPending(it.id), t=state.revisit?entryOn(it.id,logDate()):shownToday(it.id), last=lastEntry(it.id), h=state.revisit?"":hintFor(it);
   const dr=state.drafts[it.id];
   const cur=dr?cleanSets(dSets(it,dr)):(t?t.sets:[]);
   const alt=dr?dr.alt:(t&&t.alt);
@@ -2162,7 +2188,7 @@ function card(it){
    <button class="main" data-open="${it.id}" aria-label="Open ${esc(it.name)}">
      <span class="name">${it.ss?`<span class="sstag">${it.ss}</span>`:""}${esc(it.name)}${alt?`<br><span class="swap">Doing: ${esc(alt)}</span>`:""}</span>
      <span class="meta"><span class="tag">${esc(it.target)}</span><span class="rx">${rxText(it)}</span>${it.drop?'<span class="tag ghost">Drop sets</span>':""}${status}</span>
-     ${cur.length?`<span class="last today">Today: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
+     ${cur.length?`<span class="last today">${state.revisit?"Logged":"Today"}: <b>${esc(setsText(cur,it.type))}</b>${lb(cur)}</span>`:""}
      <span class="last">${lastTxt}</span>
      ${(()=>{const ln=(wt&&it.type!=="cardio"?lastEntry(it.id,wt):last)||last;return ln&&ln.note?`<span class="lnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(ln.note)}</span></span>`:""})()}
      ${vsLine(it)}
@@ -2801,6 +2827,7 @@ function planView(){
    ${heatPanel()}
    ${(()=>{const dates=new Set(sessions().map(x=>x.date));const only=(plan.wods||[]).filter(w=>!dates.has(w.date)).slice(-6).reverse();return only.length?`<div class="panel"><h2>Clock results</h2><div class="history">${only.map(w=>`<div><span class="d"><span>${fmtDate(w.date)}</span> · <span>${esc(wodTitle(w))}</span>${w.desc?` · <span dir="auto">${esc(w.desc)}</span>`:""}</span><span class="v">${esc(wodScore(w))}</span></div>`).join("")}</div></div>`:""})()}
    <div class="panel"><h2 class="hhead">History <button class="btn small" id="shareweek">Share my week</button></h2>
+    <button class="btn small" id="pastlog" style="margin:0 0 10px">+ Log a past workout</button>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0||state.histEdit===dnKey(x.date,x.day)?"open":""}>
       <summary><span class="sd" style="background:var(${DAYS[x.day]?DAYS[x.day].color:"--green"})"></span>
@@ -2829,8 +2856,10 @@ function histNotes(x){const k=dnKey(x.date,x.day),dn=dnGet(x.date,x.day);
   const wodsH=wl.length&&firstOfDate&&dnKey(firstOfDate.date,firstOfDate.day)===k?`<div class="history">${wl.map(w=>`<div><span class="d"><span>${esc(wodTitle(w))}</span>${w.desc?` · <span dir="auto">${esc(w.desc)}</span>`:""}</span><span class="v">${esc(wodScore(w))}</span></div>`).join("")}</div>`:"";
   return `${wodsH}${dn&&(dn.t||dn.tags.length)?`<div class="hdnote"><small><span>Day note</span>${dn.tags.map(t=>` · <span>${esc(t)}</span>`).join("")}</small>${dn.t?`<span dir="auto">${esc(dn.t)}</span>`:""}</div>`:""}
     <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(e.note)}</span></span>`:""}</div>`).join("")}</div>
-    <button class="linkbtn hnbtn" data-hnedit="${esc(k)}">Edit workout or notes</button>`}
+    <div class="hnbtns"><button class="linkbtn hnbtn" data-hnedit="${esc(k)}">Edit workout or notes</button>${DAYS[x.day]?`<button class="linkbtn hnbtn" data-hnadd="${esc(x.date)}|${esc(x.day)}">+ Add exercises I forgot</button>`:""}</div>`}
 function bindHistNotes(){
+  const pl=$("#pastlog");if(pl)pl.onclick=openPastPicker;
+  document.querySelectorAll("[data-hnadd]").forEach(b=>b.onclick=()=>{const [dt,dy]=b.dataset.hnadd.split("|");enterRevisit(dt,dy)});
   document.querySelectorAll("[data-hnedit]").forEach(b=>b.onclick=()=>{state.histEdit=b.dataset.hnedit;const y=window.scrollY;render();window.scrollTo(0,y);const ed=document.querySelector(".hnedit");if(ed)ed.scrollIntoView({block:"nearest"})});
   document.querySelectorAll("[data-htag]").forEach(b=>b.onclick=()=>{b.classList.toggle("on");b.setAttribute("aria-pressed",b.classList.contains("on"))});
   const c=$("#hncancel");if(c)c.onclick=()=>{state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y)};
