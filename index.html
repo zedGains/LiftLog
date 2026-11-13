@@ -858,7 +858,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .linkbtn:focus-visible,input[type=date]:focus-visible,.den[role=button]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 /* Arabic: keep set and weight numbers left-to-right */
 [dir=rtl] .rx,[dir=rtl] .v,[dir=rtl] .last b,[dir=rtl] .poline,[dir=rtl] .hset,[dir=rtl] .setrow .field{unicode-bidi:isolate;direction:ltr}
-:lang(ar) h1,:lang(ar) h2,:lang(ar) h3,:lang(ar) h4,:lang(ar) .lbl,:lang(ar) .eyebrow,:lang(ar) .dnlbl,:lang(ar) .tag{letter-spacing:0!important}
+:lang(ar) h1,:lang(ar) h2,:lang(ar) h3,:lang(ar) h4,:lang(ar) .lbl,:lang(ar) .eyebrow,:lang(ar) .dnlbl,:lang(ar) .tag,:lang(ar) .dchip,:lang(ar) .btn,:lang(ar) .skb{letter-spacing:0!important}
 .field:focus-within{outline:2px solid var(--fg);outline-offset:2px}.pick:focus-visible,.dntag:focus-visible,.hset input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 .updban{border:1px solid color-mix(in srgb,var(--accent) 50%,var(--line));background:color-mix(in srgb,var(--accent) 10%,var(--surface));border-radius:14px;padding:11px 13px;margin:0 0 12px}.updban b{display:block;margin-bottom:2px}.updban span{font-size:14px;color:var(--muted)}.updban .btns{margin-top:8px}
 .setrow .skb{all:unset;cursor:pointer;box-sizing:border-box;min-height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;font:800 12px var(--display);letter-spacing:.06em;color:var(--muted);background:var(--surface-2);padding:0 4px}
@@ -877,6 +877,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .hleg{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:12.5px;color:var(--muted);margin:6px 0 8px}.hleg i{display:inline-block;width:18px;height:9px;border-radius:4px;margin-inline-end:5px;vertical-align:middle}
 .hleg .h0{background:var(--map-muscle)}.hleg .h1{background:color-mix(in srgb,var(--green) 25%,var(--map-muscle))}.hleg .h2{background:color-mix(in srgb,var(--green) 55%,var(--map-muscle))}.hleg .h3{background:var(--green)}.hleg .h4{background:var(--orange)}
 .heatsel{border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.sheet{scroll-padding-top:56px}#sheet-title{padding-inline-end:44px}.pobox,.porow{margin-inline-end:0}
 .dncard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:11px 13px 10px;margin:0 0 12px}
 .dnlbl{display:block;font:800 12.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}.dnlbl small{font:500 12.5px var(--body);letter-spacing:0;text-transform:none;margin-left:4px}
 .dncard textarea,.hnedit textarea,.tnote textarea{width:100%;box-sizing:border-box;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;color:var(--fg);font:15px/1.4 var(--body);padding:9px 11px;resize:none;min-height:42px}
@@ -1186,9 +1187,9 @@ function effItem(dayKey,orig,sec){
     sec:sectionFor(L.g,dayKey),slot,dayKey,replaced:orig.name,lib:L.id,custom:!!L.custom};
 }
 function extraItem(dayKey,x){
-  if(x.t){const t=x.t;return {id:x.hid||("t_"+slug(t.name)),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:t.name,sets:x.sets,reps:x.reps,rs:null,drop:!!x.drop,type:t.type||"lift",target:t.target,g:t.g,p:t.p||[],s:t.s||[],each:!!t.each,note:t.note||"",cue:t.cue,tip:t.tip,alts:Array.isArray(x.alts)?x.alts:t.alts||[],sec:x.sec||t.sec||"Other",slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:null,custom:false}}
+  if(x.t){const t=x.t;return {id:x.hid||("t_"+slug(t.name)),...(x.abT!=null?{abB:true,abT:x.abT}:{}),...(x.lastK?{lastK:x.lastK}:{}),name:t.name,sets:x.sets,reps:x.reps,rs:null,drop:!!x.drop,type:t.type||"lift",target:t.target,g:t.g,p:t.p||[],s:t.s||[],each:!!t.each,note:t.note||"",cue:t.cue,tip:t.tip,alts:Array.isArray(x.alts)?x.alts:t.alts||[],sec:x.sec||t.sec||"Other",slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:null,custom:false}}
   const L=libById(x.ex);if(!L)return null;const type=L.type||"lift";
-  return {id:x.hid||((L.custom?"c_":"x_")+L.id),...(x.abT!=null?{abB:true,abT:x.abT}:{}),name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
+  return {id:x.hid||((L.custom?"c_":"x_")+L.id),...(x.abT!=null?{abB:true,abT:x.abT}:{}),...(x.lastK?{lastK:x.lastK}:{}),name:L.name,sets:x.sets,reps:x.reps,rs:Array.isArray(x.rs)&&x.rs.length?x.rs:null,drop:!!x.drop,type,target:L.g,g:L.g,p:L.p||G2M[L.g]||[],s:L.s||[],each:false,
     note:L.custom?`Your own exercise (${L.g}).`:"",alts:Array.isArray(x.alts)?x.alts:nearAlts(L),
     sec:x.sec||sectionFor(L.g,dayKey),slot:dayKey+":+"+x.sid,dayKey,extra:x.sid,lib:L.id,custom:!!L.custom}}
 function applyPick(it,exId,sets,reps,drop,rs){
@@ -1224,7 +1225,7 @@ let altSyncing=false;
 function altCapture(ap){const w=ap.snapshot&&ap.snapshot[ap.week];if(!w)return;w.days=w.days||{};
   Object.keys(plan.schedule).forEach(wd=>{const k="pw"+wd;if(plan.schedule[wd]!==k||!DAYS[k])return;const D=plan.days.find(d=>d.key===k);
     let items;try{items=daySections(k).flatMap(sc=>sc.items)}catch(e){return}
-    w.days[wd]={...(w.days[wd]||{}),title:D?(D.title||"Workout"):"Workout",items:items.map(it=>({name:it.name,g:it.g||it.target||"",type:it.type||"lift",sets:it.sets,reps:it.reps,drop:!!it.drop,...(it.rs?{rs:it.rs}:{}),...(Array.isArray(it.alts)&&it.alts.length?{alts:it.alts.slice(0,8)}:{})}))}});
+    w.days[wd]={...(w.days[wd]||{}),title:D?(D.title||"Workout"):"Workout",items:items.map(it=>({name:it.name,g:it.g||it.target||"",type:it.type||"lift",sets:it.sets,reps:it.reps,drop:!!it.drop,...(it.lastK?{lastK:it.lastK}:{}),...(it.rs?{rs:it.rs}:{}),...(Array.isArray(it.alts)&&it.alts.length?{alts:it.alts.slice(0,8)}:{})}))}});
   Object.keys(w.days).forEach(wd=>{if(plan.schedule[wd]!=="pw"+wd&&!plan.schedule[wd]&&!plan.days.some(d=>d.key==="pw"+wd))delete w.days[wd]})}
 // a program's fingerprint, to tell when the trainer changed it
 function progHash(p){const t=JSON.stringify([p.weeks||[],p.pattern||"",p.wkNames||null]);let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return (h>>>0).toString(36)}
@@ -1236,7 +1237,7 @@ function progUpdate(){const ap=plan.activeProgram;if(!ap||!ap.srcHash)return nul
 function progUpdateBanner(){const u=progUpdate();if(!u)return "";return `<div class="updban" role="status"><div><b>${esc(u.src.title)} was updated</b><span>The trainer changed this program. Get the new version? Your logs stay; changes you made to its days are replaced.</span></div>
   <div class="btns"><button class="btn primary small" id="progupd">Get the update</button><button class="btn small" id="progupdno">Not now</button></div></div>`}
 function bindProgUpdate(){const g=$("#progupd");if(g)g.onclick=()=>{const u=progUpdate();if(!u)return;const ap=plan.activeProgram;const wi=Math.min(ap.week||0,u.src.weeks.length-1);
-    applyProgram({...u.src,fresh:true,start:ap.start},wi);render();toast("Updated to the latest version")};
+    const keep={lstart:ap.lstart,round:ap.round};applyProgram({...u.src,fresh:true,start:ap.start},wi);if(keep.lstart&&plan.activeProgram.pattern!=="alt"){plan.activeProgram.lstart=keep.lstart;if(keep.round)plan.activeProgram.round=keep.round;savePlan()}render();toast("Updated to the latest version")};
   const n=$("#progupdno");if(n)n.onclick=()=>{const u=progUpdate();if(u){plan.activeProgram.dismissHash=u.h;savePlan()}render()}}
 // linear programs move to the next week every Monday, and start over after the last week
 function linSync(){const ap=plan.activeProgram;if(!ap||altSyncing||ap.pattern==="alt"||!ap.lstart||!(ap.weeks>1)||!ap.snapshot||ap.snapshot.length<2)return;
@@ -1430,11 +1431,11 @@ function isPending(id){
 // % of a set's weight, rounded to loadable plates; tap one to put it in the next set
 function pctVal(w,pc){const v=w*pc/100;return Math.round((isKg()?rPlate(v):Math.round(v/2.5)*2.5)*10000)/10000}
 function pctChips(d,i){const s=d.sets[i];const w=Number(s&&s.w)||0;if(!(w>0)||(s&&s.k==="w"))return "";const nx=d.sets[i+1];
-  return [90,80,70,60,50].map(pc=>{const v=pctVal(w,pc);return `<button type="button" class="pctb ${nx&&String(nx.w)===String(v)?"on":""}" data-pct="${i}" data-v="${v}">${pc}% <b>${toDisp(v)}</b></button>`}).join("")}
+  const seen=new Set();return [90,80,70,60,50].map(pc=>{const v=pctVal(w,pc);if(!(v>0)||v>=w||seen.has(v))return "";seen.add(v);return `<button type="button" class="pctb ${nx&&String(nx.w)===String(v)?"on":""}" data-pct="${i}" data-v="${v}">${pc}% <b>${toDisp(v)}</b></button>`}).join("")}
 function phFor(it,d,i,last,poPl){const isC=it.type==="cardio";const ls0=last&&last.sets&&last.sets.length?last.sets:null;const L=ls0?(ls0[i]||ls0[ls0.length-1]):null;
   let w=L&&L.w!=null&&L.w!==""&&Number(L.w)>0?L.w:null,r=L&&L.r!=null&&L.r!==""?L.r:null,real=!!(w!=null||r!=null);
-  if(poPl&&d.po&&d.po.on&&poPl.reps&&poPl.reps[i])r=poPl.reps[i];
-  if(poPl&&d.po&&d.po.on&&poPl.w&&poPl.w[i])w=Math.round(poPl.w[i]*10000)/10000;
+  if(poPl&&d.po&&d.po.on&&poPl.rr&&poPl.rr[i])r=poPl.rr[i];
+  if(poPl&&d.po&&d.po.on&&poPl.rw&&poPl.rw[i])w=Math.round(poPl.rw[i]*10000)/10000;
   let wReal=w!=null;
   for(let j=i-1;j>=0&&!wReal;j--){const x=d.sets[j];if(x&&x.w!==""&&x.w!=null){w=x.w;wReal=true;break}}
   let rReal=r!=null&&real;
@@ -1583,7 +1584,10 @@ function poResult(it,e){const ss=poSets(e);const done=ss.filter(s=>s.w>0&&s.r>0)
   const tg=e.tg;if(!Array.isArray(tg))return true; // first time working up: the reps you did become the goal
   return ss.every((s,i)=>tg[i]==null||!s.w||s.r>=tg[i])}
 function poHist(it){const fr=freshSet().has(it.id),wk=wkType();return entriesOf(it.id).filter(e=>(fr?e.date<=TODAY:e.date<TODAY)&&e.done&&!e.alt&&(!wk||(e.wk||"A")===wk)&&poSets(e).some(s=>s.w>0&&s.r>0))}
-function poPlan(it){const r=poPlan0(it);if(r&&isKg()&&Array.isArray(r.w))r.w=r.w.map(x=>x?rPlate(x):x);return r}
+function poPlan(it){const r=poPlan0(it);if(!r)return r;if(isKg()&&Array.isArray(r.w))r.w=r.w.map(x=>x?rPlate(x):x);
+  // rw/rr: the same targets lined up with the rows on screen (warm-up rows keep their own weight)
+  const rows=(r.last&&r.last.sets)||[];let j=0;r.rw=[];r.rr=[];r.warm=[];rows.forEach(x=>{if(x&&x.k==="w"){r.rw.push(Number(x.w)||0);r.rr.push(Number(x.r)||null);r.warm.push(true)}else{r.rw.push(r.w[j]||0);r.rr.push((r.reps||[])[j]||null);r.warm.push(false);j++}});
+  for(;j<r.w.length;j++){r.rw.push(r.w[j]||0);r.rr.push((r.reps||[])[j]||null);r.warm.push(false)}return r}
 function poPlan0(it){
   if(!poOn(it))return null;const h=poHist(it),last=h[h.length-1];
   if(!last&&wkType()==="B"){const prev=entriesOf(it.id).filter(e=>e.done&&!e.alt&&(e.wk||"A")==="A"&&poSets(e).some(s=>s.w>0)).slice(-1)[0];if(!prev)return null;
@@ -1611,9 +1615,9 @@ function poPlan0(it){
 function poW(pl){const ws=pl.w.filter(Boolean);if(!ws.length)return "";return (ws.every(w=>Math.abs(w-ws[0])<0.01)?toDisp(ws[0]):ws.map(w=>toDisp(w)).join(" · "))+" "+wU()}
 function poIncTxt(v){return `${Math.round(toDisp(v)*100)/100} ${wU()}`}
 function poFill(it,d,pl){const n=nSets(it,d);while(d.sets.length<n)d.sets.push({w:"",r:""});
-  for(let i=0;i<n&&i<pl.w.length;i++){if(pl.w[i]){d.sets[i].w=String(Math.round(pl.w[i]*10000)/10000)}}
+  const W=pl.rw||pl.w;for(let i=0;i<n&&i<W.length;i++){if(W[i]){d.sets[i].w=String(Math.round(W[i]*10000)/10000)}}
   d.autoIdx=[];d.po={k:pl.kind,on:true,tg:pl.tg}}
-function poUnfill(it,d,pl){const ss=poSets(pl.last);for(let i=0;i<d.sets.length&&i<ss.length;i++){if(ss[i].w)d.sets[i].w=String(ss[i].w)}d.autoIdx=[];d.po={k:pl.kind,on:false,tg:null}}
+function poUnfill(it,d,pl){const ss=((pl.last&&pl.last.sets)||[]).map(x=>({w:Number(x&&x.w)||0}));for(let i=0;i<d.sets.length&&i<ss.length;i++){if(ss[i].w)d.sets[i].w=String(ss[i].w)}d.autoIdx=[];d.po={k:pl.kind,on:false,tg:null}}
 // prescribed numbers for a fresh draft (Automatic fills them in; Suggest waits for a tap)
 function poStart(it,d){const pl=poPlan(it);if(!pl)return;if(poCfg().mode==="auto")poFill(it,d,pl);else d.po={k:pl.kind,on:false,tg:null}}
 function poRow(it){if(it.type!=="lift")return "";if(poCfg().mode==="off")return `<button class="rowbtn" id="pogo" type="button"><span class="rbic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18l6-6 4 4 6-8"/><path d="M15 8h5v5"/></svg></span><span class="rbt"><b>Progressive overload</b><small>Off · tap to set up</small></span><svg class="rbchev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;const on=poExOn(it);
@@ -1637,14 +1641,14 @@ function poBox(it,d){
   const c=poCfg(),auto=c.mode==="auto",on=d.po&&d.po.on,wt=poW(pl);
   if(pl.kind==="first"){const btn=on?`<button class="linkbtn" id="pounfill">Use my hypertrophy weights instead</button>`:`<div class="pobtns"><button class="btn primary small" id="pofill">Use ${wt}</button></div>`;
     return poRow(it)+`<div class="pobox up"><b>${esc(`First strength week: try ${wt}`)}</b><span>${esc(`A bit heavier than your hypertrophy weight. Aim for ${it.reps[0]}–${it.reps[1]} reps with 1–2 left in the tank.`)}</span><span class="polast">Hypertrophy week (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${btn}</div>`}
-  const head=pl.kind==="up"?(auto?`↑ You hit every rep. +${poIncTxt(pl.inc)} this week.`:`Ready to go up: try ${wt}`)
+  const head=pl.kind==="up"?(auto?`↑ You hit every rep. +${poIncTxt(pl.inc*(pl.x2?2:1))} this week.`:`Ready to go up: try ${wt}`)
     :pl.kind==="down"?`Stuck ${pl.miss} times in a row: down 10% this week`:`Same weights. Beat your reps.`;
   const body=pl.kind==="up"?(auto?(on?(pl.shape==="pyramid"?`Filled in from last time. Hit ${pl.reps.filter(Boolean).join("-")} again and it goes up again.`:`Filled in from last time. Start at ${it.reps[0]} reps and climb to ${it.reps[1]}${pl.shape==="drop"?" on your first set":" on every set"}, then it goes up again.`):`Tap below to fill in ${wt}.`)
-      :pl.shape==="straight"?`You did ${it.reps[1]} reps on every set. Start back at ${it.reps[0]} and climb to ${it.reps[1]} again.`:pl.x2?`Your AMRAP set went 2+ reps past the goal, so it's a bigger jump: +${poIncTxt(pl.inc*2)} on each set.`:`You hit every rep last time. Same reps, +${poIncTxt(pl.inc)} on each set.`)
+      :pl.shape==="straight"?`You did ${it.reps[1]} reps on every set. Start back at ${it.reps[0]} and climb to ${it.reps[1]} again.`:`You hit every rep last time. Same reps, +${poIncTxt(pl.inc*(pl.x2?2:1))} on each set.`)
     :pl.kind==="down"?`${wt}. Build back up from here. You'll usually pass your old numbers in a few weeks.`:pl.why;
   const btns=on?(pl.kind==="same"?"":`<button class="linkbtn" id="pounfill">Use last week's weights instead</button>`)
     :`<div class="pobtns"><button class="btn primary small" id="pofill">${pl.kind==="same"?`Fill in ${wt}`:`Use ${wt}`}</button>${!auto&&pl.kind!=="same"?`<button class="btn small" id="postay">Stay at ${poW({w:poSets(pl.last).map(s=>s.w)})}</button>`:""}</div>`;
-  return poRow(it)+`<div class="pobox ${pl.kind}"><b>${esc(head)}</b><span>${esc(body)}</span><span class="polast">${wkType()?`Last ${esc(wkName(wkType()).toLowerCase())} week`:"Last"} (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${d.po&&d.po.stay?"":btns}</div>`}
+  return poRow(it)+`<div class="pobox ${pl.kind}"><b>${esc(head)}</b><span>${esc(body)}</span>${pl.kind==="up"&&pl.x2?`<span>Your last set went 2 or more reps past the goal, so the jump is doubled.</span>`:""}<span class="polast">${wkType()?`Last ${esc(wkName(wkType()).toLowerCase())} week`:"Last"} (${fmtDate(pl.last.date)}): ${esc(setsText(pl.last.sets,it.type))}</span>${d.po&&d.po.stay?"":btns}</div>`}
 function poLine(it){if(!poOn(it)||isMarked(it.id)||shownToday(it.id))return "";const pl=poPlan(it);if(!pl)return "";
   const auto=poCfg().mode==="auto",r=pl.reps.filter(Boolean);
   const rt=r.length&&r.every(x=>x===r[0])?` × ${r[0]}`:r.length?` × ${r.join("-")}`:"";
@@ -1920,6 +1924,7 @@ function smView(){
      <p class="savenote" style="margin-top:6px">${a.days.length} day${a.days.length===1?"":"s"} a week${a.days.length>6?". 6 are workouts, 1 is cardio and core":""}</p>
      <div class="lbl">Time per workout</div>${seg("smmins",[[30,"30 min"],[45,"45 min"],[60,"60 min"],[75,"75+"]],a.mins)}
      <div class="lbl">Where do you train?</div>${seg("smwhere",[["gym","Full gym"],["db","Dumbbells"],["home","Home"]],a.where)}
+     ${a.where==="home"?`<p class="savenote" style="margin-top:4px">Home plans use your bodyweight and resistance bands.</p>`:a.where==="db"?`<p class="savenote" style="margin-top:4px">Uses dumbbells and a bench.</p>`:""}
      <div class="lbl">Anything to work around? <button class="infob" id="smlinfo" aria-label="About this" title="We swap out exercises that are often hard on these. This isn't medical advice. If something hurts, check with a doctor or physical therapist.">i</button></div>
      <div class="gchips">${[["back","Lower back"],["knees","Knees"],["shoulders","Shoulders"]].map(([k,l])=>`<button class="gchip ${a.limits.includes(k)?"on":""}" data-smlim="${k}" aria-pressed="${a.limits.includes(k)}">${l}</button>`).join("")}<button class="gchip ${a.limits.length?"":"on"}" data-smlim="" aria-pressed="${!a.limits.length}">Nothing</button></div>
      <div class="lbl">Week pattern <button class="infob" id="smpinfo" aria-label="About week patterns" title="Same every week: one plan, repeated. Alternate: odd weeks are hypertrophy (8–12 reps), even weeks are heavier strength weeks (4–6 reps on the big lifts). Each week type is tracked on its own, and you can change this later in Plans.">i</button></div>
@@ -1962,6 +1967,7 @@ function smReadAbout(){const a=state.onb.a,kg=a.units==="metric",err=$("#sm-err"
   if(inch!=null&&!(inch>=0&&inch<12)){err.textContent="Inches should be 0 to 11.";return false}
   Object.assign(a,{w:lb(w),age,ft,inch:ft!=null?(inch||0):null,goalW:lb(gw)});return true}
 function bindSmart(){const o=state.onb,a=o.a,re=()=>{o.r=null;render()};
+  ["sm-w","sm-ft","sm-in","sm-cm","sm-age","sm-gw"].forEach(id=>{const el=document.getElementById(id);if(!el)return;const k="_"+id;if(a[k]!=null&&el.value==="")el.value=a[k];el.addEventListener("input",()=>{a[k]=el.value;try{ls.set("ll.onb",{step:o.step,a,t:Date.now()})}catch(e){}})});
   const go=(n)=>{blockTaps(400,"#smnext,#smback,.smfoot");o.step=n;o.r=null;render();window.scrollTo(0,0)};
   $("#smback").onclick=()=>{if(o.step>1)go(o.step===7&&a.mode!=="adv"?5:o.step-1);else{blockTaps(400,"button,.card");state.onb=null;try{localStorage.removeItem("ll.onb")}catch(e){}render();window.scrollTo(0,0)}};
   document.querySelectorAll("[data-smgoal]").forEach(b=>b.onclick=()=>{a.goal=b.dataset.smgoal;re()});
@@ -2199,11 +2205,12 @@ function openSheet(id,keepScroll){
   const rows=d.sets.slice(0,N).map((s,i)=>{
     const ph=phFor(it,d,i,last,poPl);
     const w=Number(s.w)||ph.w||0;
-    const K=s.k||"";const goal=K==="a"||K==="f"?(()=>{const L=last&&last.sets?last.sets.find((x,j)=>x&&x.k===K&&j===i)||last.sets.find(x=>x&&x.k===K):null;return L&&L.r?L.r:ph.r})():null;
+    const K=s.k||"";const goal=K==="a"||K==="f"?(()=>{const L=last&&last.sets?last.sets.find((x,j)=>x&&x.k===K&&j===i)||last.sets.find(x=>x&&x.k===K):null;const cw=Number(s.w)||Number(ph.w)||0;
+      if(L&&L.r&&!(cw>(Number(L.w)||0)))return L.r;const G=it.type==="lift"&&poOn(it)?poGoalRaw(it):Array.isArray(it.rs)?it.rs:null;return Array.isArray(G)?poGoalAt(G,i):(ph.r||it.reps[0])})():null;
     const amNote=goal!=null&&!isCardio?`<div class="amnote ${K}" data-for="${i}" data-goal="${goal}">${K==="a"?"AMRAP: as many reps as you can with good form.":"To failure: until you can't do another rep."} ${s.r!==""&&Number(s.r)>goal?`<b>${s.r} reps, ${Number(s.r)-goal} past ${goal}. New best for this set.</b>`:`<span>Goal: beat <b>${goal}</b>.</span>`}${Number(s.w)>0&&Number(s.r)>0&&e1rm(Number(s.w),Number(s.r))?` <span>Estimated max: ${toDisp(e1rm(Number(s.w),Number(s.r)))} ${wU()}.</span>`:""}</div>`:"";
     const pct=!isCardio&&it.type!=="bw"&&plan.pctRow!==false&&i<N-1?`<div class="pctrow" data-for="${i}" role="group" aria-label="Percent of set ${i+1}">${pctChips(d,i)}</div>`:"";
     return `<div class="setrow ${K?"k"+K:""}">${isCardio?`<span class="n">TIME</span>`:`<button type="button" class="n skb" data-sk="${i}" aria-label="Set ${i+1} type: ${K==="a"?"AMRAP":K==="f"?"to failure":K==="w"?"warm-up":"normal"}. Tap to change">${K==="a"?"AMRAP":K==="f"?"FAIL":K==="w"?"WARM":"SET "+(i+1)}</button>`}
-      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""} ${poPl&&d.po&&d.po.on&&poPl.kind!=="same"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?"pofill":""}">${poPl&&d.po&&d.po.on&&poPl.kind==="up"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus">+${Math.round(toDisp(poPl.inc*(poPl.x2?2:1))*100)/100}</span>`:poPl&&d.po&&d.po.on&&poPl.kind==="down"&&poPl.w[i]&&String(s.w)===String(Math.round(poPl.w[i]*10000)/10000)?`<span class="poplus down">−10%</span>`:""}<input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" enterkeyhint="next" placeholder="${ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
+      <label class="field ${it.drop&&dropAuto&&(d.autoIdx||[]).includes(i)?"autofill":""} ${poPl&&d.po&&d.po.on&&poPl.kind!=="same"&&poPl.rw[i]&&String(s.w)===String(Math.round(poPl.rw[i]*10000)/10000)?"pofill":""}">${poPl&&d.po&&d.po.on&&poPl.kind==="up"&&!poPl.warm[i]&&poPl.rw[i]&&String(s.w)===String(Math.round(poPl.rw[i]*10000)/10000)?`<span class="poplus">+${Math.round(toDisp(poPl.inc*(poPl.x2?2:1))*100)/100}</span>`:poPl&&d.po&&d.po.on&&poPl.kind==="down"&&!poPl.warm[i]&&poPl.rw[i]&&String(s.w)===String(Math.round(poPl.rw[i]*10000)/10000)?`<span class="poplus down">−10%</span>`:""}<input id="w-${id}-${i}" inputmode="decimal" data-i="${i}" data-f="w" value="${esc(isCardio?s.w:toDisp(s.w))}" enterkeyhint="next" placeholder="${ph.w!=null?(isCardio?ph.w:toDisp(ph.w)):"0"}" aria-label="${isCardio?"Minutes":"Set "+(i+1)+" weight"}"><span>${isCardio?"min":it.type==="bw"?wU()+" opt.":wU()}</span></label>
       ${isCardio?"<span></span>":`<label class="field"><input id="r-${id}-${i}" inputmode="numeric" data-i="${i}" data-f="r" value="${esc(s.r)}" enterkeyhint="next" placeholder="${ph.r!=null?ph.r:""}" aria-label="Set ${i+1} reps"><span>reps</span></label>`}
       ${it.drop&&!dropAuto?`<span class="drops" data-drops="${i}" data-w="${w||""}">${dropsTxt(w)}</span>`:""}
       ${it.drop&&dropAuto&&i===0&&N>1?`<span class="drops">Sets 2–${N} fill in at ${dropPct}% drops from this weight</span>`:""}
@@ -2276,13 +2283,13 @@ function openSheet(id,keepScroll){
   });
   sh.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>{const i=+b.dataset.sk;const o=["","a","f","w"];const cur=d.sets[i].k||"";const nx=o[(o.indexOf(cur)+1)%o.length];if(nx)d.sets[i].k=nx;else delete d.sets[i].k;saveDrafts();openSheet(id,true);
     const L={a:"AMRAP: as many reps as you can",f:"To failure",w:"Warm-up: doesn't count toward bests or volume","":"Normal set"};toast(L[nx],1600)});
-  sh.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pct]");if(!b||!sh.contains(b))return;const i=+b.dataset.pct;const n=d.sets[i+1];if(!n)return;
-    n.w=b.dataset.v;saveDrafts();const inp=$(`#w-${CSS.escape(id)}-${i+1}`,sh);if(inp){inp.value=toDisp(Number(b.dataset.v));inp.dispatchEvent(new Event("input",{bubbles:true}))}
-    sh.querySelectorAll(`[data-pct="${i}"]`).forEach(x=>x.classList.toggle("on",x===b))});
-  sh.querySelectorAll("[data-alt]").forEach(b=>b.onclick=()=>{const na=b.dataset.alt||null;if((d.alt||null)!==na&&!d.marked){d.sets=d.sets.map(()=>({w:"",r:""}));if(d.po)d.po.filled=false}d.alt=na;saveDrafts();openSheet(id,true);render()});
+  sh.onclick=e=>{const b=e.target.closest&&e.target.closest("[data-pct]");if(!b||!sh.contains(b))return;const oid=state.open,dd=state.drafts[oid];if(!dd||oid!==id)return;const i=+b.dataset.pct;const n=dd.sets[i+1];if(!n)return;
+    n.w=b.dataset.v;saveDrafts();const inp=$(`#w-${CSS.escape(oid)}-${i+1}`,sh);if(inp){inp.value=toDisp(Number(b.dataset.v));inp.dispatchEvent(new Event("input",{bubbles:true}))}
+    const pr=sh.querySelector(`.pctrow[data-for="${i}"]`);if(pr)pr.innerHTML=pctChips(dd,i)};
+  sh.querySelectorAll("[data-alt]").forEach(b=>b.onclick=()=>{const na=b.dataset.alt||null;if((d.alt||null)!==na&&!d.marked){d.sets=d.sets.map(x=>({w:"",r:"",...(x&&x.k?{k:x.k}:{})}));if(d.po)d.po.filled=false}d.alt=na;saveDrafts();openSheet(id,true);render()});
   const cl=$("#copylast",sh); if(cl) cl.onclick=()=>{last.sets.forEach((s,i)=>{if(d.sets[i]){d.sets[i].w=s.w??"";d.sets[i].r=s.r??""}});d.autoIdx=[];saveDrafts();openSheet(id,true)};
-  const as=$("#addset",sh); if(as) as.onclick=()=>{const n=nSets(it,d);if(n>=12)return;while(d.sets.length<n+1)d.sets.push({w:"",r:""});d.n=null;planSets(it,n+1);refillDrops(ALL[id]||it,d);saveDrafts();openSheet(id,true);render();const f=$("#sheet").querySelector(`#w-${id}-${n}`);if(f)f.focus({preventScroll:true})};
-  const rm=$("#rmset",sh); if(rm) rm.onclick=()=>{const n=nSets(it,d);if(n<=1)return;withUndo(`Removed set ${n}`,()=>{d.sets=d.sets.slice(0,n-1);d.autoIdx=(d.autoIdx||[]).filter(x=>x<n-1);d.n=null;planSets(it,n-1);saveDrafts();openSheet(id,true);render()})};
+  const as=$("#addset",sh); if(as) as.onclick=()=>{const n=nSets(it,d);if(n>=12)return;while(d.sets.length<n+1)d.sets.push({w:"",r:""});{const lk=d.sets[n-1]&&d.sets[n-1].k;if(lk==="a"||lk==="f"){delete d.sets[n-1].k;d.sets[n].k=lk}}d.n=null;planSets(it,n+1);refillDrops(ALL[id]||it,d);saveDrafts();openSheet(id,true);render();const f=$("#sheet").querySelector(`#w-${id}-${n}`);if(f)f.focus({preventScroll:true})};
+  const rm=$("#rmset",sh); if(rm) rm.onclick=()=>{const n=nSets(it,d);if(n<=1)return;withUndo(`Removed set ${n}`,()=>{const lk=d.sets[n-1]&&d.sets[n-1].k;d.sets=d.sets.slice(0,n-1);if((lk==="a"||lk==="f")&&d.sets[n-2]&&!d.sets[n-2].k)d.sets[n-2].k=lk;d.autoIdx=(d.autoIdx||[]).filter(x=>x<n-1);d.n=null;planSets(it,n-1);saveDrafts();openSheet(id,true);render()})};
   const ks=$("#keepsets",sh); if(ks) ks.onclick=()=>{const n=nSets(it,d);d.n=null;planSets(it,n);openSheet(id,true);render();toast(`${it.name}: ${n} sets every week`)};
   const uk=$("#unkeepsets",sh); if(uk) uk.onclick=()=>{const o=ORIG[it.slot.split(":")[1]];delete plan.sets[it.slot];d.n=null;if(o)d.sets=d.sets.slice(0,Math.max(o.sets,1));savePlan();rebuildAll();openSheet(id,true);render();toast(`${it.name}: back to ${o?o.sets:"the original"} sets`)};
   bindPartnerBox(sh,it,d);
@@ -2363,7 +2370,10 @@ function parseRS(v){const a=String(v||"").split(/[^0-9]+/).filter(Boolean).map(N
 function renderConfirm(){
   const it=pk.it, L=libById(pk.pick), sh=$("#sheet");
   const isC=L.type==="cardio";
-  const sets=isC?1:DEF_RX.sets, r0=isC?10:DEF_RX.reps[0], r1=isC?10:DEF_RX.reps[1];
+  // replacing a lift: start from the sets and reps of the one it replaces
+  const keepRx=!it.addMode&&!isC&&it.type!=="cardio"&&it.sets&&Array.isArray(it.reps);
+  const sets=isC?1:keepRx?it.sets:DEF_RX.sets, r0=isC?10:keepRx?it.reps[0]:DEF_RX.reps[0], r1=isC?10:keepRx?it.reps[1]:DEF_RX.reps[1];
+  const wkWord=wkType()&&abIsTwinSafe(it.dayKey)?"every strength week":wkType()&&abTwinOfSafe(it.dayKey)?"every hypertrophy week":"every week";
   const sec=secOf(L.g,it);
   sh.innerHTML=`<div class="grab"></div>
    <div class="pkhead"><button class="btn small" id="pkback">‹ Back</button><span class="eyebrow">${esc(dlab(it))} · ${it.addMode?"add":"swap"}</span></div>
@@ -2380,7 +2390,7 @@ function renderConfirm(){
     <label class="tick"><input type="checkbox" id="cf-drop" ${it.drop&&!isC?"checked":""}> Drop sets</label>`}
    <div class="btns"><button class="btn primary" id="cf-plan">${it.addMode?`Add to ${esc(dlab(it))}`:"Replace in my plan"}</button></div>
    ${it.addMode?`<p class="savenote">${it.progMode?"Adds it to this day of your program.":`Stays in ${esc(dlab(it))} every week. Remove it anytime from the exercise screen.`}</p>`:
-   `<p class="savenote">Stays in ${esc(dlab(it))} every week until you switch it back. Your log for it starts fresh, and ${esc(it.name)}'s history is kept.</p>
+   `<p class="savenote">Stays in ${esc(dlab(it))} ${wkWord} until you switch it back. Your log for it starts fresh, and ${esc(it.name)}'s history is kept.</p>
    ${it.extra?"":`<div class="btns"><button class="btn" id="cf-today" style="flex:1">Just for today</button></div>
    <p class="savenote">Logs it in place of ${esc(it.name)} today only, like the alternates.</p>`}`}`;
   $("#pkback",sh).onclick=()=>{pk.pick=null;renderPicker(true)};
@@ -2602,6 +2612,8 @@ function openDeItem(p,wi,wd,i,save){const d=p.weeks[wi].days[wd];const x=d.items
       if(rsv){x.rs=rsv;x.sets=rsv.length;x.reps=[Math.min(...rsv),Math.max(...rsv)]}else{delete x.rs;x.sets=n("#dei-sets",3,12);x.reps=[a,b]}
       x.drop=!!($("#dei-drop",sh)||{}).checked;const kk=(sh.querySelector("[data-deik].on")||{dataset:{}}).dataset.deik;if(kk)x.lastK=kk;else delete x.lastK}
     save();back();toast("Saved")}}
+function abIsTwinSafe(k){try{return abOn()&&abIsTwin(k)}catch(e){return false}}
+function abTwinOfSafe(k){try{return abOn()&&!!abTwinOf(k)}catch(e){return false}}
 function restFor(it){return it&&it.type==="lift"&&wkType()==="B"?Math.max(timer.preset,150):timer.preset}
 function startTimer(sec){
   try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume&&audioCtx.resume()}catch(e){}
@@ -2624,9 +2636,10 @@ function updateTimer(){
   const pill=$("#pill");
   const left=timer.running?(timer.endAt-Date.now())/1000:timer.preset;
   const onTimerTab=pickTab()==="timer";
-  pill.hidden=!(timer.running||wod.running)||onTimerTab;
+  pill.hidden=!(timer.running||wod.running||wod.result)||onTimerTab;
   if(timer.running){pill.textContent=timer.over?"Rest over · GO":"Rest "+fmtT(left);pill.classList.toggle("over",timer.over)}
   else if(wod.running){pill.textContent=wodPillText();pill.classList.remove("over")}
+  else if(wod.result){pill.textContent="Clock done · save";pill.classList.add("over")}
   const t=$("#tread"); if(!t) return;
   t.textContent=timer.over?"GO":fmtT(left);
   $("#tstate").textContent=timer.over?"Rest's over. Next set!":timer.running?"Resting…":"Ready";
@@ -2665,17 +2678,28 @@ function sbeep(f,d,n){if(!nPref("sound"))return;try{audioCtx=audioCtx||new (wind
 const LEAD=3;
 function wodLen(){return wod.mode==="amrap"?wod.mins*60:wod.emins*60}
 function wodEl(){if(!wod.running)return 0;const now=wod.paused?wod.pauseAt:Date.now();return (now-wod.t0-wod.pausedMs)/1000-LEAD}
-function wodPillText(){const e=wodEl();if(e<0)return `${wod.mode==="amrap"?"AMRAP":"EMOM"} starts in ${Math.ceil(-e)}`;if(wod.mode==="amrap")return `AMRAP ${fmtT(wodLen()-e)} · R${wod.rounds+1}`;const iv=wod.every*60;return `EMOM ${Math.floor(e/iv)+1}/${Math.ceil(wodLen()/iv)} · ${fmtT(iv-(e%iv))}`}
+function wodPillText(){const e=wodEl();if(wod.paused)return `${wod.mode==="amrap"?"AMRAP":"EMOM"} paused`;if(e<0)return `${wod.mode==="amrap"?"AMRAP":"EMOM"} starts in ${Math.ceil(-e)}`;if(wod.mode==="amrap")return `AMRAP ${fmtT(wodLen()-e)} · R${wod.rounds+1}`;const iv=wod.every*60;return `EMOM ${Math.floor(e/iv)+1}/${Math.ceil(wodLen()/iv)} · ${fmtT(Math.min(iv-(e%iv),wodLen()-e))}`}
 function wodLines(){return String(wod.edesc||"").split(/\n+/).map(x=>x.trim()).filter(Boolean)}
 function wodStart(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();audioCtx.resume&&audioCtx.resume()}catch(e){}
   if(timer.running)stopTimer();Object.assign(wod,{mode:state.tmode==="emom"?"emom":"amrap",running:true,paused:false,t0:Date.now(),pausedMs:0,rounds:0,extra:0,splits:[],missed:[],lastInt:-1,result:null,lastBeep:null});
   if(nPref("awake"))try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}catch(e){}
-  wodTick();render()}
-function wodFinish(early){const e=Math.max(0,Math.min(wodEl(),wodLen()));clearTimeout(wod.h);wod.running=false;try{wake&&wake.release()}catch(_){};wake=null;
-  const iv=wod.every*60,ints=Math.ceil(wodLen()/iv);
+  wodKeep();wodTick();render()}
+function wodFinish(early){const raw=wodEl();const e=Math.max(0,Math.min(raw,wodLen()));clearTimeout(wod.h);wod.running=false;try{wake&&wake.release()}catch(_){};wake=null;
+  // ended before it really started: nothing to save
+  if(early&&raw<=0){wod.result=null;wodKeep();render();toast("Clock cancelled");return}
+  const iv=wod.every*60,ints=Math.ceil(wodLen()/iv);const full=early?Math.floor(e/iv):ints;
   wod.result=wod.mode==="amrap"?{kind:"amrap",mins:wod.mins,desc:wod.desc.trim(),rounds:wod.rounds,reps:wod.extra,secs:Math.round(e),early:!!early}
-    :{kind:"emom",mins:wod.emins,every:wod.every,desc:wodLines().join(" / "),done:Math.min(ints,Math.floor(e/iv)+(e>=wodLen()-0.5?0:1))-wod.missed.length,of:ints,secs:Math.round(e),early:!!early};
-  if(!early){beep()}render()}
+    :{kind:"emom",mins:wod.emins,every:wod.every,desc:wodLines().join(" / "),done:Math.max(0,full-wod.missed.filter(k=>k<full).length),of:ints,secs:Math.round(e),early:!!early};
+  wodKeep();
+  if(!early){sbeep(1100,.5,3);try{nPref("vibrate")&&navigator.vibrate&&navigator.vibrate([300,150,300,150,500])}catch(_){}
+    if(state.tab!=="timer")toast(`${wod.mode==="amrap"?"AMRAP":"EMOM"} done. Open the Timer tab to save your score.`,6000)}
+  render()}
+// keep a running clock (or an unsaved result) through a reload
+function wodKeep(){try{if(wod.running||wod.result)ls.set("ll.wod.live",{mode:wod.mode,running:wod.running,paused:wod.paused,t0:wod.t0,pausedMs:wod.pausedMs,pauseAt:wod.pauseAt,rounds:wod.rounds,extra:wod.extra,splits:wod.splits,missed:wod.missed,result:wod.result,mins:wod.mins,emins:wod.emins,every:wod.every,at:Date.now()});else localStorage.removeItem("ll.wod.live")}catch(e){}}
+function wodRestore(){try{const v=ls.get("ll.wod.live",null);if(!v||Date.now()-v.at>6*3600e3){localStorage.removeItem("ll.wod.live");return}
+  Object.assign(wod,{mode:v.mode,paused:!!v.paused,t0:v.t0,pausedMs:v.pausedMs||0,pauseAt:v.pauseAt||0,rounds:v.rounds||0,extra:v.extra||0,splits:v.splits||[],missed:v.missed||[],result:v.result||null,mins:v.mins||wod.mins,emins:v.emins||wod.emins,every:v.every||wod.every,lastInt:-1,lastBeep:"go"});
+  if(v.running){wod.running=true;state.tmode=v.mode;if(wodEl()>=wodLen())wodFinish(false);else wodTick()}}catch(e){}}
+setTimeout(wodRestore,0);
 function wodTick(){clearTimeout(wod.h);if(!wod.running)return;if(!wod.paused){const e=wodEl();const ce=Math.ceil(-e);
     if(e<0&&ce!==wod.lastBeep){wod.lastBeep=ce;sbeep(660,.15)}
     if(e>=0&&wod.lastBeep!=="go"){wod.lastBeep="go";sbeep(1100,.4);try{nPref("vibrate")&&navigator.vibrate&&navigator.vibrate(300)}catch(_){}}
@@ -2684,15 +2708,16 @@ function wodTick(){clearTimeout(wod.h);if(!wod.running)return;if(!wod.paused){co
     if(e>=wodLen()){wodFinish(false);return}}
   wod.h=setTimeout(wodTick,200);updateWod()}
 function wodLast(r){return (plan.wods||[]).filter(x=>x.kind===r.kind&&x.mins===r.mins&&(x.desc||"")===(r.desc||"")).slice(-1)[0]||null}
-function wodScore(x){return x.kind==="amrap"?`${x.rounds} round${x.rounds===1?"":"s"}${x.reps?` + ${x.reps} reps`:""}`:`${x.done} of ${x.of} ${x.every===2?"2-min rounds":"minutes"} done`}
+function wodScore(x){return x.kind==="amrap"?`${x.rounds} round${x.rounds===1?"":"s"}${x.reps?` + ${x.reps} reps`:""}`:(x.every||1)>1?`${x.done} of ${x.of} rounds done`:`${x.done} of ${x.of} minutes done`}
+function wodTitle(x){return x.kind==="amrap"?`AMRAP ${x.mins} min`:`EMOM ${x.mins} min${(x.every||1)>1?`, every ${x.every} min`:""}`}
 function wodTm(){return wod.running?wod.mode:wod.result?wod.result.kind:(state.tmode||ls.get("ll.tmode","amrap"))}
 function wodView(){const tm=wodTm();const A=tm!=="emom";const head=`<header class="dayhead"><div class="row"><div><div class="eyebrow">${A?"As many rounds as possible":"Every minute on the minute"}</div><h1>${A?"AMRAP":"EMOM"}</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>${tmodeChips(tm)}`;
-  if(wod.result){const r=wod.result;const prev=wodLast(r);return head+`<div class="wodres panel"><div class="eyebrow">${r.kind==="amrap"?`${r.mins} min AMRAP`:`EMOM ${r.mins} min${r.every===2?", every 2 min":""}`}${r.early?" · ended early":""}</div>
+  if(wod.result){const r=wod.result;const prev=wodLast(r);return head+`<div class="wodres panel"><div class="eyebrow"><span>${esc(wodTitle(r))}</span>${r.early?` · <span>ended early</span>`:""}</div>
     <div class="wodscore">${esc(wodScore(r))}</div>${r.desc?`<p class="small">${esc(r.desc)}</p>`:""}
     ${prev?`<p class="savenote">Last time (${fmtDate(prev.date)}): ${esc(wodScore(prev))}</p>`:""}
     ${r.kind==="amrap"?`<div class="adj"><button class="btn small" id="wrm">− rep</button><span>${r.reps} extra reps</span><button class="btn small" id="wrp">+ rep</button></div>`:""}
     <div class="btns"><button class="btn primary" id="wsave" style="flex:1">Save to today's log</button><button class="btn" id="wdisc">Discard</button></div></div>`}
-  if(wod.running){const lines=wodLines();return head+`<div class="timer wodrun">
+  if(wod.running){const lines=wodLines();return head+`${timer.running?`<button class="btn small" id="wreststop" style="display:block;margin:0 auto 8px">Rest timer running · tap to stop</button>`:""}<div class="timer wodrun">
     <div class="ring"><svg viewBox="0 0 200 200"><circle class="track" cx="100" cy="100" r="90" fill="none" stroke-width="12"/><circle class="bar" id="wbar" cx="100" cy="100" r="90" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="565.5" stroke-dashoffset="0"/></svg>
      <div class="read"><div><div class="s" id="wtop"></div><div class="t" id="wread" aria-live="off">0:00</div><div class="s" id="wsub"></div></div></div></div>
     ${A?`<button class="bigbtn" id="wround">+1 round</button><div class="adj"><button class="btn small" id="wundo">Undo round</button><button class="btn small" id="wpause">Pause</button><button class="btn small" id="wend">End</button></div>`
@@ -2706,28 +2731,28 @@ function wodView(){const tm=wodTm();const A=tm!=="emom";const head=`<header clas
    <textarea id="wdesc" dir="auto" rows="${A?2:3}" maxlength="300" placeholder="${A?"e.g. 10 kettlebell swings, 10 box jumps, 10 push-ups":"e.g. 8 thrusters 95 lb\n12 cal row"}">${esc(A?wod.desc:wod.edesc)}</textarea>
    <button class="bigbtn" id="wstart" style="margin-top:12px">Start ${A?"AMRAP":"EMOM"}</button>
    <p class="savenote">3-2-1 countdown, then ${A?"tap +1 round each time you finish one. It beeps for the last 3 seconds.":"a beep and buzz at the start of every round."} Keep the ringer on.</p>
-   ${hist.length?`<div class="dlabel">Your last results</div><div class="history">${hist.map(x=>`<div><span class="d">${fmtDate(x.date)} · ${x.mins} min${x.desc?` · ${esc(x.desc)}`:""}</span><span class="v">${esc(wodScore(x))}</span></div>`).join("")}</div>`:""}
+   ${hist.length?`<div class="dlabel">Your last results</div><div class="history">${hist.map(x=>`<div><span class="d"><span>${fmtDate(x.date)}</span> · <span>${esc(wodTitle(x))}</span>${x.desc?` · <span dir="auto">${esc(x.desc)}</span>`:""}</span><span class="v">${esc(wodScore(x))}</span></div>`).join("")}</div>`:""}
   </div>`}
 function bindWodView(){bindTmode();const A=wodTm()!=="emom";
   document.querySelectorAll("[data-wmin]").forEach(b=>b.onclick=()=>{const m=+b.dataset.wmin;if(A){wod.mins=m;ls.set("ll.wod.am",m)}else{wod.emins=m;ls.set("ll.wod.em",m)}render()});
   document.querySelectorAll("[data-wev]").forEach(b=>b.onclick=()=>{wod.every=+b.dataset.wev;ls.set("ll.wod.every",wod.every);render()});
   const ds=$("#wdesc");if(ds)ds.oninput=()=>{if(A){wod.desc=ds.value;ls.set("ll.wod.desc",ds.value)}else{wod.edesc=ds.value;ls.set("ll.wod.edesc",ds.value)}};
-  const st=$("#wstart");if(st)st.onclick=wodStart;
-  const rd=$("#wround");if(rd)rd.onclick=()=>{if(wodEl()<0)return;wod.rounds++;wod.splits.push(Math.round(wodEl()));try{nPref("vibrate")&&navigator.vibrate&&navigator.vibrate(60)}catch(_){}updateWod()};
+  const st=$("#wstart");if(st)st.onclick=wodStart;const wrs=$("#wreststop");if(wrs)wrs.onclick=()=>{stopTimer();render()};
+  const rd=$("#wround");if(rd)rd.onclick=()=>{if(wodEl()<0)return;wod.rounds++;wod.splits.push(Math.round(wodEl()));wodKeep();try{nPref("vibrate")&&navigator.vibrate&&navigator.vibrate(60)}catch(_){}updateWod()};
   const un=$("#wundo");if(un)un.onclick=()=>{if(wod.rounds>0){wod.rounds--;wod.splits.pop()}updateWod()};
-  const ps=$("#wpause");if(ps)ps.onclick=()=>{if(wod.paused){wod.pausedMs+=Date.now()-wod.pauseAt;wod.paused=false}else{wod.paused=true;wod.pauseAt=Date.now()}ps.textContent=wod.paused?"Resume":"Pause";updateWod()};
+  const ps=$("#wpause");if(ps)ps.onclick=()=>{if(wod.paused){wod.pausedMs+=Date.now()-wod.pauseAt;wod.paused=false}else{wod.paused=true;wod.pauseAt=Date.now()}ps.textContent=wod.paused?"Resume":"Pause";wodKeep();updateWod()};
   const en=$("#wend");if(en)armBtn(en,"Tap again to end",()=>wodFinish(true));
   const ms=$("#wmiss");if(ms)ms.onclick=()=>{const k=Math.floor(Math.max(0,wodEl())/(wod.every*60));const i=wod.missed.indexOf(k);if(i<0)wod.missed.push(k);else wod.missed.splice(i,1);updateWod()};
   const rm=$("#wrm"),rp=$("#wrp");if(rm)rm.onclick=()=>{wod.result.reps=Math.max(0,wod.result.reps-1);render()};if(rp)rp.onclick=()=>{wod.result.reps++;render()};
   const sv=$("#wsave");if(sv)sv.onclick=()=>{const r=wod.result;(plan.wods=plan.wods||[]).push({...r,date:logDate(),at:Date.now()});if(plan.wods.length>500)plan.wods=plan.wods.slice(-500);savePlan();
     const prev=(plan.wods.slice(0,-1).filter(x=>x.kind===r.kind&&x.mins===r.mins&&(x.desc||"")===(r.desc||"")).slice(-1)[0]);
-    const better=prev&&r.kind==="amrap"&&(r.rounds*1000+r.reps)>(prev.rounds*1000+prev.reps);wod.result=null;render();toast(better?"Saved. New best 🎉":"Saved to today's log")};
-  const dc=$("#wdisc");if(dc)armBtn(dc,"Tap again to discard",()=>{wod.result=null;render()})}
+    const better=prev&&r.kind==="amrap"&&(r.rounds*1000+r.reps)>(prev.rounds*1000+prev.reps);wod.result=null;wodKeep();render();toast(better?"Saved. New best 🎉":"Saved to today's log")};
+  const dc=$("#wdisc");if(dc)armBtn(dc,"Tap again to discard",()=>{wod.result=null;wodKeep();render()})}
 function updateWod(){updateTimer();const rd=$("#wread");if(!rd)return;const e=wodEl(),L=wodLen();
   if(e<0){rd.textContent=String(Math.ceil(-e));$("#wtop").textContent="Get ready";$("#wsub").textContent="";$("#wbar").style.strokeDashoffset="0";return}
-  if(wod.mode==="amrap"){rd.textContent=fmtT(L-e);$("#wtop").textContent=wod.paused?"Paused":"time left";$("#wsub").textContent=`Round ${wod.rounds+1}${wod.splits.length?` · last ${fmtT(wod.splits[wod.splits.length-1]-(wod.splits[wod.splits.length-2]||0))}`:""}`;
+  if(wod.mode==="amrap"){rd.textContent=fmtT(L-e);$("#wtop").textContent=wod.paused?"Paused":"time left";$("#wsub").textContent=`Round ${wod.rounds+1}`;
     $("#wbar").style.strokeDashoffset=String(565.5*(e/L))}
-  else{const iv=wod.every*60,k=Math.floor(e/iv),n=Math.ceil(L/iv);rd.textContent=fmtT(iv-(e%iv));$("#wtop").textContent=wod.paused?"Paused":`${wod.every===1?"Minute":"Round"} ${k+1} of ${n}`;$("#wsub").textContent=wod.missed.includes(k)?"marked missed":"until the next one";
+  else{const iv=wod.every*60,k=Math.floor(e/iv),n=Math.ceil(L/iv);rd.textContent=fmtT(Math.min(iv-(e%iv),L-e));$("#wtop").textContent=wod.paused?"Paused":`${wod.every===1?"Minute":"Round"} ${k+1} of ${n}`;$("#wsub").textContent=wod.missed.includes(k)?"marked missed":"until the next one";
     $("#wbar").style.strokeDashoffset=String(565.5*((e%iv)/iv));const ms=$("#wmiss");if(ms)ms.textContent=wod.missed.includes(k)?"Undo missed":"Missed this one";
     const lines=wodLines(),el=$("#emlist");if(el&&lines.length){const rows=[];for(let j=Math.max(0,k-1);j<Math.min(n,k+3);j++)rows.push(`<div class="emrow ${j<k?"done":j===k?"now":""}"><span>${wod.every===1?"Min":"Rd"} ${j+1}</span><span>${esc(lines[j%lines.length])}</span><span>${j<k?(wod.missed.includes(j)?"missed":"✓"):j===k?"now":""}</span></div>`);el.innerHTML=rows.join("")}}}
 /* ---------- weekly sets per muscle ---------- */
@@ -2774,6 +2799,7 @@ function planView(){
    ${invitePanel()}
    ${weightPanel()}
    ${heatPanel()}
+   ${(()=>{const dates=new Set(sessions().map(x=>x.date));const only=(plan.wods||[]).filter(w=>!dates.has(w.date)).slice(-6).reverse();return only.length?`<div class="panel"><h2>Clock results</h2><div class="history">${only.map(w=>`<div><span class="d"><span>${fmtDate(w.date)}</span> · <span>${esc(wodTitle(w))}</span>${w.desc?` · <span dir="auto">${esc(w.desc)}</span>`:""}</span><span class="v">${esc(wodScore(w))}</span></div>`).join("")}</div></div>`:""})()}
    <div class="panel"><h2 class="hhead">History <button class="btn small" id="shareweek">Share my week</button></h2>
     <div class="stats"><div><b>${ss.length}</b><span>workout days</span></div><div><b>${thisMonth}</b><span>this month</span></div><div><b>${thisWeek}<small>/${trainDays||"–"}</small></b><span>this week</span></div></div>
     ${ss.length?`<div class="sessions">${ss.map((x,i)=>`<details class="sess" ${i===0||state.histEdit===dnKey(x.date,x.day)?"open":""}>
@@ -2796,11 +2822,11 @@ function histNotes(x){const k=dnKey(x.date,x.day),dn=dnGet(x.date,x.day);
     <div class="dntags" role="group" aria-label="Quick tags">${DN_TAGS.map(t=>`<button type="button" class="dntag ${dn&&dn.tags.includes(t)?"on":""}" data-htag="${t}" aria-pressed="${!!(dn&&dn.tags.includes(t))}">${t}</button>`).join("")}</div>
     ${x.items.map(({it,e},i)=>{const C=it.type==="cardio";const ss=(e.sets&&e.sets.length?e.sets:[{w:"",r:""}]);
       return `<div class="hnex"><div class="dnlbl">${esc(e.alt||it.name)}</div>
-      <div class="hsets">${ss.map((st,j)=>`<div class="hset"><span class="hn">${C?"Min":`Set ${j+1}`}</span><input data-hs="${i}:${j}:w" inputmode="decimal" value="${esc(st.w==null||st.w===""?"":C?st.w:toDisp(st.w))}" aria-label="${esc(e.alt||it.name)}, ${C?"minutes":`set ${j+1} weight`}"><span class="hu">${C?"min":wU()}</span>${C?"":`<span class="hx2">×</span><input data-hs="${i}:${j}:r" inputmode="numeric" value="${esc(st.r==null?"":st.r)}" aria-label="${esc(e.alt||it.name)}, set ${j+1} reps"><span class="hu">reps</span>`}</div>`).join("")}</div>
+      <div class="hsets">${ss.map((st,j)=>`<div class="hset"><span class="hn">${C?"Min":st.k==="w"?"Warm":st.k==="a"?"AMRAP":st.k==="f"?"Fail":`Set ${j+1}`}</span><input data-hs="${i}:${j}:w" inputmode="decimal" value="${esc(st.w==null||st.w===""?"":C?st.w:toDisp(st.w))}" aria-label="${esc(e.alt||it.name)}, ${C?"minutes":`set ${j+1} weight`}"><span class="hu">${C?"min":wU()}</span>${C?"":`<span class="hx2">×</span><input data-hs="${i}:${j}:r" inputmode="numeric" value="${esc(st.r==null?"":st.r)}" aria-label="${esc(e.alt||it.name)}, set ${j+1} reps"><span class="hu">reps</span>`}</div>`).join("")}</div>
       <textarea id="hn${i}" data-hn="${i}" dir="auto" rows="2" maxlength="400" placeholder="Note for this exercise" aria-label="Note for ${esc(it.name)}">${esc(e.note||"")}</textarea></div>`}).join("")}
     <div class="btns"><button class="btn primary small" id="hnsave" data-hk="${esc(k)}">Save changes</button><button class="btn small" id="hncancel">Cancel</button></div></div>`;
   const wl=(plan.wods||[]).filter(w=>w.date===x.date);const firstOfDate=sessions().filter(z=>z.date===x.date).slice(-1)[0];
-  const wodsH=wl.length&&firstOfDate&&dnKey(firstOfDate.date,firstOfDate.day)===k?`<div class="history">${wl.map(w=>`<div><span class="d">${w.kind==="amrap"?`AMRAP ${w.mins} min`:`EMOM ${w.mins} min`}${w.desc?` · ${esc(w.desc)}`:""}</span><span class="v">${esc(wodScore(w))}</span></div>`).join("")}</div>`:"";
+  const wodsH=wl.length&&firstOfDate&&dnKey(firstOfDate.date,firstOfDate.day)===k?`<div class="history">${wl.map(w=>`<div><span class="d"><span>${esc(wodTitle(w))}</span>${w.desc?` · <span dir="auto">${esc(w.desc)}</span>`:""}</span><span class="v">${esc(wodScore(w))}</span></div>`).join("")}</div>`:"";
   return `${wodsH}${dn&&(dn.t||dn.tags.length)?`<div class="hdnote"><small><span>Day note</span>${dn.tags.map(t=>` · <span>${esc(t)}</span>`).join("")}</small>${dn.t?`<span dir="auto">${esc(dn.t)}</span>`:""}</div>`:""}
     <div class="history">${x.items.map(({it,e})=>`<div><span class="d">${esc(it.name)}${e.alt?` · <i>${esc(e.alt)}</i>`:""}</span><span class="v">${esc(setsText(e.sets,it.type))||"done"}</span>${e.note?`<span class="hnote"><span aria-hidden="true">📝</span> <span dir="auto">${esc(e.note)}</span></span>`:""}</div>`).join("")}</div>
     <button class="linkbtn hnbtn" data-hnedit="${esc(k)}">Edit workout or notes</button>`}
@@ -2814,7 +2840,7 @@ function bindHistNotes(){
       const e=(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z===r.e)||(state.logs[r.it.id]&&state.logs[r.it.id].entries||[]).find(z=>z.date===r.e.date&&z.day===r.e.day);
       if(!e)return;let ch=false;if((e.note||"")!==v){if(v)e.note=v;else delete e.note;ch=true}
       const C=r.it.type==="cardio";const ns=(e.sets&&e.sets.length?e.sets:[{w:"",r:""}]).map((st,j)=>{const gw=document.querySelector(`[data-hs="${ta.dataset.hn}:${j}:w"]`),gr=document.querySelector(`[data-hs="${ta.dataset.hn}:${j}:r"]`);
-        const wv=gw?gw.value.replace(/,/g,".").replace(/[^0-9.]/g,""):"",rv=gr?gr.value.replace(/[^0-9]/g,""):"";return {w:wv===""?null:(C?Number(wv):fromDisp(wv)),r:C?null:(rv===""?null:Number(rv))}}).filter(st=>st.w!=null||st.r!=null);
+        const wv=gw?gw.value.replace(/,/g,".").replace(/[^0-9.]/g,""):"",rv=gr?gr.value.replace(/[^0-9]/g,""):"";return {w:wv===""?null:(C?Number(wv):fromDisp(wv)),r:C?null:(rv===""?null:Number(rv)),...(st.k?{k:st.k}:{})}}).filter(st=>st.w!=null||st.r!=null);
       if(JSON.stringify(ns)!==JSON.stringify(cleanSets(e.sets||[]))){e.sets=ns;try{const k2=exKcal(r.it,ns);e.kcal=k2==null?null:Math.round(k2)}catch(_){}ch=true}
       if(ch){e.ts=Date.now();persist(r.it.id)}});
     state.histEdit=null;const y=window.scrollY;render();window.scrollTo(0,y);toast("Changes saved")};
@@ -2978,8 +3004,8 @@ function progById(id){return plan.myPrograms.find(p=>p.id===id)}
 function emptyWeek(){return {days:{}}}
 function progStats(p){const w0=(p.weeks&&p.weeks[0])||{days:{}};const dpw=Object.keys(w0.days).length;
   const ex=(p.weeks||[]).reduce((a,w)=>a+Object.values(w.days).reduce((b,d)=>b+d.items.length,0),0);return {weeks:(p.weeks||[]).length,dpw,ex}}
-function exFromItem(it){const mine=(plan.altsMine||{})[String(it.name||"").toLowerCase()];return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,p:it.p||[],s:it.s||[],eq:it.eq||"",...(Array.isArray(mine)?{alts:mine.slice()}:{})}}
-function exText(x){return x.type==="cardio"?`${x.reps[0]} min`:Array.isArray(x.rs)&&x.rs.length?`${x.rs.length} sets · ${x.rs.join("-")}`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`}
+function exFromItem(it){const mine=(plan.altsMine||{})[String(it.name||"").toLowerCase()];return {name:it.name,g:it.g||groupOf(it)||"Chest",type:it.type||"lift",sets:it.sets||3,reps:it.reps||[8,12],drop:!!it.drop,...(it.lastK?{lastK:it.lastK}:{}),p:it.p||[],s:it.s||[],eq:it.eq||"",...(Array.isArray(mine)?{alts:mine.slice()}:{})}}
+function exText(x){const k=x.lastK==="a"?", last set AMRAP":x.lastK==="f"?", last set to failure":"";return x.type==="cardio"?`${x.reps[0]} min`:(Array.isArray(x.rs)&&x.rs.length?`${x.rs.length} sets · ${x.rs.join("-")}`:`${x.sets}×${x.reps[0]===x.reps[1]?x.reps[0]:x.reps[0]+"–"+x.reps[1]}`)+k}
 function nameOf(id){if(!id)return "Someone";if(id==="liftlog")return "LiftLog";if(id===uid)return "you";return pg.names[id]||"Someone"}
 function armBtn(b,txt,fn){if(!b)return;let armed=false;const orig=b.textContent;b.onclick=()=>{if(!armed){armed=true;b.textContent=txt;setTimeout(()=>{armed=false;if(b.isConnected)b.textContent=orig},4000);return}fn()}}
 function miniCal(w){return `<span class="minical" aria-hidden="true">${WEEK_ORDER.map(i=>{const d=w&&w.days[String(i)];return `<span class="mc ${d?"on":""}">${WD_SHORT[i][0]}</span>`}).join("")}</span>`}
@@ -3392,7 +3418,7 @@ const BIG5_LIB=[["bench","Barbell Bench Press"],["incline","Incline Barbell Benc
 function big5(it){return BIG5[String(it&&it.name||"").trim().toLowerCase()]||null}
 const NOT_COMPOUND=/dumbbell|machine|smith|close-grip|incline|decline|floor|split|goblet|sissy|sumo|hack|romanian|stiff|straight leg|pendulum|belt|calf|front|zercher|box|pause|jump|overhead|landmine|trap bar|deficit|rack pull/i;
 function tracksPartner(it){if(!it||it.type==="cardio")return false;const v=plan.ptrack[it.id];if(v!=null)return !!v;return !!big5(it)}
-function topW(sets){return Math.max(0,...(sets||[]).map(s=>Number(s&&s.w)||0))}
+function topW(sets){return Math.max(0,...(sets||[]).filter(s=>!s||s.k!=="w").map(s=>Number(s&&s.w)||0))}
 function myBest(id,before){let w=0,date=null;entriesOf(id).forEach(e=>{if(!e.done||(before&&e.date>=before))return;const t=topW(e.sets);if(t>w){w=t;date=e.date}});return {w,date}}
 function pBest(pid,id,before){const p=plan.partners.find(x=>x.id===pid);let w=Number(p&&p.start&&p.start[id])||0,date=null,r=null;
   entriesOf(id).forEach(e=>{if(before&&e.date>=before)return;const x=e.partners&&e.partners[pid];if(x&&Number(x.w)>w){w=Number(x.w);date=e.date;r=x.r}});return {w,date,r}}
@@ -3952,7 +3978,8 @@ function altKey(it){return String(it.name||"").toLowerCase()}
 function defaultAlts(x){return nearAlts(x)}
 // backup choices: same body part, closest equipment first (a bodyweight move suggests bodyweight, band or dumbbell moves, not a barbell)
 function eqKind(e){e=String(e||"").toLowerCase();return /body|other|band/.test(e)?0:/dumb|kettle/.test(e)?1:/cable|machine|smith/.test(e)?3:2}
-function nearAlts(x){const k=eqKind(x.eq),P=new Set(x.p||[]);return LIB.filter(y=>y.g===x.g&&y.name!==x.name&&(y.type||"lift")!=="cardio"===((x.type||"lift")!=="cardio"))
+function needsGear(n){return /pull-?up|chin-?up|\bdips?\b|hanging|kettlebell|stability ball|trx|ring|rope climb|sled|ab wheel|box jump|nordic/i.test(n)}
+function nearAlts(x){const k=eqKind(x.eq),P=new Set(x.p||[]);const home=k===0&&!needsGear(x.name);return LIB.filter(y=>y.g===x.g&&y.name!==x.name&&!(home&&(needsGear(y.name)||eqKind(y.eq)>1))&&(y.type||"lift")!=="cardio"===((x.type||"lift")!=="cardio"))
   .map((y,i)=>[y,Math.abs(eqKind(y.eq)-k)*10-((y.p||[]).some(m=>P.has(m))?5:0)+i/1000]).sort((a,b)=>a[1]-b[1]).slice(0,3).map(a=>a[0].name)}
 function progAlts(it){if(!it.lib)return null;for(const k in plan.extra){const x=(plan.extra[k]||[]).find(y=>y.ex===it.lib&&Array.isArray(y.alts));if(x)return x.alts}return null}
 function altsOf(it){const o=(plan.altsMine||{})[altKey(it)];return Array.isArray(o)?o:(progAlts(it)||it.alts||[])}
@@ -4166,7 +4193,7 @@ function badgeStats(){
   let vol=0,prs=0,partner=false; const bestBig={},bestId={},firstId={};
   const all=[];Object.keys(state.logs).forEach(id=>entriesOf(id).forEach(e=>{if(e.done)all.push({id,e})}));
   all.sort((a,b)=>a.e.date<b.e.date?-1:1);
-  all.forEach(({id,e})=>{if(e.type==="cardio")return;const t=topW(e.sets);(e.sets||[]).forEach(s=>{vol+=(Number(s.w)||0)*(Number(s.r)||0)});
+  all.forEach(({id,e})=>{if(e.type==="cardio")return;const t=topW(e.sets);(e.sets||[]).forEach(s=>{if(s&&s.k==="w")return;vol+=(Number(s.w)||0)*(Number(s.r)||0)});
     if(t>0){if(bestId[id]&&t>bestId[id])prs++;if(!firstId[id])firstId[id]=t;bestId[id]=Math.max(bestId[id]||0,t);const b=big5({name:e.alt||e.name});if(b)bestBig[b]=Math.max(bestBig[b]||0,t)}
     if(e.partners&&Object.keys(e.partners).length)partner=true});
   S.gainPct=Math.max(0,...Object.keys(bestId).filter(i=>firstId[i]>=20).map(i=>(bestId[i]-firstId[i])/firstId[i]));
@@ -4571,7 +4598,7 @@ function svgImg(svg,w,h){return new Promise(res=>{let x=svg.replace(/<svg /,`<sv
   const img=new Image();img.onload=()=>res(img);img.onerror=()=>res(null);img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(x)})}
 function weekRecap(){const ws=wkStartOf(TODAY),ss=sessions().filter(s=>s.date>=ws&&s.date<=TODAY);let vol=0,prs=0;
   const days=[0,1,2,3,4,5,6].map(i=>ss.some(s=>s.date===addDays(ws,i)));
-  ss.forEach(s=>s.items.forEach(({it,e})=>{(e.sets||[]).forEach(st=>{const w=Number(st.w)||0,r=Number(st.r)||0;if(it&&it.type!=="cardio"&&it.type!=="bw")vol+=w*r});
+  ss.forEach(s=>s.items.forEach(({it,e})=>{(e.sets||[]).forEach(st=>{if(st&&st.k==="w")return;const w=Number(st.w)||0,r=Number(st.r)||0;if(it&&it.type!=="cardio"&&it.type!=="bw")vol+=w*r});
     const top=Math.max(0,...(e.sets||[]).map(st=>Number(st.w)||0));if(top>0){const before=entriesOf(it.id).filter(x=>x.date<e.date).reduce((m,x)=>Math.max(m,...(x.sets||[]).map(st=>Number(st.w)||0)),0);if(before>0&&top>before)prs++}}));
   const S=badgeStats();return {n:ss.length,vol,prs,days,streak:S.streak||0,ws}}
 function fitText(g,t,max,size,weight,fam){let s=size;do{g.font=`${weight} ${s}px ${fam}`;s-=2}while(g.measureText(t).width>max&&s>18);return s+2}
