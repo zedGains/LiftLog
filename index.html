@@ -928,7 +928,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .btns.two{display:grid;grid-template-columns:1fr 1fr;margin-top:0}.restcard .btns.two{margin-top:14px}.btns.two .btn,.streakp .btn,.stepsp .btn{display:inline-flex;justify-content:center;align-items:center;gap:6px}
 .donecard{text-align:center;background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 35%,transparent)}.dcic{color:var(--ok);line-height:0}.dcic .ic{width:46px;height:46px}
 .donecard h2{margin:4px 0 2px}.panel .dcsub{color:var(--muted);font-size:14px;margin:0 auto 12px}.donecard .stats{margin:0}.donecard .stats div{background:var(--surface);min-width:0}.stats b.up{color:var(--ok);font-size:20px}.stats .clip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.panel .dcnote{font-size:12.5px;color:var(--muted);margin:10px auto 0}.donemore{display:block;margin:2px auto;font-size:14px;width:max-content;max-width:100%}
+.panel .dcnote{font-size:12.5px;color:var(--muted);margin:10px auto 0}.keepgo{width:100%;margin-top:10px}.donemore{display:block;margin:2px auto;font-size:14px;width:max-content;max-width:100%}
 .stkbig{display:flex;align-items:center;gap:8px;font-family:var(--display)}.stkbig .ic{width:28px;height:28px}.stkbig b{font-size:36px;line-height:1}.stkbig span{font-size:18px;text-transform:uppercase;letter-spacing:.04em}
 .pztag{font:700 11.5px var(--body);font-style:normal;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);margin-inline-start:6px}
 .panel .sml,.sml{font-size:13px;color:var(--muted);margin:5px 0}.streakp .progress,.stepsp .progress{margin:6px 0}.streakp .btn{margin-top:4px}
@@ -1446,7 +1446,7 @@ function dSets(it,d){return d.sets.slice(0,nSets(it,d))}
 /* unsaved marks: kept on the phone and in the account, so closing the app, midnight or another device never loses them */
 let draftAt=ls.get("ll.draftsAt."+TODAY,0),draftT=null,draftPending=0;
 try{collectLeft()}catch(e){console.warn(e)}
-function saveDrafts(){if(state.revisit)return;try{if(!ls.get("ll.t0."+TODAY,null)&&Object.keys(state.drafts).length)ls.set("ll.t0."+TODAY,Date.now())}catch(e){}ls.set("ll.drafts."+TODAY,state.drafts);draftAt=Date.now();ls.set("ll.draftsAt."+TODAY,draftAt);queueDrafts()}
+function saveDrafts(){if(state.revisit)return;try{if(!ls.get("ll.t0."+TODAY,null)&&Object.keys(state.drafts).length){for(let i=localStorage.length-1;i>=0;i--){const k=localStorage.key(i);if(k&&/^ll\.t[01]\./.test(k)&&!k.endsWith(TODAY))localStorage.removeItem(k)}ls.set("ll.t0."+TODAY,Date.now())}}catch(e){}ls.set("ll.drafts."+TODAY,state.drafts);draftAt=Date.now();ls.set("ll.draftsAt."+TODAY,draftAt);queueDrafts()}
 function queueDrafts(){if(state.mode!=="db"||!col)return;clearTimeout(draftT);draftT=setTimeout(pushDrafts,1200)}
 function pushDrafts(){draftT=null;if(state.mode!=="db"||!col)return;draftPending++;
   const payload=JSON.parse(JSON.stringify({d:TODAY,at:draftAt,drafts:state.drafts,left:ls.get("ll.left",{}),gone:ls.get("ll.leftGone",[])}));
@@ -1590,6 +1590,7 @@ function bindExNote(sh,it,d){const ta=$("#tnote",sh);if(!ta)return;
   ta.oninput=()=>{ta.style.height="auto";ta.style.height=Math.min(ta.scrollHeight+2,140)+"px";d.tnote=ta.value;saveDrafts();
     const t=shownToday(it.id);if(t&&!isPending(it.id)){const v=ta.value.trim().slice(0,400);if(v)t.note=v;else delete t.note;t.ts=t.ts||Date.now();persist(it.id)}}}
 function saveDay(dayKey){
+  state.doneOff=null;try{if(!state.revisit&&logDate()===TODAY&&!ls.get("ll.t1."+TODAY,null))ls.set("ll.t1."+TODAY,Date.now())}catch(e){}
   const DATE=logDate(), past=DATE!==TODAY;
   const all=daySections(dayKey).flatMap(s=>s.items);
   const revChanged=it=>{const d=state.drafts[it.id];if(!d)return false;if(!d._o)return d.marked||draftHasNums(d);return d.marked&&d._o!==JSON.stringify([cleanSets(dSets(it,d)),String(d.tnote||"").trim(),d.alt||null])};
@@ -1749,9 +1750,10 @@ function skipToday(){const k=plannedToday();if(!k)return;plan.skips=plan.skips||
 function unskipToday(){if(plan.skips){delete plan.skips[TODAY];savePlan()}render();toast("Back on: today is a workout day again")}
 function schedNames(k){const xs=[1,2,3,4,5,6,0].filter(i=>schedOf(i)===k).map(i=>WD_LONG[i]);return xs.length?xs.join(" & "):"Not on your week yet"}
 function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs")}
-function defaultDay(){const k=state.lastDay;if(DAYS[k])return k;const t=weekdayTab()||trainKeys()[0];if(t)return t;
-  // rest day on a program: show the next workout that's coming up
-  const wd=nowD().getDay();for(let i=1;i<=7;i++){const n=schedOf((wd+i)%7);if(n&&DAYS[n])return n}return dayKeys()[0]||null}
+function defaultDay(){const k=state.lastDay;if(DAYS[k])return k;const t=weekdayTab();if(t)return t;
+  // rest day: the workout done today if there is one, otherwise the next one coming up
+  try{for(const id of Object.keys(state.logs||{})){const e=todayEntry(id);if(e&&e.done&&DAYS[e.day])return e.day}}catch(e){}
+  const wd=nowD().getDay();for(let i=1;i<=7;i++){const n=schedOf((wd+i)%7);if(n&&DAYS[n])return n}return trainKeys()[0]||dayKeys()[0]||null}
 function pickTab(){if(validTab(state.tab))return state.tab;if(state.tab==="workout")return defaultDay()||"workout";return defaultDay()||"workout"}
 const NAV_ICONS={workout:'<path d="M6 8v8M18 8v8M3 10.5v3M21 10.5v3M6 12h12" stroke-width="2.2" stroke-linecap="round"/>',
  programs:'<rect x="4" y="5" width="16" height="15" rx="2" stroke-width="2"/><path d="M4 9.5h16M9 3v4M15 3v4" stroke-width="2" stroke-linecap="round"/>',
@@ -2265,7 +2267,7 @@ function render(){
     const lin=$("#leftinfo"); if(lin) lin.onclick=()=>toast(lin.title);
     const ldr=$("#leftdrop"); if(ldr) ldr.onclick=()=>{const d0=ldr.dataset.lday,L=ls.get("ll.left",{}),snap=L[d0];dropLeft(d0);render();
       showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})}};
-  const editSaved=()=>{const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
+  const editSaved=()=>{state.doneOff=tab+TODAY;const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   const nextUp=(()=>{const wd=nowD().getDay();for(let i=1;i<=7;i++){const k=schedOf((wd+i)%7);if(k&&DAYS[k])return {k,date:addDays(TODAY,i),n:daySections(k).flatMap(s=>s.items).length}}return null})();
   const skippedK=(plan.skips||{})[TODAY];
   // a rest day gets its own screen instead of an empty-looking workout
@@ -2291,20 +2293,22 @@ function render(){
       <p style="margin-top:4px">Tap an exercise to log weights, see alternates and form videos.</p></div></div></details>`;
   const bindTop=()=>{const dt=$("#daytop");if(dt)dt.ontoggle=()=>ls.set("ll.dayTop",dt.open);try{bindDn(tab)}catch(e){console.warn(e)}};
   // after saving, the day shows as finished instead of looking wiped
-  if(!classic&&savedFresh>0&&!pending&&!done&&!ldPast&&!state.revisit&&state.doneOff!==tab+TODAY){
-    const ds=doneStats(items),si=streakInfo(),t0=ls.get("ll.t0."+TODAY,null),mins=t0&&savedAt?Math.round((savedAt-t0)/60000):0;
-    app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow">${esc(d.label)} · ${schedNames(tab)}</div><h1>${esc(d.title)}</h1></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
+  const todaySaved=items.filter(it=>{const e=todayEntry(it.id);return e&&e.done}).length,leftN=items.length-todaySaved;
+  if(!classic&&todaySaved>0&&!pending&&!ldPast&&!state.revisit&&state.doneOff!==tab+TODAY){
+    const ds=doneStats(items),si=streakInfo(),t0=ls.get("ll.t0."+TODAY,null),t1=ls.get("ll.t1."+TODAY,null),mins=t0&&t1?Math.round((t1-t0)/60000):0;
+    app.innerHTML=`<header class="dayhead"><div class="row"><div><button class="daypick" id="daypick" aria-haspopup="listbox" aria-expanded="${!!state.dayMenu}"><span class="eyebrow">${esc(d.label)} · ${schedNames(tab)}${weekdayTab()===tab?" · Today":""}</span><span class="dph1"><h1>${esc(d.title)}</h1><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></button></div><div class="plate" aria-hidden="true"><span></span></div></div></header>
     <div class="plan">${leftHTML}
-     <div class="panel donecard"><div class="dcic" aria-hidden="true">${ic("checkc")}</div><h2>Done for today</h2>
+     <div class="panel donecard"><div class="dcic" aria-hidden="true">${ic("checkc")}</div><h2>${leftN>0?"Saved so far":"Done for today"}</h2>
       <p class="dcsub"><span>${ds.n} exercise${ds.n===1?"":"s"}</span>${mins>=5&&mins<=300?` · <span>${mins} min</span>`:""}${ds.kcal?` · <span>~${ds.kcal} kcal</span>`:""}</p>
       <div class="stats"><div><b>${ds.bests}</b><span>${ds.bests===1?"new best":"new bests"}</span></div>${ds.up?`<div><b class="up">+${Math.round(toDisp(ds.up.diff)*100)/100} ${wU()}</b><span class="clip">${esc(ds.up.name)}</span></div>`:`<div><b>${ds.sets}</b><span>${ds.sets===1?"set":"sets"}</span></div>`}<div><b>${si.thisWeek}<small>/${si.target}</small></b><span>this week</span></div></div>
       <p class="dcnote">${savedAt?`<span>Saved at ${tzD(savedAt).toLocaleTimeString(LOC,{hour:"numeric",minute:"2-digit"})}.</span> `:""}It's in your History.</p></div>
      <div class="btns two"><button class="btn" id="editsaved">Edit today's log</button><button class="btn" id="doneshare">${ic("share")} Share</button></div>
-     <button class="linkbtn donemore" id="donemore">+ Do more exercises today</button>
+     ${leftN>0?`<button class="btn primary keepgo" id="donemore">Keep going · ${leftN} left</button>`:`<button class="linkbtn donemore" id="donemore">+ Do more exercises today</button>`}
      ${nextUp?`<div class="panel upnext"><span class="lbl">Up next</span><b><span>${fmtDate(nextUp.date)}</span> · <span>${esc(DAYS[nextUp.k].title)}</span></b><small>${nextUp.n} exercise${nextUp.n===1?"":"s"}</small></div>`:""}
      <details class="daytop" id="daytop" ${ls.get("ll.dayTop",false)?"open":""}><summary><span class="dtl"><span>Today's notes</span>${dnHas?`<i class="dtdot" aria-hidden="true"></i>`:""}</span>${ic("down","chev")}</summary>${dnCard(tab)}</details>
      ${streakCard()}</div>`;
     bindLeft();bindTop();bindExtras();
+    {const dp=$("#daypick");if(dp)dp.onclick=()=>{state.dayMenu=!state.dayMenu;renderDayMenu(tab)}}
     $("#editsaved").onclick=editSaved;
     $("#doneshare").onclick=()=>shareCard("week",weekRecap());
     $("#donemore").onclick=()=>{state.doneOff=tab+TODAY;render();window.scrollTo(0,0)};
