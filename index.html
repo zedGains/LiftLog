@@ -1895,6 +1895,12 @@ function openProgress(id){const it=ALL[id];if(!it)return;const sh=$("#sheet");co
   sh.hidden=false;$("#scrim").hidden=false;sh.scrollTop=0;
   $("#pgback",sh).onclick=()=>openSheet(id);$("#closesheet",sh).onclick=closeSheet;const pi=$("#pginfo",sh);if(pi)pi.onclick=()=>toast(pi.title,10000)}
 
+/* a sync from the account never redraws the screen under a box you're typing in */
+function typingInApp(){const a=document.activeElement;return !!(a&&app.contains(a)&&(a.tagName==="TEXTAREA"||(a.tagName==="INPUT"&&!/^(checkbox|radio|button)$/.test(a.type))))}
+let softWait=false;
+function softRender(){if(!typingInApp()){render();return}
+  if(softWait)return;softWait=true;const a=document.activeElement;
+  a.addEventListener("blur",()=>{setTimeout(()=>{softWait=false;if(typingInApp())softRender();else render()},450)},{once:true})}
 function renderDayMenu(tab){
   document.querySelectorAll(".dmenu,.mscrim").forEach(x=>x.remove());
   const dp=$("#daypick"); if(dp) dp.setAttribute("aria-expanded",String(!!state.dayMenu));
@@ -5156,17 +5162,18 @@ render();
     const localLogs=ls.get(LOCAL_KEY,{});
     let first=true;
     col.onSnapshot(snap=>{
-      let tplDoc=null,draftsDoc=null;
+      let tplDoc=null,draftsDoc=null,chg=first;
       const next={};snap.docs.forEach(doc=>{const v=thaw(doc.data());
         if(doc.id==="_template"){tplDoc=v;return}
         if(doc.id==="_drafts"){draftsDoc=v;return}
-        if(doc.id==="_plan"&&v){ if(planPending>0) return; if(plan.rev&&(v.rev||0)<plan.rev) return;
-          plan=normPlan(v); plan.rev=v.rev||0; ls.set("ll.plan",plan); syncDays(); return}
+        if(doc.id==="_plan"&&v){ if(planPending>0) return; if(plan.rev&&(v.rev||0)<=plan.rev) return;
+          chg=true; plan=normPlan(v); plan.rev=v.rev||0; ls.set("ll.plan",plan); syncDays(); return}
         if(v&&Array.isArray(v.entries))next[doc.id]={entries:v.entries}});
       Object.keys(logPending).forEach(id=>{if(logPending[id]>0&&state.logs[id])next[id]=state.logs[id]});
+      if(!chg&&JSON.stringify(next)!==JSON.stringify(state.logs))chg=true;
       state.logs=next;state.mode="db";
-      if(tplDoc&&tplDoc.days) ls.set("ll.tpl",tplDoc);
-      try{mergeRemoteDrafts(draftsDoc)}catch(e){console.warn(e)}
+      if(tplDoc&&tplDoc.days){if(JSON.stringify(tplDoc)!==JSON.stringify(ls.get("ll.tpl",null)))chg=true;ls.set("ll.tpl",tplDoc)}
+      try{if(mergeRemoteDrafts(draftsDoc))chg=true}catch(e){console.warn(e)}
       if(first){const had=draftsDoc&&draftsDoc.d===TODAY&&(draftsDoc.at||0)>=draftAt&&JSON.stringify(draftsDoc.drafts||{})===JSON.stringify(state.drafts);
         if(!had&&(Object.keys(state.drafts).length||Object.keys(ls.get("ll.left",{})).length||(draftsDoc&&draftsDoc.d!==TODAY)))setTimeout(pushDrafts,1500)}
       if(first){state.loading=false;setTimeout(checkBadges,1200);setTimeout(retryCheckin,1500);setTimeout(claimRef,1600);setTimeout(()=>{loadLibExtra();loadFriends();if(plan.customs.length)writeMyExercises()},2000);setTimeout(()=>{const l=ls.get("ll.fresh."+TODAY,[]),f=plan.fresh&&plan.fresh.d===TODAY?plan.fresh.ids||[]:[];if(l.some(x=>!f.includes(x)))setFresh(freshSet())},2200);setTimeout(()=>{if(!$("#celeb")&&!state.needsStart)checkHoliday()},2600); if(!snap.docs.some(x=>x.id==="_plan")&&!plan.template&&!HAD_LOCAL_PLAN) state.needsStart=true;}
@@ -5178,7 +5185,7 @@ render();
           const add=(localLogs[k].entries||[]).filter(e=>!have.has(e.date));
           if(add.length){state.logs[k]={entries:[...(next[k]?.entries||[]),...add].sort((a,b)=>a.date<b.date?-1:1)};persist(k)}});
       }
-      if(!state.open) render(); else {render();}
+      if(chg) softRender();
     },err=>{state.mode="local";loadLocal();bootLocal()});
   }catch(e){bootLocal()}
 })();
