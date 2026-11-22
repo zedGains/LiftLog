@@ -1863,7 +1863,7 @@ function streakInfo(){const S=badgeStats(),cur=wkStartOf(TODAY),mo=TODAY.slice(0
 function streakCard(){const s=streakInfo(),hit=s.thisWeek>=s.target;
   return `<div class="panel streakp" id="streakp"><h2>Streak <button class="infob" id="strinfo" aria-label="How the streak works" title="A week counts when you finish all your planned workouts. Walks and other activity you log count too. If you pause a week, missing it doesn't reset your streak. You get one pause a month.">i</button></h2>
    <div class="stkbig">${ic("flame")}<b>${s.streak}</b><span>${s.streak===1?"week":"weeks"}</span>${s.paused?`<em class="pztag">Paused</em>`:""}</div>
-   <p class="sml"><span>${s.thisWeek} of ${s.target} workouts this week</span></p>
+   <p class="sml"><span>${s.thisWeek} of ${s.target} workouts this week</span>${(()=>{if(s.thisWeek>=s.target)return "";try{const m=missedThisWeek();return m.length?` · <span>Still to do: ${m.map(x=>esc(DAYS[x.k].title)).join(", ")}</span>`:""}catch(e){return ""}})()}</p>
    <div class="progress" aria-hidden="true"><i style="width:${Math.min(100,Math.round(s.thisWeek/s.target*100))}%"></i></div>
    ${s.paused?`<p class="sml">This week is paused. Missing it won't break your streak.</p><button class="btn small" id="strunpause" type="button">Undo pause</button>`
      :hit?`<p class="sml">This week is done. Nice work.</p>`
@@ -1928,7 +1928,7 @@ function softRender(){if(!typingInApp()){render();return}
   a.addEventListener("blur",()=>{setTimeout(()=>{softWait=false;if(typingInApp())softRender();else render()},450)},{once:true})}
 function dayDoneWeek(k,ws){ws=ws||wkStartOf(TODAY);return daySections(k).flatMap(s=>s.items).some(it=>entriesOf(it.id).some(e=>e.done&&e.date>=ws&&e.date<=addDays(ws,6)))}
 function missedThisWeek(){const ws=wkStartOf(TODAY),out=[];for(let i=0;i<7;i++){const d=addDays(ws,i);if(d>=TODAY)break;const wd=new Date(d+"T12:00:00").getDay(),k=schedOf(wd);
-  if(k&&DAYS[k]&&!out.some(x=>x.k===k)&&!dayDoneWeek(k,ws)&&!((plan.skips||{})[d]))out.push({k,date:d,n:daySections(k).flatMap(s=>s.items).length})}return out}
+  if(k&&DAYS[k]&&!out.some(x=>x.k===k)&&!dayDoneWeek(k,ws))out.push({k,date:d,n:daySections(k).flatMap(s=>s.items).length,skipped:!!((plan.skips||{})[d])})}return out}
 function renderDayMenu(tab){
   document.querySelectorAll(".dmenu,.mscrim").forEach(x=>x.remove());
   const dp=$("#daypick"); if(dp) dp.setAttribute("aria-expanded",String(!!state.dayMenu));
@@ -2309,7 +2309,7 @@ function render(){
     app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow"><span>${WD_LONG[nowD().getDay()]}</span> · <span>Today</span></div><h1>Rest day</h1></div><div class="resticon" aria-hidden="true">${ic("moon")}</div></div></header>
     <div class="plan">${leftHTML}
      <div class="panel restcard"><p class="rc1">${skippedK&&DAYS[skippedK]?`<span>You made today a rest day.</span> <span>${esc(DAYS[skippedK].title)} is back next ${WD_LONG[nowD().getDay()]}.</span>`:esc(tplNote("restBanner")||"Nothing planned today. Rest and recover.")}</p>
-      ${missed.length?`<div class="upnext catchup"><span class="lbl">Still to do this week</span><b><span>${esc(DAYS[missed[0].k].title)}</span> · <span>planned ${fmtDate(missed[0].date)}</span></b><small>${missed[0].n} exercise${missed[0].n===1?"":"s"}${missed.length>1?` · <span>${missed.length-1} more missed</span>`:""}</small></div>`
+      ${missed.length?`<div class="upnext catchup"><span class="lbl">Still to do this week</span><b><span>${esc(DAYS[missed[0].k].title)}</span> · <span>${missed[0].skipped?"skipped":"planned"} ${fmtDate(missed[0].date)}</span></b><small>${missed[0].n} exercise${missed[0].n===1?"":"s"}${missed.length>1?` · <span>${missed.length-1} more missed</span>`:""}</small></div>`
        :nextUp?`<div class="upnext"><span class="lbl">Next workout</span><b><span>${fmtDate(nextUp.date)}</span> · <span>${esc(DAYS[nextUp.k].title)}</span></b><small>${nextUp.n} exercise${nextUp.n===1?"":"s"}</small></div>`:""}
       <div class="btns two">${skippedK&&DAYS[skippedK]?`<button class="btn" id="restundo">Undo rest day</button>`:missed.length?`<button class="btn primary" id="restgo">Do ${esc(DAYS[missed[0].k].title)} today</button>`:`<button class="btn" id="restgo">Train today</button>`}<button class="btn" id="restact">+ Walk / other</button></div>
       ${missed.length&&nextUp?`<p class="sml restnext"><span>Next on the plan:</span> <span>${fmtDate(nextUp.date)} · ${esc(DAYS[nextUp.k].title)}</span></p>`:""}</div>
