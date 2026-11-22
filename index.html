@@ -948,7 +948,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 .sheet h3#sheet-title{cursor:pointer}
 .sheet.scrolled .shbar::before{content:"";position:absolute;left:-16px;right:-16px;top:-8px;height:58px;background:var(--surface);border-bottom:1px solid var(--line)}
 .resticon{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--accent);flex:none}.resticon .ic{width:28px;height:28px}
-.restcard .rc1{font-size:15px;margin:0 0 12px}.upnext{display:grid;gap:2px}.upnext .lbl{margin:0 0 2px}.upnext b{font-size:17px}.upnext small{color:var(--muted);font-size:13px}
+.restcard .rc1{font-size:15px;margin:0 0 12px}.upnext{display:grid;gap:2px}.upnext.catchup .lbl{color:var(--orange)}.restnext{margin-top:10px}.banner.okb{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 35%,transparent)}.upnext .lbl{margin:0 0 2px}.upnext b{font-size:17px}.upnext small{color:var(--muted);font-size:13px}
 .btns.two{display:grid;grid-template-columns:1fr 1fr;margin-top:0}.restcard .btns.two{margin-top:14px}.btns.two .btn,.streakp .btn,.stepsp .btn{display:inline-flex;justify-content:center;align-items:center;gap:6px}
 .donecard{text-align:center;background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 35%,transparent)}.dcic{color:var(--ok);line-height:0}.dcic .ic{width:46px;height:46px}
 .donecard h2{margin:4px 0 2px}.panel .dcsub{color:var(--muted);font-size:14px;margin:0 auto 12px}.donecard .stats{margin:0}.donecard .stats div{background:var(--surface);min-width:0}.donecard .stats b.up{color:var(--ok);font-size:20px}.stats .clip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1777,6 +1777,7 @@ function validTab(t){return t&&(DAYS[t]||t==="timer"||t==="plan"||t==="programs"
 function defaultDay(){const k=state.lastDay;if(DAYS[k])return k;const t=weekdayTab();if(t)return t;
   // rest day: the workout done today if there is one, otherwise the next one coming up
   try{for(const id of Object.keys(state.logs||{})){const e=todayEntry(id);if(e&&e.done&&DAYS[e.day])return e.day}}catch(e){}
+  try{const m=missedThisWeek();if(m.length)return m[0].k}catch(e){}
   const wd=nowD().getDay();for(let i=1;i<=7;i++){const n=schedOf((wd+i)%7);if(n&&DAYS[n])return n}return trainKeys()[0]||dayKeys()[0]||null}
 function pickTab(){if(validTab(state.tab))return state.tab;if(state.tab==="workout")return defaultDay()||"workout";return defaultDay()||"workout"}
 const NAV_ICONS={workout:'<path d="M6 8v8M18 8v8M3 10.5v3M21 10.5v3M6 12h12" stroke-width="2.2" stroke-linecap="round"/>',
@@ -1925,6 +1926,9 @@ let softWait=false;
 function softRender(){if(!typingInApp()){render();return}
   if(softWait)return;softWait=true;const a=document.activeElement;
   a.addEventListener("blur",()=>{setTimeout(()=>{softWait=false;if(typingInApp())softRender();else render()},450)},{once:true})}
+function dayDoneWeek(k,ws){ws=ws||wkStartOf(TODAY);return daySections(k).flatMap(s=>s.items).some(it=>entriesOf(it.id).some(e=>e.done&&e.date>=ws&&e.date<=addDays(ws,6)))}
+function missedThisWeek(){const ws=wkStartOf(TODAY),out=[];for(let i=0;i<7;i++){const d=addDays(ws,i);if(d>=TODAY)break;const wd=new Date(d+"T12:00:00").getDay(),k=schedOf(wd);
+  if(k&&DAYS[k]&&!out.some(x=>x.k===k)&&!dayDoneWeek(k,ws)&&!((plan.skips||{})[d]))out.push({k,date:d,n:daySections(k).flatMap(s=>s.items).length})}return out}
 function renderDayMenu(tab){
   document.querySelectorAll(".dmenu,.mscrim").forEach(x=>x.remove());
   const dp=$("#daypick"); if(dp) dp.setAttribute("aria-expanded",String(!!state.dayMenu));
@@ -2299,17 +2303,19 @@ function render(){
       showUndo(`Discarded unsaved marks from ${fmtDate(d0)}`,()=>{const L2=ls.get("ll.left",{});L2[d0]=snap;ls.set("ll.left",L2);ls.set("ll.leftGone",ls.get("ll.leftGone",[]).filter(x=>x!==d0));queueDrafts();render()})}};
   const editSaved=()=>{state.doneOff=tab+TODAY;const fr=freshSet();items.forEach(it=>{if(fr.has(it.id)){fr.delete(it.id);if(!(state.drafts[it.id]&&state.drafts[it.id].marked))delete state.drafts[it.id]}});setFresh(fr);saveDrafts();render();toast("Today's saved numbers are back. Change anything, then save again.")};
   const nextUp=(()=>{const wd=nowD().getDay();for(let i=1;i<=7;i++){const k=schedOf((wd+i)%7);if(k&&DAYS[k])return {k,date:addDays(TODAY,i),n:daySections(k).flatMap(s=>s.items).length}}return null})();
-  const skippedK=(plan.skips||{})[TODAY];
+  const skippedK=(plan.skips||{})[TODAY];const missed=restDay?missedThisWeek():[];
   // a rest day gets its own screen instead of an empty-looking workout
   if(!classic&&restDay&&!state.revisit&&!ldPast&&!done&&!pending&&state.restGo!==TODAY&&[0,1,2,3,4,5,6].some(i=>schedOf(i))&&!Object.keys(state.logs).some(id=>todayEntry(id))){
     app.innerHTML=`<header class="dayhead"><div class="row"><div><div class="eyebrow"><span>${WD_LONG[nowD().getDay()]}</span> · <span>Today</span></div><h1>Rest day</h1></div><div class="resticon" aria-hidden="true">${ic("moon")}</div></div></header>
     <div class="plan">${leftHTML}
      <div class="panel restcard"><p class="rc1">${skippedK&&DAYS[skippedK]?`<span>You made today a rest day.</span> <span>${esc(DAYS[skippedK].title)} is back next ${WD_LONG[nowD().getDay()]}.</span>`:esc(tplNote("restBanner")||"Nothing planned today. Rest and recover.")}</p>
-      ${nextUp?`<div class="upnext"><span class="lbl">Next workout</span><b><span>${fmtDate(nextUp.date)}</span> · <span>${esc(DAYS[nextUp.k].title)}</span></b><small>${nextUp.n} exercise${nextUp.n===1?"":"s"}</small></div>`:""}
-      <div class="btns two">${skippedK&&DAYS[skippedK]?`<button class="btn" id="restundo">Undo rest day</button>`:`<button class="btn" id="restgo">Train today</button>`}<button class="btn" id="restact">+ Walk / other</button></div></div>
+      ${missed.length?`<div class="upnext catchup"><span class="lbl">Still to do this week</span><b><span>${esc(DAYS[missed[0].k].title)}</span> · <span>planned ${fmtDate(missed[0].date)}</span></b><small>${missed[0].n} exercise${missed[0].n===1?"":"s"}${missed.length>1?` · <span>${missed.length-1} more missed</span>`:""}</small></div>`
+       :nextUp?`<div class="upnext"><span class="lbl">Next workout</span><b><span>${fmtDate(nextUp.date)}</span> · <span>${esc(DAYS[nextUp.k].title)}</span></b><small>${nextUp.n} exercise${nextUp.n===1?"":"s"}</small></div>`:""}
+      <div class="btns two">${skippedK&&DAYS[skippedK]?`<button class="btn" id="restundo">Undo rest day</button>`:missed.length?`<button class="btn primary" id="restgo">Do ${esc(DAYS[missed[0].k].title)} today</button>`:`<button class="btn" id="restgo">Train today</button>`}<button class="btn" id="restact">+ Walk / other</button></div>
+      ${missed.length&&nextUp?`<p class="sml restnext"><span>Next on the plan:</span> <span>${fmtDate(nextUp.date)} · ${esc(DAYS[nextUp.k].title)}</span></p>`:""}</div>
      ${streakCard()}${stepsCard(true)}</div>`;
     bindLeft();bindExtras();
-    const rg=$("#restgo");if(rg)rg.onclick=()=>{state.restGo=TODAY;if(nextUp)state.tab=nextUp.k;render();window.scrollTo(0,0)};
+    const rg=$("#restgo");if(rg)rg.onclick=()=>{state.restGo=TODAY;const t=missed.length?missed[0].k:nextUp&&nextUp.k;if(t){state.tab=t;ls.set("ll.tab",t)}render();window.scrollTo(0,0)};
     const ru=$("#restundo");if(ru)ru.onclick=unskipToday;
     $("#restact").onclick=()=>openActivity();
     return}
@@ -2361,7 +2367,9 @@ function render(){
   ${(()=>{const sk=(plan.skips||{})[TODAY];const wdName=WD_LONG[nowD().getDay()];
     if(done||items.some(it=>todayEntry(it.id))) return "";
     if(sk&&DAYS[sk]) return `<div class="skipban"><span>${ic("moon")} <b>Rest today</b> · ${esc(DAYS[sk].title)} back next ${wdName}</span><button class="linkbtn" id="unskip">Undo</button></div>`;
-    if(restDay) return `<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")} Want to train anyway? Mark and save this day like normal. It's logged for today, and your week stays the same.</div>`;
+    if(restDay){const ms=missedThisWeek().find(x=>x.k===tab);if(ms)return `<div class="banner okb"><b>Catching up: ${esc(DAYS[tab].title)} from ${fmtDate(ms.date)}.</b> <span>Save it like normal. It's logged for today and counts toward this week.</span></div>`;
+      if(dayDoneWeek(tab))return `<div class="banner"><b>You already did ${esc(DAYS[tab].title)} this week.</b> <span>Training it again is fine. It's logged for today.</span></div>`;
+      return `<div class="banner"><b>${nowD().toLocaleDateString(LOC,{weekday:"long"})} is a rest day on the plan.</b> ${esc(tplNote("restBanner")||"Rest and recover.")} Want to train anyway? Mark and save this day like normal. It's logged for today, and your week stays the same.</div>`}
     if(weekdayTab()===tab) return `<button class="linkbtn skiplink" id="skipday">Not training today? Make it a rest day</button>`;
     return ""})()}
   ${secs.length?"":`<div class="banner" style="background:var(--surface)"><b>This day is empty.</b> Tap <b>Add exercise</b> to build it from the library or your own exercises.</div>`}
