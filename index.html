@@ -405,7 +405,7 @@ html:root[data-skin="pixel"] h1{font-size:26px}html:root[data-skin="pixel"] .pan
 html:root[data-skin="pixel"] .btn{border-radius:0}html:root[data-skin="pixel"] .btn.primary{box-shadow:4px 4px 0 #3C3CFF}
 html:root[data-skin="pixel"] .tabs{background:#000;border-top:4px solid #3C3CFF}
 /* Sakura (light, calm) */
-html:root[data-skin="sakura"]{--ok:#5DA87E;--ok-soft:#E3F2E9;--warn-soft:#FDF0D8;--bg:#FFF5F7;--surface:#FFFFFF;--surface-2:#FCEBF0;--fg:#3A2B33;--muted:#8E7280;--line:#F2D3DE;--map-base:#F6E1E8;--map-muscle:#E8C2D0;
+html:root[data-skin="sakura"]{--ok:#3B8560;--ok-soft:#E3F2E9;--warn-soft:#FDF0D8;--bg:#FFF5F7;--surface:#FFFFFF;--surface-2:#FCEBF0;--fg:#3A2B33;--muted:#7A5E6C;--line:#F2D3DE;--map-base:#F6E1E8;--map-muscle:#E8C2D0;
   --red:#E25D8A;--blue:#6A8FD8;--yellow:#E8A33D;--green:#5DA87E;--purple:#9B7BD6;--orange:#E58B5B;--on-yellow:#2A1700;--accent-soft:#FBE0EA;--display:"Yuji Syuku","Barlow Condensed",serif;color-scheme:light}
 html:root[data-skin="sakura"] body{background:radial-gradient(700px 360px at 100% 0,#FFD6E3,transparent 60%),radial-gradient(600px 300px at 0 100%,#FFE3EC,transparent 60%),var(--bg);background-attachment:fixed}
 html:root[data-skin="sakura"] .dayhead{background:rgba(255,245,247,.95)}
@@ -903,6 +903,7 @@ a.form{font-size:12.5px;font-weight:600;color:var(--fg);text-decoration:none;bor
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* quality-of-life pass: icons, tidy workout tab, done / rest screens, steps, streak, progress */
+.hhead .btn{color:var(--fg)}
 .ic{width:1.15em;height:1.15em;vertical-align:-.2em;flex:none;display:inline-block}
 .lbrows .rk.top{width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-size:12.5px;color:#1A1400;flex:none;margin-inline:1px}.rk.r1{background:#E8B923}.rk.r2{background:#C3CAD2}.rk.r3{background:#CF9156}
 .fstk{white-space:nowrap}.fstk .ic,.stkbig .ic{color:var(--orange)}.sklock .ic{width:12px;height:12px}.elitenote .ic{color:var(--accent)}
@@ -3033,7 +3034,7 @@ function heatPanel(){if(plan.heatOff)return "";const {vol,src}=weekVolume();cons
   return `<div class="panel heatp"><h2>This week's muscles</h2>
    <p class="savenote" style="margin-top:0">Sets per muscle, Monday to Sunday. Side muscles count half a set. Warm-ups don't count.${total?"":" Save a workout and it fills in."}</p>
    <div class="heatmap" id="heatmap">${bodyMap([],[],true,heat)}</div>
-   <div class="hleg"><span><i class="h0"></i>None</span><span><i class="h1"></i>Under</span><span><i class="h2"></i>Close</span><span><i class="h3"></i>Good</span><span><i class="h4"></i>A lot</span></div>
+   <div class="hleg"><span><i class="h0"></i>None</span><span><i class="h1"></i>Under</span><span><i class="h2"></i>Almost</span><span><i class="h3"></i>Good</span><span><i class="h4"></i>A lot</span></div>
    ${sel?(()=>{const v=r1(vol[sel]||0),t=MUS_TGT[sel];const agg={};(src[sel]||[]).forEach(z=>{const k=z.name+"|"+z.date;agg[k]=agg[k]||{...z,n:0};agg[k].n+=z.n});
      return `<div class="heatsel"><div class="lbl">${esc(MUS_NAME[sel])}</div><div class="wodscore" style="font-size:28px"><span>${v} set${v===1?"":"s"}</span> <span style="font:500 14px var(--body);color:var(--muted)">target ${t[0]}–${t[1]}</span></div>
       ${Object.values(agg).length?`<div class="history">${Object.values(agg).map(z=>`<div><span class="d">${esc(z.name)}</span><span class="v">${r1(z.n)} set${r1(z.n)===1?"":"s"} · ${fmtDate(z.date)}</span></div>`).join("")}</div>`:`<p class="savenote">Nothing for ${esc(MUS_NAME[sel].toLowerCase())} yet this week.</p>`}</div>`})()
@@ -3228,7 +3229,10 @@ async function exportCSV(){
   try{await navigator.clipboard.writeText(csv);toast("Download isn't available here, so the CSV was copied. Paste it into a spreadsheet.")}
   catch(e){toast("Couldn't download or copy the CSV on this device.")}
 }
-function bindPlan(){bindExtras();bindSkins();bindHistNotes();bindHeat();
+function inkWeek(){document.querySelectorAll(".week .wk[style*='background']").forEach(b=>{const m=getComputedStyle(b).backgroundColor.match(/[\d.]+/g);if(!m)return;
+  const L=m.slice(0,3).map(Number).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});const l=.2126*L[0]+.7152*L[1]+.0722*L[2];
+  b.style.color=(1.05/(l+.05))>=((l+.05)/.05)?"#fff":"#0B0F17"})}
+function bindPlan(){bindExtras();try{inkWeek()}catch(e){}bindSkins();bindHistNotes();bindHeat();
   const xr=$("#xrest");if(xr)xr.onchange=()=>ls.set("ll.autoRest",xr.checked);const xp=$("#xpct");if(xp)xp.onchange=()=>{plan.pctRow=xp.checked;savePlan()};const xh=$("#xheat");if(xh)xh.onchange=()=>{plan.heatOff=!xh.checked;savePlan()};const swk=$("#shareweek");if(swk)swk.onclick=()=>shareCard("week",weekRecap());bindLang();bindBadgesPanel();bindBoard();bindFriends();bindInvite();document.querySelectorAll("[data-fbgo]").forEach(b=>b.onclick=()=>openFeedback(b.dataset.fbgo));const we=$("#weekedit2");if(we)we.onclick=openWeekEditor;bindWeight();bindGuide();bindPlates();bindTrainerPanel();bindAvatarPanel();const rt=$("#replaytour2");if(rt)rt.onclick=()=>{state.settings=false;state.tab=defaultDay()||"workout";render();startTour()};
   document.querySelectorAll("[data-np]").forEach(c=>c.onchange=()=>{plan.notify={...(plan.notify||{}),[c.dataset.np]:c.checked};savePlan();toast("Saved")});
   const os2=$("#opensettings");if(os2)os2.onclick=()=>{state.settings=true;render();window.scrollTo(0,0)};
