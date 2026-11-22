@@ -1926,7 +1926,10 @@ let softWait=false;
 function softRender(){if(!typingInApp()){render();return}
   if(softWait)return;softWait=true;const a=document.activeElement;
   a.addEventListener("blur",()=>{setTimeout(()=>{softWait=false;if(typingInApp())softRender();else render()},450)},{once:true})}
-function dayDoneWeek(k,ws){ws=ws||wkStartOf(TODAY);return daySections(k).flatMap(s=>s.items).some(it=>entriesOf(it.id).some(e=>e.done&&e.date>=ws&&e.date<=addDays(ws,6)))}
+function dayDoneWeek(k,ws){ws=ws||wkStartOf(TODAY);const we=addDays(ws,6);
+  // the same workout in the other alternating week counts too; shared exercises (like abs on every day) don't
+  const same=new Set([k]);try{const t=abTwinOf(k);if(t)same.add(t);Object.entries(plan.abTwin||{}).forEach(([a,b])=>{if(b===k)same.add(a)})}catch(e){}
+  return sessions().some(s=>s.date>=ws&&s.date<=we&&same.has(s.day))}
 function missedThisWeek(){const ws=wkStartOf(TODAY),out=[];for(let i=0;i<7;i++){const d=addDays(ws,i);if(d>=TODAY)break;const wd=new Date(d+"T12:00:00").getDay(),k=schedOf(wd);
   if(k&&DAYS[k]&&!out.some(x=>x.k===k)&&!dayDoneWeek(k,ws))out.push({k,date:d,n:daySections(k).flatMap(s=>s.items).length,skipped:!!((plan.skips||{})[d])})}return out}
 function renderDayMenu(tab){
